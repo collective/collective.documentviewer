@@ -1,0 +1,4 @@
+<layers>
+    <layer name="collective.documentviewer" 
+           interface="collective.documentviewer.interfaces.ILayer" />
+</layers>

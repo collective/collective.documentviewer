@@ -1,0 +1,81 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+      
+<metal:js fill-slot="javascript_head_slot">
+  <!--[if (!IE)|(gte IE 8)]><!-->
+    <link href="/viewer/viewer-datauri.css" media="screen" rel="stylesheet" type="text/css"
+      tal:attributes="href string:${view/dvstatic}/assets/viewer-datauri.css" />
+  <!--<![endif]-->
+  <!--[if lte IE 7]>
+    <link href="/viewer/viewer.css" media="screen" rel="stylesheet" type="text/css"
+        tal:attributes="href string:${view/dvstatic}/assets/viewer.css" />
+  <![endif]-->
+  <link href="/viewer/printviewer.css" media="print" rel="stylesheet" type="text/css"
+      tal:attributes="href string:${view/dvstatic}/assets/printviewer.css" />
+  <script src="/viewer/viewer.js"
+      tal:attributes="src string:${view/dvstatic}/assets/viewer.js"></script>
+</metal:js>
+<metal:css fill-slot="style_slot">
+</metal:css>
+
+<body>
+
+<div metal:fill-slot="main">
+    <tal:main-macro metal:define-macro="main" 
+           tal:define="size python:here.getObjSize(here);
+                       content_type here/get_content_type|here/Format;">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading"> 
+            <metal:field use-macro="python:here.widget('title', mode='view')">
+            Title
+            </metal:field>
+        </h1>
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <p class="documentDescription">
+            <metal:field use-macro="python:here.widget('description', mode='view')">
+            Description
+            </metal:field>
+        </p>
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+        
+       <div id="DV-container">
+
+    <div class="DV-loadingDocument"><span>Loading</span></div>
+    <noscript>
+    <div id="DV-noJS" style="height:500px">
+      The Document Viewer requires that you enable Javascript.
+    </div>
+    </noscript>
+  </div>
+  <div id="overlay"></div>
+  <script type="text/javascript" tal:content="structure view/javascript">
+  </script>
+
+        <p>
+            <metal:field use-macro="python:here.widget('file', mode='view')">
+            File
+            </metal:field>
+        </p>
+        
+        <div metal:use-macro="here/document_relateditems/macros/relatedItems">
+            show related items if they exist
+        </div>
+    
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </tal:main-macro>
+</div>
+
+</body>
+
+</html>

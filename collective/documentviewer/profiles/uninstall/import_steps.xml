@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<import-steps>
+    <import-step id="collective.documentviewer.uninstall" version="1"
+        handler="collective.documentviewer.setuphandlers.uninstall"
+        title="Uninstall step for Document Viewer">
+    </import-step>
+</import-steps>

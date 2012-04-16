@@ -1,0 +1,128 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.documentviewer">
+
+  <five:registerPackage package="." initialize=".initialize" />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="Document Viewer"
+      directory="profiles/default"
+      description="Installs the collective.documentviewer package"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <browser:page
+    name="documentviewer"
+    for="Products.ATContentTypes.interface.file.IFileContent"
+    class=".views.DocumentViewerView"
+    template="documentviewer.pt"
+    permission="zope2.View"
+    layer=".interfaces.ILayer"
+  />
+  
+  <browser:menuItem
+    for="Products.ATContentTypes.interface.file.IFileContent"
+    menu="plone_displayviews"
+    title="Document Viewer"
+    action="documentviewer"
+    description="Displays a PDF embedded in the web page via document cloud viewer."
+  />
+
+  <browser:page
+    name="full-dv"
+    for="Products.ATContentTypes.interface.file.IFileContent"
+    class=".views.DocumentViewerView"
+    template="documentviewer-full.pt"
+    permission="zope2.View"
+    layer=".interfaces.ILayer"
+  />
+
+  <browser:page
+    name="dv-search.json"
+    for="Products.ATContentTypes.interface.file.IFileContent"
+    class=".views.DocumentViewerSearchView"
+    permission="zope2.View"
+    layer=".interfaces.ILayer"
+  />
+  
+  <browser:page
+    name="documentviewer-settings"
+    for="Products.ATContentTypes.interface.file.IFileContent"
+    class=".views.SettingsForm"
+    layer=".interfaces.ILayer"
+    permission="cmf.ModifyPortalContent"
+  />
+  <adapter 
+    for="Products.ATContentTypes.interface.file.IFileContent"
+    provides=".interfaces.IDocumentViewerSettings"
+    factory=".settings.Settings"
+  />
+  
+  <browser:page
+    name="global-documentviewer-settings"
+    for="Products.CMFPlone.Portal.PloneSite"
+    class=".views.GlobalSettingsForm"
+    layer=".interfaces.ILayer"
+    permission="cmf.ManagePortal"
+  />
+  <adapter 
+    for="Products.CMFPlone.Portal.PloneSite"
+    provides=".interfaces.IGlobalDocumentViewerSettings"
+    factory=".settings.GlobalSettings"
+  />
+  
+  <browser:page
+    name="documentviewer-utils"
+    for="*"
+    permission="zope2.View"
+    class=".views.Utils"
+    allowed_interface=".interfaces.IUtils"
+  />
+  
+  <browser:page
+    name="convert-to-documentviewer"
+    for="Products.ATContentTypes.interface.file.IFileContent"
+    permission="cmf.ModifyPortalContent"
+    class=".views.Utils"
+    attribute="convert"
+  />
+  
+  <browser:page
+    name="convertall-to-documentviewer"
+    for="Products.CMFPlone.Portal.PloneSite"
+    permission="cmf.ManagePortal"
+    class=".views.Utils"
+    attribute="convert_all"
+  />
+  
+  <browser:resourceDirectory
+    name="documentviewer.resources"
+    directory="documentviewer"
+  />
+  
+  <subscriber
+    for="Products.ATContentTypes.interface.IFileContent
+         Products.Archetypes.interfaces.IObjectEditedEvent"
+    handler=".events.handle_file_creation"
+  />
+
+  <subscriber
+    for="Products.ATContentTypes.interface.IFileContent
+         Products.Archetypes.interfaces.IObjectInitializedEvent"
+    handler=".events.handle_file_creation"
+  />
+
+  <browser:page
+    name="dvpdffiles"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    permission="zope2.View"
+    class=".views.PDFFiles"
+    allowed_interface="OFS.interfaces.IItem"
+    />
+  
+</configure>

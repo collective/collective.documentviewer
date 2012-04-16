@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool">
+  <action-provider name="portal_actions">
+
+    <action title="Document Viewer Settings" action_id="documentviewer_settings" category="object"
+        condition_expr="object/@@documentviewer-utils/enabled"
+        url_expr="string:${object_url}/@@documentviewer-settings" visible="True">
+        <permission>Modify view template</permission>
+    </action>
+
+    <action title="Document Viewer Convert" action_id="documentviewer_convert" category="object"
+        condition_expr="object/@@documentviewer-utils/enabled"
+        url_expr="string:${object_url}/@@convert-to-documentviewer" visible="True">
+        <permission>Modify view template</permission>
+    </action>
+
+  </action-provider>
+</object>
