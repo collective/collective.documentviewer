@@ -46,10 +46,37 @@ class IGlobalDocumentViewerSettings(Interface):
         title=u"Override Contributor Organization",
         description=u"What to override the organization field on viewer with."
                     u"Leave blank to use site title.")
+    height = schema.Int(
+        title=u"Viewer Height",
+        description=u"Default height to use for viewer(only for "
+                    u"non-fullscreen mode).",
+        default=500)
+    show_sidebar = schema.Bool(
+        title=u"Show sidebar",
+        description=u"Default to show sidebar",
+        default=True)
+    show_search = schema.Bool(
+        title=u"Show search box",
+        default=True)
 
 
 class IDocumentViewerSettings(Interface):
-    pass
+    height = schema.Int(
+        title=u"Viewer Height",
+        default=None,
+        required=False)
+    fullscreen = schema.Bool(
+        title=u"Fullscreen Viewer",
+        description=u"Default to fullscreen viewer",
+        default=False)
+    show_sidebar = schema.Bool(
+        title=u"Show sidebar",
+        description=u"Default to show sidebar",
+        required=False,
+        default=None)
+    show_search = schema.Bool(
+        title=u"Show search box",
+        default=None)
 
 
 class IUtils(Interface):

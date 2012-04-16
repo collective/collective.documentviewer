@@ -19,8 +19,38 @@
       tal:attributes="href string:${view/dvstatic}/assets/printviewer.css" />
   <script src="/viewer/viewer.js"
       tal:attributes="src string:${view/dvstatic}/assets/viewer.js"></script>
+  <script type="text/javascript">
+  jQuery('.close-fullscreen').live('click', function(){
+    debugger;
+    if(window.opener){
+      window.close();
+      window.opener.location = jQuery('base').attr('href') + '/view#bypass-fullscreen';
+      window.opener.location.reload();
+    }else{
+      window.location = jQuery('base').attr('href') + '/view#bypass-fullscreen';
+      window.location.reload();
+    }
+    return false;
+    });
+  </script>
 </metal:js>
 <metal:css fill-slot="style_slot">
+<style>
+.DV-navigation .DV-fullscreen{
+  right: 10px;
+  top: 54px;
+  left: inherit;
+  cursor: pointer;
+}
+
+.fullscreen .DV-navigation .DV-fullscreen{
+  display:none;
+}
+
+.not-fullscreen .close-fullscreen{
+  display:none;
+}
+</style>
 </metal:css>
 
 <body>

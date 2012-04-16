@@ -28,6 +28,12 @@ from logging import getLogger
 logger = getLogger('collective.documentviewer')
 
 
+def either(one, two):
+    if one is None:
+        return two
+    return one
+
+
 class DocumentViewerView(BrowserView):
 
     installed = docsplit is not None
@@ -83,14 +89,37 @@ class DocumentViewerView(BrowserView):
             organization = self.global_settings.override_organization
         else:
             organization = self.site.title
+        fullscreen = self.settings.fullscreen
+        height = 'height: %i,' % either(self.settings.height,
+                                       self.global_settings.height)
+        sidebar = either(self.settings.show_sidebar,
+                         self.global_settings.show_sidebar)
+        search = either(self.settings.show_search,
+                        self.global_settings.show_search)
         return """
-window.currentDocument = DV.load(%(data)s, { width: 680,
-   height: 450,
-   sidebar: false,
-   text: true,
-container: '#DV-container' });
+window.documentData = %(data)s;
+var hash = window.location.hash;
+if(hash == '#document/p1' || (%(fullscreen)s && hash != '#bypass-fullscreen')){
+window.currentDocument = DV.load(window.documentData, {
+    sidebar: true,
+    width: $('#DV-container').width(),
+    search: %(search)s,
+    container: document.body });
+$('body').addClass('fullscreen');
+}else{
+window.currentDocument = DV.load(window.documentData, { %(height)s
+    sidebar: %(sidebar)s,
+    width: $('#DV-container').width(),
+    search: %(search)s,
+    container: '#DV-container' });
+$('body').addClass('not-fullscreen');
+}
 """ % {
     'portal_url': self.portal_url,
+    'height': height,
+    'fullscreen': str(fullscreen).lower(),
+    'sidebar': str(sidebar).lower(),
+    'search': str(search).lower(),
     'data': json.dumps({
         'access': 'public',
         'annotations': [],

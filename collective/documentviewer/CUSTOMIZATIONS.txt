@@ -1,0 +1,12 @@
+Notes on customizations done to the viewer code:
+
+viewer.js
+---------
+
+- removed documentcloud link
+- added fullscreen buttons
+    <div class="DV-fullscreen" title="View Document in Fullscreen"></div><a class="close-fullscreen" href="#bypass-fullscreen" title="Close Fullscreen">Close Fullscreen</a>
+
+    after:
+
+    <div class="DV-supplemental">
