@@ -19,19 +19,17 @@ Install requirements
 --------------------
 
  - docsplit: http://documentcloud.github.com/docsplit/
-    - graphicsmagick
-    - ghostscript
-    - poppler
-    - tesseract
-    - pdftk
-    - openoffice(for doc, excel, ppt, etc types)
+ - graphicsmagick
+ - ghostscript
+ - poppler
+ - tesseract
+ - pdftk
+ - openoffice(for doc, excel, ppt, etc types)
 
+TODO
+----
 
-
- TODO
- ----
-
-  - add text back to pdf(necessary?)
-    - slow...
-  - remove images after file is deleted for plain file storage
-  - take hash of file to compare if it's already converted
+ - add text back to pdf(necessary?)
+   - slow...
+ - remove images after file is deleted for plain file storage
+ - take hash of file to compare if it's already converted
