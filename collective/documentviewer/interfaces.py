@@ -1,12 +1,19 @@
+from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.interface import Interface
 from zope import schema
+from collective.documentviewer.config import CONVERTABLE_TYPES
 
 
 class ILayer(Interface):
     """
     layer class
     """
+
+FILE_TYPES_VOCAB = []
+
+for id, doc in CONVERTABLE_TYPES.items():
+    FILE_TYPES_VOCAB.append(SimpleTerm(id, id, doc.name))
 
 
 class IGlobalDocumentViewerSettings(Interface):
@@ -46,6 +53,19 @@ class IGlobalDocumentViewerSettings(Interface):
         title=u"Auto select layout",
         description=u"For pdf files",
         default=True)
+    auto_layout_file_types = schema.List(
+        title=u"Auto layout file types",
+        description=u"extra types only work in open office is installed",
+        default=['pdf'],
+        #missing_value=['pdf'],
+        value_type=schema.Choice(
+            vocabulary=SimpleVocabulary(FILE_TYPES_VOCAB))
+        )
+    auto_convert = schema.Bool(
+        title=u"Auto Convert",
+        description=u"Automatically convert files on creation "
+                    u"and modification. ",
+        default=True)
     override_contributor = schema.TextLine(
         title=u"Override Contributor",
         description=u"What to override the contributor field on viewer with."
@@ -58,7 +78,7 @@ class IGlobalDocumentViewerSettings(Interface):
         title=u"Viewer Height",
         description=u"Default height to use for viewer(only for "
                     u"non-fullscreen mode).",
-        default=500)
+        default=700)
     show_sidebar = schema.Bool(
         title=u"Show sidebar",
         description=u"Default to show sidebar",
@@ -98,7 +118,3 @@ class IUtils(Interface):
         """
         force conversion
         """
-
-
-class IPDFBlobFile(Interface):
-    pass

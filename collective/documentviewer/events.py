@@ -1,10 +1,11 @@
 from zope.app.component.hooks import getSite
 from settings import GlobalSettings
 from Products.CMFCore.utils import getToolByName
-from convert import convert
+from convert import Converter
 from zope.component import getUtility
 from settings import Settings
 from logging import getLogger
+from collective.documentviewer.utils import allowedDocumentType
 
 logger = getLogger('collective.documentviewer')
 
@@ -16,19 +17,23 @@ except:
 
 
 def queue_job(object):
+    converter = Converter(object)
+    if not converter.can_convert:
+        return
     if async_installed:
         try:
             settings = Settings(object)
             async = getUtility(IAsyncService)
-            async.queueJob(convert, object)
+            async.queueJob(converter, object)
             settings.converting = True
+            return
         except:
             logger.exception("Error using plone.app.async with "
                 "collective.documentviewer. Converting pdf without "
                 "plone.app.async...")
-            convert(object)
+            converter()
     else:
-        convert(object)
+        converter()
 
 
 def handle_file_creation(object, event):
@@ -36,13 +41,15 @@ def handle_file_creation(object, event):
     if not qi.isProductInstalled('collective.documentviewer'):
         return
 
-    if object.getContentType() not in ('application/pdf', 'application/x-pdf',
-                                       'image/pdf'):
-        return
     site = getSite()
     gsettings = GlobalSettings(site)
+
+    if not allowedDocumentType(object, gsettings.auto_layout_file_types):
+        return
+
     auto_layout = gsettings.auto_select_layout
     if auto_layout and object.getLayout() != 'documentviewer':
         object.setLayout('documentviewer')
 
-    queue_job(object)
+    if gsettings.auto_convert:
+        queue_job(object)

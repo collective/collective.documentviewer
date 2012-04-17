@@ -76,19 +76,21 @@
         </p>
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
-        
+
+      <tal:show tal:condition="view/enabled">        
        <div id="DV-container">
 
-    <div class="DV-loadingDocument"><span>Loading</span></div>
-    <noscript>
-    <div id="DV-noJS" style="height:500px">
-      The Document Viewer requires that you enable Javascript.
-    </div>
-    </noscript>
-  </div>
-  <div id="overlay"></div>
-  <script type="text/javascript" tal:content="structure view/javascript">
-  </script>
+       <div class="DV-loadingDocument"><span>Loading</span></div>
+        <noscript>
+          <div id="DV-noJS" style="height:500px">
+            The Document Viewer requires that you enable Javascript.
+          </div>
+        </noscript>
+      </div>
+      <div id="overlay"></div>
+      <script type="text/javascript" tal:content="structure view/javascript">
+      </script>
+      </tal:show>
 
         <p>
             <metal:field use-macro="python:here.widget('file', mode='view')">

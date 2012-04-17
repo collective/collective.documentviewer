@@ -6,8 +6,8 @@ from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing.ILayers import FunctionalTesting
-from plone.app.testing.ILayers import IntegrationTesting
+from plone.app.testing import FunctionalTesting
+from plone.app.testing import IntegrationTesting
 from zope.configuration import xmlconfig
 from plone.testing import z2
 
@@ -17,8 +17,8 @@ class DocumentViewer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # load ZCML
-        import collective.routes
-        xmlconfig.file('configure.zcml', collective.routes,
+        import collective.documentviewer
+        xmlconfig.file('configure.zcml', collective.documentviewer,
             context=configurationContext)
         z2.installProduct(app, 'collective.documentviewer')
 

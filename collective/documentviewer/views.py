@@ -1,3 +1,4 @@
+from collective.documentviewer.utils import allowedDocumentType
 import os
 from zExceptions import NotFound
 from Products.Five.browser import BrowserView
@@ -25,9 +26,10 @@ from OFS.SimpleItem import SimpleItem
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from collective.documentviewer import convert
 from repoze.catalog.query import Contains
-from zope.browserresource.file import FileResourceFactory
-from zope.component import queryUtility
-from zope.browserresource.interfaces import IResourceFactoryFactory
+from plone.app.blob.download import handleRequestRange
+from plone.app.blob.iterators import BlobStreamIterator
+from plone.app.blob.utils import openBlob
+from webdav.common import rfc1123_date
 
 from logging import getLogger
 logger = getLogger('collective.documentviewer')
@@ -59,8 +61,8 @@ class DocumentViewerView(BrowserView):
         utils = getToolByName(self.context, 'plone_utils')
         msg = None
 
-        if self.context.getContentType() in ('application/pdf',
-                'application/x-pdf', 'image/pdf'):
+        if allowedDocumentType(self.context,
+                self.global_settings.auto_layout_file_types):
             if not self.installed:
                 msg = "Since you do not have docspilt installed on this " + \
                       "system, we can not render the pages of this PDF."
@@ -278,40 +280,6 @@ class Utils(BrowserView):
                 settings = Settings(file)
                 settings.last_updated = DateTime('1999/01/01').ISO8601()
                 queue_job(file)
-
-
-from plone.app.blob.download import handleRequestRange
-from plone.app.blob.iterators import BlobStreamIterator
-from plone.app.blob.utils import openBlob
-from webdav.common import rfc1123_date
-from collective.documentviewer.interfaces import IPDFBlobFile
-
-
-class ServeBlob(BrowserView):
-
-    def __call__(self):
-        context = self.context
-        filename = context.filename
-        filepath = context.filepath
-        settings = context.settings
-        blob = settings.blob_files[filepath]
-        blobfi = openBlob(blob)
-        length = os.fstat(blobfi.fileno()).st_size
-        blobfi.close()
-
-        ext = os.path.splitext(os.path.normcase(filename))[1][1:]
-        if ext == 'txt':
-            ct = 'text/plain'
-        else:
-            ct = 'image/%s' % ext
-        self.request.response.setHeader('Last-Modified',
-            rfc1123_date(self.context._p_mtime))
-        self.request.response.setHeader('Accept-Ranges', 'bytes')
-        self.request.response.setHeader("Content-Length", length)
-        self.request.response.setHeader('Content-Type', ct)
-        range = handleRequestRange(self.context, length, self.request,
-            self.request.response)
-        return BlobStreamIterator(blob, **range)
 
 
 class PDFTraverseBlobFile(SimpleItem):
