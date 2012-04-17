@@ -24,7 +24,6 @@ Install requirements
 
   - add text back to pdf(necessary?)
     - slow...
-  - convert other docs to pdf for viewer
   - be able to override data base url
     - for offsite storage
   - remove images after file is deleted

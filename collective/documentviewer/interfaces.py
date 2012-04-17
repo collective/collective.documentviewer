@@ -32,7 +32,6 @@ class IGlobalDocumentViewerSettings(Interface):
         vocabulary=SimpleVocabulary.fromValues([
             'Blob',
             'File']))
-    # XXX try to detect default var location
     storage_location = schema.TextLine(
         title=u"Storage location",
         description=u'Only for file storage not with zodb. '
@@ -74,6 +73,13 @@ class IGlobalDocumentViewerSettings(Interface):
         title=u"Override Contributor Organization",
         description=u"What to override the organization field on viewer with."
                     u"Leave blank to use site title.")
+    override_base_resource_url = schema.URI(
+        title=u"Overridden Base Resource URL",
+        description=u"If you're syncing your storage to another server you "
+                    u"would like to serve the pdf resources from, please "
+                    u"specify the base url path.",
+        default=None,
+        required=False)
     height = schema.Int(
         title=u"Viewer Height",
         description=u"Default height to use for viewer(only for "

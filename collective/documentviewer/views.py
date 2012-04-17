@@ -47,16 +47,21 @@ class DocumentViewerView(BrowserView):
     enabled = docsplit is not None
 
     def __call__(self):
+        self.site = getSite()
+        self.settings = Settings(self.context)
+        self.global_settings = GlobalSettings(self.site)
+
         self.portal_url = getMultiAdapter((self.context, self.request),
             name="plone_portal_state").portal_url()
         self.dvstatic = "%s/++resource++documentviewer.resources" % (
             self.portal_url)
-        self.dvpdffiles = '%s/@@dvpdffiles/%s' % (
-            self.portal_url, self.context.UID())
-
-        self.site = getSite()
-        self.settings = Settings(self.context)
-        self.global_settings = GlobalSettings(self.site)
+        resource_url = self.global_settings.override_base_resource_url
+        if resource_url:
+            self.dvpdffiles = '%s/%s' % (resource_url.rstrip('/'),
+                                         self.context.UID())
+        else:
+            self.dvpdffiles = '%s/@@dvpdffiles/%s' % (
+                self.portal_url, self.context.UID())
 
         utils = getToolByName(self.context, 'plone_utils')
         msg = None
