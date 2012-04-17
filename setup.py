@@ -27,7 +27,8 @@ setup(name='collective.documentviewer',
           'setuptools',
           'plone.app.testing',
           'zope.browserresource',
-          'repoze.catalog'
+          'repoze.catalog',
+          'plone.app.z3cform'
       ],
       entry_points="""
       # -*- Entry points: -*-

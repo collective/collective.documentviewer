@@ -44,7 +44,7 @@
   <browser:page
     name="documentviewer-settings"
     for="Products.ATContentTypes.interface.file.IFileContent"
-    class=".views.SettingsForm"
+    class=".views.SettingsFormView"
     layer=".interfaces.ILayer"
     permission="cmf.ModifyPortalContent"
   />
@@ -57,7 +57,7 @@
   <browser:page
     name="global-documentviewer-settings"
     for="Products.CMFPlone.Portal.PloneSite"
-    class=".views.GlobalSettingsForm"
+    class=".views.GlobalSettingsFormView"
     layer=".interfaces.ILayer"
     permission="cmf.ManagePortal"
   />

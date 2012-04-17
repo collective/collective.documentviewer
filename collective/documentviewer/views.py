@@ -2,9 +2,7 @@ from collective.documentviewer.utils import allowedDocumentType
 import os
 from zExceptions import NotFound
 from Products.Five.browser import BrowserView
-from plone.app.form import base as ploneformbase
 from zope.interface import implements
-from zope.formlib import form
 from Products.CMFCore.utils import getToolByName
 from interfaces import IDocumentViewerSettings, IUtils, \
     IGlobalDocumentViewerSettings
@@ -181,63 +179,53 @@ class DocumentViewerSearchView(BrowserView):
         return json.dumps({"results": [], "query": query})
 
 
-class SettingsForm(ploneformbase.EditForm):
+from z3c.form import form, field, group, button
+from plone.app.z3cform.layout import wrap_form
+
+
+class SettingsForm(form.EditForm):
     """
     The page that holds all the slider settings
     """
-    form_fields = form.FormFields(IDocumentViewerSettings)
+    fields = field.Fields(IDocumentViewerSettings)
 
     label = _(u'heading_documentviewer_settings_form',
         default=u"Document Viewer Settings")
     description = _(u'description_documentviewer_settings_form',
         default=u"these settings override the global settings.")
 
-    @form.action(_(u"label_save", default="Save"),
-                 condition=form.haveInputWidgets,
-                 name=u'save')
-    def handle_save_action(self, action, data):
-        if form.applyChanges(self.context, self.form_fields, data,
-                                                     self.adapters):
-            zope.event.notify(
-                zope.lifecycleevent.ObjectModifiedEvent(self.context))
-            zope.event.notify(ploneformbase.EditSavedEvent(self.context))
-            self.status = "Changes saved"
-        else:
-            zope.event.notify(ploneformbase.EditCancelledEvent(self.context))
-            self.status = "No changes"
-
-        # convert right now if password provided
-        if data.get('encryption_password', None):
-            settings = Settings(self.context)
-            settings.last_updated = DateTime('1999/01/01').ISO8601()
-            queue_job(self.context)
+    @button.buttonAndHandler(_('Save'), name='apply')
+    def handleApply(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        self.applyChanges(data)
 
         url = getMultiAdapter((self.context, self.request),
             name='absolute_url')() + '/view'
         self.request.response.redirect(url)
+SettingsFormView = wrap_form(SettingsForm)
 
 
-class GlobalSettingsForm(ploneformbase.EditForm):
-    form_fields = form.FormFields(IGlobalDocumentViewerSettings)
+class GlobalSettingsForm(form.EditForm):
+    fields = field.Fields(IGlobalDocumentViewerSettings)
 
     label = _(u'heading_documentviewer_global_settings_form',
         default=u"Global Document Viewer Settings")
     description = _(u'description_documentviewer_global_settings_form',
         default=u"Configure the parameters for this Viewer.")
 
-    @form.action(_(u"label_save", default="Save"),
-                 condition=form.haveInputWidgets,
-                 name=u'save')
-    def _handle_save_action(self, action, data):
-        if form.applyChanges(self.context, self.form_fields, data,
-                             self.adapters):
-            zope.event.notify(ploneformbase.EditSavedEvent(self.context))
-            self.status = "Changes saved"
-        else:
-            zope.event.notify(ploneformbase.EditCancelledEvent(self.context))
-            self.status = "No changes"
-        self.request.response.redirect(
-            self.context.absolute_url() + '/@@global-documentviewer-settings')
+    @button.buttonAndHandler(_('Save'), name='apply')
+    def handleApply(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        self.applyChanges(data)
+
+        self.status = u'Changes saved...'
+GlobalSettingsFormView = wrap_form(GlobalSettingsForm)
 
 
 class Utils(BrowserView):

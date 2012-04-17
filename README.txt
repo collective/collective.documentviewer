@@ -24,7 +24,5 @@ Install requirements
 
   - add text back to pdf(necessary?)
     - slow...
-  - be able to override data base url
-    - for offsite storage
   - remove images after file is deleted
   - take hash of file to compare if it's already converted
