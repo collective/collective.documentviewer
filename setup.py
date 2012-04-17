@@ -11,12 +11,14 @@ setup(name='collective.documentviewer',
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
+        "Framework :: Plone :: 4.0",
+        "Framework :: Plone :: 4.1",
         "Framework :: Plone",
         "Programming Language :: Python",
         ],
-      keywords='',
-      author='',
-      author_email='',
+      keywords='plone documentviewer pdf ocr doc viewer',
+      author='Nathan Van Gheem',
+      author_email='vangheem@gmail.com',
       url='http://svn.plone.org/svn/collective/',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),

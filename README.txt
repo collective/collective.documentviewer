@@ -6,6 +6,14 @@ into plone.
 
 Example viewer: https://www.documentcloud.org/documents/19864-goldman-sachs-internal-emails
 
+Besides displaying PDFs, it will also display:
+
+ - Word
+ - Excel
+ - Powerpoint
+ - HTML
+ - RTF
+
 
 Install requirements
 --------------------
@@ -16,7 +24,8 @@ Install requirements
     - poppler
     - tesseract
     - pdftk
-    - openoffice
+    - openoffice(for doc, excel, ppt, etc types)
+
 
 
  TODO
@@ -24,5 +33,5 @@ Install requirements
 
   - add text back to pdf(necessary?)
     - slow...
-  - remove images after file is deleted
+  - remove images after file is deleted for plain file storage
   - take hash of file to compare if it's already converted
