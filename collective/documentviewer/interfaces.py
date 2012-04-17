@@ -19,10 +19,18 @@ class IGlobalDocumentViewerSettings(Interface):
     thumb_size = schema.Int(
         title=u"Thumb Image Size",
         default=180)
+    storage_type = schema.Choice(
+        title=u"Storage Type",
+        default='Blob',
+        vocabulary=SimpleVocabulary.fromValues([
+            'Blob',
+            'File']))
     # XXX try to detect default var location
     storage_location = schema.TextLine(
         title=u"Storage location",
-        default=u"../var/dvpdffiles")
+        description=u'Only for file storage not with zodb. '
+                    u'Plone client must have write access to directory.',
+        default=u"/opt/dvpdffiles")
     pdf_image_format = schema.Choice(
         title=u"Image Format",
         default=u"gif",
@@ -90,3 +98,7 @@ class IUtils(Interface):
         """
         force conversion
         """
+
+
+class IPDFBlobFile(Interface):
+    pass

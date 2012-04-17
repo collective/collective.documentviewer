@@ -20,3 +20,4 @@ Install requirements
   - add text back to pdf(necessary?)
   - convert other docs to pdf for viewer
   - remove images after file is deleted
+  - take hash of file to compare if it's already converted

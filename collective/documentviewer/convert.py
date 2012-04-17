@@ -1,3 +1,5 @@
+from ZODB.blob import Blob
+from persistent.dict import PersistentDict
 import subprocess
 import os
 from settings import Settings, GlobalSettings
@@ -9,6 +11,7 @@ import shutil
 from repoze.catalog.catalog import Catalog
 from repoze.catalog.indexes.text import CatalogTextIndex
 from repoze.catalog.indexes.field import CatalogFieldIndex
+import tempfile
 
 logger = getLogger('collective.documentviewer')
 
@@ -143,6 +146,16 @@ except IOError:
     docsplit = None
 
 
+def saveFileToBlob(filepath):
+    blob = Blob()
+    fi = open(filepath)
+    bfile = blob.open('w')
+    bfile.write(fi.read())
+    bfile.close()
+    fi.close()
+    return blob
+
+
 def convert(context):
     """
     Convert PDF to Images
@@ -154,9 +167,13 @@ def convert(context):
         field = context.getField('file') or context.getPrimaryField()
         site = getSite()
         gsettings = GlobalSettings(site)
-        storage_dir = os.path.join(gsettings.storage_location, context.UID())
-        if not os.path.exists(storage_dir):
-            os.mkdir(storage_dir)
+        if gsettings.storage_type == 'Blob':
+            storage_dir = tempfile.mkdtemp()
+        else:
+            storage_dir = os.path.join(gsettings.storage_location,
+                                       context.UID())
+            if not os.path.exists(storage_dir):
+                os.mkdir(storage_dir)
         if settings.catalog is None:
             settings.catalog = CatalogFactory()
 
@@ -180,6 +197,35 @@ def convert(context):
                     dump_path, page_num))
                 page = Page(page_num, filepath)
                 catalog.index_doc(page_num, page)
+
+            if gsettings.storage_type == 'Blob':
+                logger.info('setting blob data for %s' % repr(context))
+                # go through temp folder and move items into blob storage
+                files = PersistentDict()
+                for size in ('large', 'normal', 'small'):
+                    path = os.path.join(storage_dir, size)
+                    for filename in os.listdir(path):
+                        filepath = os.path.join(path, filename)
+                        filename = '%s/%s' % (size, filename)
+                        files[filename] = saveFileToBlob(filepath)
+                textfilespath = os.path.join(storage_dir, TEXT_REL_PATHNAME)
+                for filename in os.listdir(textfilespath):
+                    filepath = os.path.join(textfilespath, filename)
+                    filename = '%s/%s' % (TEXT_REL_PATHNAME, filename)
+                    files[filename] = saveFileToBlob(filepath)
+                settings.blob_files = files
+                shutil.rmtree(storage_dir)
+
+                #check for old storage to remove... Just in case.
+                old_storage_dir = os.path.join(gsettings.storage_location,
+                                               context.UID())
+                if os.path.exists(old_storage_dir):
+                    shutil.rmtree(old_storage_dir)
+            else:
+                # if settings used to be blob, delete file data
+                if settings.storage_type == 'Blob' and settings.blob_files:
+                    del settings._metadata['blob_files']
+            settings.storage_type = gsettings.storage_type
         except:
             logger.exception('Error converting PDF')
             settings.successfully_converted = False

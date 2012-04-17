@@ -1,3 +1,5 @@
+import os
+from zExceptions import NotFound
 from Products.Five.browser import BrowserView
 from plone.app.form import base as ploneformbase
 from zope.interface import implements
@@ -23,6 +25,9 @@ from OFS.SimpleItem import SimpleItem
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from collective.documentviewer import convert
 from repoze.catalog.query import Contains
+from zope.browserresource.file import FileResourceFactory
+from zope.component import queryUtility
+from zope.browserresource.interfaces import IResourceFactoryFactory
 
 from logging import getLogger
 logger = getLogger('collective.documentviewer')
@@ -275,6 +280,86 @@ class Utils(BrowserView):
                 queue_job(file)
 
 
+from plone.app.blob.download import handleRequestRange
+from plone.app.blob.iterators import BlobStreamIterator
+from plone.app.blob.utils import openBlob
+from webdav.common import rfc1123_date
+from collective.documentviewer.interfaces import IPDFBlobFile
+
+
+class ServeBlob(BrowserView):
+
+    def __call__(self):
+        context = self.context
+        filename = context.filename
+        filepath = context.filepath
+        settings = context.settings
+        blob = settings.blob_files[filepath]
+        blobfi = openBlob(blob)
+        length = os.fstat(blobfi.fileno()).st_size
+        blobfi.close()
+
+        ext = os.path.splitext(os.path.normcase(filename))[1][1:]
+        if ext == 'txt':
+            ct = 'text/plain'
+        else:
+            ct = 'image/%s' % ext
+        self.request.response.setHeader('Last-Modified',
+            rfc1123_date(self.context._p_mtime))
+        self.request.response.setHeader('Accept-Ranges', 'bytes')
+        self.request.response.setHeader("Content-Length", length)
+        self.request.response.setHeader('Content-Type', ct)
+        range = handleRequestRange(self.context, length, self.request,
+            self.request.response)
+        return BlobStreamIterator(blob, **range)
+
+
+class PDFTraverseBlobFile(SimpleItem):
+    """
+    For traversing blob data store
+    """
+    implements(IBrowserPublisher)
+
+    def __init__(self, fileobj, settings, request, previous=None):
+        self.context = fileobj
+        self.settings = settings
+        self.request = request
+        self.previous = previous
+
+    def publishTraverse(self, request, name):
+        if name not in ('large', 'normal', 'small', 'text'):
+            filepath = '%s/%s' % (self.previous, name)
+            if filepath in self.settings.blob_files:
+                blob = self.settings.blob_files[filepath]
+                blobfi = openBlob(blob)
+                length = os.fstat(blobfi.fileno()).st_size
+                blobfi.close()
+                ext = os.path.splitext(os.path.normcase(name))[1][1:]
+                if ext == 'txt':
+                    ct = 'text/plain'
+                else:
+                    ct = 'image/%s' % ext
+                self.request.response.setHeader('Last-Modified',
+                    rfc1123_date(self.context._p_mtime))
+                self.request.response.setHeader('Accept-Ranges', 'bytes')
+                self.request.response.setHeader("Content-Length", length)
+                self.request.response.setHeader('Content-Type', ct)
+                range = handleRequestRange(self.context, length, self.request,
+                    self.request.response)
+                return BlobStreamIterator(blob, **range)
+            else:
+                raise NotFound
+        else:
+            fi = PDFTraverseBlobFile(self.context, self.settings,
+                                     request, name)
+            fi.__parent__ = self
+            return fi.__of__(self)
+
+    def browserDefault(self, request):
+        '''See interface IBrowserPublisher'''
+        return lambda: '', ()
+
+
 class PDFFiles(SimpleItem, DirectoryResource):
     implements(IBrowserPublisher)
 
@@ -285,7 +370,26 @@ class PDFFiles(SimpleItem, DirectoryResource):
         permission = CheckerPublic
         checker = NamesChecker(allowed_names + ('__getitem__', 'get'),
                            permission)
-        self.__dir = Directory('/opt/dvpdffiles', checker, self.__name__)
+        self.site = getSite()
+        self.global_settings = GlobalSettings(self.site)
+        self.storage_type = self.global_settings.storage_type
+        self.__dir = Directory(self.global_settings.storage_location,
+            checker, self.__name__)
 
         DirectoryResource.__init__(self, self.__dir, request)
         self.__Security_checker__ = checker
+
+    def publishTraverse(self, request, name):
+        '''See interface IBrowserPublisher'''
+        uidcat = getToolByName(self.site, 'uid_catalog')
+        brains = uidcat(UID=name)
+        if len(brains) == 0:
+            return NotFound
+        fileobj = brains[0].getObject()
+        settings = Settings(fileobj)
+        if settings.storage_type == 'Blob':
+            fi = PDFTraverseBlobFile(fileobj, settings, request)
+            fi.__parent__ = self
+            return fi.__of__(self)
+        else:
+            return super(PDFFiles, self).publishTraverse(request, name)
