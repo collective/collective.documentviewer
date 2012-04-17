@@ -34,15 +34,6 @@
   />
 
   <browser:page
-    name="full-dv"
-    for="Products.ATContentTypes.interface.file.IFileContent"
-    class=".views.DocumentViewerView"
-    template="documentviewer-full.pt"
-    permission="zope2.View"
-    layer=".interfaces.ILayer"
-  />
-
-  <browser:page
     name="dv-search.json"
     for="Products.ATContentTypes.interface.file.IFileContent"
     class=".views.DocumentViewerSearchView"
