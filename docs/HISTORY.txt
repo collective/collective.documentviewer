@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1a1 (unreleased)
+1.1a1 (2012-04-18)
 ------------------
 
 - add pdf folder album view
