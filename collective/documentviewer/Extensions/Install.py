@@ -48,3 +48,9 @@ def uninstall(context, reinstall=False):
         # remove control panel
         pcp = getToolByName(context, 'portal_controlpanel')
         pcp.unregisterConfiglet('documentviewer')
+
+        # remove global settings annotations
+        annotations = IAnnotations(portal)
+        data = annotations.get('collective.documentviewer', None)
+        if data:
+            del annotations['collective.documentviewer']
