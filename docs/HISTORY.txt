@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0a2 (unreleased)
+1.0a2 (2012-04-17)
 ------------------
 
 - add control panel icon
