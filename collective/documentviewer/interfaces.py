@@ -28,6 +28,11 @@ class IGlobalDocumentViewerSettings(Interface):
         default=180)
     storage_type = schema.Choice(
         title=u"Storage Type",
+        description=u"Blob storage using the normal ZODB blob mechanism. "
+                    u"File storage is for just storage the files on the "
+                    u"file system with no hard reference on write to the "
+                    u"ZODB. This allows you to easily push the files to "
+                    u"be served off-site.",
         default='Blob',
         vocabulary=SimpleVocabulary.fromValues([
             'Blob',
@@ -47,6 +52,7 @@ class IGlobalDocumentViewerSettings(Interface):
         ]))
     ocr = schema.Bool(
         title=u"OCR",
+        description=u"extract the text from the PDF using OCR technology",
         default=True)
     auto_select_layout = schema.Bool(
         title=u"Auto select layout",
@@ -54,9 +60,8 @@ class IGlobalDocumentViewerSettings(Interface):
         default=True)
     auto_layout_file_types = schema.List(
         title=u"Auto layout file types",
-        description=u"extra types only work in open office is installed",
+        description=u"extra types only work with openoffice installed",
         default=['pdf'],
-        #missing_value=['pdf'],
         value_type=schema.Choice(
             vocabulary=SimpleVocabulary(FILE_TYPES_VOCAB))
         )
@@ -78,7 +83,7 @@ class IGlobalDocumentViewerSettings(Interface):
         default=None,
         required=False)
     override_base_resource_url = schema.URI(
-        title=u"Overridden Base Resource URL",
+        title=u"Override Base Resource URL",
         description=u"If you're syncing your storage to another server you "
                     u"would like to serve the pdf resources from, please "
                     u"specify the base url path.",

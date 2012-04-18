@@ -282,6 +282,7 @@ class Converter(object):
             settings.num_pages = pages
             settings.successfully_converted = True
             settings.storage_type = self.gsettings.storage_type
+            settings.pdf_image_format = self.gsettings.pdf_image_format
         except:
             logger.exception('Error converting PDF')
             settings.successfully_converted = False

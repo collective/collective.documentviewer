@@ -10,6 +10,9 @@ Changelog
 - fix uninstall procedure
   [vangheem]
 
+- changing image type does not cause existing ones to fail.
+  [vangheem]
+
 
 1.0a1 (2012-04-17)
 ------------------

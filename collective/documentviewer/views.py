@@ -106,6 +106,13 @@ class DocumentViewerView(BrowserView):
                          self.global_settings.show_sidebar)
         search = either(self.settings.show_search,
                         self.global_settings.show_search)
+        image_format = self.settings.pdf_image_format
+        if not image_format:
+            # oops, this wasn't set like it should have been
+            # on alpha release. We'll default back to global
+            # setting.
+            image_format = self.global_settings.pdf_image_format
+
         return """
 window.documentData = %(data)s;
 var hash = window.location.hash;
@@ -149,14 +156,14 @@ $('body').addClass('not-fullscreen');
             'page': {
                 'image': '%s/{size}/%s_{page}.%s' % (
                     self.dvpdffiles, dump_path,
-                    self.global_settings.pdf_image_format),
+                    image_format),
                 'text': '%s/%s/%s_{page}.txt' % (
                     self.dvpdffiles, convert.TEXT_REL_PATHNAME, dump_path)
             },
             'pdf': self.context.absolute_url(),
             'thumbnail': '%s/small/%s_1.%s' % (
                 self.dvpdffiles, dump_path,
-                self.global_settings.pdf_image_format),
+                image_format),
             'search': '%s/dv-search.json?q={query}' % (
                     self.context.absolute_url())
         }
