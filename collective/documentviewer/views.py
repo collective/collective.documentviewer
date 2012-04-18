@@ -117,7 +117,7 @@ class DocumentViewerView(BrowserView):
         return """
 window.documentData = %(data)s;
 var hash = window.location.hash;
-if(hash == '#document/p1' || (%(fullscreen)s && hash != '#bypass-fullscreen')){
+if(hash.indexOf('#document') != -1 || (%(fullscreen)s && hash != '#bypass-fullscreen')){
 window.currentDocument = DV.load(window.documentData, {
     sidebar: true,
     width: $('#DV-container').width(),
