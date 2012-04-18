@@ -38,20 +38,23 @@ class JobRunner(object):
         self.async = getUtility(IAsyncService)
         self.queue = self.async.getQueues()['']
 
+    def is_current_active(self, job):
+        return isConversion(job, self.sitepath) and \
+            job.args[0] == self.objectpath and \
+            job.status != 'completed-status'
+
     @property
     def already_in_queue(self):
         """
         Check if object in queue
         """
         for job in self.queue.quotas[QUOTA_NAME]._data:
-            if isConversion(job, self.sitepath) and \
-                    job.args[2] == self.objectpath:
+            if self.is_current_active(job):
                 return True
 
         jobs = [job for job in self.queue]
         for job in jobs:
-            if isConversion(job, self.sitepath) and \
-                    job.args[2] == self.objectpath:
+            if self.is_current_active(job):
                 return True
         return False
 
