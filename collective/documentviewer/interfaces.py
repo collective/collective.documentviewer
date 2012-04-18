@@ -101,6 +101,11 @@ class IGlobalDocumentViewerSettings(Interface):
     show_search = schema.Bool(
         title=u"Show search box",
         default=True)
+    async_quota_size = schema.Int(
+        title=u"Async Quota Size",
+        description=u"Number of conversions to run at a time. "
+                    u"The quota name assigned is `dv`.",
+        default=3)
 
 
 class IDocumentViewerSettings(Interface):
@@ -132,4 +137,8 @@ class IUtils(Interface):
     def convert():
         """
         force conversion
+        """
+    def async_enabled():
+        """
+        whether async is installed
         """

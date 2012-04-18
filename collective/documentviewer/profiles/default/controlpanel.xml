@@ -11,5 +11,13 @@
         visible="True" i18n:attributes="title">
         <permission>Manage Portal</permission>
     </configlet>
+    <configlet title="Document Viewer Async Tasks" action_id="documentviewer-jobs"
+        appId="collective.documentviewer" category="Products"
+        condition_expr="portal/@@documentviewer-utils/async_enabled"
+        url_expr="string:${portal_url}/@@dvasync-monitor"
+        icon_expr="string:${portal_url}/++resource++documentviewer.resources/images/application-pdf.png"
+        visible="True" i18n:attributes="title">
+        <permission>Manage Portal</permission>
+    </configlet>
   
 </object>

@@ -38,8 +38,8 @@
 
 <body>
 
-<div metal:fill-slot="main">
-<metal:main_macro define-macro="main"
+<div metal:fill-slot="content-core">
+<metal:main_macro define-macro="content-core"
      tal:define="result python: view.results(portal_type=('File', 'Image'));
                  files result/files|python:[];
                  albums result/folders|python:[];
@@ -47,17 +47,6 @@
                  b_start python:request.get('b_start', 0);
                  templateId template/getId|nothing;
                  batch python:Batch(files, 12, int(b_start), orphan=1)">
-
-    <div tal:replace="structure provider:plone.abovecontenttitle" />
-    <div id="headerSlot">
-      <h1 tal:content="here/pretty_title_or_id" class="documentFirstHeading">Title or id</h1>
-      <p metal:use-macro="here/kss_generic_macros/macros/generic_description_view">
-        Description
-      </p>
-    </div>
-    <div tal:replace="structure provider:plone.belowcontenttitle" />
-
-    <div tal:replace="structure provider:plone.abovecontentbody" />
 
     <div metal:define-macro="text-field-view" tal:on-error="nothing"
         id="parent-fieldname-text" class="stx"
@@ -153,10 +142,6 @@
 
     <div tal:condition="python:albums or files"
          metal:use-macro="here/batch_macros/macros/navigation" />
-
-    <metal:subtopics use-macro="here/atct_topic_view/macros/folderlisting_macro" />
-
-    <div tal:replace="structure provider:plone.belowcontentbody" />
 
   </metal:main_macro>
 </div>

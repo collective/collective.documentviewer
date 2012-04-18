@@ -67,4 +67,13 @@ TODO
    - slow...
  - remove images after file is deleted for plain file storage
  - take hash of file to compare if it's already converted
-
+ - make searchable in plone
+    - extract data from local catalog perhaps?
+ - change folder view
+    - to not do the large thumb popup
+    - be able to local searchable
+    - remove colorbox(just a holdover from pdfpal)
+ - add async monitor
+    - cp item?
+ - check if already in queue before adding it to queue
+   again.

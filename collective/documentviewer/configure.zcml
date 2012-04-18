@@ -4,6 +4,7 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="collective.documentviewer">
 
   <five:registerPackage package="." initialize=".initialize" />
@@ -15,6 +16,7 @@
       description="Installs the collective.documentviewer package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
+  <include file="upgrades.zcml" />
 
   <browser:page
     name="documentviewer"
@@ -72,14 +74,24 @@
   />
   
   <browser:page
+    zcml:condition="installed plone.app.async"
+    name="dvasync-monitor"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".views.AsyncMonitor"
+    template="async-monitor.pt"
+    permission="cmf.ManagePortal"
+    layer=".interfaces.ILayer"
+  />
+
+  <browser:page
     name="global-documentviewer-settings"
-    for="Products.CMFPlone.Portal.PloneSite"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     class=".views.GlobalSettingsFormView"
     layer=".interfaces.ILayer"
     permission="cmf.ManagePortal"
   />
   <adapter 
-    for="Products.CMFPlone.Portal.PloneSite"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     provides=".interfaces.IGlobalDocumentViewerSettings"
     factory=".settings.GlobalSettings"
   />
@@ -102,7 +114,7 @@
   
   <browser:page
     name="convertall-to-documentviewer"
-    for="Products.CMFPlone.Portal.PloneSite"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     permission="cmf.ManagePortal"
     class=".views.Utils"
     attribute="convert_all"

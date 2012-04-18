@@ -1,0 +1,14 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:gs="http://namespaces.zope.org/genericsetup"
+  i18n_domain="collective.documentviewer">
+
+  <gs:upgradeStep
+    title="Upgrade collective.documentviewer to 1.1"
+    description="Upgrade collective.documentviewer to 1.1"
+    source="*"
+    destination="1100"
+    handler=".upgrades.upgrade_to_1_1"
+    profile="collective.documentviewer:default" />
+
+</configure>

@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+
+<metal:css fill-slot="style_slot">
+      <style type="text/css" media="screen"> 
+        .active-status td{
+          background-color: #FF9452;
+        }
+        .completed-status td{
+          background-color:#9AFF8F;
+        }
+        .job-count{
+          color:red;
+        }
+    </style>
+</metal:css>
+
+<body>
+
+<div metal:fill-slot="main">
+    <tal:main-macro metal:define-macro="main" tal:define="jobs python: view.jobs">
+
+
+        <h1 class="async-header"> 
+          Monitor Document Viewer Async Jobs
+        </h1>
+        
+        <p class="discreet">You have <span class="job-count" tal:content="python: len(jobs)" /> jobs yet to finish.</p>
+
+        <div id="async-jobs">
+          <table class="listing">
+            <thead>
+              <tr>
+                <th>user</th>
+                <th>status</th>
+                <th>object</th>
+                <th>last access</th>
+                <th>running time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tal:jobs tal:repeat="job jobs">
+                <tr tal:attributes="class string:${job/status}">
+                  <td tal:content="job/user" />
+                  <td tal:content="job/status" />
+                  <td tal:content="job/object_path" />
+                  <td tal:content="job/lastused" />
+                  <td tal:content="job/timerunning" />
+                </tr>
+              </tal:jobs>
+            </tbody>
+          </table>
+        </div>
+      
+
+    </tal:main-macro>
+</div>
+
+</body>
+
+</html>

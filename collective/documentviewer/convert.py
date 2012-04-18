@@ -50,7 +50,7 @@ def CatalogFactory():
     return catalog
 
 
-class docsplit_subprocess:
+class DocSplitSubProcess:
     """
     idea of how to handle this shamelessly
     stolen from ploneformgen's gpg calls
@@ -167,7 +167,7 @@ class docsplit_subprocess:
         return num_pages
 
 try:
-    docsplit = docsplit_subprocess()
+    docsplit = DocSplitSubProcess()
 except IOError:
     logger.exception("No docsplit installed. collective.documentviewer "
                      "will not work.")
@@ -293,6 +293,9 @@ class Converter(object):
         return result
 
 
-def run_conversion(context):
+def runConversion(context):
+    """
+    Create document viewer files
+    """
     converter = Converter(context)
     return converter()
