@@ -1,4 +1,5 @@
-<layers>
+<?xml version="1.0"?>
+<layers name="" meta_type="ComponentRegistry">
     <layer name="collective.documentviewer" 
            interface="collective.documentviewer.interfaces.ILayer" />
 </layers>

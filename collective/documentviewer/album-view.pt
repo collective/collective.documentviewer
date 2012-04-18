@@ -1,0 +1,166 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+
+
+<metal:css fill-slot="style_slot">
+
+  <link rel="stylesheet" href="++resource++documentviewer.resources/colorbox/colorbox.css"
+    tal:attributes="href string:${context/portal_url}/++resource++documentviewer.resources/colorbox/colorbox.css"
+    type="text/css" media="screen" />
+  
+  <script type="text/javascript" src="++resource++documentviewer.resources/colorbox/jquery.colorbox.js"
+    tal:attributes="src string:${context/portal_url}/++resource++documentviewer.resources/colorbox/jquery.colorbox.js"></script>
+
+  
+  <script type="text/javascript">
+  
+    jq(document).ready(function(){
+      jq('div.pdfEntry a.box').colorbox({
+        inline : true,
+        title : ' ',
+        current : "Document {current} of {total}",
+        cbox_open : function(){
+          var parent = jq(this).parent();
+          if(parent.hasClass('pdfEntry')){
+            this.href = "#" + jq(this).parent().attr('rel');
+          }else{
+            window.location = this.href;
+          }
+        }
+      });
+    });
+  
+  </script>
+  
+</metal:css>
+
+<body>
+
+<div metal:fill-slot="main">
+<metal:main_macro define-macro="main"
+     tal:define="result python: view.results(portal_type=('File', 'Image'));
+                 files result/files|python:[];
+                 albums result/folders|python:[];
+                 Batch python:modules['Products.CMFPlone'].Batch;
+                 b_start python:request.get('b_start', 0);
+                 templateId template/getId|nothing;
+                 batch python:Batch(files, 12, int(b_start), orphan=1)">
+
+    <div tal:replace="structure provider:plone.abovecontenttitle" />
+    <div id="headerSlot">
+      <h1 tal:content="here/pretty_title_or_id" class="documentFirstHeading">Title or id</h1>
+      <p metal:use-macro="here/kss_generic_macros/macros/generic_description_view">
+        Description
+      </p>
+    </div>
+    <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+    <div tal:replace="structure provider:plone.abovecontentbody" />
+
+    <div metal:define-macro="text-field-view" tal:on-error="nothing"
+        id="parent-fieldname-text" class="stx"
+        tal:define="text here/aq_explicit/getText|nothing;
+                    format here/Format|nothing;"
+        tal:condition="text"
+        tal:attributes="class python:test(format in ('text/structured',
+                                               'text/x-rst', ), 'stx', 'plain')">
+      <div metal:define-slot="inside" tal:replace="structure text">The body</div>
+    </div>
+
+    <tal:albumsfiles tal:condition="python:albums or files">
+      <tal:files tal:condition="batch" tal:repeat="file batch">
+        <div class="photoAlbumEntry pdfEntry" tal:attributes="rel string:pdf${repeat/file/number}"
+            tal:define="type file/portal_type;
+                        file file/getObject|file;
+                        scales python: view.get_scales(file);">
+          <div style="display:none" tal:define="url file/absolute_url">
+            <div class="box-data" tal:attributes="id string:pdf${repeat/file/number}">
+              <h1 tal:content="file/Title" />
+              <a tal:attributes="href string:${file/absolute_url}/view;">
+                <img src="" alt="" tal:attributes="src scales/large" />
+              </a>
+              <p class="buttons">
+                <a tal:attributes="href string:${url}/view">View Document</a>
+              </p>
+            </div>
+          </div>
+          <a tal:define="id python:int(b_start)+int(repeat['file'].number()-1)" rel="thumbnails" class="box"
+             tal:attributes="href string:${file/absolute_url}/view;
+                             title file/Description;">
+            <span class="photoAlbumEntryWrapper">
+              <img src="" alt="" tal:attributes="src scales/small" />
+            </span>
+            <span class="photoAlbumEntryTitle" tal:content="file/pretty_title_or_id">
+              Title
+            </span>
+          </a>
+          <a tal:attributes="href string:${file/absolute_url}/view;">View</a>
+        </div>
+      </tal:files>
+      <div class="photoAlbum" tal:condition="albums">
+        <tal:albums tal:repeat="album albums">
+          <div class="photoAlbumEntry photoAlbumFolder pdfEntry"
+              tal:attributes="rel string:pdffolder${repeat/album/number}"
+              tal:define="file_brains_in_album python:view.get_files(album);
+                          number_of_files python:len(file_brains_in_album);
+                          random python:modules['random'];
+                          random_image python:number_of_files and random.choice(file_brains_in_album).getObject() or None;
+                          type random_image/portal_type|nothing;
+                          scales python: view.get_scales(random_image);">
+            <div style="display:none" tal:condition="number_of_files">
+              <div class="box-data" tal:attributes="id string:pdffolder${repeat/album/number}">
+                <h1 tal:content="album/Title" />
+                <p class="discreet" tal:content="album/Description" />
+                <a tal:attributes="href string:${album/getURL}/view;">
+                  <img src="" alt="" tal:attributes="src scales/large" />
+                </a>
+                <p class="discreet">
+                  There are <tal:count tal:replace="number_of_files" /> documents in this folder
+                </p>
+                <p class="buttons">
+                  <a tal:attributes="href string:${album/getURL}">View Group</a>
+                </p>
+              </div>
+            </div>
+            <a tal:attributes="href album/getURL;
+                               title album/Description;
+                               class python: number_of_files and 'box' or '';" 
+                rel="thumbnails">
+              <span class="photoAlbumEntryWrapper">
+                <img src="" alt=""
+                    tal:condition="number_of_files"
+                    tal:attributes="src scales/small" />
+              </span>
+              <span class="photoAlbumEntryTitle">
+                <tal:title content="album/pretty_title_or_id">Title</tal:title>
+                (<tal:number content="number_of_files" />)
+              </span>
+            </a>
+          </div>
+        </tal:albums>
+      </div>
+      <div class="visualClear"><!-- --></div>
+    </tal:albumsfiles>
+
+    <p class="discreet"
+       i18n:domain="atcontenttypes"
+       i18n:translate="text_no_albums_uploaded"
+       tal:condition="python:not (albums or files)">
+        No albums or photos uploaded yet.
+    </p>
+
+    <div tal:condition="python:albums or files"
+         metal:use-macro="here/batch_macros/macros/navigation" />
+
+    <metal:subtopics use-macro="here/atct_topic_view/macros/folderlisting_macro" />
+
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+
+  </metal:main_macro>
+</div>
+
+</body>
+
+</html>

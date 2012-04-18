@@ -5,7 +5,7 @@ version = '1.0a2'
 
 setup(name='collective.documentviewer',
       version=version,
-      description="documentviewer integration",
+      description="Document cloud's document viewer integration into plone.",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from

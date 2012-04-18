@@ -6,6 +6,29 @@ from collective.documentviewer.settings import GlobalSettings
 from Products.ATContentTypes.interface.file import IFileContent
 from Products.CMFCore.utils import getToolByName
 
+types_to_add_ablum_view = [
+    'Folder',
+    'Large Plone Folder',
+    'Plone Site',
+    'Topic'
+]
+
+
+def install(context):
+    # when you override this, you have to manually run GS
+    setup = getToolByName(context, 'portal_setup')
+    setup.runAllImportStepsFromProfile(
+        'profile-collective.documentviewer:default')
+
+    types = getToolByName(context, 'portal_types')
+
+    for portal_type in types_to_add_ablum_view:
+        if portal_type in types.objectIds():
+            _type = types[portal_type]
+            methods = list(_type.view_methods)
+            methods.append('dvpdf-album-view')
+            _type.view_methods = tuple(set(methods))
+
 
 def uninstall(context, reinstall=False):
     if not reinstall:
@@ -42,8 +65,18 @@ def uninstall(context, reinstall=False):
         types = getToolByName(portal, 'portal_types')
         filetype = types['File']
         methods = list(filetype.view_methods)
-        methods.remove('documentviewer')
-        filetype.view_methods = tuple(methods)
+        if 'documentviewer' in methods:
+            methods.remove('documentviewer')
+            filetype.view_methods = tuple(methods)
+
+        # remove pdf album view
+        for portal_type in types_to_add_ablum_view:
+            if portal_type in types.objectIds():
+                _type = types[portal_type]
+                methods = list(_type.view_methods)
+                if 'dvpdf-album-view' in methods:
+                    methods.remove('dvpdf-album-view')
+                    _type.view_methods = tuple(set(methods))
 
         # remove control panel
         pcp = getToolByName(context, 'portal_controlpanel')

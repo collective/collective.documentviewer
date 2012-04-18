@@ -9,8 +9,6 @@ from interfaces import IDocumentViewerSettings, IUtils, \
 from settings import Settings, GlobalSettings
 from Products.ATContentTypes.interface.file import IFileContent
 from collective.documentviewer import mf as _
-import zope.event
-import zope.lifecycleevent
 from zope.component import getMultiAdapter
 from convert import docsplit
 from zope.app.component.hooks import getSite
@@ -28,6 +26,9 @@ from plone.app.blob.download import handleRequestRange
 from plone.app.blob.iterators import BlobStreamIterator
 from plone.app.blob.utils import openBlob
 from webdav.common import rfc1123_date
+from Products.CMFPlone.utils import base_hasattr
+from z3c.form import form, field, button
+from plone.app.z3cform.layout import wrap_form
 
 from logging import getLogger
 logger = getLogger('collective.documentviewer')
@@ -184,10 +185,6 @@ class DocumentViewerSearchView(BrowserView):
                 "query": query
                 })
         return json.dumps({"results": [], "query": query})
-
-
-from z3c.form import form, field, group, button
-from plone.app.z3cform.layout import wrap_form
 
 
 class SettingsForm(form.EditForm):
@@ -361,3 +358,79 @@ class PDFFiles(SimpleItem, DirectoryResource):
             return fi.__of__(self)
         else:
             return super(PDFFiles, self).publishTraverse(request, name)
+
+
+class AlbumView(BrowserView):
+
+    def getContents(self, object=None, portal_type=('File',),
+                    full_objects=False, path=None):
+        if not object:
+            object = self.context
+        opts = {'portal_type': portal_type}
+        if path:
+            opts['path'] = path
+        if object.portal_type == 'Topic':
+            res = object.queryCatalog(**opts)
+        else:
+            opts['sort_on'] = 'getObjPositionInParent'
+            res = object.getFolderContents(contentFilter=opts,
+                                           full_objects=full_objects)
+        return res
+
+    def results(self, portal_type=('File',)):
+        result = {}
+        result['files'] = self.getContents(portal_type=portal_type)
+        result['folders'] = self.getContents(
+            portal_type=('Folder', 'Large Plone Folder'))
+        return result
+
+    def get_files(self, obj, portal_type=('File',)):
+        #Handle brains or objects
+        if base_hasattr(obj, 'getPath'):
+            path = obj.getPath()
+        else:
+            path = '/'.join(obj.getPhysicalPath())
+        # Explicitly set path to remove default depth
+        return self.getContents(object=obj, portal_type=portal_type, path=path)
+
+    def __call__(self):
+        self.site = getSite()
+        self.global_settings = GlobalSettings(self.site)
+
+        self.portal_url = getMultiAdapter((self.context, self.request),
+            name="plone_portal_state").portal_url()
+        self.resource_url = self.global_settings.override_base_resource_url
+        self.dump_path = convert.DUMP_FILENAME.rsplit('.', 1)[0]
+        return super(AlbumView, self).__call__()
+
+    def get_scales(self, obj):
+        if not obj:
+            return None
+        if self.resource_url:
+            dvpdffiles = '%s/%s' % (self.resource_url.rstrip('/'),
+                                         obj.UID())
+        else:
+            dvpdffiles = '%s/@@dvpdffiles/%s' % (
+                self.portal_url, obj.UID())
+
+        if obj.portal_type == 'File':
+            settings = Settings(obj)
+            if settings.successfully_converted:
+                image_format = settings.pdf_image_format
+                if not image_format:
+                    image_format = self.global_settings.pdf_image_format
+                return {
+                    'small': '%s/small/%s_1.%s' % (
+                        dvpdffiles, self.dump_path, image_format),
+                    'large': '%s/normal/%s_1.%s' % (
+                        dvpdffiles, self.dump_path, image_format),
+                }
+            else:
+                # XXX need placeholders...
+                return {'small': '', 'large': ''}
+        elif obj.portal_type == 'Image':
+            url = obj.absolute_url()
+            return {
+                'small': '%s/image_thumb' % url,
+                'large': '%s/image_preview' % url
+            }

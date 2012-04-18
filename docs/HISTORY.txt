@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.1a1 (unreleased)
+------------------
+
+- add pdf folder album view
+  [vangheem]
+
+
 1.0a2 (2012-04-17)
 ------------------
 

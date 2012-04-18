@@ -40,6 +40,23 @@
     permission="zope2.View"
     layer=".interfaces.ILayer"
   />
+
+  <browser:page
+    name="dvpdf-album-view"
+    for="*"
+    class=".views.AlbumView"
+    template="album-view.pt"
+    permission="zope2.View"
+    layer=".interfaces.ILayer"
+  />
+
+  <browser:menuItem
+    for="*"
+    menu="plone_displayviews"
+    title="PDF Album View"
+    action="dvpdf-album-view"
+    description="To show thumbnails from pdf."
+  />
   
   <browser:page
     name="documentviewer-settings"
