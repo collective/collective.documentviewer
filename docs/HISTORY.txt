@@ -7,6 +7,9 @@ Changelog
 - add pdf folder album view
   [vangheem]
 
+- fix async integration
+  [vangheem]
+
 
 1.0a2 (2012-04-17)
 ------------------

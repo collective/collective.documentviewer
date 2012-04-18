@@ -283,8 +283,16 @@ class Converter(object):
             settings.successfully_converted = True
             settings.storage_type = self.gsettings.storage_type
             settings.pdf_image_format = self.gsettings.pdf_image_format
+            result = 'success'
         except:
             logger.exception('Error converting PDF')
             settings.successfully_converted = False
+            result = 'failure'
         settings.last_updated = DateTime().ISO8601()
         settings.converting = False
+        return result
+
+
+def run_conversion(context):
+    converter = Converter(context)
+    return converter()

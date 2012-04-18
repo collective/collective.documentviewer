@@ -1,7 +1,7 @@
 from zope.app.component.hooks import getSite
 from settings import GlobalSettings
 from Products.CMFCore.utils import getToolByName
-from convert import Converter
+from convert import Converter, run_conversion
 from zope.component import getUtility
 from settings import Settings
 from logging import getLogger
@@ -24,7 +24,7 @@ def queue_job(object):
         try:
             settings = Settings(object)
             async = getUtility(IAsyncService)
-            async.queueJob(converter, object)
+            async.queueJob(run_conversion, object)
             settings.converting = True
             return
         except:
