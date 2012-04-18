@@ -7,7 +7,7 @@
     <configlet title="Document Viewer Settings" action_id="documentviewer"
         appId="collective.documentviewer" category="Products" condition_expr=""
         url_expr="string:${portal_url}/@@global-documentviewer-settings"
-        icon_expr="string:${portal_url}/dc.png"
+        icon_expr="string:${portal_url}/++resource++documentviewer.resources/images/application-pdf.png"
         visible="True" i18n:attributes="title">
         <permission>Manage Portal</permission>
     </configlet>

@@ -33,3 +33,4 @@ TODO
    - slow...
  - remove images after file is deleted for plain file storage
  - take hash of file to compare if it's already converted
+ - add folder view

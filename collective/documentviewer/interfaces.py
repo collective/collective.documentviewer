@@ -68,11 +68,15 @@ class IGlobalDocumentViewerSettings(Interface):
     override_contributor = schema.TextLine(
         title=u"Override Contributor",
         description=u"What to override the contributor field on viewer with."
-                    u"Leave blank to use document owner")
+                    u"Leave blank to use document owner",
+        default=None,
+        required=False)
     override_organization = schema.TextLine(
         title=u"Override Contributor Organization",
         description=u"What to override the organization field on viewer with."
-                    u"Leave blank to use site title.")
+                    u"Leave blank to use site title.",
+        default=None,
+        required=False)
     override_base_resource_url = schema.URI(
         title=u"Overridden Base Resource URL",
         description=u"If you're syncing your storage to another server you "
