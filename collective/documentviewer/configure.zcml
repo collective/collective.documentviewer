@@ -128,13 +128,13 @@
   <subscriber
     for="Products.ATContentTypes.interface.IFileContent
          Products.Archetypes.interfaces.IObjectEditedEvent"
-    handler=".events.handle_file_creation"
+    handler=".subscribers.handle_file_creation"
   />
 
   <subscriber
     for="Products.ATContentTypes.interface.IFileContent
          Products.Archetypes.interfaces.IObjectInitializedEvent"
-    handler=".events.handle_file_creation"
+    handler=".subscribers.handle_file_creation"
   />
 
   <browser:page
