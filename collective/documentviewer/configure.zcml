@@ -55,7 +55,7 @@
   <browser:menuItem
     for="Products.CMFCore.interfaces._content.IFolderish"
     menu="plone_displayviews"
-    title="PDF Album View"
+    title="PDF Group View"
     action="dvpdf-group-view"
     description="To show thumbnails from pdf and make it searchable."
   />

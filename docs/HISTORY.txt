@@ -7,6 +7,9 @@ Changelog
 - fix setting custom quota for async queue
   [vangheem]
 
+- fix group view clear button
+  [vangheem]
+
 
 1.2a1 (2012-04-19)
 ------------------
