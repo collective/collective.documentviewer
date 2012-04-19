@@ -129,6 +129,14 @@
     class=".views.Utils"
     attribute="convert_all"
   />
+
+  <browser:page
+    name="dvcleanup-filestorage"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    permission="cmf.ManagePortal"
+    class=".views.Utils"
+    attribute="cleanup_file_storage"
+  />
   
   <browser:resourceDirectory
     name="documentviewer.resources"

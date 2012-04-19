@@ -31,6 +31,8 @@ from z3c.form import form, field, button
 from plone.app.z3cform.layout import wrap_form
 from collective.documentviewer.async import isConversion, \
     asyncInstalled, QUOTA_NAME, queueJob
+import shutil
+from zope.annotation.interfaces import IAnnotations
 
 
 from logging import getLogger
@@ -289,6 +291,41 @@ class Utils(BrowserView):
                 settings = Settings(file)
                 settings.last_updated = DateTime('1999/01/01').ISO8601()
                 queueJob(file)
+
+    def cleanup_file_storage(self):
+        """
+        Cases to remove file storage.
+
+        1) object not found
+        2) found but not document viewer layout
+        3) found, document viewer layout but blob storage set
+        """
+        gsettings = GlobalSettings(self.context)
+        storage_loc = gsettings.storage_location
+        if not os.path.exists(storage_loc):
+            return 'storage location path "%s" does not exist' % storage_loc
+        catalog = getToolByName(self.context, 'portal_catalog')
+        for foldername in os.listdir(storage_loc):
+            #foldername should be file uid
+            brains = catalog(UID=foldername)
+            folderpath = os.path.join(storage_loc, foldername)
+            if len(brains) == 0:
+                shutil.rmtree(folderpath)
+            else:
+                obj = brains[0].getObject()
+                settings = Settings(obj)
+                if obj.getLayout() != 'documentviewer':
+                    if not settings.converting:
+                        shutil.rmtree(folderpath)
+                        # also delete settings
+                        annotations = IAnnotations(obj)
+                        data = annotations.get('collective.documentviewer',
+                                               None)
+                        if data:
+                            del annotations['collective.documentviewer']
+                elif settings.storage_type == 'Blob':
+                    shutil.rmtree(folderpath)
+        return 'done'
 
 
 class PDFTraverseBlobFile(SimpleItem):

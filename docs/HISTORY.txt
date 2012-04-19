@@ -29,6 +29,10 @@ Changelog
 - be able to remove document viewer conversion tasks
   [vangheem]
 
+- add ability to cleanup file storage files for deleted
+  plone File objects.
+  [vangheem]
+
 
 1.1a1 (2012-04-18)
 ------------------

@@ -75,8 +75,26 @@ Auto Convert
     When pdf files are added and modified, automatically convert.
 
 
+File storage integration
+------------------------
+
+If you choose to use basic file storage instead of zodb blob storage,
+there are a few things you'll want to keep in mind.
+
+1) Use nginx to then serve the file system files. This might require
+   you install a local nginx just for serving file storage on the
+   plone server. You can get creative with how your file storage
+   is used though.
+
+2) Since in plone's operation, it can be interrupted and the deletion
+   of a file on the OS system system can not be done within a transaction,
+   no files are ever deleted. However, there is an action you can
+   put in a cron task to clean up your file storage directory. Just call the
+   url `http://zeoinstace/plone/@@dvcleanup-filestorage`.
+
+
 TODO
 ----
 
- - remove images after file is deleted for plain file storage
- - reject converting pdf if too large and no async support provided
+ - reject converting pdf if too large and no async support provided?
+    - or let people hang themselves?
