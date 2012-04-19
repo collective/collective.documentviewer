@@ -140,7 +140,7 @@
   
   <browser:resourceDirectory
     name="documentviewer.resources"
-    directory="documentviewer"
+    directory="resources"
   />
   
   <subscriber
