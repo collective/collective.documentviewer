@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.2a2 (unreleased)
+------------------
+
+- fix setting custom quota for async queue
+  [vangheem]
+
+
 1.2a1 (2012-04-19)
 ------------------
 

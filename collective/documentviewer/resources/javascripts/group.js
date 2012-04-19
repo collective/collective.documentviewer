@@ -20,6 +20,7 @@ $(document).ready(function(){
             },
             complete: function(){
                 $('#kss-spinner').hide();
+                cancel.show();
             }
         })
         return false;
@@ -28,6 +29,7 @@ $(document).ready(function(){
     cancel.click(function(){
         input.val('');
         form.trigger('submit');
+        cancel.hide();
     });
 
 });
