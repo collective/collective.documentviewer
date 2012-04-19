@@ -7,14 +7,14 @@
 <metal:css fill-slot="style_slot">
 
   <link rel="stylesheet" type="text/css" media="screen" href="group.css"
-    tal:attributes="href string:${context/portal_url}/++resource++documentviewer.resources/stylesheets/group.css" />
+    tal:attributes="href string:${context/portal_url}/++resource++dv.resources/stylesheets/group.css" />
 
 </metal:css>
 
 <metal:css fill-slot="javascript_head_slot">
 
   <script type="text/javascript" src="group.js"
-    tal:attributes="src string:${context/portal_url}/++resource++documentviewer.resources/javascripts/group.js"></script>
+    tal:attributes="src string:${context/portal_url}/++resource++dv.resources/javascripts/group.js"></script>
 
 </metal:css>
 

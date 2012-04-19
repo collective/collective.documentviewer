@@ -139,7 +139,7 @@
   />
   
   <browser:resourceDirectory
-    name="documentviewer.resources"
+    name="dv.resources"
     directory="resources"
   />
   

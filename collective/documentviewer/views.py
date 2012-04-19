@@ -62,7 +62,7 @@ class DocumentViewerView(BrowserView):
 
         self.portal_url = getMultiAdapter((self.context, self.request),
             name="plone_portal_state").portal_url()
-        self.dvstatic = "%s/++resource++documentviewer.resources" % (
+        self.dvstatic = "%s/++resource++dv.resources" % (
             self.portal_url)
         resource_url = self.global_settings.override_base_resource_url
         if resource_url:
@@ -451,7 +451,7 @@ class GroupView(BrowserView):
 
         self.portal_url = getMultiAdapter((self.context, self.request),
             name="plone_portal_state").portal_url()
-        self.static_url = '%s/++resource++documentviewer.resources' % (
+        self.static_url = '%s/++resource++dv.resources' % (
             self.portal_url)
         self.resource_url = self.global_settings.override_base_resource_url
         self.dump_path = convert.DUMP_FILENAME.rsplit('.', 1)[0]

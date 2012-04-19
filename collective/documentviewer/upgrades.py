@@ -12,6 +12,9 @@ def upgrade_to_1_1(context):
 
 
 def upgrade_to_1_2(context):
+    # run 1.1 upgrade again since we change the control panel again
+    upgrade_to_1_1(context)
+
     types = getToolByName(context, 'portal_catalog')
     old_display = 'dvpdf-album-view'
 
