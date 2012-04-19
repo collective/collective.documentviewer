@@ -11,4 +11,12 @@
     handler=".upgrades.upgrade_to_1_1"
     profile="collective.documentviewer:default" />
 
+  <gs:upgradeStep
+    title="Upgrade collective.documentviewer to 1.2"
+    description="Upgrade collective.documentviewer to 1.2"
+    source="*"
+    destination="1200"
+    handler=".upgrades.upgrade_to_1_2"
+    profile="collective.documentviewer:default" />
+
 </configure>

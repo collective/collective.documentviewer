@@ -5,13 +5,7 @@ from zope.annotation.interfaces import IAnnotations
 from collective.documentviewer.settings import GlobalSettings
 from Products.ATContentTypes.interface.file import IFileContent
 from Products.CMFCore.utils import getToolByName
-
-types_to_add_ablum_view = [
-    'Folder',
-    'Large Plone Folder',
-    'Plone Site',
-    'Topic'
-]
+from collective.documentviewer.config import GROUP_VIEW_DISPLAY_TYPES
 
 
 def install(context):
@@ -22,11 +16,11 @@ def install(context):
 
     types = getToolByName(context, 'portal_types')
 
-    for portal_type in types_to_add_ablum_view:
+    for portal_type in GROUP_VIEW_DISPLAY_TYPES:
         if portal_type in types.objectIds():
             _type = types[portal_type]
             methods = list(_type.view_methods)
-            methods.append('dvpdf-album-view')
+            methods.append('dvpdf-group-view')
             _type.view_methods = tuple(set(methods))
 
 
@@ -50,7 +44,8 @@ def uninstall(context, reinstall=False):
         # remove annotations and reset view
         for obj in objs:
             obj = obj.getObject()
-            obj.layout = ''
+            if obj.getLayout() == 'documentviewer':
+                obj.layout = ''
             annotations = IAnnotations(obj)
             data = annotations.get('collective.documentviewer', None)
             if data:
@@ -70,17 +65,18 @@ def uninstall(context, reinstall=False):
             filetype.view_methods = tuple(methods)
 
         # remove pdf album view
-        for portal_type in types_to_add_ablum_view:
+        for portal_type in GROUP_VIEW_DISPLAY_TYPES:
             if portal_type in types.objectIds():
                 _type = types[portal_type]
                 methods = list(_type.view_methods)
-                if 'dvpdf-album-view' in methods:
-                    methods.remove('dvpdf-album-view')
+                if 'dvpdf-group-view' in methods:
+                    methods.remove('dvpdf-group-view')
                     _type.view_methods = tuple(set(methods))
 
         # remove control panel
         pcp = getToolByName(context, 'portal_controlpanel')
         pcp.unregisterConfiglet('documentviewer')
+        pcp.unregisterConfiglet('documentviewer-jobs')
 
         # remove global settings annotations
         annotations = IAnnotations(portal)

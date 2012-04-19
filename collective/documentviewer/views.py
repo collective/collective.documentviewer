@@ -372,7 +372,7 @@ class PDFFiles(SimpleItem, DirectoryResource):
             return super(PDFFiles, self).publishTraverse(request, name)
 
 
-class AlbumView(BrowserView):
+class GroupView(BrowserView):
 
     def getContents(self, object=None, portal_type=('File',),
                     full_objects=False, path=None):
@@ -381,6 +381,8 @@ class AlbumView(BrowserView):
         opts = {'portal_type': portal_type}
         if path:
             opts['path'] = path
+        if 'q' in self.request.form:
+            opts['SearchableText'] = self.request.form['q']
         if object.portal_type == 'Topic':
             res = object.queryCatalog(**opts)
         else:
@@ -411,11 +413,13 @@ class AlbumView(BrowserView):
 
         self.portal_url = getMultiAdapter((self.context, self.request),
             name="plone_portal_state").portal_url()
+        self.static_url = '%s/++resource++documentviewer.resources' % (
+            self.portal_url)
         self.resource_url = self.global_settings.override_base_resource_url
         self.dump_path = convert.DUMP_FILENAME.rsplit('.', 1)[0]
-        return super(AlbumView, self).__call__()
+        return super(GroupView, self).__call__()
 
-    def get_scales(self, obj):
+    def get_thumb(self, obj):
         if not obj:
             return None
         if self.resource_url:
@@ -431,21 +435,13 @@ class AlbumView(BrowserView):
                 image_format = settings.pdf_image_format
                 if not image_format:
                     image_format = self.global_settings.pdf_image_format
-                return {
-                    'small': '%s/small/%s_1.%s' % (
-                        dvpdffiles, self.dump_path, image_format),
-                    'large': '%s/normal/%s_1.%s' % (
-                        dvpdffiles, self.dump_path, image_format),
-                }
+                return '%s/small/%s_1.%s' % (
+                        dvpdffiles, self.dump_path, image_format)
             else:
-                # XXX need placeholders...
-                return {'small': '', 'large': ''}
+                return '%s/images/pdf.png' % (self.static_url)
         elif obj.portal_type == 'Image':
             url = obj.absolute_url()
-            return {
-                'small': '%s/image_thumb' % url,
-                'large': '%s/image_preview' % url
-            }
+            return '%s/image_thumb' % url
 
 
 class AsyncMonitor(BrowserView):

@@ -78,14 +78,12 @@ Auto Convert
 TODO
 ----
 
- - add text back to pdf(necessary?)
-   - slow...
  - remove images after file is deleted for plain file storage
- - take hash of file to compare if it's already converted
  - change folder view
     - to not do the large thumb popup
     - be able to local searchable
     - remove colorbox(just a holdover from pdfpal)
+    - placeholder for missing pdfs
  - handle very large PDFs
     - try to not load into memory--use file handlers if possible
     - get zodb blob file handle
@@ -93,4 +91,3 @@ TODO
     - remove from queue
  - in converting status message, provide link to queue management
  - reject converting pdf if too large and no async support provided
- 

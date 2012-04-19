@@ -1,0 +1,67 @@
+.photoAlbumEntry img {
+    max-width: 128px;
+    max-height: 143px;
+}
+
+#pdf-files-search * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+}
+
+#pdf-files-search {
+    height: 28px;
+    background: transparent;
+    border: 1px solid #CCC;
+    border-radius: 12px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    background-color: #FAFAFA;
+    -webkit-box-shadow: inset 0 0 10px #ccc;
+    -moz-box-shadow: inset 0 0 10px #ccc;
+    box-shadow: inset 0 0 10px #ccc;
+    position: relative;
+}
+
+#search-icon {
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    left: 10px;
+    top: 8px;
+    background-image: url("../images/search.png");
+}
+
+#search-input {
+    position: relative;
+    margin: 0 28px;
+}
+
+#search-input input {
+    width: 100%;
+    height: 18px;
+    padding: 5px 0;
+    display: block;
+    background: transparent;
+    font-size: 16px;
+    line-height: 18px;
+    color: black;
+    font-size: 13px;
+}
+
+#cancel-search {
+    width: 11px;
+    height: 11px;
+    background-position: center 0;
+    background-image: url("../images/clear.png");
+    cursor: pointer;
+    display: none;
+    position: absolute;
+    right: 9px;
+    top: 8px;
+}
+
+#cancel-search:hover {
+    background-position: center -11px;
+}

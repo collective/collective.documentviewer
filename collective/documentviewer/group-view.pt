@@ -1,0 +1,119 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+
+
+<metal:css fill-slot="style_slot">
+
+  <link rel="stylesheet" type="text/css" media="screen" href="group.css"
+    tal:attributes="href string:${context/portal_url}/++resource++documentviewer.resources/stylesheets/group.css" />
+
+</metal:css>
+
+<metal:css fill-slot="javascript_head_slot">
+
+  <script type="text/javascript" src="group.js"
+    tal:attributes="src string:${context/portal_url}/++resource++documentviewer.resources/javascripts/group.js"></script>
+
+</metal:css>
+
+<body>
+
+<div metal:fill-slot="content-core">
+<metal:main_macro define-macro="content-core"
+     tal:define="result python: view.results(portal_type=('File', 'Image'));
+                 files result/files|python:[];
+                 albums result/folders|python:[];
+                 Batch python:modules['Products.CMFPlone'].Batch;
+                 b_start python:request.get('b_start', 0);
+                 templateId template/getId|nothing;
+                 batch python:Batch(files, 12, int(b_start), orphan=1)">
+
+  <div metal:define-macro="text-field-view" tal:on-error="nothing"
+      id="parent-fieldname-text" class="stx"
+      tal:define="text here/aq_explicit/getText|nothing;
+                  format here/Format|nothing;"
+      tal:condition="text"
+      tal:attributes="class python:test(format in ('text/structured',
+                                             'text/x-rst', ), 'stx', 'plain')">
+    <div metal:define-slot="inside" tal:replace="structure text">The body</div>
+  </div>
+
+  <div id="pdf-files-search">
+    <div id="search-icon"></div>
+    <div id="search-input">
+      <form method="get">
+        <input placeholder="Search..." name="q" tal:attributes="value request/q|nothing" />
+      </form>
+    </div>
+    <div id="cancel-search" title="clear search"></div>
+  </div>
+
+  <div id="pdf-files">
+    <tal:albumsfiles tal:condition="python:albums or files">
+      <tal:files tal:condition="batch" tal:repeat="file batch">
+        <div class="photoAlbumEntry pdfEntry" tal:attributes="rel string:pdf${repeat/file/number}"
+            tal:define="type file/portal_type;
+                        file file/getObject|file;
+                        thumb python: view.get_thumb(file);">
+          <a tal:define="id python:int(b_start)+int(repeat['file'].number()-1)" rel="thumbnails" class="box"
+             tal:attributes="href string:${file/absolute_url}/view;
+                             title file/Description;">
+            <span class="photoAlbumEntryWrapper">
+              <img src="" alt="" tal:attributes="src thumb" />
+            </span>
+            <span class="photoAlbumEntryTitle" tal:content="file/pretty_title_or_id">
+              Title
+            </span>
+          </a>
+          <a tal:attributes="href string:${file/absolute_url}/view;">View</a>
+        </div>
+      </tal:files>
+      <div class="photoAlbum" tal:condition="albums">
+        <tal:albums tal:repeat="album albums">
+          <div class="photoAlbumEntry photoAlbumFolder pdfEntry"
+              tal:attributes="rel string:pdffolder${repeat/album/number}"
+              tal:define="file_brains_in_album python:view.get_files(album);
+                          number_of_files python:len(file_brains_in_album);
+                          random python:modules['random'];
+                          random_image python:number_of_files and random.choice(file_brains_in_album).getObject() or None;
+                          type random_image/portal_type|nothing;
+                          thumb python: view.get_thumb(random_image);">
+            <a tal:attributes="href album/getURL;
+                               title album/Description;
+                               class python: number_of_files and 'box' or '';" 
+                rel="thumbnails">
+              <span class="photoAlbumEntryWrapper">
+                <img src="" alt=""
+                    tal:condition="number_of_files"
+                    tal:attributes="src thumb" />
+              </span>
+              <span class="photoAlbumEntryTitle">
+                <tal:title content="album/pretty_title_or_id">Title</tal:title>
+                (<tal:number content="number_of_files" />)
+              </span>
+            </a>
+          </div>
+        </tal:albums>
+      </div>
+      <div class="visualClear"><!-- --></div>
+    </tal:albumsfiles>
+  </div>
+
+  <p class="discreet"
+     i18n:domain="atcontenttypes"
+     i18n:translate="text_no_albums_uploaded"
+     tal:condition="python:not (albums or files)">
+      No albums or photos uploaded yet.
+  </p>
+
+  <div tal:condition="python:albums or files"
+       metal:use-macro="here/batch_macros/macros/navigation" />
+
+  </metal:main_macro>
+</div>
+
+</body>
+
+</html>

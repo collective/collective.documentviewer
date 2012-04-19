@@ -23,3 +23,11 @@ EXTENSION_TO_ID_MAPPING = {}
 for id, doc in CONVERTABLE_TYPES.items():
     for ext in doc.extensions:
         EXTENSION_TO_ID_MAPPING[ext] = id
+
+
+GROUP_VIEW_DISPLAY_TYPES = (
+    'Folder',
+    'Large Plone Folder',
+    'Plone Site',
+    'Topic'
+)

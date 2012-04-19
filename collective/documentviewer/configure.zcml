@@ -44,20 +44,20 @@
   />
 
   <browser:page
-    name="dvpdf-album-view"
-    for="*"
-    class=".views.AlbumView"
-    template="album-view.pt"
+    name="dvpdf-group-view"
+    for="Products.CMFCore.interfaces._content.IFolderish"
+    class=".views.GroupView"
+    template="group-view.pt"
     permission="zope2.View"
     layer=".interfaces.ILayer"
   />
 
   <browser:menuItem
-    for="*"
+    for="Products.CMFCore.interfaces._content.IFolderish"
     menu="plone_displayviews"
     title="PDF Album View"
-    action="dvpdf-album-view"
-    description="To show thumbnails from pdf."
+    action="dvpdf-group-view"
+    description="To show thumbnails from pdf and make it searchable."
   />
   
   <browser:page
