@@ -23,6 +23,8 @@ logger = getLogger('collective.documentviewer')
 
 DUMP_FILENAME = 'dump.pdf'
 TEXT_REL_PATHNAME = 'text'
+# so we know to resync and do savepoints
+LARGE_PDF_SIZE = 40
 
 
 class Page(object):
@@ -236,13 +238,8 @@ class Converter(object):
         self.settings = Settings(self.context)
         field = self.context.getField('file') or context.getPrimaryField()
         wrapper = field.get(self.context)
-        try:
-            blob = wrapper.getBlob()
-            opened = openBlob(blob)
-            self.blob_filepath = opened.name
-            opened.close()
-        except IOError:
-            self.blob_filepath = None
+        self.blob = wrapper.getBlob()
+        self.initialize_blob_filepath()
         self.filehash = None
 
     def initialize_filehash(self):
@@ -352,6 +349,21 @@ class Converter(object):
             # ignore, probably in a unit test
             pass
 
+    def initialize_blob_filepath(self):
+        try:
+            opened = openBlob(self.blob)
+            self.blob_filepath = opened.name
+            opened.close()
+        except IOError:
+            self.blob_filepath = None
+
+    def savepoint(self):
+        # every savepoint will move the file descriptor
+        # so we need to reset it.
+        savepoint = transaction.savepoint()
+        self.initialize_blob_filepath()
+        return savepoint
+
     def __call__(self):
         settings = self.settings
         self.gsettings = GlobalSettings(getSite())
@@ -363,12 +375,15 @@ class Converter(object):
         savepoint = None
         try:
             pages = self.run_conversion()
-            # conversion can take a long time.
-            # let's sync before we save the changes
-            self.sync_db()
-            savepoint = transaction.savepoint()
-            self.index_pdf(pages)
-            savepoint = transaction.savepoint()
+            if pages > LARGE_PDF_SIZE:
+                # conversion can take a long time.
+                # let's sync before we save the changes
+                self.sync_db()
+                savepoint = self.savepoint()
+                self.index_pdf(pages)
+                savepoint = self.savepoint()
+            else:
+                self.index_pdf(pages)
             self.handle_storage()
             settings.num_pages = pages
             settings.successfully_converted = True
