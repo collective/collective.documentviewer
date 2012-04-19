@@ -31,7 +31,6 @@ from z3c.form import form, field, button
 from plone.app.z3cform.layout import wrap_form
 from collective.documentviewer.async import isConversion, \
     asyncInstalled, QUOTA_NAME, queueJob
-from zc.async.interfaces import COMPLETED
 
 
 from logging import getLogger
@@ -469,7 +468,7 @@ class AsyncMonitor(BrowserView):
         else:
             return '%i second%s' % (secs, secs > 1 and 's' or '')
 
-    def get_job_data(self, job, sitepath):
+    def get_job_data(self, job, sitepath, removable=True):
         lastused = DateTime(job._p_mtime)
         if job.status != 'pending-status':
             timerunning = self.time_since(lastused)
@@ -481,24 +480,55 @@ class AsyncMonitor(BrowserView):
             'object_path': '/'.join(job.args[0][len(sitepath):]),
             'lastused': lastused.toZone('UTC').pCommon(),
             'timerunning': timerunning,
-            'completed': job.status == COMPLETED
+            'removable': removable
         }
 
     @property
     def jobs(self):
         results = []
         if asyncInstalled():
-            site = getSite()
-            sitepath = site.getPhysicalPath()
+            sitepath = self.context.getPhysicalPath()
             async = getUtility(IAsyncService)
             queue = async.getQueues()['']
+            quota = queue.quotas[QUOTA_NAME]
 
-            for job in queue.quotas[QUOTA_NAME]._data:
+            for job in quota._data:
                 if isConversion(job, sitepath):
-                    results.append(self.get_job_data(job, sitepath))
+                    results.append(self.get_job_data(job, sitepath, False))
 
             jobs = [job for job in queue]
             for job in jobs:
                 if isConversion(job, sitepath):
                     results.append(self.get_job_data(job, sitepath))
         return results
+
+    def redirect(self):
+        return self.request.response.redirect("%s/@@dvasync-monitor" % (
+            self.context.absolute_url()))
+
+    def remove(self):
+        if self.request.get('REQUEST_METHOD', 'POST') and \
+                self.request.form.get('form.action.remove', '') == 'Remove':
+            # find the job
+            sitepath = self.context.getPhysicalPath()
+            async = getUtility(IAsyncService)
+            queue = async.getQueues()['']
+
+            objpath = self.request.form.get('path')
+            object = self.context.restrictedTraverse(str(objpath), None)
+            if object is None:
+                return self.redirect()
+            objpath = object.getPhysicalPath()
+
+            jobs = [job for job in queue]
+            for job in jobs:
+                if isConversion(job, sitepath) and \
+                        job.args[0] == objpath:
+                    try:
+                        queue.remove(job)
+                        settings = Settings(object)
+                        settings.converting = False
+                    except LookupError:
+                        pass
+                    return self.redirect()
+        return self.redirect()

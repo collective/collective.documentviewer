@@ -84,6 +84,16 @@
   />
 
   <browser:page
+    zcml:condition="installed plone.app.async"
+    name="dv-remove-from-queue"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".views.AsyncMonitor"
+    attribute="remove"
+    permission="cmf.ManagePortal"
+    layer=".interfaces.ILayer"
+  />
+
+  <browser:page
     name="global-documentviewer-settings"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     class=".views.GlobalSettingsFormView"

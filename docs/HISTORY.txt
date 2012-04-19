@@ -19,6 +19,16 @@ Changelog
 - better pdf group view with search
   [vangheem]
 
+- handle large files better
+  [vangheem]
+
+- check if file has already been converted by storing
+  hash of the file to check against.
+  [vangheem]
+
+- be able to remove document viewer conversion tasks
+  [vangheem]
+
 
 1.1a1 (2012-04-18)
 ------------------

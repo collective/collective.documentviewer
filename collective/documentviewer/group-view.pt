@@ -40,7 +40,7 @@
     <div metal:define-slot="inside" tal:replace="structure text">The body</div>
   </div>
 
-  <div id="pdf-files-search">
+  <div id="pdf-files-search" tal:condition="view/search_enabled">
     <div id="search-icon"></div>
     <div id="search-input">
       <form method="get">

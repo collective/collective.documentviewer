@@ -41,6 +41,7 @@
                 <th>object</th>
                 <th>last access</th>
                 <th>running time</th>
+                <th />
               </tr>
             </thead>
             <tbody>
@@ -51,6 +52,13 @@
                   <td tal:content="job/object_path" />
                   <td tal:content="job/lastused" />
                   <td tal:content="job/timerunning" />
+                  <td>
+                    <form method="post" action="dv-remove-from-queue" tal:condition="job/removable"
+                      tal:attributes="action string:${context/portal_url}/@@dv-remove-from-queue">
+                      <input type="hidden" name="path" tal:attributes="value job/object_path" />
+                      <input type="submit" name="form.action.remove" value="Remove" /> 
+                    </form>
+                  </td>
                 </tr>
               </tal:jobs>
             </tbody>
