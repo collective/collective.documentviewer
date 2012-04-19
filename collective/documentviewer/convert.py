@@ -400,7 +400,6 @@ class Converter(object):
         self.storage_dir = self.get_storage_dir()
         self.doc_type = getDocumentType(self.context,
             self.gsettings.auto_layout_file_types)
-        self.initialize_catalog()
 
         savepoint = None
         try:
@@ -409,10 +408,12 @@ class Converter(object):
                 # conversion can take a long time.
                 # let's sync before we save the changes
                 self.sync_db()
+                self.initialize_catalog()
                 savepoint = self.savepoint()
                 self.index_pdf(pages)
                 savepoint = self.savepoint()
             else:
+                self.initialize_catalog()
                 self.index_pdf(pages)
             self.handle_storage()
             settings.num_pages = pages

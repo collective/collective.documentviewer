@@ -4,6 +4,10 @@ Changelog
 1.2a3 (unreleased)
 ------------------
 
+- make sure to initialize catalog after db sync
+  for large PDFs.
+  [vangheem]
+
 
 1.2a2 (2012-04-19)
 ------------------

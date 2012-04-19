@@ -87,7 +87,8 @@ class DocumentViewerView(BrowserView):
                 self.enabled = False
             elif not self.settings.successfully_converted:
                 msg = "There was an error trying to convert the PDF. Maybe " +\
-                      "the PDF is encrypted, corrupt or malformed?"
+                      "the PDF is encrypted, corrupt or malformed? " +\
+                      "Check log for details."
                 self.enabled = False
         else:
             self.enabled = False
