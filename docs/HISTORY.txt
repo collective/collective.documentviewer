@@ -1,13 +1,16 @@
 Changelog
 =========
 
-1.2a2 (unreleased)
+1.2a2 (2012-04-19)
 ------------------
 
 - fix setting custom quota for async queue
   [vangheem]
 
 - fix group view clear button
+  [vangheem]
+
+- add support for alternative md5sum binary
   [vangheem]
 
 
