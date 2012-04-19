@@ -100,11 +100,11 @@ def queueJob(object):
     if asyncInstalled():
         try:
             runner = JobRunner(object)
+            runner.set_quota()
             if runner.already_in_queue:
                 logger.info('object %s already in queue for conversion' % (
                     repr(object)))
             else:
-                runner.set_quota()
                 runner.queue_it()
             return
         except:
