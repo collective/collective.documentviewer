@@ -7,6 +7,15 @@ Changelog
 - fix full screen page bug
   [vangheem]
 
+- better async integration with quota setting
+  [vangheem]
+
+- View async queue for conversions
+  [vangheem]
+
+- index ocr data in portal catalog
+  [vangheem]
+
 
 1.1a1 (2012-04-18)
 ------------------

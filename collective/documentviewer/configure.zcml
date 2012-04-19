@@ -144,5 +144,7 @@
     class=".views.PDFFiles"
     allowed_interface="OFS.interfaces.IItem"
     />
-  
+
+  <adapter name="SearchableText" factory=".catalog.SearchableText" />
+
 </configure>

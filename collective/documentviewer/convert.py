@@ -13,7 +13,10 @@ from repoze.catalog.indexes.text import CatalogTextIndex
 from repoze.catalog.indexes.field import CatalogFieldIndex
 import tempfile
 from collective.documentviewer.utils import getDocumentType
+import re
 
+
+word_re = re.compile('\W+')
 logger = getLogger('collective.documentviewer')
 
 DUMP_FILENAME = 'dump.pdf'
@@ -31,7 +34,10 @@ class Page(object):
             fi = open(self.filepath)
             text = fi.read()
             fi.close()
-            return unicode(text, errors='ignore').encode('utf-8')
+            text = unicode(text, errors='ignore').encode('utf-8')
+            # let's strip out the ugly...
+            text = word_re.sub(' ', text).strip()
+            return ' '.join([word for word in text.split() if len(word) > 3])
         return ''
 
 
@@ -206,8 +212,11 @@ class Converter(object):
         return storage_dir
 
     def initialize_catalog(self):
-        if self.settings.catalog is None:
-            self.settings.catalog = CatalogFactory()
+        """
+        Always set a new catalog to restart the
+        search weights
+        """
+        self.settings.catalog = CatalogFactory()
 
     def run_conversion(self):
         context = self.context
@@ -225,7 +234,6 @@ class Converter(object):
     def index_pdf(self, pages):
         logger.info('indexing pdf %s' % repr(self.context))
         catalog = self.settings.catalog
-        catalog.clear()
         text_dir = os.path.join(self.storage_dir, TEXT_REL_PATHNAME)
         dump_path = DUMP_FILENAME.rsplit('.', 1)[0]
         for page_num in range(1, pages + 1):
@@ -277,12 +285,16 @@ class Converter(object):
 
         try:
             pages = self.run_conversion()
+            # conversion can take a long time.
+            # let's sync before we save the changes
+            self.context._p_jar.sync()
             self.index_pdf(pages)
             self.handle_storage()
             settings.num_pages = pages
             settings.successfully_converted = True
             settings.storage_type = self.gsettings.storage_type
             settings.pdf_image_format = self.gsettings.pdf_image_format
+            self.context.reindexObject(idxs=['SearchableText'])
             result = 'success'
         except:
             logger.exception('Error converting PDF')

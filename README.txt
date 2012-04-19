@@ -6,6 +6,21 @@ into plone.
 
 Example viewer: https://www.documentcloud.org/documents/19864-goldman-sachs-internal-emails
 
+Features
+--------
+
+ - very nice document viewer
+ - OCR
+ - Searchable on OCR text
+ - works with many different document types
+ - plone.app.async integration with task monitor
+ - lots of configuration options
+ - PDF Album view for display groups of PDFs
+
+
+Works with
+----------
+
 Besides displaying PDFs, it will also display:
 
  - Word
@@ -67,13 +82,15 @@ TODO
    - slow...
  - remove images after file is deleted for plain file storage
  - take hash of file to compare if it's already converted
- - make searchable in plone
-    - extract data from local catalog perhaps?
  - change folder view
     - to not do the large thumb popup
     - be able to local searchable
     - remove colorbox(just a holdover from pdfpal)
- - add async monitor
-    - cp item?
- - check if already in queue before adding it to queue
-   again.
+ - handle very large PDFs
+    - try to not load into memory--use file handlers if possible
+    - get zodb blob file handle
+ - be able to cancel jobs
+    - remove from queue
+ - in converting status message, provide link to queue management
+ - reject converting pdf if too large and no async support provided
+ 

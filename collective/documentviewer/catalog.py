@@ -5,6 +5,10 @@ from collective.documentviewer.settings import Settings
 
 @indexer(IFileContent)
 def SearchableText(object):
+    """
+    Override searchable text to also
+    provide the ocr'd text
+    """
     text = object.SearchableText()
     if object.getLayout() != 'documentviewer':
         return ''
