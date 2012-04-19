@@ -5,6 +5,7 @@ from zope.app.component.hooks import getSite
 from collective.documentviewer.settings import GlobalSettings
 from logging import getLogger
 from collective.documentviewer.convert import Converter
+from zc.async.interfaces import COMPLETED
 
 logger = getLogger('collective.documentviewer')
 
@@ -12,9 +13,16 @@ QUOTA_NAME = 'dv'
 
 try:
     from plone.app.async.interfaces import IAsyncService
-    ASYNC_INSTALLED = True
-except:
-    ASYNC_INSTALLED = False
+except ImportError:
+    pass
+
+
+def asyncInstalled():
+    try:
+        import plone.app.async
+        return True
+    except:
+        return False
 
 
 def isConversion(job, sitepath):
@@ -41,7 +49,7 @@ class JobRunner(object):
     def is_current_active(self, job):
         return isConversion(job, self.sitepath) and \
             job.args[0] == self.objectpath and \
-            job.status != 'completed-status'
+            job.status != COMPLETED
 
     @property
     def already_in_queue(self):
@@ -89,7 +97,7 @@ def queueJob(object):
     converter = Converter(object)
     if not converter.can_convert:
         return
-    if ASYNC_INSTALLED:
+    if asyncInstalled():
         try:
             runner = JobRunner(object)
             if runner.already_in_queue:

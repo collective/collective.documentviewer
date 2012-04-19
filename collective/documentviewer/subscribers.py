@@ -23,5 +23,5 @@ def handle_file_creation(object, event):
     if auto_layout and object.getLayout() != 'documentviewer':
         object.setLayout('documentviewer')
 
-    if gsettings.auto_convert:
+    if object.getLayout() == 'documentviewer' and gsettings.auto_convert:
         queueJob(object)

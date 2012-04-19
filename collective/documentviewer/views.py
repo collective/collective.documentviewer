@@ -30,7 +30,8 @@ from Products.CMFPlone.utils import base_hasattr
 from z3c.form import form, field, button
 from plone.app.z3cform.layout import wrap_form
 from collective.documentviewer.async import isConversion, \
-    ASYNC_INSTALLED, QUOTA_NAME, queueJob
+    asyncInstalled, QUOTA_NAME, queueJob
+from zc.async.interfaces import COMPLETED
 
 
 from logging import getLogger
@@ -252,7 +253,7 @@ class Utils(BrowserView):
             return False
 
     def async_enabled(self):
-        return ASYNC_INSTALLED
+        return asyncInstalled()
 
     def convert(self):
         if self.enabled():
@@ -381,7 +382,7 @@ class GroupView(BrowserView):
         opts = {'portal_type': portal_type}
         if path:
             opts['path'] = path
-        if 'q' in self.request.form:
+        if 'q' in self.request.form and self.search_enabled:
             opts['SearchableText'] = self.request.form['q']
         if object.portal_type == 'Topic':
             res = object.queryCatalog(**opts)
@@ -410,6 +411,7 @@ class GroupView(BrowserView):
     def __call__(self):
         self.site = getSite()
         self.global_settings = GlobalSettings(self.site)
+        self.search_enabled = self.global_settings.show_search_on_group_view
 
         self.portal_url = getMultiAdapter((self.context, self.request),
             name="plone_portal_state").portal_url()
@@ -478,13 +480,14 @@ class AsyncMonitor(BrowserView):
             'user': job.args[3],
             'object_path': '/'.join(job.args[0][len(sitepath):]),
             'lastused': lastused.toZone('UTC').pCommon(),
-            'timerunning': timerunning
+            'timerunning': timerunning,
+            'completed': job.status == COMPLETED
         }
 
     @property
     def jobs(self):
         results = []
-        if ASYNC_INSTALLED:
+        if asyncInstalled():
             site = getSite()
             sitepath = site.getPhysicalPath()
             async = getUtility(IAsyncService)

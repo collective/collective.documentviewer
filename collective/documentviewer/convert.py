@@ -1,5 +1,5 @@
 from ZODB.blob import Blob
-from persistent.dict import PersistentDict
+from BTrees.OOBTree import OOBTree
 import subprocess
 import os
 from settings import Settings, GlobalSettings
@@ -14,7 +14,9 @@ from repoze.catalog.indexes.field import CatalogFieldIndex
 import tempfile
 from collective.documentviewer.utils import getDocumentType
 import re
-
+import transaction
+from plone.app.blob.utils import openBlob
+import traceback
 
 word_re = re.compile('\W+')
 logger = getLogger('collective.documentviewer')
@@ -56,41 +58,75 @@ def CatalogFactory():
     return catalog
 
 
-class DocSplitSubProcess:
-    """
-    idea of how to handle this shamelessly
-    stolen from ploneformgen's gpg calls
-    """
-    paths = ['/bin', '/usr/bin', '/usr/local/bin']
+class BaseSubProcess(object):
+    default_paths = ['/bin', '/usr/bin', '/usr/local/bin']
+    bin_name = ''
 
     def __init__(self):
-        if os.name == 'nt':
-            bin_name = 'docsplit.exe'
-        else:
-            bin_name = 'docsplit'
-        docsplit_binary = self._findbinary(bin_name)
-        self.docsplit_binary = docsplit_binary
-        if docsplit_binary is None:
+        binary = self._findbinary()
+        self.binary = binary
+        if binary is None:
             raise IOError("Unable to find docsplit binary")
 
-    def _findbinary(self, binname):
+    def _findbinary(self):
         import os
         if 'PATH' in os.environ:
             path = os.environ['PATH']
             path = path.split(os.pathsep)
         else:
-            path = self.paths
+            path = self.default_paths
         for dir in path:
-            fullname = os.path.join(dir, binname)
+            fullname = os.path.join(dir, self.bin_name)
             if os.path.exists(fullname):
                 return fullname
         return None
+
+
+class MD5SubProcess(BaseSubProcess):
+    """
+    To get md5 hash of files on the filesystem so
+    large files do not need to be loaded into
+    memory to be checked
+    """
+    if os.name == 'nt':
+        bin_name = 'md5.exe'
+    else:
+        bin_name = 'md5'
+
+    def get(self, filepath):
+        cmd = "%s %s" % (self.binary, filepath)
+        logger.info("Running command %s" % cmd)
+        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        hash = process.communicate()[0]
+        logger.info("Finished Running Command %s" % cmd)
+        return hash.split('=')[1].strip()
+
+try:
+    md5 = MD5SubProcess()
+except IOError:
+    logger.exception("No md5 installed. collective.documentviewer "
+                     "will not be able to detect if the pdf has "
+                     "already been converted")
+    md5 = None
+
+
+class DocSplitSubProcess(BaseSubProcess):
+    """
+    idea of how to handle this shamelessly
+    stolen from ploneformgen's gpg calls
+    """
+
+    if os.name == 'nt':
+        bin_name = 'docsplit.exe'
+    else:
+        bin_name = 'docsplit'
 
     def dump_images(self, filepath, output_dir, sizes, format):
         # docsplit images pdf.pdf --size 700x,300x,50x
         # --format gif --output
         cmd = "%s images %s --size %s --format %s --rolling --output %s" % (
-            self.docsplit_binary, filepath,
+            self.binary, filepath,
             ','.join([str(s[1]) + 'x' for s in sizes]),
             format, output_dir)
         logger.info("Running command %s" % cmd)
@@ -112,7 +148,7 @@ class DocSplitSubProcess:
         # docsplit text pdf.pdf --[no-]ocr --pages all
         output_dir = os.path.join(output_dir, TEXT_REL_PATHNAME)
         cmd = "%s text %s --%socr --pages all --output %s" % (
-            self.docsplit_binary, filepath,
+            self.binary, filepath,
             not ocr and 'no-' or '',
             output_dir)
         logger.info("Running command %s" % cmd)
@@ -123,7 +159,7 @@ class DocSplitSubProcess:
         # XXX Check for error..
 
     def get_num_pages(self, filepath):
-        cmd = "%s length %s" % (self.docsplit_binary, filepath)
+        cmd = "%s length %s" % (self.binary, filepath)
         logger.info("Running command %s" % cmd)
         process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
@@ -131,12 +167,10 @@ class DocSplitSubProcess:
         logger.info("Finished Running Command %s" % cmd)
         return int(result.strip())
 
-    def convert_to_pdf(self, filedata, filename, output_dir):
+    def convert_to_pdf(self, filepath, filename, output_dir):
         inputfilepath = os.path.join(output_dir, filename)
-        fi = open(inputfilepath, 'wb')
-        fi.write(filedata)
-        fi.close()
-        cmd = "%s pdf %s --output %s" % (self.docsplit_binary, inputfilepath,
+        shutil.move(filepath, inputfilepath)
+        cmd = "%s pdf %s --output %s" % (self.binary, inputfilepath,
                                          output_dir)
         logger.info("Running command %s" % cmd)
         process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
@@ -154,16 +188,21 @@ class DocSplitSubProcess:
         converted_path = os.path.join(output_dir, files[0])
         shutil.move(converted_path, os.path.join(output_dir, DUMP_FILENAME))
 
-    def convert(self, filedata, output_dir, converttopdf=False,
-                sizes=(('large', 1000),), ocr=True, format='gif',
-                filename=None):
+    def convert(self, output_dir, inputfilepath=None, filedata=None,
+                converttopdf=False, sizes=(('large', 1000),), ocr=True,
+                format='gif', filename=None):
+        if inputfilepath is None and filedata is None:
+            raise Exception("Must provide either filepath or filedata params")
         path = os.path.join(output_dir, DUMP_FILENAME)
-        if converttopdf:
-            self.convert_to_pdf(filedata, filename, output_dir)
+        if inputfilepath is not None:
+            # copy file to be able to work with.
+            shutil.copy(inputfilepath, path)
         else:
             fi = open(path, 'wb')
             fi.write(filedata)
             fi.close()
+        if converttopdf:
+            self.convert_to_pdf(path, filename, output_dir)
 
         self.dump_images(path, output_dir, sizes, format)
         self.dump_text(path, output_dir, ocr)
@@ -195,11 +234,38 @@ class Converter(object):
     def __init__(self, context):
         self.context = aq_inner(context)
         self.settings = Settings(self.context)
+        field = self.context.getField('file') or context.getPrimaryField()
+        wrapper = field.get(self.context)
+        try:
+            blob = wrapper.getBlob()
+            opened = openBlob(blob)
+            self.blob_filepath = opened.name
+            opened.close()
+        except IOError:
+            self.blob_filepath = None
+        self.filehash = None
+
+    def initialize_filehash(self):
+        if self.filehash is None and self.blob_filepath:
+            try:
+                self.filehash = md5.get(self.blob_filepath)
+            except IndexError:
+                pass
 
     @property
     def can_convert(self):
-        return DateTime(self.settings.last_updated) < \
+        modified = DateTime(self.settings.last_updated) < \
             DateTime(self.context.ModificationDate())
+        if modified and md5 and self.blob_filepath is not None and \
+                self.settings.filehash is not None and \
+                not self.settings.converting and \
+                not self.settings.successfully_converted:
+            # okay, it's been modified and we have the md5
+            # library, check the hash now
+            self.initialize_filehash()
+            return self.filehash != self.settings.filehash
+        else:
+            return modified
 
     def get_storage_dir(self):
         if self.gsettings.storage_type == 'Blob':
@@ -222,14 +288,18 @@ class Converter(object):
         context = self.context
         gsettings = self.gsettings
         field = context.getField('file') or context.getPrimaryField()
-        return docsplit.convert(str(field.get(context).data), self.storage_dir,
-                sizes=(('large', gsettings.large_size),
+        args = dict(sizes=(('large', gsettings.large_size),
                        ('normal', gsettings.normal_size),
                        ('small', gsettings.thumb_size)),
                 ocr=gsettings.ocr,
                 format=gsettings.pdf_image_format,
                 converttopdf=self.doc_type.requires_conversion,
                 filename=field.getFilename(context))
+        if self.blob_filepath is None:
+            args['filedata'] = str(field.get(context).data)
+        else:
+            args['inputfilepath'] = self.blob_filepath
+        return docsplit.convert(self.storage_dir, **args)
 
     def index_pdf(self, pages):
         logger.info('indexing pdf %s' % repr(self.context))
@@ -250,7 +320,7 @@ class Converter(object):
         if self.gsettings.storage_type == 'Blob':
             logger.info('setting blob data for %s' % repr(context))
             # go through temp folder and move items into blob storage
-            files = PersistentDict()
+            files = OOBTree()
             for size in ('large', 'normal', 'small'):
                 path = os.path.join(storage_dir, size)
                 for filename in os.listdir(path):
@@ -275,6 +345,13 @@ class Converter(object):
             if settings.storage_type == 'Blob' and settings.blob_files:
                 del settings._metadata['blob_files']
 
+    def sync_db(self):
+        try:
+            self.context._p_jar.sync()
+        except AttributeError:
+            # ignore, probably in a unit test
+            pass
+
     def __call__(self):
         settings = self.settings
         self.gsettings = GlobalSettings(getSite())
@@ -283,21 +360,30 @@ class Converter(object):
             self.gsettings.auto_layout_file_types)
         self.initialize_catalog()
 
+        savepoint = None
         try:
             pages = self.run_conversion()
             # conversion can take a long time.
             # let's sync before we save the changes
-            self.context._p_jar.sync()
+            self.sync_db()
+            savepoint = transaction.savepoint()
             self.index_pdf(pages)
+            savepoint = transaction.savepoint()
             self.handle_storage()
             settings.num_pages = pages
             settings.successfully_converted = True
             settings.storage_type = self.gsettings.storage_type
             settings.pdf_image_format = self.gsettings.pdf_image_format
             self.context.reindexObject(idxs=['SearchableText'])
+            # store hash of file
+            self.initialize_filehash()
+            self.settings.filehash = self.filehash
             result = 'success'
         except:
-            logger.exception('Error converting PDF')
+            if savepoint is not None:
+                savepoint.rollback()
+            logger.exception('Error converting PDF:\n%s' % (
+                traceback.format_exc()))
             settings.successfully_converted = False
             result = 'failure'
         settings.last_updated = DateTime().ISO8601()

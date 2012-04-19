@@ -96,10 +96,15 @@ class IGlobalDocumentViewerSettings(Interface):
         default=700)
     show_sidebar = schema.Bool(
         title=u"Show sidebar",
-        description=u"Default to show sidebar",
+        description=u"Default to show sidebar on Document Viewer.",
         default=True)
     show_search = schema.Bool(
         title=u"Show search box",
+        description=u"On Document Viewer.",
+        default=True)
+    show_search_on_group_view = schema.Bool(
+        title=u"Show search on group view",
+        description=u"Enable search on group view.",
         default=True)
     async_quota_size = schema.Int(
         title=u"Async Quota Size",
