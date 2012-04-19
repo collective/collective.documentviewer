@@ -40,6 +40,7 @@ Install requirements
  - tesseract
  - pdftk
  - openoffice(for doc, excel, ppt, etc types)
+ - md5 or md5sum command line tool
 
 
 Async Integration

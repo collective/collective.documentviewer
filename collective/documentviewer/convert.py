@@ -113,6 +113,36 @@ except IOError:
     md5 = None
 
 
+class MD5SumSubProcess(BaseSubProcess):
+    """
+    To get md5 hash of files on the filesystem so
+    large files do not need to be loaded into
+    memory to be checked
+    """
+    if os.name == 'nt':
+        bin_name = 'md5sum.exe'
+    else:
+        bin_name = 'md5sum'
+
+    def get(self, filepath):
+        cmd = "%s %s" % (self.binary, filepath)
+        logger.info("Running command %s" % cmd)
+        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        hash = process.communicate()[0]
+        logger.info("Finished Running Command %s" % cmd)
+        return hash.split('  ')[0].strip()
+
+try:
+    if md5 is None:
+        md5 = MD5SumSubProcess()
+except IOError:
+    logger.exception("No md5 installed. collective.documentviewer "
+                     "will not be able to detect if the pdf has "
+                     "already been converted")
+    md5 = None
+
+
 class DocSplitSubProcess(BaseSubProcess):
     """
     idea of how to handle this shamelessly
@@ -243,7 +273,7 @@ class Converter(object):
         self.filehash = None
 
     def initialize_filehash(self):
-        if self.filehash is None and self.blob_filepath:
+        if md5 is not None and self.filehash is None and self.blob_filepath:
             try:
                 self.filehash = md5.get(self.blob_filepath)
             except IndexError:
