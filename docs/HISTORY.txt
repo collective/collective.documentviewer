@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.4a2 (unreleased)
+1.4a2 (2012-04-20)
 ------------------
 
 - make sure to not use files with spaces
