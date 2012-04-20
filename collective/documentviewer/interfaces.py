@@ -89,6 +89,11 @@ class IGlobalDocumentViewerSettings(Interface):
                     u"specify the base url path.",
         default=None,
         required=False)
+    width = schema.Int(
+        title=u"Viewer Width",
+        description=u"Leave blank to take full width.",
+        default=None,
+        required=False)
     height = schema.Int(
         title=u"Viewer Height",
         description=u"Default height to use for viewer(only for "
@@ -114,6 +119,11 @@ class IGlobalDocumentViewerSettings(Interface):
 
 
 class IDocumentViewerSettings(Interface):
+    width = schema.Int(
+        title=u"Viewer Width",
+        description=u"Leave blank to take full width.",
+        default=None,
+        required=False)
     height = schema.Int(
         title=u"Viewer Height",
         default=None,

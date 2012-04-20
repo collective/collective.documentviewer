@@ -8,6 +8,8 @@ Changelog
 
 - better logging when looking for binary files
 
+- be able to override width of viewer
+
 
 1.3a3 (2012-04-20)
 ------------------

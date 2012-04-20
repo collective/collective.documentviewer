@@ -121,6 +121,12 @@ class DocumentViewerView(BrowserView):
         fullscreen = self.settings.fullscreen
         height = 'height: %i,' % either(self.settings.height,
                                        self.global_settings.height)
+        width = either(self.settings.width,
+                       self.global_settings.width)
+        if width is None:
+            width = "jQuery('#DV-container').width()"
+        else:
+            width = str(width)
         sidebar = either(self.settings.show_sidebar,
                          self.global_settings.show_sidebar)
         search = either(self.settings.show_search,
@@ -139,14 +145,13 @@ if(hash.indexOf('#document') != -1 || (%(fullscreen)s &&
    hash != '#bypass-fullscreen')){
 window.currentDocument = DV.load(window.documentData, {
     sidebar: true,
-    width: $('#DV-container').width(),
     search: %(search)s,
     container: document.body });
 $('body').addClass('fullscreen');
 }else{
 window.currentDocument = DV.load(window.documentData, { %(height)s
     sidebar: %(sidebar)s,
-    width: $('#DV-container').width(),
+    width: %(width)s,
     search: %(search)s,
     container: '#DV-container' });
 $('body').addClass('not-fullscreen');
@@ -157,6 +162,7 @@ $('body').addClass('not-fullscreen');
     'fullscreen': str(fullscreen).lower(),
     'sidebar': str(sidebar).lower(),
     'search': str(search).lower(),
+    'width': width,
     'data': json.dumps({
         'access': 'public',
         'annotations': [],
