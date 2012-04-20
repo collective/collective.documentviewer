@@ -233,7 +233,9 @@ class DocSplitSubProcess(BaseSubProcess):
         return int(result.strip())
 
     def convert_to_pdf(self, filepath, filename, output_dir):
-        inputfilepath = os.path.join(output_dir, filename)
+        # get ext from filename
+        ext = os.path.splitext(os.path.normcase(filename))[1][1:]
+        inputfilepath = os.path.join(output_dir, 'dump.%s' % ext)
         shutil.move(filepath, inputfilepath)
         cmd = "%s pdf %s --output %s" % (self.binary, inputfilepath,
                                          output_dir)
