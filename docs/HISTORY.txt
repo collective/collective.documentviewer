@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3b2 (unreleased)
+1.3b2 (2012-04-20)
 ------------------
 
 - use jQuery instead of $()
