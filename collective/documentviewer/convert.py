@@ -1,3 +1,4 @@
+from zope.annotation.interfaces import IAnnotations
 from ZODB.blob import Blob
 from BTrees.OOBTree import OOBTree
 import subprocess
@@ -394,6 +395,35 @@ class Converter(object):
         self.initialize_blob_filepath()
         return savepoint
 
+    def handle_layout(self):
+        """
+        This will check if the file does not have the
+        document viewer display selected.
+
+        In addition, if the currently selected display
+        is for wc.pageturner, we'll clean out the annotations
+        from that product. Additionally, we'll also look
+        for wildcard.pdfpal related values.
+        """
+        current = self.context.getLayout()
+        if current != 'documentviewer':
+            self.context.layout = 'documentviewer'
+            # remove page turner related
+            if current == 'page-turner':
+                annotations = IAnnotations(self.context)
+                data = annotations.get('wc.pageturner', None)
+                if data:
+                    del annotations['wc.pageturner']
+
+            # remove pdfpal related
+            field = self.context.getField('ocrText')
+            if field:
+                field.set(self.context, '')
+
+            data = annotations.get('wildcard.pdfpal', None)
+            if data:
+                del annotations['wildcard.pdfpal']
+
     def __call__(self):
         settings = self.settings
         self.gsettings = GlobalSettings(getSite())
@@ -416,6 +446,7 @@ class Converter(object):
                 self.initialize_catalog()
                 self.index_pdf(pages)
             self.handle_storage()
+            self.handle_layout()
             settings.num_pages = pages
             settings.successfully_converted = True
             settings.storage_type = self.gsettings.storage_type

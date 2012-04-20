@@ -85,10 +85,17 @@ class DocumentViewerView(BrowserView):
                 msg = "The PDF is currently being converted to the " + \
                       "Document Viewer view..."
                 self.enabled = False
-            elif not self.settings.successfully_converted:
+            elif self.settings.successfully_converted is not None and \
+                    not self.settings.successfully_converted:
                 msg = "There was an error trying to convert the PDF. Maybe " +\
                       "the PDF is encrypted, corrupt or malformed? " +\
                       "Check log for details."
+                self.enabled = False
+            elif self.settings.successfully_converted is None:
+                # must have just switched to this view
+                msg = "This PDF is not yet converted to document viewer. " +\
+                      "Please click the `Document Viewer Convert` button " +\
+                      "to convert."
                 self.enabled = False
         else:
             self.enabled = False
@@ -250,48 +257,12 @@ class Utils(BrowserView):
     def enabled(self):
         try:
             return IFileContent.providedBy(self.context) and \
-                self.context.getLayout() == 'documentviewer'
+                self.context.getLayout() in ('documentviewer', 'page-turner')
         except:
             return False
 
     def async_enabled(self):
         return asyncInstalled()
-
-    def convert(self):
-        if self.enabled():
-            settings = Settings(self.context)
-            settings.last_updated = DateTime('1999/01/01').ISO8601()
-            queueJob(self.context)
-
-        self.request.response.redirect(self.context.absolute_url() + '/view')
-
-    def convert_all(self):
-        confirm = self.request.get('confirm', 'no')
-        if confirm != 'yes':
-            return 'You must append "?confirm=yes"'
-        else:
-            ptool = getToolByName(object, 'portal_properties')
-            site_props = getattr(ptool, 'site_properties', None)
-            auto_layout = site_props.getProperty(
-                'documentviewer_auto_select_layout', False)
-
-            catalog = getToolByName(self.context, 'portal_catalog')
-            files = catalog(object_provides=IFileContent.__identifier__)
-            for brain in files:
-                file = brain.getObject()
-                if file.getContentType() not in ('application/pdf',
-                        'application/x-pdf', 'image/pdf'):
-                    continue
-
-                if auto_layout and file.getLayout() != 'documentviewer':
-                    file.setLayout('documentviewer')
-
-                self.request.response.write(
-                    'Converting %s to documentviewer...\n' % (
-                        file.absolute_url()))
-                settings = Settings(file)
-                settings.last_updated = DateTime('1999/01/01').ISO8601()
-                queueJob(file)
 
     def cleanup_file_storage(self):
         """
@@ -327,6 +298,19 @@ class Utils(BrowserView):
                 elif settings.storage_type == 'Blob':
                     shutil.rmtree(folderpath)
         return 'done'
+
+
+class Convert(Utils):
+
+    def __call__(self):
+        if self.enabled():
+            settings = Settings(self.context)
+            settings.last_updated = DateTime('1999/01/01').ISO8601()
+            queueJob(self.context)
+            if asyncInstalled():
+                return super(Convert, self).__call__()
+
+        self.request.response.redirect(self.context.absolute_url() + '/view')
 
 
 class PDFTraverseBlobFile(SimpleItem):

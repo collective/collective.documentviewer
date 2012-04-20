@@ -2,9 +2,35 @@ from zope.app.component.hooks import getSite
 from logging import getLogger
 from Products.CMFCore.utils import getToolByName
 from collective.documentviewer.config import GROUP_VIEW_DISPLAY_TYPES
+from Products.ATContentTypes.interface.file import IFileContent
+from collective.documentviewer.settings import GlobalSettings
+from collective.documentviewer.settings import Settings
+from collective.documentviewer.utils import allowedDocumentType
+from DateTime import DateTime
+from collective.documentviewer.async import queueJob
 
 default_profile = 'profile-collective.documentviewer:default'
 logger = getLogger('collective.documentviewer')
+
+
+def convert_all(context):
+    catalog = getToolByName(context, 'portal_catalog')
+    portal = getSite()
+    gsettings = GlobalSettings(portal)
+    for brain in catalog(object_provides=IFileContent.__identifier__):
+        file = brain.getObject()
+
+        if not allowedDocumentType(file,
+                gsettings.auto_layout_file_types):
+            continue
+
+        # let's not switch to the document viewer view
+        # until the document is converted. The conversion
+        # process will check if the layout is set correctly.
+        if file.getLayout() != 'documentviewer':
+            settings = Settings(file)
+            settings.last_updated = DateTime('1999/01/01').ISO8601()
+            queueJob(file)
 
 
 def upgrade_to_1_1(context):

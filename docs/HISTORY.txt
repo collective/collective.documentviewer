@@ -8,6 +8,10 @@ Changelog
   for large PDFs.
   [vangheem]
 
+- better integrate with pdfpal and pageturner so
+  it's easy to upgrade from those products.
+  [vangheem]
+
 
 1.2a2 (2012-04-19)
 ------------------

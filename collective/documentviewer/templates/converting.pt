@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+
+<body>
+
+<div metal:fill-slot="content-core">
+  <tal:main-macro metal:define-macro="content-core" 
+         tal:define="size python:here.getObjSize(here);
+                     content_type here/get_content_type|here/Format;">
+    <h3>Converting</h3>
+    <p>PDF is now being converted to Document Viewer. The current view
+       will remain until the conversion process is complete.</p>
+    <p>You may visit
+      <a tal:attributes="href string:${context/absolute_url}/view">the current file</a>
+      until the conversion is complete or
+      <a tal:attributes="href string:${context/portal_url}/@@dvasync-monitor">check
+        it in the process queue</a>.
+    </p>
+  </tal:main-macro>
+</div>
+
+</body>
+
+</html>

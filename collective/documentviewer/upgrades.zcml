@@ -4,6 +4,14 @@
   i18n_domain="collective.documentviewer">
 
   <gs:upgradeStep
+    title="Convert all valid unconverted files document viewer"
+    description="see title.."
+    source="*"
+    destination="upgrade-all"
+    handler=".upgrades.convert_all"
+    profile="collective.documentviewer:default" />
+
+  <gs:upgradeStep
     title="Upgrade collective.documentviewer to 1.1"
     description="Upgrade collective.documentviewer to 1.1"
     source="*"

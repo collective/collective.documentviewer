@@ -30,7 +30,8 @@ setup(name='collective.documentviewer',
           'plone.app.testing',
           'zope.browserresource',
           'repoze.catalog',
-          'plone.app.z3cform'
+          'plone.app.z3cform',
+          'collective.monkeypatcher'
       ],
       entry_points="""
       # -*- Entry points: -*-
