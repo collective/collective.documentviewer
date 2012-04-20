@@ -69,7 +69,7 @@ class BaseSubProcess(object):
         binary = self._findbinary()
         self.binary = binary
         if binary is None:
-            raise IOError("Unable to find docsplit binary")
+            raise IOError("Unable to find %s binary" % self.bin_name)
 
     def _findbinary(self):
         import os
@@ -109,8 +109,7 @@ try:
     md5 = MD5SubProcess()
 except IOError:
     logger.exception("No md5 installed. collective.documentviewer "
-                     "will not be able to detect if the pdf has "
-                     "already been converted")
+                     "Will check for md5sum.")
     md5 = None
 
 
@@ -138,7 +137,7 @@ try:
     if md5 is None:
         md5 = MD5SumSubProcess()
 except IOError:
-    logger.exception("No md5 installed. collective.documentviewer "
+    logger.exception("No md5sum or md5 installed. collective.documentviewer "
                      "will not be able to detect if the pdf has "
                      "already been converted")
     md5 = None
