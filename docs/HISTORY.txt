@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.4a1 (unreleased)
+1.4a1 (2012-04-20)
 ------------------
 
 - be able to detect if pdf already has text in it
