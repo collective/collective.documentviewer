@@ -6,6 +6,8 @@ Changelog
 
 - default OCR to being off since it's pretty slow
 
+- better logging when looking for binary files
+
 
 1.3a3 (2012-04-20)
 ------------------
