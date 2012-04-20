@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.3a2 (2012-04-19)
+------------------
+
+- fix async bug if it wasn't installed
+  [vangheem]
+
+
 1.3a1 (2012-04-19)
 ------------------
 

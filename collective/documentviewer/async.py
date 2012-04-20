@@ -5,7 +5,10 @@ from zope.app.component.hooks import getSite
 from collective.documentviewer.settings import GlobalSettings
 from logging import getLogger
 from collective.documentviewer.convert import Converter
-from zc.async.interfaces import COMPLETED
+try:
+    from zc.async.interfaces import COMPLETED
+except:
+    COMPLETED = None
 
 logger = getLogger('collective.documentviewer')
 
