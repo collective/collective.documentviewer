@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3a1 (unreleased)
+1.3a1 (2012-04-19)
 ------------------
 
 - make sure to initialize catalog after db sync
