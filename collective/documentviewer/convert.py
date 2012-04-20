@@ -286,8 +286,7 @@ class Converter(object):
             DateTime(self.context.ModificationDate())
         if modified and md5 and self.blob_filepath is not None and \
                 self.settings.filehash is not None and \
-                not self.settings.converting and \
-                not self.settings.successfully_converted:
+                not self.settings.converting:
             # okay, it's been modified and we have the md5
             # library, check the hash now
             self.initialize_filehash()

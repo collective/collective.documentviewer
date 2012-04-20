@@ -171,22 +171,4 @@
     preserveOriginal="True"
   />
 
-  <monkey:patch
-    zcml:condition="installed wildcard.pdfpal"
-    description="Patch object modify/creation subscribers to not run with dv"
-    module="wildcard.pdfpal.ocr"
-    original="index_pdf"
-    replacement=".patches.pal_index_pdf"
-    preserveOriginal="True"
-  />
-
-  <monkey:patch
-    zcml:condition="installed wildcard.pdfpal"
-    description="Patch object modify/creation subscribers to not run with dv"
-    module="wildcard.pdfpal.thumbnail"
-    original="create_thumbnails"
-    replacement=".patches.pal_create_thumbnails"
-    preserveOriginal="True"
-  />
-
 </configure>

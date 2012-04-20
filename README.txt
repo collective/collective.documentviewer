@@ -94,6 +94,37 @@ there are a few things you'll want to keep in mind.
    url `http://zeoinstace/plone/@@dvcleanup-filestorage`.
 
 
+Upgrading from page turner
+--------------------------
+
+If you currently have page turner installed, this project will supercede 
+it. Your page turner views will work but no future files added to the site
+will be converted to page turner.
+
+To convert existing view, on every page turner enabled file, there will
+be a button `Document Viewer Convert` that you can click to manually
+convert page turner to document viewer.
+
+To convert all existing views, go to portal_setup in the zmi, upgrades,
+select collective.documentviewer, click to show old upgrades and there
+should be an `upgrade-all` step to run.
+
+
+Upgrading from pdfpal
+---------------------
+
+If you want to upgrade from pdfpal, it is recommended that you simply
+uninstall pdf pal.
+
+Document viewer will disable parts of pdfpal if installed with it
+otherwise. If you still want both installed, you'll need to upgrade
+to at least version 0.7b5 in order for it to play nice with document
+viewer.
+
+Also, version 0.7b5 has the best uninstall support so if you're going
+to uninstall the product, first upgrade your egg to 0.7b5.
+
+
 TODO
 ----
 
