@@ -74,6 +74,8 @@ Auto Select Layout
     document viewer display.
 Auto Convert
     When pdf files are added and modified, automatically convert.
+Auto layout file types
+    Types that should automatically be converted to document viewer
 
 
 File storage integration

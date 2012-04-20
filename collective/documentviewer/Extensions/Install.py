@@ -72,7 +72,7 @@ def uninstall(context, reinstall=False):
                 del annotations['collective.documentviewer']
             # delete files associated with it...
             storage_dir = os.path.join(settings.storage_location,
-                                       context.UID())
+                                       obj.UID())
             if os.path.exists(storage_dir):
                 shutil.rmtree(storage_dir)
 
