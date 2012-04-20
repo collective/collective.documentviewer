@@ -132,3 +132,5 @@ TODO
 
  - reject converting pdf if too large and no async support provided?
     - or let people hang themselves?
+ - Check if pdf already has text in it and do not OCR if it does.
+    - be able to configure the check

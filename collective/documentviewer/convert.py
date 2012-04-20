@@ -84,6 +84,14 @@ class BaseSubProcess(object):
                 return fullname
         return None
 
+    def _run_command(self, cmd):
+        logger.info("Running command %s" % cmd)
+        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        output = process.communicate()[0]
+        logger.info("Finished Running Command %s" % cmd)
+        return output
+
 
 class MD5SubProcess(BaseSubProcess):
     """
@@ -98,11 +106,7 @@ class MD5SubProcess(BaseSubProcess):
 
     def get(self, filepath):
         cmd = "%s %s" % (self.binary, filepath)
-        logger.info("Running command %s" % cmd)
-        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        hash = process.communicate()[0]
-        logger.info("Finished Running Command %s" % cmd)
+        hash = self._run_command(cmd)
         return hash.split('=')[1].strip()
 
 try:
@@ -126,11 +130,7 @@ class MD5SumSubProcess(BaseSubProcess):
 
     def get(self, filepath):
         cmd = "%s %s" % (self.binary, filepath)
-        logger.info("Running command %s" % cmd)
-        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        hash = process.communicate()[0]
-        logger.info("Finished Running Command %s" % cmd)
+        hash = self._run_command(cmd)
         return hash.split('  ')[0].strip()
 
 try:
@@ -141,6 +141,39 @@ except IOError:
                      "will not be able to detect if the pdf has "
                      "already been converted")
     md5 = None
+
+
+class TextCheckerSubProcess(BaseSubProcess):
+    if os.name == 'nt':
+        bin_name = 'pdffonts.ext'
+    else:
+        bin_name = 'pdffonts'
+
+    font_line_marker = '%s %s --- --- --- ---------' % (
+        '-' * 36, '-' * 17)
+
+    def has(self, filepath):
+        cmd = "%s %s" % (self.binary, filepath)
+        output = self._run_command(cmd)
+        if not isinstance(output, basestring):
+            return False
+        lines = output.splitlines()
+        if len(lines) < 3:
+            return False
+        try:
+            index = lines.index(self.font_line_marker)
+        except:
+            return False
+        return len(lines[index + 1:]) > 0
+
+
+try:
+    textChecker = TextCheckerSubProcess()
+except IOError:
+    logger.exception("No pdffonts installed. collective.documentviewer "
+                     "will not be able to detect if the pdf already"
+                     "contains text")
+    textChecker = None
 
 
 class DocSplitSubProcess(BaseSubProcess):
@@ -222,7 +255,7 @@ class DocSplitSubProcess(BaseSubProcess):
 
     def convert(self, output_dir, inputfilepath=None, filedata=None,
                 converttopdf=False, sizes=(('large', 1000),), ocr=True,
-                format='gif', filename=None):
+                detect_text=True, format='gif', filename=None):
         if inputfilepath is None and filedata is None:
             raise Exception("Must provide either filepath or filedata params")
         path = os.path.join(output_dir, DUMP_FILENAME)
@@ -237,6 +270,10 @@ class DocSplitSubProcess(BaseSubProcess):
             self.convert_to_pdf(path, filename, output_dir)
 
         self.dump_images(path, output_dir, sizes, format)
+        if ocr and detect_text and textChecker is not None:
+            if textChecker.has(path):
+                logger.info('Text already found in pdf. Skipping OCR.')
+                ocr = False
         self.dump_text(path, output_dir, ocr)
         num_pages = self.get_num_pages(path)
 
@@ -318,6 +355,7 @@ class Converter(object):
                        ('normal', gsettings.normal_size),
                        ('small', gsettings.thumb_size)),
                 ocr=gsettings.ocr,
+                detect_text=gsettings.detect_text,
                 format=gsettings.pdf_image_format,
                 converttopdf=self.doc_type.requires_conversion,
                 filename=field.getFilename(context))

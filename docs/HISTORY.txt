@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.4a1 (unreleased)
+------------------
+
+- be able to detect if pdf already has text in it
+  and do not OCR it if it does.
+
+
 1.3b2 (2012-04-20)
 ------------------
 

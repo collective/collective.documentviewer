@@ -54,6 +54,13 @@ class IGlobalDocumentViewerSettings(Interface):
         title=u"OCR",
         description=u"extract the text from the PDF using OCR technology",
         default=False)
+    detect_text = schema.Bool(
+        title=u"Detect text",
+        description=u"Detect if pdf has text before performing OCR on it. "
+                    u"If text is found, ocr will be skipped. "
+                    u"If OCR is disabled, text will always try to be "
+                    u"retrieved from the PDF file anyways.",
+        default=True)
     auto_select_layout = schema.Bool(
         title=u"Auto select layout",
         description=u"For pdf files",
