@@ -53,7 +53,7 @@ class IGlobalDocumentViewerSettings(Interface):
     ocr = schema.Bool(
         title=u"OCR",
         description=u"extract the text from the PDF using OCR technology",
-        default=True)
+        default=False)
     auto_select_layout = schema.Bool(
         title=u"Auto select layout",
         description=u"For pdf files",

@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.3b1 (unreleased)
+------------------
+
+- default OCR to being off since it's pretty slow
+
+
 1.3a3 (2012-04-20)
 ------------------
 
