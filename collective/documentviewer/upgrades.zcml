@@ -5,7 +5,7 @@
 
   <gs:upgradeStep
     title="Convert all valid unconverted files document viewer"
-    description="see title.."
+    description="if async installed, we queue up all processes"
     source="*"
     destination="upgrade-all"
     handler=".upgrades.convert_all"
@@ -13,7 +13,7 @@
 
   <gs:upgradeStep
     title="Upgrade collective.documentviewer to 1.1"
-    description="Upgrade collective.documentviewer to 1.1"
+    description="upgrade control panel"
     source="*"
     destination="1100"
     handler=".upgrades.upgrade_to_1_1"
@@ -21,7 +21,7 @@
 
   <gs:upgradeStep
     title="Upgrade collective.documentviewer to 1.2"
-    description="Upgrade collective.documentviewer to 1.2"
+    description="fix view names and upgrade control panel"
     source="*"
     destination="1200"
     handler=".upgrades.upgrade_to_1_2"
@@ -29,7 +29,7 @@
 
   <gs:upgradeStep
     title="Upgrade collective.documentviewer to 1.2a2"
-    description="Upgrade collective.documentviewer to 1.2a2"
+    description="fix view names and upgrade control panel again..."
     source="1200"
     destination="1201"
     handler=".upgrades.upgrade_to_1_2"
