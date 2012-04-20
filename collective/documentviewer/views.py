@@ -147,14 +147,14 @@ window.currentDocument = DV.load(window.documentData, {
     sidebar: true,
     search: %(search)s,
     container: document.body });
-$('body').addClass('fullscreen');
+jQuery('body').addClass('fullscreen');
 }else{
 window.currentDocument = DV.load(window.documentData, { %(height)s
     sidebar: %(sidebar)s,
     width: %(width)s,
     search: %(search)s,
     container: '#DV-container' });
-$('body').addClass('not-fullscreen');
+jQuery('body').addClass('not-fullscreen');
 }
 """ % {
     'portal_url': self.portal_url,
