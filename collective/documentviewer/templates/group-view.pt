@@ -26,9 +26,9 @@
                  files result/files|python:[];
                  albums result/folders|python:[];
                  Batch python:modules['Products.CMFPlone'].Batch;
-                 b_start python:request.get('b_start', 0);
+                 b_start python:view.b_start;
                  templateId template/getId|nothing;
-                 batch python:Batch(files, 12, int(b_start), orphan=1)">
+                 batch python:Batch(files, view.b_size, int(b_start), orphan=1)">
 
   <div metal:define-macro="text-field-view" tal:on-error="nothing"
       id="parent-fieldname-text" class="stx"

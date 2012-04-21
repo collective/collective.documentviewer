@@ -435,6 +435,21 @@ class GroupView(BrowserView):
         # Explicitly set path to remove default depth
         return self.getContents(object=obj, portal_type=portal_type, path=path)
 
+    @property
+    def b_start(self):
+        try:
+            return int(self.request.get('b_start', 0))
+        except ValueError:
+            return 0
+
+    @property
+    def b_size(self):
+        if self.context.portal_type == 'Topic':
+            batch = self.context.getItemCount()
+            if batch:
+                return batch
+        return self.global_settings.group_view_batch_size
+
     def __call__(self):
         self.site = getSite()
         self.global_settings = GlobalSettings(self.site)

@@ -118,6 +118,10 @@ class IGlobalDocumentViewerSettings(Interface):
         title=u"Show search on group view",
         description=u"Enable search on group view.",
         default=True)
+    group_view_batch_size = schema.Int(
+        title=u"Group View Batch Size",
+        description=u"For folders. Does not apply to topics.",
+        default=20)
     async_quota_size = schema.Int(
         title=u"Async Quota Size",
         description=u"Number of conversions to run at a time. "
