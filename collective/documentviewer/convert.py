@@ -459,9 +459,9 @@ class Converter(object):
         current = self.context.getLayout()
         if current != 'documentviewer':
             self.context.layout = 'documentviewer'
+            annotations = IAnnotations(self.context)
             # remove page turner related
             if current == 'page-turner':
-                annotations = IAnnotations(self.context)
                 data = annotations.get('wc.pageturner', None)
                 if data:
                     del annotations['wc.pageturner']
