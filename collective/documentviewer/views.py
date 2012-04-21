@@ -141,20 +141,20 @@ class DocumentViewerView(BrowserView):
         return """
 window.documentData = %(data)s;
 var hash = window.location.hash;
-if(hash.indexOf('#document') != -1 || (%(fullscreen)s &&
-   hash != '#bypass-fullscreen')){
-window.currentDocument = DV.load(window.documentData, {
-    sidebar: true,
-    search: %(search)s,
-    container: document.body });
-jQuery('body').addClass('fullscreen');
+if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
+        hash != '#bypass-fullscreen')){
+    window.currentDocument = DV.load(window.documentData, {
+        sidebar: true,
+        search: %(search)s,
+        container: document.body });
+    jQuery('body').addClass('fullscreen');
 }else{
-window.currentDocument = DV.load(window.documentData, { %(height)s
-    sidebar: %(sidebar)s,
-    width: %(width)s,
-    search: %(search)s,
-    container: '#DV-container' });
-jQuery('body').addClass('not-fullscreen');
+    window.currentDocument = DV.load(window.documentData, { %(height)s
+        sidebar: %(sidebar)s,
+        width: %(width)s,
+        search: %(search)s,
+        container: '#DV-container' });
+    jQuery('body').addClass('not-fullscreen');
 }
 """ % {
     'portal_url': self.portal_url,

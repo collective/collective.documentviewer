@@ -132,3 +132,6 @@ TODO
 
  - reject converting pdf if too large and no async support provided?
     - or let people hang themselves?
+
+ - do batch size of collection or make configuration option for folder
+   batch size.

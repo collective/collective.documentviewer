@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.4b1 (unreleased)
+------------------
+
+- fix full screen button when text or pages selected.
+
+
 1.4a2 (2012-04-20)
 ------------------
 
