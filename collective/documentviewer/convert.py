@@ -96,11 +96,24 @@ class BaseSubProcess(object):
         return None
 
     def _run_command(self, cmd):
-        logger.info("Running command %s" % cmd)
-        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
+        if isinstance(cmd, basestring):
+            cmd = cmd.split()
+        cmdformatted = ' '.join(cmd)
+        logger.info("Running command %s" % cmdformatted)
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
-        output = process.communicate()[0]
-        logger.info("Finished Running Command %s" % cmd)
+        process.wait()
+        output = process.stdout.read()
+        if process.returncode != 0:
+            error = """Command
+%s
+finished with return code
+%i
+and output:
+%s""" % (cmdformatted, process.returncode, output)
+            logger.info(error)
+            raise Exception(error)
+        logger.info("Finished Running Command %s" % cmdformatted)
         return output
 
 
@@ -116,7 +129,7 @@ class MD5SubProcess(BaseSubProcess):
         bin_name = 'md5'
 
     def get(self, filepath):
-        cmd = "%s %s" % (self.binary, filepath)
+        cmd = [self.binary, filepath]
         hash = self._run_command(cmd)
         return hash.split('=')[1].strip()
 
@@ -140,7 +153,7 @@ class MD5SumSubProcess(BaseSubProcess):
         bin_name = 'md5sum'
 
     def get(self, filepath):
-        cmd = "%s %s" % (self.binary, filepath)
+        cmd = [self.binary, filepath]
         hash = self._run_command(cmd)
         return hash.split('  ')[0].strip()
 
@@ -164,7 +177,7 @@ class TextCheckerSubProcess(BaseSubProcess):
         '-' * 36, '-' * 17)
 
     def has(self, filepath):
-        cmd = "%s %s" % (self.binary, filepath)
+        cmd = [self.binary, filepath]
         output = self._run_command(cmd)
         if not isinstance(output, basestring):
             return False
@@ -201,16 +214,12 @@ class DocSplitSubProcess(BaseSubProcess):
     def dump_images(self, filepath, output_dir, sizes, format):
         # docsplit images pdf.pdf --size 700x,300x,50x
         # --format gif --output
-        cmd = "%s images %s --size %s --format %s --rolling --output %s" % (
-            self.binary, filepath,
-            ','.join([str(s[1]) + 'x' for s in sizes]),
-            format, output_dir)
-        logger.info("Running command %s" % cmd)
-        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        process.communicate()[0]
-        logger.info("Finished Running Command %s" % cmd)
-        # XXX Check for error..
+        cmd = [self.binary, "images", filepath,
+            '--size', ','.join([str(s[1]) + 'x' for s in sizes]),
+            '--format', format,
+            '--rolling',
+            '--output', output_dir]
+        self._run_command(cmd)
 
         # now, move images to correctly named folders
         for name, size in sizes:
@@ -223,38 +232,26 @@ class DocSplitSubProcess(BaseSubProcess):
     def dump_text(self, filepath, output_dir, ocr):
         # docsplit text pdf.pdf --[no-]ocr --pages all
         output_dir = os.path.join(output_dir, TEXT_REL_PATHNAME)
-        cmd = "%s text %s --%socr --pages all --output %s" % (
-            self.binary, filepath,
-            not ocr and 'no-' or '',
-            output_dir)
-        logger.info("Running command %s" % cmd)
-        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        process.communicate()[0]
-        logger.info("Finished Running Command %s" % cmd)
-        # XXX Check for error..
+        ocr = not ocr and 'no-' or ''
+        cmd = [self.binary, "text", filepath,
+            '--%socr' % ocr,
+            '--pages', 'all',
+            '--output', output_dir
+        ]
+        self._run_command(cmd)
 
     def get_num_pages(self, filepath):
-        cmd = "%s length %s" % (self.binary, filepath)
-        logger.info("Running command %s" % cmd)
-        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        result = process.communicate()[0]
-        logger.info("Finished Running Command %s" % cmd)
-        return int(result.strip())
+        cmd = [self.binary, "length", filepath]
+        return int(self._run_command(cmd).strip())
 
     def convert_to_pdf(self, filepath, filename, output_dir):
         # get ext from filename
         ext = os.path.splitext(os.path.normcase(filename))[1][1:]
         inputfilepath = os.path.join(output_dir, 'dump.%s' % ext)
         shutil.move(filepath, inputfilepath)
-        cmd = "%s pdf %s --output %s" % (self.binary, inputfilepath,
-                                         output_dir)
-        logger.info("Running command %s" % cmd)
-        process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        process.communicate()[0]
-        logger.info("Finished Running Command %s" % cmd)
+        cmd = [self.binary, 'pdf', inputfilepath,
+            '--output', output_dir]
+        self._run_command(cmd)
 
         # remove original
         os.remove(inputfilepath)
@@ -505,14 +502,16 @@ class Converter(object):
             self.context.reindexObject(idxs=['SearchableText'])
             # store hash of file
             self.initialize_filehash()
-            self.settings.filehash = self.filehash
+            settings.filehash = self.filehash
             result = 'success'
-        except:
+        except Exception, ex:
             if savepoint is not None:
                 savepoint.rollback()
             logger.exception('Error converting PDF:\n%s' % (
                 traceback.format_exc()))
             settings.successfully_converted = False
+            settings.exception_msg = getattr(ex, 'message', '')
+            settings.exception_traceback = traceback.format_exc()
             result = 'failure'
         settings.last_updated = DateTime().ISO8601()
         settings.converting = False
