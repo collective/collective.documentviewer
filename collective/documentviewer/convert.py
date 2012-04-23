@@ -18,8 +18,8 @@ import re
 import transaction
 from plone.app.blob.utils import openBlob
 import traceback
-import errno
 from collective.documentviewer import storage
+from collective.documentviewer.utils import mkdir_p
 
 word_re = re.compile('\W+')
 logger = getLogger('collective.documentviewer')
@@ -28,16 +28,6 @@ DUMP_FILENAME = 'dump.pdf'
 TEXT_REL_PATHNAME = 'text'
 # so we know to resync and do savepoints
 LARGE_PDF_SIZE = 40
-
-
-def mkdir_p(path):
-    try:
-        os.makedirs(path)
-    except OSError as exc:
-        if exc.errno == errno.EEXIST:
-            pass
-        else:
-            raise
 
 
 class Page(object):

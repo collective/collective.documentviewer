@@ -53,7 +53,7 @@ def browserLogin(portal, browser, username=None, password=None):
         browser.handleErrors = handleErrors
 
 
-def createObject(context, _type, id, delete_first=False,
+def createObject(context, _type, id, delete_first=True,
                  check_for_first=False, **kwargs):
     if delete_first and id in context.objectIds():
         context.manage_delObjects([id])

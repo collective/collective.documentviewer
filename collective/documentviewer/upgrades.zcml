@@ -12,6 +12,14 @@
     profile="collective.documentviewer:default" />
 
   <gs:upgradeStep
+    title="Migrate file storage to new folder layout"
+    description="will just move the folders into the correct places for you"
+    source="*"
+    destination="migrate-file-storage"
+    handler=".upgrades.migrate_old_storage"
+    profile="collective.documentviewer:default" />
+
+  <gs:upgradeStep
     title="Upgrade collective.documentviewer to 1.1"
     description="upgrade control panel"
     source="*"

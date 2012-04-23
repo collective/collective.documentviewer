@@ -5,9 +5,16 @@ from collective.documentviewer.config import GROUP_VIEW_DISPLAY_TYPES
 from Products.ATContentTypes.interface.file import IFileContent
 from collective.documentviewer.settings import GlobalSettings
 from collective.documentviewer.settings import Settings
+from collective.documentviewer.settings import STORAGE_VERSION
 from collective.documentviewer.utils import allowedDocumentType
 from DateTime import DateTime
 from collective.documentviewer.async import queueJob
+from collective.documentviewer import storage
+from os.path import exists
+import shutil
+import transaction
+from collective.documentviewer.utils import mkdir_p
+import os
 
 default_profile = 'profile-collective.documentviewer:default'
 logger = getLogger('collective.documentviewer')
@@ -31,6 +38,36 @@ def convert_all(context):
             settings = Settings(file)
             settings.last_updated = DateTime('1999/01/01').ISO8601()
             queueJob(file)
+
+
+def migrate_old_storage(context):
+    catalog = getToolByName(context, 'portal_catalog')
+    portal = getSite()
+    gsettings = GlobalSettings(portal)
+    for brain in catalog(object_provides=IFileContent.__identifier__):
+        file = brain.getObject()
+        if file.getLayout() == 'documentviewer':
+            settings = Settings(file)
+            if settings.storage_version == 1:
+                if settings.storage_type == 'File':
+                    current_location = storage.getResourceDirectory(
+                        gsettings=gsettings, settings=settings)
+                    if not exists(current_location):
+                        raise Exception(
+                            "oops, can't find storage location %s" % (
+                                current_location))
+                    settings.storage_version = STORAGE_VERSION
+                    new_location = storage.getResourceDirectory(
+                        gsettings=gsettings, settings=settings)
+                    # only make base
+                    mkdir_p(os.path.sep.join(
+                        new_location.split(os.path.sep)[:-1]))
+                    shutil.move(current_location, new_location)
+                    # need to commit these eagerly since a failed
+                    # migration could leave some migrated wrong
+                    transaction.commit()
+                else:
+                    settings.storage_version = STORAGE_VERSION
 
 
 def upgrade_to_1_1(context):

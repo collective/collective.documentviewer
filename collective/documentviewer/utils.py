@@ -1,6 +1,8 @@
 from collective.documentviewer.config import EXTENSION_TO_ID_MAPPING
 from collective.documentviewer.config import CONVERTABLE_TYPES
 from Products.CMFCore.utils import getToolByName
+import os
+import errno
 
 
 def getDocumentType(object, allowed_types):
@@ -17,3 +19,13 @@ def getDocumentType(object, allowed_types):
 
 def allowedDocumentType(object, allowed_types):
     return getDocumentType(object, allowed_types) is not None
+
+
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc:
+        if exc.errno == errno.EEXIST:
+            pass
+        else:
+            raise
