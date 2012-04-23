@@ -1,7 +1,7 @@
-from zope.app.component.hooks import getSite
-from settings import GlobalSettings
-from Products.CMFCore.utils import getToolByName
 from logging import getLogger
+from zope.app.component.hooks import getSite
+from Products.CMFCore.utils import getToolByName
+from collective.documentviewer.settings import GlobalSettings
 from collective.documentviewer.utils import allowedDocumentType
 from collective.documentviewer.async import queueJob
 

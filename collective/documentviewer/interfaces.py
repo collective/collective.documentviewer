@@ -1,7 +1,9 @@
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.interface import Interface
+from zope.interface import Attribute
 from zope import schema
+from zope.component.interfaces import IObjectEvent
 from collective.documentviewer.config import CONVERTABLE_TYPES
 
 
@@ -168,3 +170,8 @@ class IUtils(Interface):
         """
         whether async is installed
         """
+
+
+class IConversionFinishedEvent(IObjectEvent):
+
+    status = Attribute("The status of the conversion")

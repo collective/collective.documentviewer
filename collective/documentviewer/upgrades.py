@@ -1,20 +1,20 @@
-from zope.app.component.hooks import getSite
+import os
 from logging import getLogger
+from os.path import exists
+import shutil
+import transaction
+from DateTime import DateTime
+from zope.app.component.hooks import getSite
 from Products.CMFCore.utils import getToolByName
-from collective.documentviewer.config import GROUP_VIEW_DISPLAY_TYPES
 from Products.ATContentTypes.interface.file import IFileContent
+from collective.documentviewer.config import GROUP_VIEW_DISPLAY_TYPES
 from collective.documentviewer.settings import GlobalSettings
 from collective.documentviewer.settings import Settings
 from collective.documentviewer.settings import STORAGE_VERSION
 from collective.documentviewer.utils import allowedDocumentType
-from DateTime import DateTime
 from collective.documentviewer.async import queueJob
 from collective.documentviewer import storage
-from os.path import exists
-import shutil
-import transaction
 from collective.documentviewer.utils import mkdir_p
-import os
 
 default_profile = 'profile-collective.documentviewer:default'
 logger = getLogger('collective.documentviewer')

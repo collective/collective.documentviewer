@@ -1,5 +1,5 @@
-from zope.app.component.hooks import getSite
 from os.path import join
+from zope.app.component.hooks import getSite
 from collective.documentviewer.settings import GlobalSettings
 from collective.documentviewer.settings import Settings
 

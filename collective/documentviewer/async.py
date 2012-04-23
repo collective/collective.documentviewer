@@ -1,9 +1,9 @@
-from collective.documentviewer.settings import Settings
-from zope.component import getUtility
-from collective.documentviewer.convert import runConversion
-from zope.app.component.hooks import getSite
-from collective.documentviewer.settings import GlobalSettings
 from logging import getLogger
+from zope.component import getUtility
+from zope.app.component.hooks import getSite
+from collective.documentviewer.settings import Settings
+from collective.documentviewer.convert import runConversion
+from collective.documentviewer.settings import GlobalSettings
 from collective.documentviewer.convert import Converter
 try:
     from zc.async.interfaces import COMPLETED

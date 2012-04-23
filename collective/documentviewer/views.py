@@ -1,42 +1,50 @@
-from zope.component import getUtility
-from collective.documentviewer.utils import allowedDocumentType
 import os
-from zExceptions import NotFound
-from Products.Five.browser import BrowserView
-from zope.interface import implements
-from Products.CMFCore.utils import getToolByName
-from interfaces import IDocumentViewerSettings, IUtils, \
-    IGlobalDocumentViewerSettings
-from settings import Settings, GlobalSettings
-from Products.ATContentTypes.interface.file import IFileContent
-from collective.documentviewer import mf as _
-from zope.component import getMultiAdapter
-from convert import docsplit
-from zope.app.component.hooks import getSite
-from DateTime import DateTime
 import json
-from zope.browserresource.directory import DirectoryResource, Directory
-from zope.browserresource.metaconfigure import allowed_names
-from zope.security.checker import CheckerPublic, NamesChecker
+import shutil
+from logging import getLogger
+from zExceptions import NotFound
 from OFS.SimpleItem import SimpleItem
+from Products.Five.browser import BrowserView
+from DateTime import DateTime
+from webdav.common import rfc1123_date
+from zope.component import getMultiAdapter
+from zope.interface import implements
+from zope.component import getUtility
+from zope.app.component.hooks import getSite
+from zope.browserresource.directory import DirectoryResource
+from zope.browserresource.directory import Directory
+from zope.browserresource.metaconfigure import allowed_names
 from zope.publisher.interfaces.browser import IBrowserPublisher
-from collective.documentviewer import convert
+from zope.security.checker import CheckerPublic
+from zope.security.checker import NamesChecker
+from zope.annotation.interfaces import IAnnotations
+from Products.CMFCore.utils import getToolByName
+from Products.ATContentTypes.interface.file import IFileContent
+from Products.CMFPlone.utils import base_hasattr
 from repoze.catalog.query import Contains
 from plone.app.blob.download import handleRequestRange
 from plone.app.blob.iterators import BlobStreamIterator
 from plone.app.blob.utils import openBlob
-from webdav.common import rfc1123_date
-from Products.CMFPlone.utils import base_hasattr
-from z3c.form import form, field, button
+from z3c.form import form
+from z3c.form import field
+from z3c.form import button
 from plone.app.z3cform.layout import wrap_form
-from collective.documentviewer.async import isConversion, \
-    asyncInstalled, QUOTA_NAME, queueJob
-import shutil
-from zope.annotation.interfaces import IAnnotations
+from collective.documentviewer.utils import allowedDocumentType
+from collective.documentviewer.interfaces import IDocumentViewerSettings
+from collective.documentviewer.interfaces import IUtils
+from collective.documentviewer.interfaces import IGlobalDocumentViewerSettings
+from collective.documentviewer.settings import Settings
+from collective.documentviewer.settings import GlobalSettings
+from collective.documentviewer import mf as _
+from collective.documentviewer.convert import docsplit
+from collective.documentviewer.convert import DUMP_FILENAME
+from collective.documentviewer.convert import TEXT_REL_PATHNAME
+from collective.documentviewer.async import isConversion
+from collective.documentviewer.async import asyncInstalled
+from collective.documentviewer.async import QUOTA_NAME
+from collective.documentviewer.async import queueJob
 from collective.documentviewer import storage
 
-
-from logging import getLogger
 logger = getLogger('collective.documentviewer')
 
 try:
@@ -111,7 +119,7 @@ class DocumentViewerView(BrowserView):
         return self.index()
 
     def javascript(self):
-        dump_path = convert.DUMP_FILENAME.rsplit('.', 1)[0]
+        dump_path = DUMP_FILENAME.rsplit('.', 1)[0]
         if self.global_settings.override_contributor:
             contributor = self.global_settings.override_contributor
         else:
@@ -186,7 +194,7 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
                     self.dvpdffiles, dump_path,
                     image_format),
                 'text': '%s/%s/%s_{page}.txt' % (
-                    self.dvpdffiles, convert.TEXT_REL_PATHNAME, dump_path)
+                    self.dvpdffiles, TEXT_REL_PATHNAME, dump_path)
             },
             'pdf': self.context.absolute_url(),
             'thumbnail': '%s/small/%s_1.%s' % (
@@ -497,7 +505,7 @@ class GroupView(BrowserView):
         self.static_url = '%s/++resource++dv.resources' % (
             self.portal_url)
         self.resource_url = self.global_settings.override_base_resource_url
-        self.dump_path = convert.DUMP_FILENAME.rsplit('.', 1)[0]
+        self.dump_path = DUMP_FILENAME.rsplit('.', 1)[0]
         return super(GroupView, self).__call__()
 
     def get_thumb(self, obj):

@@ -8,6 +8,8 @@ Changelog
 
 - Change "Original Document (PDF)" to "Original Document"
 
+- emit event after conversion
+
 
 1.4.1b1 (2012-04-23)
 --------------------

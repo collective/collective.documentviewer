@@ -1,25 +1,28 @@
-from zope.annotation.interfaces import IAnnotations
-from ZODB.blob import Blob
-from BTrees.OOBTree import OOBTree
 import subprocess
 import os
-from settings import Settings, GlobalSettings
+from logging import getLogger
+import shutil
+import tempfile
+import re
+import transaction
+import traceback
+from ZODB.blob import Blob
+from BTrees.OOBTree import OOBTree
 from Acquisition import aq_inner
 from DateTime import DateTime
-from logging import getLogger
+from zope.event import notify
+from zope.annotation.interfaces import IAnnotations
 from zope.app.component.hooks import getSite
-import shutil
+from plone.app.blob.utils import openBlob
 from repoze.catalog.catalog import Catalog
 from repoze.catalog.indexes.text import CatalogTextIndex
 from repoze.catalog.indexes.field import CatalogFieldIndex
-import tempfile
+from collective.documentviewer.settings import Settings
+from collective.documentviewer.settings import GlobalSettings
 from collective.documentviewer.utils import getDocumentType
-import re
-import transaction
-from plone.app.blob.utils import openBlob
-import traceback
 from collective.documentviewer import storage
 from collective.documentviewer.utils import mkdir_p
+from collective.documentviewer.events import ConversionFinishedEvent
 
 word_re = re.compile('\W+')
 logger = getLogger('collective.documentviewer')
@@ -514,6 +517,7 @@ class Converter(object):
             settings.exception_msg = getattr(ex, 'message', '')
             settings.exception_traceback = traceback.format_exc()
             result = 'failure'
+        notify(ConversionFinishedEvent(self.context, result))
         settings.last_updated = DateTime().ISO8601()
         settings.converting = False
         return result

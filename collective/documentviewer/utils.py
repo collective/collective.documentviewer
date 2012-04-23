@@ -1,8 +1,8 @@
-from collective.documentviewer.config import EXTENSION_TO_ID_MAPPING
-from collective.documentviewer.config import CONVERTABLE_TYPES
-from Products.CMFCore.utils import getToolByName
 import os
 import errno
+from Products.CMFCore.utils import getToolByName
+from collective.documentviewer.config import EXTENSION_TO_ID_MAPPING
+from collective.documentviewer.config import CONVERTABLE_TYPES
 
 
 def getDocumentType(object, allowed_types):

@@ -1,8 +1,10 @@
-from zope.interface import implements
 from persistent.dict import PersistentDict
-from zope.annotation.interfaces import IAnnotations
-from interfaces import IDocumentViewerSettings, IGlobalDocumentViewerSettings
 from DateTime import DateTime
+from zope.interface import implements
+from zope.annotation.interfaces import IAnnotations
+from collective.documentviewer.interfaces import IDocumentViewerSettings
+from collective.documentviewer.interfaces import IGlobalDocumentViewerSettings
+
 
 STORAGE_VERSION = 2
 
