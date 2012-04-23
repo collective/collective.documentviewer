@@ -19,37 +19,12 @@
       tal:attributes="href string:${view/dvstatic}/assets/printviewer.css" />
   <script src="/viewer/viewer.js"
       tal:attributes="src string:${view/dvstatic}/assets/viewer.js"></script>
-  <script type="text/javascript">
-  jQuery('.close-fullscreen').live('click', function(){
-    if(window.opener){
-      window.close();
-      window.opener.location = jQuery('base').attr('href') + '/view#bypass-fullscreen';
-      window.opener.location.reload();
-    }else{
-      window.location = jQuery('base').attr('href') + '/view#bypass-fullscreen';
-      window.location.reload();
-    }
-    return false;
-    });
-  </script>
+  <script src="/viewer/viewer.js"
+      tal:attributes="src string:${view/dvstatic}/javascripts/viewer.js"></script>
 </metal:js>
 <metal:css fill-slot="style_slot">
-<style>
-.DV-navigation .DV-fullscreen{
-  right: 10px;
-  top: 54px;
-  left: inherit;
-  cursor: pointer;
-}
-
-.fullscreen .DV-navigation .DV-fullscreen{
-  display:none;
-}
-
-.not-fullscreen .close-fullscreen{
-  display:none;
-}
-</style>
+  <link rel="stylesheet" type="text/css" media="screen" href="group.css"
+      tal:attributes="href string:${context/portal_url}/++resource++dv.resources/stylesheets/viewer.css" />
 </metal:css>
 
 <body>
@@ -58,6 +33,15 @@
   <tal:main-macro metal:define-macro="content-core" 
          tal:define="size python:here.getObjSize(here);
                      content_type here/get_content_type|here/Format;">
+    <tal:notshow tal:condition="not: view/enabled">
+      <dl id="errorMsg" tal:condition="python: view.can_modify and view.settings.successfully_converted is False">
+        <dt><a href="#">Show Document Viewer Conversion Error</a></dt>
+        <dd>
+          <pre tal:content="python: view.settings.exception_msg" />
+          <pre tal:content="python: view.settings.exception_traceback" />
+        </dd>
+      </dl>
+    </tal:notshow>
     <tal:show tal:condition="view/enabled">        
       <div id="DV-container">
 

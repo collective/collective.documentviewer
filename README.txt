@@ -136,11 +136,3 @@ TODO
 
  - file storage should do sub folder structure to prevent too many files in one directory
 
- - work on command runners
-    - do not use 'split'
-    - check return code
-    - log errors and do not continue execution
-
- - log errors on conversion better so you can see why one failed with what command
-
- - cleanup up tmp directories on error

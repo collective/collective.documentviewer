@@ -1,14 +1,16 @@
 Changelog
 =========
 
-1.4b2 (unreleased)
-------------------
+1.4.1b1 (unreleased)
+--------------------
 
 - do not assume pdfpal is used along with pageturner
   on data conversion.
 
-- remove file is exists in cases where there was an
-  error on conversion
+- better command runner
+
+- track errors better and display them in interface if something
+  happened during conversion
 
 
 1.4b1 (2012-04-21)

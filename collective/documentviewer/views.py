@@ -100,11 +100,12 @@ class DocumentViewerView(BrowserView):
         else:
             self.enabled = False
             msg = "The file is not a PDF. No need for this view."
-
+        self.can_modify = False
         if msg:
             mtool = getToolByName(self.context, 'portal_membership')
             if mtool.checkPermission('cmf.ModifyPortalContent', self.context):
                 utils.addPortalMessage(msg)
+                self.can_modify = True
 
         return self.index()
 

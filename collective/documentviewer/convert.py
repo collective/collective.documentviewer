@@ -364,8 +364,8 @@ class Converter(object):
         gsettings = self.gsettings
         field = context.getField('file') or context.getPrimaryField()
         args = dict(sizes=(('large', gsettings.large_size),
-                       ('normal', gsettings.normal_size),
-                       ('small', gsettings.thumb_size)),
+                           ('normal', gsettings.normal_size),
+                           ('small', gsettings.thumb_size)),
                 ocr=gsettings.ocr,
                 detect_text=gsettings.detect_text,
                 format=gsettings.pdf_image_format,
@@ -507,7 +507,8 @@ class Converter(object):
         except Exception, ex:
             if savepoint is not None:
                 savepoint.rollback()
-            logger.exception('Error converting PDF:\n%s' % (
+            logger.exception('Error converting PDF:\n%s\n%s' % (
+                getattr(ex, 'message', ''),
                 traceback.format_exc()))
             settings.successfully_converted = False
             settings.exception_msg = getattr(ex, 'message', '')
