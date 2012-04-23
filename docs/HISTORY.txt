@@ -10,6 +10,8 @@ Changelog
 
 - emit event after conversion
 
+- only show queue link if manager
+
 
 1.4.1b1 (2012-04-23)
 --------------------

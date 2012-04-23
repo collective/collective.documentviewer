@@ -339,6 +339,9 @@ class Convert(Utils):
             settings.last_updated = DateTime('1999/01/01').ISO8601()
             queueJob(self.context)
             if asyncInstalled():
+                mtool = getToolByName(self.context, 'portal_membership')
+                self.manager = mtool.checkPermission('cmf.ManagePortal',
+                                                     self.context)
                 return super(Convert, self).__call__()
 
         self.request.response.redirect(self.context.absolute_url() + '/view')
