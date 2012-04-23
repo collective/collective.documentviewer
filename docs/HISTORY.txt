@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.4.1b1 (unreleased)
+1.4.1b1 (2012-04-23)
 --------------------
 
 - do not assume pdfpal is used along with pageturner

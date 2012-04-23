@@ -123,8 +123,8 @@ otherwise. If you still want both installed, you'll need to upgrade
 to at least version 0.7b5 in order for it to play nice with document
 viewer.
 
-Also, version 0.7b5 has the best uninstall support so if you're going
-to uninstall the product, first upgrade your egg to 0.7b5.
+Also, version 0.7b6 has the best uninstall support so if you're going
+to uninstall the product, first upgrade your egg to 0.7b6.
 
 
 TODO
