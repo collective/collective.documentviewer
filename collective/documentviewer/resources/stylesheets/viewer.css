@@ -1,0 +1,18 @@
+#errorMsg dd{
+    display:none;
+}
+
+.DV-navigation .DV-fullscreen{
+  right: 10px;
+  top: 54px;
+  left: inherit;
+  cursor: pointer;
+}
+
+.fullscreen .DV-navigation .DV-fullscreen{
+  display:none;
+}
+
+.not-fullscreen .close-fullscreen{
+  display:none;
+}

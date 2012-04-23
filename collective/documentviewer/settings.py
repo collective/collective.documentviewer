@@ -18,7 +18,7 @@ class Base(object):
         if self._metadata is None:
             self._metadata = PersistentDict()
             self._metadata['last_updated'] = DateTime('1901/01/01').ISO8601()
-            #self.storage_version = STORAGE_VERSION
+            self.storage_version = STORAGE_VERSION
             annotations['collective.documentviewer'] = self._metadata
 
     def __setattr__(self, name, value):
