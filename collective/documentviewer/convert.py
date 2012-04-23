@@ -354,13 +354,6 @@ class Converter(object):
                 mkdir_p(storage_dir)
         return storage_dir
 
-    def initialize_catalog(self):
-        """
-        Always set a new catalog to restart the
-        search weights
-        """
-        self.settings.catalog = CatalogFactory()
-
     def run_conversion(self):
         context = self.context
         gsettings = self.gsettings
@@ -379,9 +372,8 @@ class Converter(object):
             args['inputfilepath'] = self.blob_filepath
         return docsplit.convert(self.storage_dir, **args)
 
-    def index_pdf(self, pages):
+    def index_pdf(self, pages, catalog):
         logger.info('indexing pdf %s' % repr(self.context))
-        catalog = self.settings.catalog
         text_dir = os.path.join(self.storage_dir, TEXT_REL_PATHNAME)
         dump_path = DUMP_FILENAME.rsplit('.', 1)[0]
         for page_num in range(1, pages + 1):
@@ -483,17 +475,14 @@ class Converter(object):
         savepoint = None
         try:
             pages = self.run_conversion()
+            catalog = CatalogFactory()
+            self.index_pdf(pages, catalog)
             if pages > LARGE_PDF_SIZE:
                 # conversion can take a long time.
                 # let's sync before we save the changes
                 self.sync_db()
-                self.initialize_catalog()
                 savepoint = self.savepoint()
-                self.index_pdf(pages)
-                savepoint = self.savepoint()
-            else:
-                self.initialize_catalog()
-                self.index_pdf(pages)
+            self.settings.catalog = catalog
             self.handle_storage()
             self.handle_layout()
             settings.num_pages = pages
