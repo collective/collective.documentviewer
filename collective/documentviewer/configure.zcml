@@ -11,12 +11,12 @@
   <five:registerPackage package="." initialize=".initialize" />
 
   <genericsetup:registerProfile
-      name="default"
-      title="Document Viewer"
-      directory="profiles/default"
-      description="Installs the collective.documentviewer package"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
+    name="default"
+    title="Document Viewer"
+    directory="profiles/default"
+    description="Installs the collective.documentviewer package"
+    provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
   <include file="upgrades.zcml" />
 
   <browser:page

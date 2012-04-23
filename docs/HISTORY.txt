@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.4.1b3 (unreleased)
+1.4.1b3 (2012-04-23)
 --------------------
 
 - create local catalog and index because syncing db to prevent
