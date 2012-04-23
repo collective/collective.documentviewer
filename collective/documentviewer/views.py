@@ -272,6 +272,40 @@ class Utils(BrowserView):
     def async_enabled(self):
         return asyncInstalled()
 
+    def clean_folder(self, catalog, storage_loc):
+        if not os.path.isdir(storage_loc):
+            return 0
+        count = 0
+        for foldername in os.listdir(storage_loc):
+            if len(foldername) == 1:
+                # we're in a container, check inside
+                count += self.clean_folder(catalog,
+                    os.path.join(storage_loc, foldername))
+            else:
+                #foldername should be file uid
+                brains = catalog(UID=foldername)
+                folderpath = os.path.join(storage_loc, foldername)
+                if len(brains) == 0:
+                    shutil.rmtree(folderpath)
+                    count += 1
+                else:
+                    obj = brains[0].getObject()
+                    settings = Settings(obj)
+                    if obj.getLayout() != 'documentviewer':
+                        if not settings.converting:
+                            shutil.rmtree(folderpath)
+                            count += 1
+                            # also delete settings
+                            annotations = IAnnotations(obj)
+                            data = annotations.get('collective.documentviewer',
+                                                   None)
+                            if data:
+                                del annotations['collective.documentviewer']
+                    elif settings.storage_type == 'Blob':
+                        shutil.rmtree(folderpath)
+                        count += 1
+            return count
+
     def cleanup_file_storage(self):
         """
         Cases to remove file storage.
@@ -285,27 +319,8 @@ class Utils(BrowserView):
         if not os.path.exists(storage_loc):
             return 'storage location path "%s" does not exist' % storage_loc
         catalog = getToolByName(self.context, 'portal_catalog')
-        # for foldername in os.listdir(storage_loc):
-        #     #foldername should be file uid
-        #     brains = catalog(UID=foldername)
-        #     folderpath = os.path.join(storage_loc, foldername)
-        #     if len(brains) == 0:
-        #         shutil.rmtree(folderpath)
-        #     else:
-        #         obj = brains[0].getObject()
-        #         settings = Settings(obj)
-        #         if obj.getLayout() != 'documentviewer':
-        #             if not settings.converting:
-        #                 shutil.rmtree(folderpath)
-        #                 # also delete settings
-        #                 annotations = IAnnotations(obj)
-        #                 data = annotations.get('collective.documentviewer',
-        #                                        None)
-        #                 if data:
-        #                     del annotations['collective.documentviewer']
-        #         elif settings.storage_type == 'Blob':
-        #             shutil.rmtree(folderpath)
-        return 'done'
+        number = self.clean_folder(catalog, storage_loc)
+        return 'cleaned %i' % number
 
 
 class Convert(Utils):
