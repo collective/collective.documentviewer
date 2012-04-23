@@ -101,9 +101,7 @@ class BaseSubProcess(object):
         logger.info("Running command %s" % cmdformatted)
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE, close_fds=self.close_fds)
-        process.wait()
-        output = process.stdout.read()
-        error = process.stderr.read()
+        output, error = process.communicate()
         process.stdout.close()
         process.stderr.close()
         if process.returncode != 0:

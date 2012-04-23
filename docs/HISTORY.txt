@@ -12,6 +12,12 @@ Changelog
 
 - only show queue link if manager
 
+- convert button should work for files that do not have
+  layout selected yet
+
+- use communicate instead of wait with popen in case
+  output is large. Prevents deadlocks.
+
 
 1.4.1b1 (2012-04-23)
 --------------------
