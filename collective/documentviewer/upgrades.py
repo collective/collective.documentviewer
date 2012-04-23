@@ -102,3 +102,7 @@ def upgrade_to_1_2(context):
     site = getSite()
     if site.getLayout() == old_display:
         site.setLayout('dvpdf-group-view')
+
+
+def upgrade_to_1_4(context):
+    context.runImportStepFromProfile(default_profile, 'actions')

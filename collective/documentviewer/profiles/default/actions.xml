@@ -3,7 +3,7 @@
   <action-provider name="portal_actions">
 
     <action title="Document Viewer Settings" action_id="documentviewer_settings" category="object"
-        condition_expr="object/@@documentviewer-utils/enabled"
+        condition_expr="object/@@documentviewer-utils/settings_enabled"
         url_expr="string:${object_url}/@@documentviewer-settings" visible="True">
         <permission>Modify view template</permission>
     </action>

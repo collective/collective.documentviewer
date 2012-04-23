@@ -162,6 +162,11 @@ class IUtils(Interface):
         return true is documentviewer is enabled for the object
         """
 
+    def settings_enabled():
+        """
+        if settings button should appear
+        """
+
     def convert():
         """
         force conversion

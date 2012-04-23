@@ -272,10 +272,19 @@ class Utils(BrowserView):
 
     def enabled(self):
         try:
-            return IFileContent.providedBy(self.context) and \
-                self.context.getLayout() in ('documentviewer', 'page-turner')
+            if IFileContent.providedBy(self.context):
+                if self.context.getLayout() == 'documentviewer':
+                    return True
+                else:
+                    return allowedDocumentType(self.context,
+                        GlobalSettings(getSite()).auto_layout_file_types)
+            else:
+                return False
         except:
             return False
+
+    def settings_enabled(self):
+        return self.context.getLayout() == 'documentviewer'
 
     def async_enabled(self):
         return asyncInstalled()
