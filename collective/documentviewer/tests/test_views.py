@@ -74,6 +74,8 @@ class PDFResourceTraverseTest(BaseTest):
                     uid[0], uid[1], uid))
 
     def test_blob_old_storage_works(self):
+        gsettings = GlobalSettings(self.portal)
+        gsettings.storage_type = 'Blob'
         fi = self.createFile('test.pdf')
         settings = Settings(fi)
         del settings._metadata['storage_version']
@@ -88,6 +90,8 @@ class PDFResourceTraverseTest(BaseTest):
         self.assertTrue(isinstance(blobtraverser, BlobStreamIterator))
 
     def test_blob_new_storage_works(self):
+        gsettings = GlobalSettings(self.portal)
+        gsettings.storage_type = 'Blob'
         fi = self.createFile('test.pdf')
         notify(ObjectInitializedEvent(fi))
         uid = fi.UID()
