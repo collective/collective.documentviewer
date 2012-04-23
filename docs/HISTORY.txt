@@ -12,6 +12,9 @@ Changelog
 - track errors better and display them in interface if something
   happened during conversion
 
+- new file storage structure to prevent too many files from
+  being in one directory
+
 
 1.4b1 (2012-04-21)
 ------------------

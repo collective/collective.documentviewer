@@ -134,5 +134,3 @@ TODO
     - ConflictError: database conflict error (oid 0x4d10, class BTrees.IOBTree.IOBucket, serial this txn started with 0x0395f478bc2cb377 2012-04-21 03:36:44.103425, serial currently committed 0x0395f479b09de4cc 2012-04-21 03:37:41.394556)
     - ERROR ZODB.Connection Shouldn't load state for 0x319d when the connection is closed
 
- - file storage should do sub folder structure to prevent too many files in one directory
-

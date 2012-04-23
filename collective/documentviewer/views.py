@@ -33,6 +33,7 @@ from collective.documentviewer.async import isConversion, \
     asyncInstalled, QUOTA_NAME, queueJob
 import shutil
 from zope.annotation.interfaces import IAnnotations
+from collective.documentviewer import storage
 
 
 from logging import getLogger
@@ -65,12 +66,12 @@ class DocumentViewerView(BrowserView):
         self.dvstatic = "%s/++resource++dv.resources" % (
             self.portal_url)
         resource_url = self.global_settings.override_base_resource_url
+        rel_url = storage.getResourceRelURL(gsettings=self.global_settings,
+                                            settings=self.settings)
         if resource_url:
-            self.dvpdffiles = '%s/%s' % (resource_url.rstrip('/'),
-                                         self.context.UID())
+            self.dvpdffiles = '%s/%s' % (resource_url.rstrip('/'), rel_url)
         else:
-            self.dvpdffiles = '%s/@@dvpdffiles/%s' % (
-                self.portal_url, self.context.UID())
+            self.dvpdffiles = '%s/%s' % (self.portal_url, rel_url)
 
         utils = getToolByName(self.context, 'plone_utils')
         msg = None
@@ -284,26 +285,26 @@ class Utils(BrowserView):
         if not os.path.exists(storage_loc):
             return 'storage location path "%s" does not exist' % storage_loc
         catalog = getToolByName(self.context, 'portal_catalog')
-        for foldername in os.listdir(storage_loc):
-            #foldername should be file uid
-            brains = catalog(UID=foldername)
-            folderpath = os.path.join(storage_loc, foldername)
-            if len(brains) == 0:
-                shutil.rmtree(folderpath)
-            else:
-                obj = brains[0].getObject()
-                settings = Settings(obj)
-                if obj.getLayout() != 'documentviewer':
-                    if not settings.converting:
-                        shutil.rmtree(folderpath)
-                        # also delete settings
-                        annotations = IAnnotations(obj)
-                        data = annotations.get('collective.documentviewer',
-                                               None)
-                        if data:
-                            del annotations['collective.documentviewer']
-                elif settings.storage_type == 'Blob':
-                    shutil.rmtree(folderpath)
+        # for foldername in os.listdir(storage_loc):
+        #     #foldername should be file uid
+        #     brains = catalog(UID=foldername)
+        #     folderpath = os.path.join(storage_loc, foldername)
+        #     if len(brains) == 0:
+        #         shutil.rmtree(folderpath)
+        #     else:
+        #         obj = brains[0].getObject()
+        #         settings = Settings(obj)
+        #         if obj.getLayout() != 'documentviewer':
+        #             if not settings.converting:
+        #                 shutil.rmtree(folderpath)
+        #                 # also delete settings
+        #                 annotations = IAnnotations(obj)
+        #                 data = annotations.get('collective.documentviewer',
+        #                                        None)
+        #                 if data:
+        #                     del annotations['collective.documentviewer']
+        #         elif settings.storage_type == 'Blob':
+        #             shutil.rmtree(folderpath)
         return 'done'
 
 
@@ -356,6 +357,9 @@ class PDFTraverseBlobFile(SimpleItem):
             else:
                 raise NotFound
         else:
+            if self.previous is not None:
+                # shouldn't be traversing this deep
+                raise NotFound
             fi = PDFTraverseBlobFile(self.context, self.settings,
                                      request, name)
             fi.__parent__ = self
@@ -369,8 +373,9 @@ class PDFTraverseBlobFile(SimpleItem):
 class PDFFiles(SimpleItem, DirectoryResource):
     implements(IBrowserPublisher)
 
-    def __init__(self, context, request):
+    def __init__(self, context, request, previous=[]):
         SimpleItem.__init__(self, context, request)
+        self.previous = previous
 
         self.__name__ = 'dvpdffiles'
         permission = CheckerPublic
@@ -379,18 +384,34 @@ class PDFFiles(SimpleItem, DirectoryResource):
         self.site = getSite()
         self.global_settings = GlobalSettings(self.site)
         self.storage_type = self.global_settings.storage_type
-        self.__dir = Directory(self.global_settings.storage_location,
+        self.__dir = Directory(
+            os.path.join(self.global_settings.storage_location, *previous),
             checker, self.__name__)
 
         DirectoryResource.__init__(self, self.__dir, request)
         self.__Security_checker__ = checker
 
     def publishTraverse(self, request, name):
-        '''See interface IBrowserPublisher'''
+        if len(self.previous) > 2:
+            raise NotFound
+        if len(name) == 1:
+            if len(self.previous) == 0:
+                previous = [name]
+            else:
+                previous = self.previous
+                previous.append(name)
+            self.context.path = os.path.join(self.context.path, name)
+            files = PDFFiles(self.context, request, previous)
+            files.__parent__ = self
+            return files.__of__(self)
+        if len(self.previous) == 2 and (self.previous[0] != name[0] or \
+                self.previous[1] != name[1:2]):
+            # make sure the first two were a sub-set of the uid
+            raise NotFound
         uidcat = getToolByName(self.site, 'uid_catalog')
         brains = uidcat(UID=name)
         if len(brains) == 0:
-            return NotFound
+            raise NotFound
         fileobj = brains[0].getObject()
         settings = Settings(fileobj)
         if settings.storage_type == 'Blob':
@@ -467,12 +488,13 @@ class GroupView(BrowserView):
     def get_thumb(self, obj):
         if not obj:
             return None
+        resource_rel = storage.getResourceRelURL(obj=obj)
         if self.resource_url:
             dvpdffiles = '%s/%s' % (self.resource_url.rstrip('/'),
-                                         obj.UID())
+                                         resource_rel)
         else:
-            dvpdffiles = '%s/@@dvpdffiles/%s' % (
-                self.portal_url, obj.UID())
+            dvpdffiles = '%s/%s' % (
+                self.portal_url, resource_rel)
 
         if obj.portal_type == 'File':
             settings = Settings(obj)

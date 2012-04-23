@@ -19,6 +19,7 @@ import transaction
 from plone.app.blob.utils import openBlob
 import traceback
 import errno
+from collective.documentviewer import storage
 
 word_re = re.compile('\W+')
 logger = getLogger('collective.documentviewer')
@@ -346,10 +347,11 @@ class Converter(object):
         if self.gsettings.storage_type == 'Blob':
             storage_dir = tempfile.mkdtemp()
         else:
-            storage_dir = os.path.join(self.gsettings.storage_location,
-                                       self.context.UID())
+            storage_dir = storage.getResourceDirectory(
+                gsettings=self.gsettings,
+                settings=self.settings)
             if not os.path.exists(storage_dir):
-                os.mkdir(storage_dir)
+                mkdir_p(storage_dir)
         return storage_dir
 
     def initialize_catalog(self):
@@ -456,21 +458,20 @@ class Converter(object):
         current = self.context.getLayout()
         if current != 'documentviewer':
             self.context.layout = 'documentviewer'
-            annotations = IAnnotations(self.context)
-            # remove page turner related
-            if current == 'page-turner':
-                data = annotations.get('wc.pageturner', None)
-                if data:
-                    del annotations['wc.pageturner']
+        annotations = IAnnotations(self.context)
+        # remove page turner related
+        data = annotations.get('wc.pageturner', None)
+        if data:
+            del annotations['wc.pageturner']
 
-            # remove pdfpal related
-            field = self.context.getField('ocrText')
-            if field:
-                field.set(self.context, '')
+        # remove pdfpal related
+        field = self.context.getField('ocrText')
+        if field:
+            field.set(self.context, '')
 
-            data = annotations.get('wildcard.pdfpal', None)
-            if data:
-                del annotations['wildcard.pdfpal']
+        data = annotations.get('wildcard.pdfpal', None)
+        if data:
+            del annotations['wildcard.pdfpal']
 
     def __call__(self):
         settings = self.settings

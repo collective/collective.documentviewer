@@ -6,6 +6,7 @@ from collective.documentviewer.settings import GlobalSettings
 from Products.ATContentTypes.interface.file import IFileContent
 from Products.CMFCore.utils import getToolByName
 from collective.documentviewer.config import GROUP_VIEW_DISPLAY_TYPES
+from collective.documentviewer import storage
 
 
 def install(context):
@@ -71,8 +72,8 @@ def uninstall(context, reinstall=False):
             if data:
                 del annotations['collective.documentviewer']
             # delete files associated with it...
-            storage_dir = os.path.join(settings.storage_location,
-                                       obj.UID())
+            storage_dir = storage.getResourceDirectory(gsettings=settings,
+                obj=obj)
             if os.path.exists(storage_dir):
                 shutil.rmtree(storage_dir)
 

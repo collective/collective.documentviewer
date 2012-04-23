@@ -6,6 +6,10 @@ from DateTime import DateTime
 
 STORAGE_VERSION = 2
 
+_defaults = {
+    'storage_version': 1
+}
+
 
 class Base(object):
     use_interface = None
@@ -31,6 +35,8 @@ class Base(object):
         default = None
         if name in self.use_interface.names():
             default = self.use_interface[name].default
+        elif name in _defaults:
+            default = _defaults.get(name, None)
 
         return self._metadata.get(name, default)
 
