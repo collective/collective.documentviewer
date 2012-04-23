@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.4.1b2 (unreleased)
+--------------------
+
+- make sure to close open file descriptors
+
+- Change "Original Document (PDF)" to "Original Document"
+
+
 1.4.1b1 (2012-04-23)
 --------------------
 
