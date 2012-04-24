@@ -1,10 +1,16 @@
 Changelog
 =========
 
+1.4.2 (2012-04-24)
+------------------
+
+- no changes, first final release
+
+
 1.4.1b3 (2012-04-23)
 --------------------
 
-- create local catalog and index because syncing db to prevent
+- create local catalog and index before syncing db to prevent
   conflict errors.
 
 - add redirect timeout to conversion info page
