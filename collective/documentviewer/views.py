@@ -1,3 +1,4 @@
+from AccessControl import Unauthorized
 import os
 import json
 import shutil
@@ -43,6 +44,7 @@ from collective.documentviewer.async import isConversion
 from collective.documentviewer.async import asyncInstalled
 from collective.documentviewer.async import QUOTA_NAME
 from collective.documentviewer.async import queueJob
+from collective.documentviewer.async import JobRunner
 from collective.documentviewer import storage
 
 logger = getLogger('collective.documentviewer')
@@ -92,7 +94,7 @@ class DocumentViewerView(BrowserView):
             elif self.settings.converting is not None and \
                     self.settings.converting:
                 msg = "The PDF is currently being converted to the " + \
-                      "Document Viewer view..."
+                      "Document Viewer view."
                 self.enabled = False
             elif self.settings.successfully_converted is not None and \
                     not self.settings.successfully_converted:
@@ -343,15 +345,41 @@ class Utils(BrowserView):
 class Convert(Utils):
 
     def __call__(self):
+        """
+        - handle queuing
+        - csrf protection
+        - async
+            - queue position
+        """
+        mtool = getToolByName(self.context, 'portal_membership')
+        self.manager = mtool.checkPermission('cmf.ManagePortal',
+                                             self.context)
+        self.async_installed = asyncInstalled()
+        self.converting = False
         if self.enabled():
-            settings = Settings(self.context)
-            settings.last_updated = DateTime('1999/01/01').ISO8601()
-            queueJob(self.context)
-            if asyncInstalled():
-                mtool = getToolByName(self.context, 'portal_membership')
-                self.manager = mtool.checkPermission('cmf.ManagePortal',
-                                                     self.context)
-                return super(Convert, self).__call__()
+            req = self.request
+            if req.get('REQUEST_METHOD', 'POST') and \
+                req.form.get('form.action.queue', '') == 'Convert':
+                authenticator = getMultiAdapter((self.context, self.request),
+                                                name=u"authenticator")
+                if not authenticator.verify():
+                    raise Unauthorized
+                settings = Settings(self.context)
+                settings.last_updated = DateTime('1999/01/01').ISO8601()
+                queueJob(self.context)
+                self.converting = True
+                if self.async_installed:
+                    self.position = JobRunner(self.context).find_position()
+                    queueJob(self.context)
+                else:
+                    return self.request.response.redirect(
+                        self.context.absolute_url() + '/view')
+            else:
+                if self.async_installed:
+                    self.position = JobRunner(self.context).find_position()
+                    if self.position > -1:
+                        self.converting = True
+            return super(Convert, self).__call__()
 
         self.request.response.redirect(self.context.absolute_url() + '/view')
 
@@ -607,9 +635,16 @@ class AsyncMonitor(BrowserView):
         return self.request.response.redirect("%s/@@dvasync-monitor" % (
             self.context.absolute_url()))
 
+    def move(self):
+        pass
+
     def remove(self):
         if self.request.get('REQUEST_METHOD', 'POST') and \
                 self.request.form.get('form.action.remove', '') == 'Remove':
+            authenticator = getMultiAdapter((self.context, self.request),
+                                            name=u"authenticator")
+            if not authenticator.verify():
+                raise Unauthorized
             # find the job
             sitepath = self.context.getPhysicalPath()
             async = getUtility(IAsyncService)
@@ -633,3 +668,17 @@ class AsyncMonitor(BrowserView):
                         pass
                     return self.redirect()
         return self.redirect()
+
+
+class MoveJob(BrowserView):
+
+    def __call__(self):
+        if self.request.get('REQUEST_METHOD', 'POST') and \
+                self.request.form.get('form.action.move', False):
+            authenticator = getMultiAdapter((self.context, self.request),
+                                            name=u"authenticator")
+            if not authenticator.verify():
+                raise Unauthorized
+            JobRunner(self.context).move_to_front()
+        return self.request.response.redirect(
+            self.context.absolute_url() + '/@@convert-to-documentviewer')

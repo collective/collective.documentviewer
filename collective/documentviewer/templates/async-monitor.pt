@@ -44,7 +44,7 @@
                 <th />
               </tr>
             </thead>
-            <tbody>
+            <tbody tal:define="auth context/@@authenticator/authenticator">
               <tal:jobs tal:repeat="job jobs">
                 <tr tal:attributes="class string:${job/status}">
                   <td tal:content="job/user" />
@@ -55,6 +55,7 @@
                   <td>
                     <form method="post" action="dv-remove-from-queue" tal:condition="job/removable"
                       tal:attributes="action string:${context/portal_url}/@@dv-remove-from-queue">
+                      <span tal:replace="structure auth"/>
                       <input type="hidden" name="path" tal:attributes="value job/object_path" />
                       <input type="submit" name="form.action.remove" value="Remove" /> 
                     </form>

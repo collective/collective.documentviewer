@@ -59,15 +59,23 @@ class JobRunner(object):
         """
         Check if object in queue
         """
+        return self.find_job()[0] > -1
+
+    def find_position(self):
+        # active in queue
+        return self.find_job()[0]
+
+    def find_job(self):
+        # active in queue
         for job in self.queue.quotas[QUOTA_NAME]._data:
             if self.is_current_active(job):
-                return True
+                return 0, job
 
         jobs = [job for job in self.queue]
-        for job in jobs:
+        for idx, job in enumerate(jobs):
             if self.is_current_active(job):
-                return True
-        return False
+                return idx + 1, job
+        return -1, None
 
     def set_quota(self):
         """
@@ -90,6 +98,31 @@ class JobRunner(object):
                                    self.object)
         settings = Settings(self.object)
         settings.converting = True
+
+    def move_to_front(self):
+        """
+        Queue data is stored in buckets of queues.
+        Because of this, you need to go through each
+        bucket and find where the actual job is,
+        then move it to the first bucket, first item
+        of queue.
+        """
+        position, job = self.find_job()
+        if position <= 1:
+            return
+        found_bucket = None
+        for bucket in self.queue._queue._data:
+            if job in bucket._data:
+                found_bucket = bucket
+                break
+        jobs = list(found_bucket._data)
+        jobs.remove(job)
+        found_bucket._data = tuple(jobs)
+
+        bucket = self.queue._queue._data[0]
+        jobs = list(bucket._data)
+        jobs.insert(0, job)
+        bucket._data = tuple(jobs)
 
 
 def queueJob(object):

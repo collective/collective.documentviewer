@@ -12,25 +12,46 @@
   <tal:main-macro metal:define-macro="content-core" 
          tal:define="size python:here.getObjSize(here);
                      content_type here/get_content_type|here/Format;">
+  <tal:notconverting tal:condition="not: view/converting">
+    <h3>Convert this to document viewer</h3>
+    <p class="discreet">
+      Are you sure you want to convert this to document viewer?
+    </p>
+    <form method="post">
+      <span tal:replace="structure context/@@authenticator/authenticator"/>
+      <input type="submit" name="form.action.queue" value="Convert" /> 
+    </form>
+  </tal:notconverting>
+  <tal:converting tal:condition="view/converting">
     <h3>Converting</h3>
     <p class="discreet">
-      This page will automatically redirect in 10 seconds to the default view.
+      This file is currently being converted to document viewer.
     </p>
     <p>PDF is now being converted to Document Viewer. The current view
        will remain until the conversion process is complete.</p>
     <p>You may visit
       <a tal:attributes="href string:${context/absolute_url}/view">the current file</a>
       until the conversion is complete.
-      <tal:queue tal:condition="view/manager">Or
+      <tal:queue tal:condition="python: view.manager and view.async_installed">
+        <tal:pos tal:condition="python: view.position > 0">
+          The file is number <tal:pos tal:replace="view/position" /> in the Queue.
+        </tal:pos>
+        <tal:pos tal:condition="python: view.position == 0">
+          The file is active in the Queue.
+        </tal:pos>
+        <tal:move tal:condition="python: view.position > 1 and view.manager">
+          <form method="post" tal:attributes="action string:${context/absolute_url}/@@dvmove-to-front">
+            <span tal:replace="structure context/@@authenticator/authenticator"/>
+            <input type="submit" name="form.action.move" value="Move to front of Queue" /> 
+          </form>
+        </tal:move>
+        <br /><br />
+        You might also want to 
         <a tal:attributes="href string:${context/portal_url}/@@dvasync-monitor">check
           it in the process queue</a>.
       </tal:queue>
     </p>
-    <script type="text/javascript">
-    setTimeout(function(){
-      window.location = jQuery('base').attr('href') + '/view';
-    }, 10000);
-    </script>
+  </tal:converting>
   </tal:main-macro>
 </div>
 
