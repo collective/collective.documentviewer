@@ -6,6 +6,10 @@ Changelog
 
 - be able to move jobs to front of queue
 
+- use portal_catalog instead of uid_catalog so security
+  checks apply to resource urls.
+
+
 1.4.2 (2012-04-24)
 ------------------
 

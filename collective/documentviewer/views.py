@@ -471,7 +471,7 @@ class PDFFiles(SimpleItem, DirectoryResource):
                 self.previous[1] != name[1:2]):
             # make sure the first two were a sub-set of the uid
             raise NotFound
-        uidcat = getToolByName(self.site, 'uid_catalog')
+        uidcat = getToolByName(self.site, 'portal_catalog')
         brains = uidcat(UID=name)
         if len(brains) == 0:
             raise NotFound
