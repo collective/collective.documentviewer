@@ -1,6 +1,12 @@
 Introduction
 ============
 
+.. image:: http://wildcardcorp.com/logo.png
+   :height: 50
+   :width: 382
+   :alt: Produced by wildcardcorp.com
+   :align: right
+
 This package integrates documentcloud's viewer and pdf processing
 into plone.
 

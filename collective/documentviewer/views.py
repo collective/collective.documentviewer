@@ -542,8 +542,7 @@ class GroupView(BrowserView):
 
         self.portal_url = getMultiAdapter((self.context, self.request),
             name="plone_portal_state").portal_url()
-        self.static_url = '%s/++resource++dv.resources' % (
-            self.portal_url)
+        self.static_url = '%s/++resource++dv.resources' % (self.portal_url)
         self.resource_url = self.global_settings.override_base_resource_url
         self.dump_path = DUMP_FILENAME.rsplit('.', 1)[0]
         return super(GroupView, self).__call__()
@@ -554,10 +553,9 @@ class GroupView(BrowserView):
         resource_rel = storage.getResourceRelURL(obj=obj)
         if self.resource_url:
             dvpdffiles = '%s/%s' % (self.resource_url.rstrip('/'),
-                                         resource_rel)
+                                    resource_rel)
         else:
-            dvpdffiles = '%s/%s' % (
-                self.portal_url, resource_rel)
+            dvpdffiles = '%s/%s' % (self.portal_url, resource_rel)
 
         if obj.portal_type == 'File':
             settings = Settings(obj)
@@ -565,8 +563,8 @@ class GroupView(BrowserView):
                 image_format = settings.pdf_image_format
                 if not image_format:
                     image_format = self.global_settings.pdf_image_format
-                return '%s/small/%s_1.%s' % (
-                        dvpdffiles, self.dump_path, image_format)
+                return '%s/small/%s_1.%s' % (dvpdffiles, self.dump_path,
+                                             image_format)
             else:
                 return '%s/images/pdf.png' % (self.static_url)
         elif obj.portal_type == 'Image':
