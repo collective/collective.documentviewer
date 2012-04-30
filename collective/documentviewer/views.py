@@ -7,18 +7,17 @@ from zExceptions import NotFound
 from OFS.SimpleItem import SimpleItem
 from Products.Five.browser import BrowserView
 from DateTime import DateTime
+from AccessControl import getSecurityManager
 from webdav.common import rfc1123_date
 from zope.component import getMultiAdapter
 from zope.interface import implements
 from zope.component import getUtility
 from zope.app.component.hooks import getSite
-from zope.browserresource.directory import DirectoryResource
-from zope.browserresource.directory import Directory
-from zope.browserresource.metaconfigure import allowed_names
+from Products.Five.browser.resource import DirectoryResource
+from Products.Five.browser.resource import Directory
 from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.security.checker import CheckerPublic
-from zope.security.checker import NamesChecker
 from zope.annotation.interfaces import IAnnotations
+from Products.CMFCore import permissions
 from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.interface.file import IFileContent
 from Products.CMFPlone.utils import base_hasattr
@@ -46,6 +45,7 @@ from collective.documentviewer.async import QUOTA_NAME
 from collective.documentviewer.async import queueJob
 from collective.documentviewer.async import JobRunner
 from collective.documentviewer import storage
+from collective.documentviewer.interfaces import IBlobFileWrapper
 
 logger = getLogger('collective.documentviewer')
 
@@ -384,6 +384,46 @@ class Convert(Utils):
         self.request.response.redirect(self.context.absolute_url() + '/view')
 
 
+class BlobView(BrowserView):
+
+    def __call__(self):
+        sm = getSecurityManager()
+        if not sm.checkPermission(permissions.View, self.context.context):
+            raise Unauthorized
+        settings = self.context.settings
+        filepath = self.context.filepath
+        blob = settings.blob_files[filepath]
+        blobfi = openBlob(blob)
+        length = os.fstat(blobfi.fileno()).st_size
+        blobfi.close()
+        ext = os.path.splitext(os.path.normcase(filepath))[1][1:]
+        if ext == 'txt':
+            ct = 'text/plain'
+        else:
+            ct = 'image/%s' % ext
+        self.request.response.setHeader('Last-Modified',
+            rfc1123_date(self.context._p_mtime))
+        self.request.response.setHeader('Accept-Ranges', 'bytes')
+        self.request.response.setHeader("Content-Length", length)
+        self.request.response.setHeader('Content-Type', ct)
+        range = handleRequestRange(self.context, length, self.request,
+            self.request.response)
+        return BlobStreamIterator(blob, **range)
+
+
+class BlobFileWrapper(SimpleItem):
+    implements(IBlobFileWrapper, IBrowserPublisher)
+
+    def __init__(self, fileobj, settings, filepath, request):
+        self.context = fileobj
+        self.settings = settings
+        self.filepath = filepath
+        self.request = request
+
+    def browserDefault(self, request):
+        return self, ('@@view',)
+
+
 class PDFTraverseBlobFile(SimpleItem):
     """
     For traversing blob data store
@@ -400,23 +440,8 @@ class PDFTraverseBlobFile(SimpleItem):
         if name not in ('large', 'normal', 'small', 'text'):
             filepath = '%s/%s' % (self.previous, name)
             if filepath in self.settings.blob_files:
-                blob = self.settings.blob_files[filepath]
-                blobfi = openBlob(blob)
-                length = os.fstat(blobfi.fileno()).st_size
-                blobfi.close()
-                ext = os.path.splitext(os.path.normcase(name))[1][1:]
-                if ext == 'txt':
-                    ct = 'text/plain'
-                else:
-                    ct = 'image/%s' % ext
-                self.request.response.setHeader('Last-Modified',
-                    rfc1123_date(self.context._p_mtime))
-                self.request.response.setHeader('Accept-Ranges', 'bytes')
-                self.request.response.setHeader("Content-Length", length)
-                self.request.response.setHeader('Content-Type', ct)
-                range = handleRequestRange(self.context, length, self.request,
-                    self.request.response)
-                return BlobStreamIterator(blob, **range)
+                return BlobFileWrapper(self.context, self.settings,
+                    filepath, self.request).__of__(self.context)
             else:
                 raise NotFound
         else:
@@ -441,18 +466,14 @@ class PDFFiles(SimpleItem, DirectoryResource):
         self.previous = previous
 
         self.__name__ = 'dvpdffiles'
-        permission = CheckerPublic
-        checker = NamesChecker(allowed_names + ('__getitem__', 'get'),
-                           permission)
         self.site = getSite()
         self.global_settings = GlobalSettings(self.site)
         self.storage_type = self.global_settings.storage_type
         self.__dir = Directory(
             os.path.join(self.global_settings.storage_location, *previous),
-            checker, self.__name__)
+            self.__name__)
 
         DirectoryResource.__init__(self, self.__dir, request)
-        self.__Security_checker__ = checker
 
     def publishTraverse(self, request, name):
         if len(self.previous) > 2:
@@ -471,7 +492,7 @@ class PDFFiles(SimpleItem, DirectoryResource):
                 self.previous[1] != name[1:2]):
             # make sure the first two were a sub-set of the uid
             raise NotFound
-        uidcat = getToolByName(self.site, 'portal_catalog')
+        uidcat = getToolByName(self.site, 'uid_catalog')
         brains = uidcat(UID=name)
         if len(brains) == 0:
             raise NotFound
@@ -482,7 +503,11 @@ class PDFFiles(SimpleItem, DirectoryResource):
             fi.__parent__ = self
             return fi.__of__(self)
         else:
-            return super(PDFFiles, self).publishTraverse(request, name)
+            # so permission checks for file object are applied
+            # to file resource
+            self.__roles__ = fileobj.__roles__ + ()
+            fi = super(PDFFiles, self).publishTraverse(request, name)
+            return fi
 
 
 class GroupView(BrowserView):

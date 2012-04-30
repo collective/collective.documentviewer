@@ -180,3 +180,11 @@ class IUtils(Interface):
 class IConversionFinishedEvent(IObjectEvent):
 
     status = Attribute("The status of the conversion")
+
+
+from OFS.interfaces import IItem
+class IBlobFileWrapper(IItem):
+    pass
+
+class IFilePathWrapper(IItem):
+    pass

@@ -169,6 +169,14 @@
     layer=".interfaces.ILayer"
     />
 
+  <browser:page
+    name="view"
+    for=".interfaces.IBlobFileWrapper"
+    permission="zope2.View"
+    class=".views.BlobView"
+    layer=".interfaces.ILayer"
+    />
+
   <adapter name="SearchableText" factory=".catalog.SearchableText" />
 
   <monkey:patch

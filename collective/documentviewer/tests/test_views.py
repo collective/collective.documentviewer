@@ -8,8 +8,8 @@ import unittest2 as unittest
 
 from collective.documentviewer.settings import Settings
 from collective.documentviewer.tests import BaseTest
+from collective.documentviewer.views import BlobFileWrapper
 from os.path import join
-from plone.app.blob.iterators import BlobStreamIterator
 
 
 class PDFResourceTraverseTest(BaseTest):
@@ -87,7 +87,7 @@ class PDFResourceTraverseTest(BaseTest):
         blobtraverser = files.publishTraverse(req, uid)
         blobtraverser = blobtraverser.publishTraverse(req, 'small')
         blobtraverser = blobtraverser.publishTraverse(req, 'dump_1.gif')
-        self.assertTrue(isinstance(blobtraverser, BlobStreamIterator))
+        self.assertTrue(isinstance(blobtraverser, BlobFileWrapper))
 
     def test_blob_new_storage_works(self):
         gsettings = GlobalSettings(self.portal)
@@ -103,7 +103,7 @@ class PDFResourceTraverseTest(BaseTest):
         blobtraverser = files.publishTraverse(req, uid)
         blobtraverser = blobtraverser.publishTraverse(req, 'small')
         blobtraverser = blobtraverser.publishTraverse(req, 'dump_1.gif')
-        self.assertTrue(isinstance(blobtraverser, BlobStreamIterator))
+        self.assertTrue(isinstance(blobtraverser, BlobFileWrapper))
 
     def test_extra_paths_404s(self):
         files = self.portal.unrestrictedTraverse('@@dvpdffiles')
