@@ -1,3 +1,6 @@
+import random
+from persistent.list import PersistentList
+from persistent.dict import PersistentDict
 from AccessControl import Unauthorized
 import os
 import json
@@ -111,14 +114,29 @@ class DocumentViewerView(BrowserView):
         else:
             self.enabled = False
             msg = "The file is not a PDF. No need for this view."
-        self.can_modify = False
-        if msg:
-            mtool = getToolByName(self.context, 'portal_membership')
-            if mtool.checkPermission('cmf.ModifyPortalContent', self.context):
-                utils.addPortalMessage(msg)
-                self.can_modify = True
+        mtool = getToolByName(self.context, 'portal_membership')
+        self.can_modify = mtool.checkPermission('cmf.ModifyPortalContent',
+                                                self.context)
+        if msg and self.can_modify:
+            utils.addPortalMessage(msg)
 
         return self.index()
+
+    def annotations(self):
+        data = []
+        annotations = self.settings.annotations
+        if annotations is None:
+            return data
+        for page, anns in annotations.items():
+            for idx, ann in enumerate(anns):
+                data.append({
+                    "location": {"image": ann['coord']},
+                    "title": ann['title'],
+                    "id": ann['id'],
+                    "page": page,
+                    "access": "public",
+                    "content": ann['content']})
+        return data
 
     def javascript(self):
         dump_path = DUMP_FILENAME.rsplit('.', 1)[0]
@@ -177,7 +195,7 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
     'width': width,
     'data': json.dumps({
         'access': 'public',
-        'annotations': [],
+        'annotations': self.annotations(),
         'canonical_url': self.context.absolute_url() + '/view',
         'created_at': DateTime(self.context.CreationDate()).aCommonZ(),
         'data': {},
@@ -705,3 +723,35 @@ class MoveJob(BrowserView):
             JobRunner(self.context).move_to_front()
         return self.request.response.redirect(
             self.context.absolute_url() + '/@@convert-to-documentviewer')
+
+
+class Annotate(BrowserView):
+
+    def __call__(self):
+        req = self.request
+        settings = Settings(self.context)
+        annotations = settings.annotations
+        page = int(req.form['page'])
+        if annotations is None:
+            annotations = PersistentDict()
+            settings.annotations = annotations
+        if req.form['action'] == 'add':
+            if page not in annotations:
+                annotations[page] = PersistentList()
+            pageann = annotations[page]
+            pageann.append({
+                "id": random.randint(1, 9999999),
+                "coord": req.form['coord'],
+                "title": req.form.get('title', ''),
+                "content": req.form.get('content', '')})
+        elif req.form['action'] == 'remove':
+            if page in annotations:
+                id = int(req.form['id'])
+                found = False
+                annotations = annotations[page]
+                for ann in annotations:
+                    if ann['id'] == id:
+                        found = ann
+                        break
+                if found:
+                    annotations.remove(found)

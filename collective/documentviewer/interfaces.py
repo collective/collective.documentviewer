@@ -5,6 +5,7 @@ from zope.interface import Attribute
 from zope import schema
 from zope.component.interfaces import IObjectEvent
 from collective.documentviewer.config import CONVERTABLE_TYPES
+from OFS.interfaces import IItem
 
 
 class ILayer(Interface):
@@ -182,9 +183,5 @@ class IConversionFinishedEvent(IObjectEvent):
     status = Attribute("The status of the conversion")
 
 
-from OFS.interfaces import IItem
 class IBlobFileWrapper(IItem):
-    pass
-
-class IFilePathWrapper(IItem):
     pass

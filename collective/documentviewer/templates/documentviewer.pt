@@ -21,6 +21,17 @@
       tal:attributes="src string:${view/dvstatic}/assets/viewer.js"></script>
   <script src="/viewer/viewer.js"
       tal:attributes="src string:${view/dvstatic}/javascripts/viewer.js"></script>
+
+  <tal:annotate tal:condition="view/can_modify">
+    <link rel="stylesheet" type="text/css"
+      tal:attributes="href string:${view/dvstatic}/jquery.imgareaselect/css/imgareaselect-default.css" />
+    <link rel="stylesheet" type="text/css"
+      tal:attributes="href string:${view/dvstatic}/stylesheets/annotate.css" />
+    <script tal:attributes="src string:${view/dvstatic}/jquery.imgareaselect/scripts/jquery.imgareaselect.min.js">
+    </script>
+    <script tal:attributes="src string:${view/dvstatic}/javascripts/annotate.js">
+    </script>
+  </tal:annotate>
 </metal:js>
 <metal:css fill-slot="style_slot">
   <link rel="stylesheet" type="text/css" media="screen" href="group.css"
@@ -42,7 +53,11 @@
         </dd>
       </dl>
     </tal:notshow>
-    <tal:show tal:condition="view/enabled">        
+    <tal:show tal:condition="view/enabled">
+      <tal:annotate tal:condition="view/can_modify">
+        <a href="#" id="add-annotation">Add Annotation</a> | 
+        <a href="#" id="remove-annotations">Remove Annotations</a>
+      </tal:annotate>
       <div id="DV-container">
 
       <div class="DV-loadingDocument"><span>Loading</span></div>
