@@ -97,12 +97,12 @@
 }
 
 #annotation-management{
-    height:400px;
+    min-height:400px;
 }
 
 #image-container img{
     visibility: visible !important;
-    border-right: 2px solid #DDD;
+    border: 2px solid #DDD;
 }
 
 #image-container{
@@ -112,13 +112,18 @@
     position: absolute;
     top: 25px;
     right: 20px;
-    width: 500px;
+    width: 350px;
+    overflow:scroll;
 }
 
-#add-annotation{
-    
+#add-annotation textarea{
+    height:120px;
 }
 
 #section-management{
 
+}
+
+.add{
+    padding: 5px;
 }

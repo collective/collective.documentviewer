@@ -56,7 +56,7 @@
     </tal:notshow>
     <tal:show tal:condition="view/enabled">
       <tal:annotate tal:condition="view/can_modify">
-        <a href="#" id="manage-annotations">Manage Annotation</a> | 
+        <a href="#" id="manage-annotations">Manage Annotations</a> | 
         <a href="#" id="manage-sections">Manage Sections</a>
         <div id="annotation-management">
           <div class="close"><span>Close</span></div>
@@ -69,15 +69,34 @@
           </div>
           <div id="right-container">
             <div id="add-annotation">
-              <fieldset>
+              <form class="">
                 <legend>Add Annotation</legend>
-                <label>Title</label>
-                <input type="text" />
-                <br />
-                <label>Text</label>
-                <textarea></textarea>
-                <button class="add">Add</button>
-              </fieldset>
+                <p class="discreet">Click and drag an area of the image to 
+                  select where the annotation should be.</p>
+                <fieldset>
+                  <div class="field">
+                    <label class="formQuestion" for="title">
+                      Title
+                      <span class="required" title="Required" style="color: #f00;">■</span>
+                    </label>
+                    <div class="formHelp" id="title_help">The title of the annotation</div>
+                    <div class="fieldErrorBox"></div>
+                    <input type="text" id="title" size="30" maxlength="255" />
+                  </div>
+                  <div class="field">
+                    <label class="formQuestion" for="text">
+                      Text
+                      <span class="required" title="Required" style="color: #f00;">■</span>
+                    </label>
+                    <div class="formHelp" id="title_help">The text for the annotation. Can include html.</div>
+                    <div class="fieldErrorBox"></div>
+                    <textarea id="text"></textarea>
+                  </div>
+                  <div class="formControls">
+                    <button class="allowMultiSubmit context add">Add</button>
+                  </div>
+                </fieldset>
+              </form>
             </div>
             <div id="annotations">
               <h3>Current Annotations</h3>
@@ -88,20 +107,37 @@
         <div id="section-management">
           <div class="close"><span>Close</span></div>
           <div id="add-section">
+            <form>
+              <legend>Add Section</legend>
               <fieldset>
-                <legend>Add Section</legend>
-                <label>Title</label>
-                <input id="section-title" type="text" />
-                <br />
-                <label>Page</label>
-                <input id="section-page" type="text" />
-                <button class="add">Add</button>
+                <div class="field">
+                  <label class="formQuestion" for="section-title">
+                    Title
+                    <span class="required" title="Required" style="color: #f00;">■</span>
+                  </label>
+                  <div class="formHelp" id="title_help">The title of the section</div>
+                  <div class="fieldErrorBox"></div>
+                  <input type="text" id="section-title" size="30" maxlength="255" />
+                </div>
+                <div class="field">
+                  <label class="formQuestion" for="section-page">
+                    Page
+                    <span class="required" title="Required" style="color: #f00;">■</span>
+                  </label>
+                  <div class="formHelp" id="title_help">The page the section is for.</div>
+                  <div class="fieldErrorBox"></div>
+                  <input type="text" id="section-page" size="4" maxlength="255" />
+                </div>
+                <div class="formControls">
+                  <button class="allowMultiSubmit context add">Add</button>
+                </div>
               </fieldset>
-            </div>
-            <div id="sections">
-              <h3>Current Sections</h3>
-              <ul></ul>
-            </div>
+            </form>
+          </div>
+          <div id="sections">
+            <h3>Current Sections</h3>
+            <ul></ul>
+          </div>
         </div>
       </tal:annotate>
       <div id="DV-container">

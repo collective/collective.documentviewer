@@ -18,6 +18,7 @@ $(document).ready(function(){
     var sectionpage = $('#section-page');
     var add_section = $('#add-section');
     var add_section_button = add_section.find('.add');
+    var right_container = $('#right-container');
 
     function reloadDV(){
         $('#DV-container').empty();
@@ -29,11 +30,15 @@ $(document).ready(function(){
             image.imgAreaSelect({remove: true});
             image.remove();
         }
-        image = $('.DV-page-' + page + ' .DV-page img:first');
-        image = image.clone();
+        var url = window.documentData.resources.page.image.replace('{size}', 'normal').replace('{page}', page);
+        image = $('<img src="' + url + '" />');
         for(var i=0; i<window.documentData.pages; i++){
-            var option = $('<option value="' + (i+1) + '">' + (i+1) + '</option>');
-            if((i+1) == page){
+            var num = i + 1;
+            if(pselect.find('[value="' + num + '"]').length > 0){
+                continue;
+            }
+            var option = $('<option value="' + num + '">' + num + '</option>');
+            if(num == page){
                 option[0].selected = true;
             }
             pselect.append(option);
@@ -41,15 +46,19 @@ $(document).ready(function(){
 
         /* add image */
         img_container.append(image);
-        var width = image.width(), height = image.height();
-
-        annotation_container.height(height);
-        annotation_container.slideDown();
-        image.imgAreaSelect({
-            handles: true,
-            onSelectEnd: function (img, selection) {
-                SELECTION = selection;
-            }
+        var loadingImage = new Image();
+        loadingImage.src = image.attr("src");
+        $(loadingImage).load(function(){
+            var height = loadingImage.height;
+            annotation_container.height(height);
+            right_container.height(height - 20);
+            image.imgAreaSelect({
+                handles: true,
+                onSelectEnd: function (img, selection) {
+                    SELECTION = selection;
+                }
+            });
+            annotation_container.show();
         });
     }
 
@@ -63,12 +72,46 @@ $(document).ready(function(){
                     '" class="remove">Remove</a>)</li>');
     }
 
-    add_button.click(function(){
+    function clearAddAnnotation(){
+        title.val('');
+        text.val('');
+        title.parent().removeClass('error');
+        text.parent().removeClass('error');
+        if(image != null){
+            image.imgAreaSelect({hide: true});
+        }
+    }
+    function clearAddSection(){
+        sectiontitle.val('');
+        sectionpage.val('');
+        sectiontitle.parent().removeClass('error');
+        sectionpage.parent().removeClass('error');
+        sectionpage.parent().find('.fieldErrorBox').html('');
+    }
+
+    add_container.find('form').submit(function(){return false;});
+    add_button.click(function(e){
         var titleval = title.val();
         var textval = text.val();
-        if(!titleval || !textval || SELECTION == null){
-            alert("You must fill out both title and text fields");
-            return;
+        var error = false;
+        if(!titleval){
+            title.parent().addClass('error');
+            error = true;
+        }else{
+            title.parent().removeClass('error');
+        }
+        if(!textval){
+            text.parent().addClass('error');
+            error = true;
+        }else{
+            text.parent().removeClass('error');
+        }
+        if(SELECTION == null){
+            alert("You must drag and select a part of the image for the annotation.");
+            error = true;
+        }
+        if(error){
+            return false;
         }
         $.ajax({
             url: $('base').attr('href') + '/@@documentviewer-annotate',
@@ -91,11 +134,10 @@ $(document).ready(function(){
                     access: 'public',
                     content: data.content});
                 reloadDV();
-                title.val('');
-                text.val('');
-                image.imgAreaSelect({hide: true});
+                clearAddAnnotation();
             }
         });
+        return false;
     });
 
     $('#annotations a.remove').live('click', function(){
@@ -125,12 +167,10 @@ $(document).ready(function(){
     });
 
     $('#annotation-management .close,#section-management .close').click(function(){
-        $(this).parent().slideUp();
+        $(this).parent().hide();
         annotations.empty();
-        title.val('');
-        text.val('');
-        sectiontitle.val('');
-        sectionpage.val('');
+        clearAddAnnotation();
+        clearAddSection();
         pselect.empty();
         sections.empty();
         $(this).parent().removeClass('open');
@@ -153,7 +193,6 @@ $(document).ready(function(){
         $.each(window.documentData.annotations, function(){
             addToAnnotationList(this.title, this.page, this.id);
         });
-
         return false;
     });
 
@@ -165,7 +204,35 @@ $(document).ready(function(){
 
     add_section_button.click(function(){
         var titleval = sectiontitle.val();
-        var pageval = parseInt(sectionpage.val());
+        var pageval = sectionpage.val();
+        var error = false;
+        if(!titleval){
+            sectiontitle.parent().addClass('error');
+            error = true;
+        }else{
+            sectiontitle.parent().removeClass('error');
+        }
+        if(!pageval){
+            sectionpage.parent().addClass('error');
+            error = true;
+        }else if(isNaN(pageval)){
+            sectionpage.parent().addClass('error');
+            error = true;
+            sectionpage.parent().find('.fieldErrorBox').html("Must be a valid page number.");
+        }else{
+            pageval = parseInt(pageval);
+            if(pageval <= 0 || pageval > window.documentData.pages){
+                sectionpage.parent().addClass('error');
+                error = true;
+                sectionpage.parent().find('.fieldErrorBox').html("Number not a valid document page.");
+            }else{
+                sectionpage.parent().removeClass('error');
+                sectionpage.parent().find('.fieldErrorBox').html('');
+            }
+        }
+        if(error){
+            return false;
+        }
         $.ajax({
             url: $('base').attr('href') + '/@@documentviewer-annotate',
             type: 'POST',
@@ -181,10 +248,10 @@ $(document).ready(function(){
                     title: titleval,
                     page: pageval});
                 reloadDV();
-                sectiontitle.val('');
-                sectionpage.val('');
+                clearAddSection();
             }
         });
+        return false;
     });
 
     $('#sections a.remove').live('click', function(){
@@ -224,102 +291,9 @@ $(document).ready(function(){
         $.each(window.documentData.sections, function(){
             addToSectionList(this.title, this.page);
         });
-        sections_container.slideDown();
+        sections_container.show();
         return false;
     });
-
-    // $('#add-annotation').click(function(){
-    //     var page = parseInt(window.currentDocument.elements.currentPage.html());
-    //     var image = $('.DV-page-' + page + ' img:first');
-    //     var container = $('<div id="annotate-container" />');
-    //     var image = image.clone();
-    //     container.append(image);
-    //     $('body').append(container);
-    //     var width = image.width(), height = image.height();
-    //     image.imgAreaSelect({
-    //         handles: true,
-    //         onSelectEnd: function (img, selection) {
-    //             SELECTION = selection;
-    //         },
-    //         x1: width/4, y1: height/4, x2: width/2, y2: height/2
-    //     });
-
-    //     var controls = $('<div id="annotate-controls" />');
-    //     controls.append('<label>Title</label>');
-    //     var title = $('<input type="text" />');
-    //     controls.append(title);
-    //     controls.append('<label>Text</label>');
-    //     var text = $('<textarea></textarea>');
-    //     controls.append(text);
-    //     var add = $('<button class="add">Annotate</button>');
-    //     add.click(function(){
-    //         $.ajax({
-    //             url: $('base').attr('href') + '/@@documentviewer-annotate',
-    //             type: 'POST',
-    //             data: {
-    //                 'action': 'add',
-    //                 'title': title.val(),
-    //                 'content': text.val(),
-    //                 'coord': SELECTION.y1 + ',' + SELECTION.x2 + ',' + SELECTION.y2 + ',' + SELECTION.x1,
-    //                 'page': page
-    //             },
-    //             success: function(){
-    //                 window.location.reload();
-    //             }
-    //         });
-    //         return false;
-    //     });
-    //     controls.append(add);
-    //     var close = $('<button id="close">Close Annotations</button>');
-    //     close.click(function(){
-    //         image.imgAreaSelect({remove: true});
-    //         controls.remove();
-    //         container.remove();
-    //         return false;
-    //     });
-    //     controls.append(close);
-    //     $('body').append(controls);
-    //     return false;
-    // });
-
-    // $('#remove-annotations').click(function(){
-    //     var page = parseInt(window.currentDocument.elements.currentPage.html());
-    //     var image = $('.DV-page-' + page + ' img:first');
-    //     var container = $('<div id="annotate-remove" />');
-    //     var ann = $('<ul />');
-    //     $.each(window.documentData.annotations, function(){
-    //         if(this.page == page){
-    //             ann.append('<li>' + this.title + 
-    //                 '(<a href="#" rel="' + this.id + '" class="remove">Remove</a>)</li>');
-    //         }
-    //     });
-    //     ann.find('.remove').click(function(){
-    //         var link = $(this);
-    //         $.ajax({
-    //             url: $('base').attr('href') + '/@@documentviewer-annotate',
-    //             type: 'POST',
-    //             data: {
-    //                 'action': 'remove',
-    //                 'id': $(this).attr('rel'),
-    //                 'page': page
-    //             },
-    //             success: function(){
-    //                 link.parent().remove();
-    //             }
-    //         });
-    //         return false;
-    //     });
-    //     container.append(ann);
-    //     var close = $('<button id="close">Close</button>');
-    //     close.click(function(){
-    //         container.remove();
-    //         window.location.reload();
-    //         return false;
-    //     });
-    //     container.append(close);
-    //     $('body').append(container);
-    //     return false;
-    // });
 
 });
 })(jQuery);
