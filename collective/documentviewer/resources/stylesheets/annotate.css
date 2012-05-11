@@ -58,3 +58,67 @@
     visibility: visible !important;
     box-shadow: 0px 0px 30px 0px black;
 }
+
+
+
+#annotation-management, #section-management{
+    display: none;
+    width: 98%;
+    margin: 5px;
+    padding: 5px;
+    border: 2px solid #ddd;
+    position: relative;
+}
+
+#annotation-management div.close, #section-management div.close{
+    background-image: url(../../pb_close.png);
+    position: absolute;
+    left: -14px;
+    top: -14px;
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    z-index: 100;
+}
+
+#annotation-management div.close span, #section-management div.close span{
+    display: block;
+    height: 1px;
+    margin: -1px 0 0 -1px;
+    overflow: hidden;
+    padding: 0;
+    width: 1px;
+}
+
+#pagesel-container{
+    position: absolute;
+    top: 5px;
+    right: 20px;
+}
+
+#annotation-management{
+    height:400px;
+}
+
+#image-container img{
+    visibility: visible !important;
+    border-right: 2px solid #DDD;
+}
+
+#image-container{
+}
+
+#right-container{
+    position: absolute;
+    top: 25px;
+    right: 20px;
+    width: 500px;
+}
+
+#add-annotation{
+    
+}
+
+#section-management{
+
+}

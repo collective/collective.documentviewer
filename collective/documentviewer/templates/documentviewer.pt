@@ -5,14 +5,15 @@
       lang="en"
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="plone">
-      
-<metal:js fill-slot="javascript_head_slot">
-  <!--[if (!IE)|(gte IE 8)]><!-->
-    <link href="/viewer/viewer-datauri.css" media="screen" rel="stylesheet" type="text/css"
+
+  <metal:js fill-slot="javascript_head_slot">
+  <!--[if (!IE)|(gte IE 8)]>
+  <!-->
+  <link href="/viewer/viewer-datauri.css" media="screen" rel="stylesheet" type="text/css"
       tal:attributes="href string:${view/dvstatic}/assets/viewer-datauri.css" />
   <!--<![endif]-->
   <!--[if lte IE 7]>
-    <link href="/viewer/viewer.css" media="screen" rel="stylesheet" type="text/css"
+  <link href="/viewer/viewer.css" media="screen" rel="stylesheet" type="text/css"
         tal:attributes="href string:${view/dvstatic}/assets/viewer.css" />
   <![endif]-->
   <link href="/viewer/printviewer.css" media="print" rel="stylesheet" type="text/css"
@@ -27,55 +28,95 @@
       tal:attributes="href string:${view/dvstatic}/jquery.imgareaselect/css/imgareaselect-default.css" />
     <link rel="stylesheet" type="text/css"
       tal:attributes="href string:${view/dvstatic}/stylesheets/annotate.css" />
-    <script tal:attributes="src string:${view/dvstatic}/jquery.imgareaselect/scripts/jquery.imgareaselect.min.js">
-    </script>
-    <script tal:attributes="src string:${view/dvstatic}/javascripts/annotate.js">
-    </script>
+    <script tal:attributes="src string:${view/dvstatic}/jquery.imgareaselect/scripts/jquery.imgareaselect.min.js"></script>
+    <script tal:attributes="src string:${view/dvstatic}/javascripts/annotate.js"></script>
   </tal:annotate>
 </metal:js>
 <metal:css fill-slot="style_slot">
-  <link rel="stylesheet" type="text/css" media="screen" href="group.css"
+<link rel="stylesheet" type="text/css" media="screen" href="group.css"
       tal:attributes="href string:${context/portal_url}/++resource++dv.resources/stylesheets/viewer.css" />
 </metal:css>
 
 <body>
 
 <div metal:fill-slot="content-core">
-  <tal:main-macro metal:define-macro="content-core" 
+<tal:main-macro metal:define-macro="content-core" 
          tal:define="size python:here.getObjSize(here);
                      content_type here/get_content_type|here/Format;">
-    <tal:notshow tal:condition="not: view/enabled">
-      <dl id="errorMsg" tal:condition="python: view.can_modify and view.settings.successfully_converted is False">
-        <dt><a href="#">Show Document Viewer Conversion Error</a></dt>
-        <dd>
-          <pre tal:content="python: view.settings.exception_msg" />
+  <tal:notshow tal:condition="not: view/enabled">
+    <dl id="errorMsg" tal:condition="python: view.can_modify and view.settings.successfully_converted is False">
+      <dt>
+        <a href="#">Show Document Viewer Conversion Error</a>
+      </dt>
+      <dd>
+        <pre tal:content="python: view.settings.exception_msg" />
           <pre tal:content="python: view.settings.exception_traceback" />
         </dd>
       </dl>
     </tal:notshow>
     <tal:show tal:condition="view/enabled">
       <tal:annotate tal:condition="view/can_modify">
-        <a href="#" id="add-annotation">Add Annotation</a> | 
-        <a href="#" id="remove-annotations">Remove Annotations</a>
+        <a href="#" id="manage-annotations">Manage Annotation</a> | 
+        <a href="#" id="manage-sections">Manage Sections</a>
+        <div id="annotation-management">
+          <div class="close"><span>Close</span></div>
+          <div id="image-container">
+          </div>
+          <div id="pagesel-container">
+            <label>Page:</label>
+            <select id="pselector">
+            </select>
+          </div>
+          <div id="right-container">
+            <div id="add-annotation">
+              <fieldset>
+                <legend>Add Annotation</legend>
+                <label>Title</label>
+                <input type="text" />
+                <br />
+                <label>Text</label>
+                <textarea></textarea>
+                <button class="add">Add</button>
+              </fieldset>
+            </div>
+            <div id="annotations">
+              <h3>Current Annotations</h3>
+              <ul></ul>
+            </div>
+          </div>
+        </div>
+        <div id="section-management">
+          <div class="close"><span>Close</span></div>
+          <div id="add-section">
+              <fieldset>
+                <legend>Add Section</legend>
+                <label>Title</label>
+                <input id="section-title" type="text" />
+                <br />
+                <label>Page</label>
+                <input id="section-page" type="text" />
+                <button class="add">Add</button>
+              </fieldset>
+            </div>
+            <div id="sections">
+              <h3>Current Sections</h3>
+              <ul></ul>
+            </div>
+        </div>
       </tal:annotate>
       <div id="DV-container">
 
       <div class="DV-loadingDocument"><span>Loading</span></div>
         <noscript>
-          <div id="DV-noJS" style="height:500px">
-            The Document Viewer requires that you enable Javascript.
-          </div>
+          <div id="DV-noJS" style="height:500px">The Document Viewer requires that you enable Javascript.</div>
         </noscript>
       </div>
       <div id="overlay"></div>
-      <script type="text/javascript" tal:content="structure view/javascript">
-      </script>
+      <script type="text/javascript" tal:content="structure view/javascript"></script>
     </tal:show>
 
     <p>
-      <metal:field use-macro="python:here.widget('file', mode='view')">
-        File
-      </metal:field>
+      <metal:field use-macro="python:here.widget('file', mode='view')">File</metal:field>
     </p>
   </tal:main-macro>
 </div>

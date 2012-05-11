@@ -138,7 +138,13 @@ class DocumentViewerView(BrowserView):
                     "content": ann['content']})
         return data
 
-    def javascript(self):
+    def sections(self):
+        sections = self.settings.sections
+        if sections is None:
+            return []
+        return sections
+
+    def dv_data(self):
         dump_path = DUMP_FILENAME.rsplit('.', 1)[0]
         if self.global_settings.override_contributor:
             contributor = self.global_settings.override_contributor
@@ -148,6 +154,45 @@ class DocumentViewerView(BrowserView):
             organization = self.global_settings.override_organization
         else:
             organization = self.site.title
+        image_format = self.settings.pdf_image_format
+        if not image_format:
+            # oops, this wasn't set like it should have been
+            # on alpha release. We'll default back to global
+            # setting.
+            image_format = self.global_settings.pdf_image_format
+        return {
+            'access': 'public',
+            'annotations': self.annotations(),
+            'sections': list(self.sections()),
+            'canonical_url': self.context.absolute_url() + '/view',
+            'created_at': DateTime(self.context.CreationDate()).aCommonZ(),
+            'data': {},
+            'description': self.context.Description(),
+            'id': self.context.UID(),
+            'pages': self.settings.num_pages,
+            'updated_at': DateTime(self.context.ModificationDate()).aCommonZ(),
+            'title': self.context.Title(),
+            'source': '',
+            "contributor": contributor,
+            "contributor_organization": organization,
+            'resources': {
+                'page': {
+                    'image': '%s/{size}/%s_{page}.%s' % (
+                        self.dvpdffiles, dump_path,
+                        image_format),
+                    'text': '%s/%s/%s_{page}.txt' % (
+                        self.dvpdffiles, TEXT_REL_PATHNAME, dump_path)
+                },
+                'pdf': self.context.absolute_url(),
+                'thumbnail': '%s/small/%s_1.%s' % (
+                    self.dvpdffiles, dump_path,
+                    image_format),
+                'search': '%s/dv-search.json?q={query}' % (
+                        self.context.absolute_url())
+            }
+        }
+
+    def javascript(self):
         fullscreen = self.settings.fullscreen
         height = 'height: %i,' % either(self.settings.height,
                                        self.global_settings.height)
@@ -161,16 +206,17 @@ class DocumentViewerView(BrowserView):
                          self.global_settings.show_sidebar)
         search = either(self.settings.show_search,
                         self.global_settings.show_search)
-        image_format = self.settings.pdf_image_format
-        if not image_format:
-            # oops, this wasn't set like it should have been
-            # on alpha release. We'll default back to global
-            # setting.
-            image_format = self.global_settings.pdf_image_format
-
         return """
 window.documentData = %(data)s;
 var hash = window.location.hash;
+window.initializeDV = function(){
+/* We do this so we can reload it later when managing annotations */
+    window.currentDocument = DV.load(window.documentData, { %(height)s
+        sidebar: %(sidebar)s,
+        width: %(width)s,
+        search: %(search)s,
+        container: '#DV-container' });
+}
 if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
         hash != '#bypass-fullscreen')){
     window.currentDocument = DV.load(window.documentData, {
@@ -179,11 +225,7 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
         container: document.body });
     jQuery('body').addClass('fullscreen');
 }else{
-    window.currentDocument = DV.load(window.documentData, { %(height)s
-        sidebar: %(sidebar)s,
-        width: %(width)s,
-        search: %(search)s,
-        container: '#DV-container' });
+    window.initializeDV();
     jQuery('body').addClass('not-fullscreen');
 }
 """ % {
@@ -193,37 +235,7 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
     'sidebar': str(sidebar).lower(),
     'search': str(search).lower(),
     'width': width,
-    'data': json.dumps({
-        'access': 'public',
-        'annotations': self.annotations(),
-        'canonical_url': self.context.absolute_url() + '/view',
-        'created_at': DateTime(self.context.CreationDate()).aCommonZ(),
-        'data': {},
-        'description': self.context.Description(),
-        'id': self.context.UID(),
-        'pages': self.settings.num_pages,
-        'updated_at': DateTime(self.context.ModificationDate()).aCommonZ(),
-        'title': self.context.Title(),
-        'source': '',
-        'sections': [],
-        "contributor": contributor,
-        "contributor_organization": organization,
-        'resources': {
-            'page': {
-                'image': '%s/{size}/%s_{page}.%s' % (
-                    self.dvpdffiles, dump_path,
-                    image_format),
-                'text': '%s/%s/%s_{page}.txt' % (
-                    self.dvpdffiles, TEXT_REL_PATHNAME, dump_path)
-            },
-            'pdf': self.context.absolute_url(),
-            'thumbnail': '%s/small/%s_1.%s' % (
-                self.dvpdffiles, dump_path,
-                image_format),
-            'search': '%s/dv-search.json?q={query}' % (
-                    self.context.absolute_url())
-        }
-    })
+    'data': json.dumps(self.dv_data())
 }
 
 
@@ -731,20 +743,28 @@ class Annotate(BrowserView):
         req = self.request
         settings = Settings(self.context)
         annotations = settings.annotations
-        page = int(req.form['page'])
         if annotations is None:
             annotations = PersistentDict()
             settings.annotations = annotations
-        if req.form['action'] == 'add':
+        sections = settings.sections
+        if sections is None:
+            sections = PersistentList()
+            settings.sections = sections
+        action = req.form['action']
+        if action == 'addannotation':
+            page = int(req.form['page'])
             if page not in annotations:
                 annotations[page] = PersistentList()
             pageann = annotations[page]
-            pageann.append({
+            data = {
                 "id": random.randint(1, 9999999),
                 "coord": req.form['coord'],
                 "title": req.form.get('title', ''),
-                "content": req.form.get('content', '')})
-        elif req.form['action'] == 'remove':
+                "content": req.form.get('content', '')}
+            pageann.append(data)
+            return json.dumps(data)
+        elif action == 'removeannotation':
+            page = int(req.form['page'])
             if page in annotations:
                 id = int(req.form['id'])
                 found = False
@@ -755,3 +775,17 @@ class Annotate(BrowserView):
                         break
                 if found:
                     annotations.remove(found)
+        elif action == 'addsection':
+            data = {
+                'page': req.form['page'],
+                'title': req.form['title']
+            }
+            sections.append(data)
+            return json.dumps(data)
+        elif action == 'removesection':
+            data = {
+                'page': req.form['page'],
+                'title': req.form['title']
+            }
+            if data in sections:
+                sections.remove(data)
