@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '2.0b1'
+version = '2.0.1b1'
 
 setup(name='collective.documentviewer',
       version=version,

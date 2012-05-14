@@ -70,7 +70,8 @@ class IGlobalDocumentViewerSettings(Interface):
         default=True)
     auto_layout_file_types = schema.List(
         title=u"Auto layout file types",
-        description=u"extra types only work with openoffice installed",
+        description=u"extra types only work with "
+                    u"openoffice/libreoffice installed",
         default=['pdf'],
         value_type=schema.Choice(
             vocabulary=SimpleVocabulary(FILE_TYPES_VOCAB))
