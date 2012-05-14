@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.1b1 (unreleased)
+--------------------
+
+- add support for new formats: star office, ps, photoshop, visio, palm
+
 2.0b1 (2012-05-11)
 ------------------
 
