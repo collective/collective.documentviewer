@@ -552,18 +552,18 @@ class GroupView(BrowserView):
         if 'q' in self.request.form and self.search_enabled:
             opts['SearchableText'] = self.request.form['q']
         if object.portal_type == 'Topic':
-            res = object.queryCatalog(**opts)
+            res = object.queryCatalog(self.request, batch=True, **opts)
         else:
             opts['sort_on'] = 'getObjPositionInParent'
             res = object.getFolderContents(contentFilter=opts,
+                                           batch=True, b_size=self.b_size,
                                            full_objects=full_objects)
         return res
 
     def results(self, portal_type=('File',)):
         result = {}
-        result['files'] = self.getContents(portal_type=portal_type)
-        result['folders'] = self.getContents(
-            portal_type=('Folder', 'Large Plone Folder'))
+        types = ('Folder', 'Large Plone Folder') + portal_type
+        return self.getContents(portal_type=types)
         return result
 
     def get_files(self, obj, portal_type=('File',)):
@@ -576,18 +576,10 @@ class GroupView(BrowserView):
         return self.getContents(object=obj, portal_type=portal_type, path=path)
 
     @property
-    def b_start(self):
-        try:
-            return int(self.request.get('b_start', 0))
-        except ValueError:
-            return 0
-
-    @property
     def b_size(self):
         if self.context.portal_type == 'Topic':
-            batch = self.context.getItemCount()
-            if batch:
-                return batch
+            if self.context.getLimitNumber():
+                return self.context.getItemCount()
         return self.global_settings.group_view_batch_size
 
     def __call__(self):

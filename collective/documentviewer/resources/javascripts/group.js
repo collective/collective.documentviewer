@@ -17,6 +17,7 @@ $(document).ready(function(){
             success: function(data){
                 var html = $(data);
                 $('#pdf-files').replaceWith(html.find('#pdf-files'));
+                $('.listingBar').replaceWith(html.find('.listingBar'));
             },
             complete: function(){
                 $('#kss-spinner').hide();

@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.1 (unreleased)
+------------------
+
+- fixing batching on group view
+
 2.0.1b1 (2012-05-14)
 --------------------
 
