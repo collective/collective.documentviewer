@@ -27,6 +27,7 @@ setup(name='collective.documentviewer',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'Products.CMFPlone',
           'plone.app.testing',
           'zope.browserresource',
           'repoze.catalog',

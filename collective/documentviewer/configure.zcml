@@ -10,6 +10,7 @@
 
   <five:registerPackage package="." initialize=".initialize" />
   <include file="upgrades.zcml" />
+  <include package="Products.CMFPlone" />
   <include package="plone.app.contentmenu" />
 
   <genericsetup:registerProfile
