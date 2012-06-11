@@ -30,7 +30,8 @@ logger = getLogger('collective.documentviewer')
 DUMP_FILENAME = 'dump.pdf'
 TEXT_REL_PATHNAME = 'text'
 # so we know to resync and do savepoints
-LARGE_PDF_SIZE = 40
+# this isn't working???
+LARGE_PDF_SIZE = 10000
 
 
 class Page(object):
