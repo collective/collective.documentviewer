@@ -6,6 +6,8 @@ Changelog
 
 - include contentmenu zcml dependency
 
+- upgrade conversion will now try and fix error'd conversions
+
 
 2.0.1 (2012-05-15)
 ------------------

@@ -38,6 +38,13 @@ def convert_all(context):
             settings = Settings(file)
             settings.last_updated = DateTime('1999/01/01').ISO8601()
             queueJob(file)
+        else:
+            settings = Settings(file)
+            # also convert if there was an error.
+            if settings.successfully_converted == False:
+                settings.last_updated = DateTime('1999/01/01').ISO8601()
+                settings.filehash = ''
+                queueJob(file)
 
 
 def migrate_old_storage(context):
