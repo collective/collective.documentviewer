@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.2 (unreleased)
+2.0.2 (2012-06-12)
 ------------------
 
 - include contentmenu zcml dependency
