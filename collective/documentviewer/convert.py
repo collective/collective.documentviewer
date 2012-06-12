@@ -138,8 +138,6 @@ class MD5SubProcess(BaseSubProcess):
 try:
     md5 = MD5SubProcess()
 except IOError:
-    logger.exception("No md5 installed. collective.documentviewer "
-                     "Will check for md5sum.")
     md5 = None
 
 

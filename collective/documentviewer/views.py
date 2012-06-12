@@ -93,27 +93,29 @@ class DocumentViewerView(BrowserView):
                 self.global_settings.auto_layout_file_types):
             if not self.installed:
                 msg = "Since you do not have docspilt installed on this " + \
-                      "system, we can not render the pages of this PDF."
+                      "system, we can not render the pages of this document."
             elif self.settings.converting is not None and \
                     self.settings.converting:
-                msg = "The PDF is currently being converted to the " + \
+                msg = "The document is currently being converted to the " + \
                       "Document Viewer view."
                 self.enabled = False
             elif self.settings.successfully_converted is not None and \
                     not self.settings.successfully_converted:
-                msg = "There was an error trying to convert the PDF. Maybe " +\
-                      "the PDF is encrypted, corrupt or malformed? " +\
-                      "Check log for details."
+                msg = "There was an error trying to convert the document. " +\
+                      "Maybe the document is encrypted, corrupt or " +\
+                      "malformed? Check log for details."
                 self.enabled = False
             elif self.settings.successfully_converted is None:
                 # must have just switched to this view
-                msg = "This PDF is not yet converted to document viewer. " +\
-                      "Please click the `Document Viewer Convert` button " +\
-                      "to convert."
+                msg = "This document is not yet converted to document " +\
+                      "viewer. Please click the `Document Viewer Convert` " +\
+                      "button to convert."
                 self.enabled = False
         else:
             self.enabled = False
-            msg = "The file is not a PDF. No need for this view."
+            msg = "The file is not a supported document type. " + \
+                  "Your type may be supported. Check out the document " + \
+                  "viewer configuration settings."
         mtool = getToolByName(self.context, 'portal_membership')
         self.can_modify = mtool.checkPermission('cmf.ModifyPortalContent',
                                                 self.context)
