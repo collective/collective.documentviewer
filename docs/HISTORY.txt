@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.3 (unreleased)
+------------------
+
+- check for quota set before finding existing jobs.
+
 2.0.2 (2012-06-12)
 ------------------
 

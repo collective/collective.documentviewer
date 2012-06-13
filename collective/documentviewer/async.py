@@ -63,10 +63,15 @@ class JobRunner(object):
 
     def find_position(self):
         # active in queue
-        return self.find_job()[0]
+        try:
+            return self.find_job()[0]
+        except KeyError:
+            return -1
 
     def find_job(self):
         # active in queue
+        if QUOTA_NAME not in self.queue.quotas:
+            return -1, None
         for job in self.queue.quotas[QUOTA_NAME]._data:
             if self.is_current_active(job):
                 return 0, job
