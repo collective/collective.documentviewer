@@ -355,7 +355,7 @@ class Utils(BrowserView):
                     elif settings.storage_type == 'Blob':
                         shutil.rmtree(folderpath)
                         count += 1
-            return count
+        return count
 
     def cleanup_file_storage(self):
         """
@@ -537,7 +537,7 @@ class PDFFiles(SimpleItem, DirectoryResource):
         else:
             # so permission checks for file object are applied
             # to file resource
-            self.__roles__ = fileobj.__roles__ + ()
+            self.__roles__ = tuple(fileobj.__roles__) + ()
             fi = super(PDFFiles, self).publishTraverse(request, name)
             return fi
 

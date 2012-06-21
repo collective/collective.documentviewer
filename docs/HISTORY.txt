@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.0.4 (unreleased)
+------------------
+
+- fix cleaning file location
+
+- fix potential tranversal error for file resources
+ 
+
 2.0.3 (2012-06-13)
 ------------------
 
