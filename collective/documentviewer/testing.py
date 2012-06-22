@@ -27,7 +27,9 @@ class DocumentViewer(PloneSandboxLayer):
         applyProfile(portal, 'collective.documentviewer:default')
         setRoles(portal, TEST_USER_ID, ('Member', 'Manager'))
         workflowTool = getToolByName(portal, 'portal_workflow')
-        workflowTool.setDefaultChain('plone_workflow')
+        workflowTool.setDefaultChain('simple_publication_workflow')
+        workflowTool.setChainForPortalTypes(('File',),
+            'simple_publication_workflow')
 
 
 DocumentViewer_FIXTURE = DocumentViewer()
