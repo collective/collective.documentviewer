@@ -52,7 +52,8 @@ class IGlobalDocumentViewerSettings(Interface):
                     u"on them. This provides a bit more security as the path "
                     u"to the resources will be more difficult to guess and "
                     u"never publisized. Of course, do not have your web "
-                    u"server list directory contents.",
+                    u"server list directory contents. *If you don't know what "
+                    u"this does, you probably do NOT want to enable it*",
         default=False)
     pdf_image_format = schema.Choice(
         title=u"Image Format",
