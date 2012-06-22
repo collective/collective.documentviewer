@@ -492,22 +492,24 @@ class Converter(object):
         of this secret location.
         """
         settings = self.settings
+        if not settings.obfuscate_secret:
+                settings.obfuscate_secret = str(random.randint(1, 9999999999))
+        storage_dir = self.storage_dir
+        secret_dir = os.path.join(storage_dir,
+                                  settings.obfuscate_secret)
         if self.gsettings.storage_obfuscate == True and \
                 settings.storage_type == 'File' and not self.anonCanView():
             # alright, we know we should be obfuscating the path now.
-            if not settings.obfuscate_secret:
-                settings.obfuscate_secret = str(random.randint(1, 9999999999))
-
             # conversions are always done on the same path structure
             # so we just move that path structure into the secret folder
-            # need to move folders to obfuscated path...
-            storage_dir = self.storage_dir
-            secret_dir = os.path.join(storage_dir,
-                                      settings.obfuscate_secret)
+            settings.obfuscated_filepath = True
             if os.path.exists(secret_dir):
-                # clear it out before moving new stuff in
-                shutil.rmtree(secret_dir)
-            mkdir_p(secret_dir)
+                # already exists
+                if len(os.listdir(secret_dir)) > 0 and \
+                        len(os.listdir(storage_dir)) == 1:
+                    return
+            else:
+                mkdir_p(secret_dir)
             for folder in os.listdir(storage_dir):
                 path = os.path.join(storage_dir, folder)
                 if not os.path.isdir(path) or \
@@ -515,9 +517,10 @@ class Converter(object):
                     continue
                 newpath = os.path.join(secret_dir, folder)
                 shutil.move(path, newpath)
-            settings.obfuscated_filepath = True
         else:
             settings.obfuscated_filepath = False
+            if os.path.exists(secret_dir):
+                shutil.rmtree(secret_dir)
 
     def __call__(self):
         settings = self.settings

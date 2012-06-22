@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.1b2 (2012-06-22)
+------------------
+
+- better handling of moving folders around
+
 2.1b1 (2012-06-22)
 ------------------
 
