@@ -45,6 +45,15 @@ class IGlobalDocumentViewerSettings(Interface):
         description=u'Only for file storage not with zodb. '
                     u'Plone client must have write access to directory.',
         default=u"/opt/dvpdffiles")
+    storage_obfuscate = schema.Bool(
+        title=u"Obfuscate private file paths",
+        description=u"*experimental* If you're serving files straight from "
+                    u"a web server, there is no way to do permission checks "
+                    u"on them. This provides a bit more security as the path "
+                    u"to the resources will be more difficult to guess and "
+                    u"never publisized. Of course, do not have your web "
+                    u"server list directory contents.",
+        default=False)
     pdf_image_format = schema.Choice(
         title=u"Image Format",
         default=u"gif",

@@ -95,7 +95,7 @@ there are a few things you'll want to keep in mind.
    plone server. You can get creative with how your file storage
    is used though.
 
-2) Since in plone's operation, it can be interrupted and the deletion
+2) Since in plone's delete operation, it can be interrupted and the deletion
    of a file on the OS system system can not be done within a transaction,
    no files are ever deleted. However, there is an action you can
    put in a cron task to clean up your file storage directory. Just call the

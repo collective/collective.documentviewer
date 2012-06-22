@@ -398,6 +398,7 @@ class Convert(Utils):
                     raise Unauthorized
                 settings = Settings(self.context)
                 settings.last_updated = DateTime('1999/01/01').ISO8601()
+                settings.filehash = '--foobar--'
                 queueJob(self.context)
                 self.converting = True
                 if self.async_installed:
@@ -538,6 +539,10 @@ class PDFFiles(SimpleItem, DirectoryResource):
             # so permission checks for file object are applied
             # to file resource
             self.__roles__ = tuple(fileobj.__roles__) + ()
+            if settings.obfuscated_filepath:
+                # check if this thing isn't published...
+                self.context.path = os.path.join(self.context.path, name)
+                name = settings.obfuscate_secret
             fi = super(PDFFiles, self).publishTraverse(request, name)
             return fi
 

@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.1b1 (unreleased)
+------------------
+
+- be able to obfuscate file paths
+
 2.0.4 (2012-06-21)
 ------------------
 

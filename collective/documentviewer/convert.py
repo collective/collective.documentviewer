@@ -23,6 +23,7 @@ from collective.documentviewer.utils import getDocumentType
 from collective.documentviewer import storage
 from collective.documentviewer.utils import mkdir_p
 from collective.documentviewer.events import ConversionFinishedEvent
+import random
 
 word_re = re.compile('\W+')
 logger = getLogger('collective.documentviewer')
@@ -249,6 +250,7 @@ class DocSplitSubProcess(BaseSubProcess):
         ext = os.path.splitext(os.path.normcase(filename))[1][1:]
         inputfilepath = os.path.join(output_dir, 'dump.%s' % ext)
         shutil.move(filepath, inputfilepath)
+        orig_files = set(os.listdir(output_dir))
         cmd = [self.binary, 'pdf', inputfilepath,
             '--output', output_dir]
         self._run_command(cmd)
@@ -257,10 +259,11 @@ class DocSplitSubProcess(BaseSubProcess):
         os.remove(inputfilepath)
 
         # move the file to the right location now
-        files = os.listdir(output_dir)
-        if len(files) != 1:
+        files = set(os.listdir(output_dir))
+        if len(files) != len(orig_files):
             raise Exception("Error converting to pdf")
-        converted_path = os.path.join(output_dir, files[0])
+        converted_path = os.path.join(output_dir,
+            [f for f in files - orig_files][0])
         shutil.move(converted_path, os.path.join(output_dir, DUMP_FILENAME))
 
     def convert(self, output_dir, inputfilepath=None, filedata=None,
@@ -320,6 +323,10 @@ class Converter(object):
         self.blob = wrapper.getBlob()
         self.initialize_blob_filepath()
         self.filehash = None
+        self.gsettings = GlobalSettings(getSite())
+        self.storage_dir = self.get_storage_dir()
+        self.doc_type = getDocumentType(self.context,
+            self.gsettings.auto_layout_file_types)
 
     def initialize_filehash(self):
         if md5 is not None and self.filehash is None and self.blob_filepath:
@@ -464,12 +471,56 @@ class Converter(object):
         if data:
             del annotations['wildcard.pdfpal']
 
+    def anonCanView(self):
+        can = False
+        for perm in self.context.rolesOfPermission("View"):
+            if perm['name'] == 'Anonymous' and perm["selected"] != "":
+                can = True
+                break
+        return can
+
+    def handleFileObfuscation(self):
+        """
+        This is in case you have serve file storage outside
+        of the plone server and you have no way of doing
+        permission checks. This will only work if editors
+        are on the same server as the files getting stored.
+        DV's file storage traverser is the only resolver
+        that will know how to handle the secret location.
+
+        Publishing content is the only way to get it out
+        of this secret location.
+        """
+        settings = self.settings
+        if self.gsettings.storage_obfuscate == True and \
+                settings.storage_type == 'File' and not self.anonCanView():
+            # alright, we know we should be obfuscating the path now.
+            if not settings.obfuscate_secret:
+                settings.obfuscate_secret = str(random.randint(1, 9999999999))
+
+            # conversions are always done on the same path structure
+            # so we just move that path structure into the secret folder
+            # need to move folders to obfuscated path...
+            storage_dir = self.storage_dir
+            secret_dir = os.path.join(storage_dir,
+                                      settings.obfuscate_secret)
+            if os.path.exists(secret_dir):
+                # clear it out before moving new stuff in
+                shutil.rmtree(secret_dir)
+            mkdir_p(secret_dir)
+            for folder in os.listdir(storage_dir):
+                path = os.path.join(storage_dir, folder)
+                if not os.path.isdir(path) or \
+                        folder == settings.obfuscate_secret:
+                    continue
+                newpath = os.path.join(secret_dir, folder)
+                shutil.move(path, newpath)
+            settings.obfuscated_filepath = True
+        else:
+            settings.obfuscated_filepath = False
+
     def __call__(self):
         settings = self.settings
-        self.gsettings = GlobalSettings(getSite())
-        self.storage_dir = self.get_storage_dir()
-        self.doc_type = getDocumentType(self.context,
-            self.gsettings.auto_layout_file_types)
 
         savepoint = None
         try:
@@ -492,6 +543,7 @@ class Converter(object):
             # store hash of file
             self.initialize_filehash()
             settings.filehash = self.filehash
+            self.handleFileObfuscation()
             result = 'success'
         except Exception, ex:
             if savepoint is not None:

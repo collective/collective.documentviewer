@@ -152,6 +152,11 @@
          Products.Archetypes.interfaces.IObjectInitializedEvent"
     handler=".subscribers.handle_file_creation" />
 
+  <subscriber
+    for="Products.ATContentTypes.interface.IFileContent
+         Products.CMFCore.interfaces.IActionSucceededEvent"
+    handler=".subscribers.handle_workflow_change" />
+
   <browser:page
     name="dvpdffiles"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
