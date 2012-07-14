@@ -133,6 +133,12 @@ Also, version 0.7b6 has the best uninstall support so if you're going
 to uninstall the product, first upgrade your egg to 0.7b6.
 
 
+Installation on Cent OS/Red hat
+-------------------------------
+
+Special instructions for centos have been contributed by Eric Tyrer.
+You can access them via `the git hub repo file location <https://github.com/collective/collective.documentviewer/blob/master/CENTOS-INSTALL.rst>`_.
+
 TODO
 ----
 
