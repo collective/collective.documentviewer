@@ -1,11 +1,11 @@
 from logging import getLogger
 import os
 import shutil
-from zope.app.component.hooks import getSite
 from Products.CMFCore.utils import getToolByName
 from collective.documentviewer.settings import GlobalSettings
 from collective.documentviewer.settings import Settings
 from collective.documentviewer.utils import allowedDocumentType
+from collective.documentviewer.utils import getPortal
 from collective.documentviewer.async import queueJob
 from collective.documentviewer import storage
 from collective.documentviewer.convert import Converter
@@ -18,7 +18,7 @@ def handle_file_creation(object, event):
     if not qi.isProductInstalled('collective.documentviewer'):
         return
 
-    site = getSite()
+    site = getPortal(object)
     gsettings = GlobalSettings(site)
 
     if not allowedDocumentType(object, gsettings.auto_layout_file_types):
@@ -34,7 +34,7 @@ def handle_file_creation(object, event):
 
 def handle_workflow_change(object, event):
     settings = Settings(object)
-    site = getSite()
+    site = getPortal(object)
     gsettings = GlobalSettings(site)
     if not gsettings.storage_obfuscate or \
             settings.storage_type != 'File':

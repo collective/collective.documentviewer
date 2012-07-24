@@ -15,7 +15,6 @@ from webdav.common import rfc1123_date
 from zope.component import getMultiAdapter
 from zope.interface import implements
 from zope.component import getUtility
-from zope.app.component.hooks import getSite
 from Products.Five.browser.resource import DirectoryResource
 from Products.Five.browser.resource import Directory
 from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -48,7 +47,9 @@ from collective.documentviewer.async import QUOTA_NAME
 from collective.documentviewer.async import queueJob
 from collective.documentviewer.async import JobRunner
 from collective.documentviewer import storage
+from collective.documentviewer.utils import getPortal
 from collective.documentviewer.interfaces import IBlobFileWrapper
+from plone.memoize.request import memoize_diy_request
 
 logger = getLogger('collective.documentviewer')
 
@@ -70,7 +71,7 @@ class DocumentViewerView(BrowserView):
     enabled = docsplit is not None
 
     def __call__(self):
-        self.site = getSite()
+        self.site = getPortal(self.context)
         self.settings = Settings(self.context)
         self.global_settings = GlobalSettings(self.site)
 
@@ -311,7 +312,8 @@ class Utils(BrowserView):
                     return True
                 else:
                     return allowedDocumentType(self.context,
-                        GlobalSettings(getSite()).auto_layout_file_types)
+                        GlobalSettings(
+                            getPortal(self.context)).auto_layout_file_types)
             else:
                 return False
         except:
@@ -491,6 +493,37 @@ class PDFTraverseBlobFile(SimpleItem):
         return lambda: '', ()
 
 
+_marker = object()
+
+
+class RequestMemo(object):
+
+    key = 'plone.memoize_request'
+
+    def __call__(self, func):
+
+        def memogetter(*args, **kwargs):
+            request = args[0]
+
+            annotations = IAnnotations(request)
+            cache = annotations.get(self.key, _marker)
+
+            if cache is _marker:
+                cache = annotations[self.key] = dict()
+
+            key = (func.__module__, func.__name__)
+            value = cache.get(key, _marker)
+            if value is _marker:
+                value = cache[key] = func(*args, **kwargs)
+            return value
+        return memogetter
+
+
+@RequestMemo()
+def _getPortal(request, context):
+    return getPortal(context)
+
+
 class PDFFiles(SimpleItem, DirectoryResource):
     implements(IBrowserPublisher)
 
@@ -499,7 +532,7 @@ class PDFFiles(SimpleItem, DirectoryResource):
         self.previous = previous
 
         self.__name__ = 'dvpdffiles'
-        self.site = getSite()
+        self.site = _getPortal(request, context)
         self.global_settings = GlobalSettings(self.site)
         self.storage_type = self.global_settings.storage_type
         self.__dir = Directory(
@@ -590,7 +623,7 @@ class GroupView(BrowserView):
         return self.global_settings.group_view_batch_size
 
     def __call__(self):
-        self.site = getSite()
+        self.site = getPortal(self.context)
         self.global_settings = GlobalSettings(self.site)
         self.search_enabled = self.global_settings.show_search_on_group_view
 

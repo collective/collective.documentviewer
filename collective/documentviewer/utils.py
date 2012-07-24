@@ -29,3 +29,7 @@ def mkdir_p(path):
             pass
         else:
             raise
+
+
+def getPortal(object):
+    return getToolByName(object, 'portal_url').getPortalObject()

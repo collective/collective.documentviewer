@@ -1,6 +1,6 @@
 from logging import getLogger
 from zope.component import getUtility
-from zope.app.component.hooks import getSite
+from collective.documentviewer.utils import getPortal
 from collective.documentviewer.settings import Settings
 from collective.documentviewer.convert import runConversion
 from collective.documentviewer.settings import GlobalSettings
@@ -44,13 +44,13 @@ class JobRunner(object):
     def __init__(self, object):
         self.object = object
         self.objectpath = self.object.getPhysicalPath()
-        self.site = getSite()
-        self.sitepath = self.site.getPhysicalPath()
+        self.portal = getPortal(object)
+        self.portalpath = self.portal.getPhysicalPath()
         self.async = getUtility(IAsyncService)
         self.queue = self.async.getQueues()['']
 
     def is_current_active(self, job):
-        return isConversion(job, self.sitepath) and \
+        return isConversion(job, self.portalpath) and \
             job.args[0] == self.objectpath and \
             job.status != COMPLETED
 
@@ -86,7 +86,7 @@ class JobRunner(object):
         """
         Set quota for document viewer jobs
         """
-        settings = GlobalSettings(self.site)
+        settings = GlobalSettings(self.portal)
         size = settings.async_quota_size
         if QUOTA_NAME in self.queue.quotas:
             if self.queue.quotas[QUOTA_NAME].size != size:

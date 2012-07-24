@@ -12,7 +12,7 @@ from Acquisition import aq_inner
 from DateTime import DateTime
 from zope.event import notify
 from zope.annotation.interfaces import IAnnotations
-from zope.app.component.hooks import getSite
+from collective.documentviewer.utils import getPortal
 from plone.app.blob.utils import openBlob
 from repoze.catalog.catalog import Catalog
 from repoze.catalog.indexes.text import CatalogTextIndex
@@ -323,7 +323,7 @@ class Converter(object):
         self.blob = wrapper.getBlob()
         self.initialize_blob_filepath()
         self.filehash = None
-        self.gsettings = GlobalSettings(getSite())
+        self.gsettings = GlobalSettings(getPortal(context))
         self.storage_dir = self.get_storage_dir()
         self.doc_type = getDocumentType(self.context,
             self.gsettings.auto_layout_file_types)
