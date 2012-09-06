@@ -93,7 +93,7 @@ class DocumentViewerView(BrowserView):
         if allowedDocumentType(self.context,
                 self.global_settings.auto_layout_file_types):
             if not self.installed:
-                msg = "Since you do not have docspilt installed on this " + \
+                msg = "Since you do not have docsplit installed on this " + \
                       "system, we can not render the pages of this document."
             elif self.settings.converting is not None and \
                     self.settings.converting:
