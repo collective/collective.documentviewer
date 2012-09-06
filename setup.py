@@ -13,6 +13,7 @@ setup(name='collective.documentviewer',
       classifiers=[
         "Framework :: Plone :: 4.0",
         "Framework :: Plone :: 4.1",
+        "Framework :: Plone :: 4.2",
         "Framework :: Plone",
         "Programming Language :: Python",
         ],
@@ -28,12 +29,14 @@ setup(name='collective.documentviewer',
       install_requires=[
           'setuptools',
           'Products.CMFPlone',
-          'plone.app.testing',
           'zope.browserresource',
           'repoze.catalog',
           'plone.app.z3cform',
           'collective.monkeypatcher'
       ],
+      extras_require={
+        'test': ['plone.app.testing'],
+      },
       entry_points="""
       # -*- Entry points: -*-
 
