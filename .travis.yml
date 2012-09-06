@@ -1,0 +1,10 @@
+language: python
+python: "2.7"
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq rubygems graphicsmagick poppler-utils
+  - sudo gem install docsplit -q
+install:
+  - python bootstrap.py -c travis.cfg
+  - bin/buildout -c travis.cfg -q
+script: bin/test
