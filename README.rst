@@ -15,13 +15,13 @@ Example viewer: https://www.documentcloud.org/documents/19864-goldman-sachs-inte
 Features
 --------
 
- - very nice document viewer
- - OCR
- - Searchable on OCR text
- - works with many different document types
- - plone.app.async integration with task monitor
- - lots of configuration options
- - PDF Album view for display groups of PDFs
+- very nice document viewer
+- OCR
+- Searchable on OCR text
+- works with many different document types
+- plone.app.async integration with task monitor
+- lots of configuration options
+- PDF Album view for display groups of PDFs
 
 
 Works with
@@ -29,24 +29,24 @@ Works with
 
 Besides displaying PDFs, it will also display:
 
- - Word
- - Excel
- - Powerpoint
- - HTML
- - RTF
+- Word
+- Excel
+- Powerpoint
+- HTML
+- RTF
 
 
 Install requirements
 --------------------
 
- - docsplit: http://documentcloud.github.com/docsplit/
- - graphicsmagick
- - ghostscript
- - poppler
- - tesseract
- - pdftk
- - openoffice or libreoffice(for doc, excel, ppt, etc types)
- - md5 or md5sum command line tool
+- Docsplit: http://documentcloud.github.com/docsplit/
+- GraphicsMagick
+- ghostscript
+- Poppler
+- tesseract (optional)
+- pdftk (optional)
+- OpenOffice or LibreOffice (optional, for doc, excel, ppt, etc. types)
+- md5 or md5sum command line tool
 
 
 Async Integration
@@ -142,6 +142,6 @@ You can access them via `the git hub repo file location <https://github.com/coll
 TODO
 ----
 
- - check why there are some error during async operations:
+- check why there are some error during async operations:
     - ConflictError: database conflict error (oid 0x4d10, class BTrees.IOBTree.IOBucket, serial this txn started with 0x0395f478bc2cb377 2012-04-21 03:36:44.103425, serial currently committed 0x0395f479b09de4cc 2012-04-21 03:37:41.394556)
     - ERROR ZODB.Connection Shouldn't load state for 0x319d when the connection is closed
