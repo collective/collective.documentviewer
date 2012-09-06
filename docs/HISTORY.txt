@@ -4,6 +4,9 @@ Changelog
 2.2a1 (unreleased)
 ------------------
 
+- test for Plone 4.2 compatibility.
+  [hvelarde]
+
 - work with subsites
 
 2.1b2 (2012-06-22)

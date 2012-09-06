@@ -13,6 +13,7 @@ setup(name='collective.documentviewer',
       classifiers=[
         "Framework :: Plone :: 4.0",
         "Framework :: Plone :: 4.1",
+        "Framework :: Plone :: 4.2",
         "Framework :: Plone",
         "Programming Language :: Python",
         ],
