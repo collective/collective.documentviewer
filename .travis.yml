@@ -6,5 +6,5 @@ before_install:
   - sudo gem install docsplit -q
 install:
   - python bootstrap.py -c travis.cfg
-  - bin/buildout -c travis.cfg -q
+  - bin/buildout -c travis.cfg -qq
 script: bin/test
