@@ -159,7 +159,7 @@
 
   <browser:page
     name="dvpdffiles"
-    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    for="plone.app.layout.navigation.interfaces.INavigationRoot"
     permission="zope2.View"
     class=".views.PDFFiles"
     allowed_interface="OFS.interfaces.IItem"

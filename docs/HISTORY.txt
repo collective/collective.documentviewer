@@ -1,7 +1,14 @@
 Changelog
 =========
 
-2.2a1 (unreleased)
+2.2a2 (unreleased)
+------------------
+
+- another subsite fix
+  [vangheem]
+
+
+2.2a1 (2012-xx-xx)
 ------------------
 
 - test for Plone 4.2 compatibility.
