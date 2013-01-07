@@ -97,9 +97,13 @@ class DocumentViewerView(BrowserView):
                       "system, we can not render the pages of this document."
             elif self.settings.converting is not None and \
                     self.settings.converting:
-                msg = "The document is currently being converted to the " + \
-                      "Document Viewer view."
-                self.enabled = False
+                if self.settings.successfully_converted:
+                    # there is a version that is already converted, show it.
+                    self.enabled = True
+                else:
+                    msg = "The document is currently being converted to the " + \
+                          "Document Viewer view."
+                    self.enabled = False
             elif self.settings.successfully_converted is not None and \
                     not self.settings.successfully_converted:
                 msg = "There was an error trying to convert the document. " +\
@@ -110,7 +114,7 @@ class DocumentViewerView(BrowserView):
                 # must have just switched to this view
                 msg = "This document is not yet converted to document " +\
                       "viewer. Please click the `Document Viewer Convert` " +\
-                      "button to convert."
+                      "button in the actions menu to convert."
                 self.enabled = False
         else:
             self.enabled = False

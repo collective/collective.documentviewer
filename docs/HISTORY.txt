@@ -4,7 +4,12 @@ Changelog
 2.2b1 (unreleased)
 ------------------
 
+- while pdf is converting, show existing if available.
+  [vangheem]
+
 - move convert button to actions
+  [vangheem]
+
 
 2.2a2 (2012-10-01)
 ------------------
