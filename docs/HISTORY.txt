@@ -1,7 +1,11 @@
 Changelog
 =========
 
-2.2b1 (unreleased)
+2.2b2 (unreleased)
+------------------
+
+
+2.2b1 (2013-01-06)
 ------------------
 
 - switch to using OFS.interfaces.IFolder for folder view
