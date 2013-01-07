@@ -4,6 +4,9 @@ Changelog
 2.2b1 (unreleased)
 ------------------
 
+- switch to using OFS.interfaces.IFolder for folder view
+  [vangheem]
+
 - while pdf is converting, show existing if available.
   [vangheem]
 

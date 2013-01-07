@@ -47,7 +47,7 @@
 
   <browser:page
     name="dvpdf-group-view"
-    for="Products.CMFCore.interfaces._content.IFolderish"
+    for="OFS.interfaces.IFolder"
     class=".views.GroupView"
     template="templates/group-view.pt"
     permission="zope2.View"
