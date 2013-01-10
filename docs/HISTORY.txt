@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.2b2 (unreleased)
+2.2b2 (2013-01-10)
 ------------------
 
 - fix getSite imports for plone 4.3
