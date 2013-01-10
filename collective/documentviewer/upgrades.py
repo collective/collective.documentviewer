@@ -4,7 +4,10 @@ from os.path import exists
 import shutil
 import transaction
 from DateTime import DateTime
-from zope.app.component.hooks import getSite
+try:
+    from zope.app.component.hooks import getSite
+except ImportError:
+    from zope.component.hooks import getSite
 from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.interface.file import IFileContent
 from collective.documentviewer.config import GROUP_VIEW_DISPLAY_TYPES

@@ -1,6 +1,9 @@
 import os
 import shutil
-from zope.app.component.hooks import getSite
+try:
+    from zope.app.component.hooks import getSite
+except ImportError:
+    from zope.component.hooks import getSite
 from zope.annotation.interfaces import IAnnotations
 from collective.documentviewer.settings import GlobalSettings
 from Products.ATContentTypes.interface.file import IFileContent
