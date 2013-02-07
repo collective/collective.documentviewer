@@ -16,3 +16,7 @@
 .not-fullscreen .close-fullscreen{
   display:none;
 }
+
+#DV-container {
+    z-index: 0;
+}
