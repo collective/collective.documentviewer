@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.2b3 (unreleased)
-------------------
+2.2 (2013-02-06)
+----------------
 
 - fix z-index on viewer
   [damilgra]
