@@ -1,6 +1,16 @@
 Changelog
 =========
 
+2.2.1 (unreleased)
+------------------
+
+- do not require docsplit to be installed on the
+  plone instance in order to display the viewer.
+  In case the document was converted on another
+  client.
+  [vangheem]
+
+
 2.2 (2013-02-06)
 ----------------
 
