@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.2.1 (2013-03-12)
+------------------
+
+- fix use with latest libreoffice and docsplit.
+  Fixes: https://github.com/collective/collective.documentviewer/issues/11
+  [vangheem]
+
+
 2.2 (2013-02-06)
 ----------------
 

@@ -260,7 +260,14 @@ class DocSplitSubProcess(BaseSubProcess):
 
         # move the file to the right location now
         files = set(os.listdir(output_dir))
+        if 'libreoffice' in files:
+            # XXX hackish, docsplit or libreoffice leaves behind junk?
+            files = files - set(['libreoffice'])
         if len(files) != len(orig_files):
+            # we should have the same number of files as when we first began
+            # since we removed libreoffice.
+            # We do this in order to keep track of the files being created
+            # and used...
             raise Exception("Error converting to pdf")
         converted_path = os.path.join(output_dir,
             [f for f in files - orig_files][0])
