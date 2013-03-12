@@ -6,6 +6,11 @@ Changelog
 
 - fix use with latest libreoffice and docsplit.
   Fixes: https://github.com/collective/collective.documentviewer/issues/11
+
+- do not require docsplit to be installed on the
+  plone instance in order to display the viewer.
+  In case the document was converted on another
+  client.
   [vangheem]
 
 

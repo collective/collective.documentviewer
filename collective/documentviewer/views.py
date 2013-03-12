@@ -68,7 +68,7 @@ def either(one, two):
 class DocumentViewerView(BrowserView):
 
     installed = docsplit is not None
-    enabled = docsplit is not None
+    enabled = True
 
     def __call__(self):
         self.site = getPortal(self.context)
@@ -89,13 +89,14 @@ class DocumentViewerView(BrowserView):
 
         utils = getToolByName(self.context, 'plone_utils')
         msg = None
+        self.enabled = True
 
         if allowedDocumentType(self.context,
                 self.global_settings.auto_layout_file_types):
             if not self.installed:
                 msg = "Since you do not have docsplit installed on this " + \
                       "system, we can not render the pages of this document."
-            elif self.settings.converting is not None and \
+            if self.settings.converting is not None and \
                     self.settings.converting:
                 if self.settings.successfully_converted:
                     # there is a version that is already converted, show it.
