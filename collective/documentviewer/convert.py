@@ -258,11 +258,15 @@ class DocSplitSubProcess(BaseSubProcess):
         # remove original
         os.remove(inputfilepath)
 
+        # while using libreoffice, docsplit leaves a 'libreoffice'
+        # folder next to the generated PDF, removes it!
+        libreOfficePath = os.path.join(output_dir, 'libreoffice')
+        if os.path.exists(libreOfficePath):
+            shutil.rmtree(libreOfficePath)
+
         # move the file to the right location now
         files = set(os.listdir(output_dir))
-        if 'libreoffice' in files:
-            # XXX hackish, docsplit or libreoffice leaves behind junk?
-            files = files - set(['libreoffice'])
+
         if len(files) != len(orig_files):
             # we should have the same number of files as when we first began
             # since we removed libreoffice.
