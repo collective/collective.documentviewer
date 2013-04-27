@@ -10,8 +10,9 @@ class DocType(object):
 
 CONVERTABLE_TYPES = {
     'pdf': DocType(u'PDF', ('pdf',), False),
-    'word': DocType(u'Word Document', ('doc', 'docx', 'odt', 'sxw',
-                                       'wks', 'wpd', 'vor', 'sdw')),
+    'word': DocType(u'Word Document', ('doc', 'docx', 'dot', 'wiz',
+                                       'odt', 'sxw', 'wks', 'wpd',
+                                       'vor', 'sdw')),
     'excel': DocType(u'Excel File', ('xls', 'xlsx', 'xlt', 'ods', 'csv', )),
     'ppt': DocType(u'Powerpoint', ('ppt', 'pptx', 'pps', 'ppa', 'pwz',
                                    'odp', 'sxi')),
