@@ -1,0 +1,291 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2013-05-08 15:00-100\n"
+"Last-Translator: Gauthier Bastien <gauthier.bastien@imio.be>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.documentviewer\n"
+
+#. Default: "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
+msgid "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
+msgstr "*expérimental* Si les fichiers sont servis directement depuis un serveur web, il n'y a aucune vérification de permission sur ceux-ci.  Cette fonctionnalité apporte un peu plus de sécurité car le chemin d'accès aux fichiers est plus compliqué et il n'est jamais rendu public.  Ne laissez pas d'accès à un listing complet des fichiers sur votre serveur web.  *Si vous ne comprenez pas exactement ce dont il s'agit, n'activez pas cette fonctionnalité!*"
+
+#. Default: "Add"
+msgid "Add"
+msgstr "Ajouter"
+
+#. Default: "Add Annotation"
+msgid "Add Annotation"
+msgstr "Ajouter la note"
+
+#. Default: "Are you sure you want to convert this to document viewer?"
+msgid "Are you sure you want to convert this to document viewer?"
+msgstr "Etes-vous certain de vouloir convertir ce fichier avec la visionneuse de documents?"
+
+#. Default: "Async Quota Size"
+msgid "Async Quota Size"
+msgstr "Quota de tâches asynchrones"
+
+#. Default: "Auto Convert"
+msgid "Auto Convert"
+msgstr "Convertir automatiquement"
+
+#. Default: "Auto layout file types"
+msgid "Auto layout file types"
+msgstr "Types de fichier à convertir"
+
+#. Default: "Auto select layout"
+msgid "Auto select layout"
+msgstr "Sélectionner automatiquement la mise en page"
+
+#. Default: "Automatically convert files on creation and modification."
+msgid "Automatically convert files on creation and modification."
+msgstr "Convertir automatiquement à chaque création ou modification."
+
+#. Default: "Blob storage using the normal ZODB blob mechanism. File storage is for just storage the files on the file system with no hard reference on write to the ZODB. This allows you to easily push the files to be served off-site."
+msgid "Blob storage using the normal ZODB blob mechanism. File storage is for just storage the files on the file system with no hard reference on write to the ZODB. This allows you to easily push the files to be served off-site."
+msgstr "Stockage 'Blob' pour utiliser la mécanique classique de la ZODB.  Le stockage 'File' permet de stocker les fichiers sur le système de fichiers sans l'ajouter dans la ZODB.  Ceci permet par exemple d'accéder facilement aux fichiers depuis un autre outil."
+
+#. Default: "Click and drag an area of the image to select where the annotation should be."
+msgid "Click and drag an area of the image to select where the annotation should be."
+msgstr "Cliquez et dessinez une zone sur l'image à laquelle lier cette note."
+
+#. Default: "Close"
+msgid "Close"
+msgstr "Fermer"
+
+#. Default: "Convert"
+msgid "Convert"
+msgstr "Convertir"
+
+#. Default: "Convert this to document viewer"
+msgid "Convert this to document viewer"
+msgstr "Convetir avec la visionneuse de documents"
+
+#. Default: "Converting"
+msgid "Converting"
+msgstr "En cours de conversion"
+
+#. Default: "Current Annotations"
+msgid "Current Annotations"
+msgstr "Annotations existantes"
+
+#. Default: "Default height to use for viewer (only for non-fullscreen mode)."
+msgid "Default height to use for viewer (only for non-fullscreen mode)."
+msgstr "Hauteur de la visionneuse par défaut (pas utilisé dans le mode 'plein écran')."
+
+#. Default: "Default to fullscreen viewer."
+msgid "Default to fullscreen viewer."
+msgstr "Afficher en plein écran par défaut."
+
+#. Default: "Default to show sidebar on Document Viewer."
+msgid "Default to show sidebar on Document Viewer."
+msgstr "Montrer les barres d'outils par défaut sur la visionneuse."
+
+#. Default: "Default to show sidebar."
+msgid "Default to show sidebar."
+msgstr "Montrer la barre d'outils par défaut."
+
+#. Default: "Detect if pdf has text before performing OCR on it. If text is found, ocr will be skipped. If OCR is disabled, text will always try to be retrieved from the PDF file anyways."
+msgid "Detect if pdf has text before performing OCR on it. If text is found, ocr will be skipped. If OCR is disabled, text will always try to be retrieved from the PDF file anyways."
+msgstr "Détecter si le fichier PDF contient du texte avant d'effectuer une reconnaissance de caractères (OCR) sur celui-ci.  Si l'OCR est désactivé, le texte est extrait du PDF si possible."
+
+#. Default: "Detect text"
+msgid "Detect text"
+msgstr "Détecter le texte"
+
+#. Default: "Enable search on group view."
+msgid "Enable search on group view."
+msgstr "Activer la recherche sur la vue Groupe"
+
+#. Default: "Extra types only work with openoffice/libreoffice installed."
+msgid "Extra types only work with openoffice/libreoffice installed."
+msgstr "Certains types ne fonctionnent que si OpenOffice/LibreOffice est installé."
+
+#. Default: "Extract the text from the PDF using OCR technology."
+msgid "Extract the text from the PDF using OCR technology."
+msgstr "Extraire le texte du PDF en utilisant un moteur OCR (reconnaissance de caractères)."
+
+#. Default: "For folders. Does not apply to topics."
+msgid "For folders. Does not apply to topics."
+msgstr "Pour les dossiers.  Ne s'appliquent pas aux Collections."
+
+#. Default: "For pdf files."
+msgid "For pdf files."
+msgstr "Pour les fichiers PDF."
+
+#. Default: "Fullscreen Viewer"
+msgid "Fullscreen Viewer"
+msgstr "Afficher en plein écran"
+
+#. Default: "Group View Batch Size"
+msgid "Group View Batch Size"
+msgstr "Taille du batch pour la vue Groupe"
+
+#. Default: "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
+msgid "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
+msgstr "Si vous synchronisez votre stockage avec un autre serveur duquel vous souhaitez servir les ressources PDF, entrez ici l'url de base de ce serveur."
+
+#. Default: "Image Format"
+msgid "Image Format"
+msgstr "Format des images"
+
+#. Default: "Large Image Size"
+msgid "Large Image Size"
+msgstr "Taille de l'image large"
+
+#. Default: "Leave blank to take full width."
+msgid "Leave blank to take full width."
+msgstr "Laissez vide pour utiliser toute la largeur disponible."
+
+#. Default: "Loading"
+msgid "Loading"
+msgstr "Chargement"
+
+#. Default: "Manage Annotations"
+msgid "Manage Annotations"
+msgstr "Gérer les notes"
+
+#. Default: "Manage Sections"
+msgid "Manage Sections"
+msgstr "Gérer les sections"
+
+#. Default: "Normal Image Size"
+msgid "Normal Image Size"
+msgstr "Taille de l'image normale"
+
+#. Default: "Number of conversions to run at a time. The quota name assigned is `dv`."
+msgid "Number of conversions to run at a time. The quota name assigned is `dv`."
+msgstr "Nombre de conversions à lancier à la fois.  Le nom du quota assigné est 'dv'."
+
+#. Default: "OCR"
+msgid "OCR"
+msgstr "OCR"
+
+#. Default: "Obfuscate private file paths"
+msgid "Obfuscate private file paths"
+msgstr "Brouiller les chemins de fichiers privés"
+
+#. Default: "On Document Viewer."
+msgid "On Document Viewer."
+msgstr "Sur le Viewer de documents."
+
+#. Default: "Only for file storage not with zodb. Plone client must have write access to directory."
+msgid "Only for file storage not with zodb. Plone client must have write access to directory."
+msgstr "Concerne seulement le stockage en dehors de la ZODB.  Le client Plone doit avoir un accès en écriture à ce dossier."
+
+#. Default: "Override Base Resource URL"
+msgid "Override Base Resource URL"
+msgstr "Surcharger l'url de base des ressources"
+
+#. Default: "Override Contributor "
+msgid "Override Contributor "
+msgstr "Surcharger le contributeur"
+
+#. Default: "Override Contributor Organization"
+msgid "Override Contributor Organization"
+msgstr "Surcharger l'organisation du contributeur"
+
+#. Default: "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
+msgid "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
+msgstr "Ce PDF est en court de conversion par la visionneuse de documents.  Vous verrez ce message tant que le processus de conversion n'est pas terminé."
+
+#. Default: "Page:"
+msgid "Page:"
+msgstr "Page:"
+
+#. Default: "Required"
+msgid "Required"
+msgstr "Requis"
+
+#. Default: "Show search box"
+msgid "Show search box"
+msgstr "Montrer la zone de recherche"
+
+#. Default: "Show search on group view"
+msgid "Show search on group view"
+msgstr "Montrer la recherche sur la vue Groupe"
+
+#. Default: "Show sidebar"
+msgid "Show sidebar"
+msgstr "Montrer la barre d'outils"
+
+#. Default: "Storage Type"
+msgid "Storage Type"
+msgstr "Type de stockage"
+
+#. Default: "Storage location"
+msgid "Storage location"
+msgstr "Emplacement du stockage"
+
+#. Default: "Text"
+msgid "Text"
+msgstr "Texte"
+
+#. Default: "The Document Viewer requires that you enable Javascript."
+msgid "The Document Viewer requires that you enable Javascript."
+msgstr "La visionneuse de documents nécessite que vous activiez javascript."
+
+#. Default: "The page the section is for."
+msgid "The page the section is for."
+msgstr "La page concernée par cette section."
+
+#. Default: "The text for the annotation. Can include html."
+msgid "The text for the annotation. Can include html."
+msgstr "Le texte de la note.  Peut contenir du HTML."
+
+#. Default: "The title of the annotation"
+msgid "The title of the annotation"
+msgstr "Le titre de la note"
+
+#. Default: "This file is currently being converted to document viewer."
+msgid "This file is currently being converted to document viewer."
+msgstr "Ce fichier est en cours de conversion par la visionneuse de documents."
+
+#. Default: "Thumb Image Size"
+msgid "Thumb Image Size"
+msgstr "Taille de l'image vignette"
+
+#. Default: "Title"
+msgid "Title"
+msgstr "Titre"
+
+#. Default: "Viewer Height"
+msgid "Viewer Height"
+msgstr "Hauteur de la visionneuse"
+
+#. Default: "Viewer Width"
+msgid "Viewer Width"
+msgstr "Largeur de la visionneuse"
+
+#. Default: "What to override the contributor field on viewer with.Leave blank to use document owner."
+msgid "What to override the contributor field on viewer with.Leave blank to use document owner."
+msgstr "Valeur à mettre dans la zone 'Contributeur' affichée sur la visionneuse.  Laissez vide pour utiliser le propirétaire du document."
+
+#. Default: "What to override the organization field on viewer with.Leave blank to use site title."
+msgid "What to override the organization field on viewer with.Leave blank to use site title."
+msgstr "Valeur à mettre comme 'Organisation' dans la zone 'Contributeur' affichée sur la visionneuse.  Laissez vide pour utiliser le nom du site."
+
+#. Default: "Configure the parameters for this Viewer."
+msgid "description_documentviewer_global_settings_form"
+msgstr "Configurer les paramètres pour cette visionneuse."
+
+#. Default: "These settings override the global settings."
+msgid "description_documentviewer_settings_form"
+msgstr "Ces paramètres surchargent les paramètres globaux."
+
+#. Default: "Global Document Viewer Settings"
+msgid "heading_documentviewer_global_settings_form"
+msgstr "Paramètres globaux de la visionneuse de documents"
+
+#. Default: "Document Viewer Settings"
+msgid "heading_documentviewer_settings_form"
+msgstr "Paramètres de la visionneuse de documents"

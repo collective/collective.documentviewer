@@ -1,0 +1,303 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: collective.documentviewer\n"
+"POT-Creation-Date: 2013-05-08 15:00-100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+
+#. Default: "Large Image Size"
+msgid "Large Image Size"
+msgstr ""
+
+#. Default: "Normal Image Size"
+msgid "Normal Image Size"
+msgstr ""
+
+#. Default: "Thumb Image Size"
+msgid "Thumb Image Size"
+msgstr ""
+
+#. Default: "Storage Type"
+msgid "Storage Type"
+msgstr ""
+
+#. Default: "Blob storage using the normal ZODB blob mechanism. File storage is for just storage the files on the file system with no hard reference on write to the ZODB. This allows you to easily push the files to be served off-site."
+msgid "Blob storage using the normal ZODB blob mechanism. File storage is for just storage the files on the file system with no hard reference on write to the ZODB. This allows you to easily push the files to be served off-site."
+msgstr ""
+
+#. Default: "Storage location"
+msgid "Storage location"
+msgstr ""
+
+#. Default: "Only for file storage not with zodb. Plone client must have write access to directory."
+msgid "Only for file storage not with zodb. Plone client must have write access to directory."
+msgstr ""
+
+#. Default: "Obfuscate private file paths"
+msgid "Obfuscate private file paths"
+msgstr ""
+
+#. Default: "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
+msgid "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
+msgstr ""
+
+#. Default: "Image Format"
+msgid "Image Format"
+msgstr ""
+
+#. Default: "OCR"
+msgid "OCR"
+msgstr ""
+
+#. Default: "Extract the text from the PDF using OCR technology."
+msgid "Extract the text from the PDF using OCR technology."
+msgstr ""
+
+#. Default: "Detect text"
+msgid "Detect text"
+msgstr ""
+
+#. Default: "Detect if pdf has text before performing OCR on it. If text is found, ocr will be skipped. If OCR is disabled, text will always try to be retrieved from the PDF file anyways."
+msgid "Detect if pdf has text before performing OCR on it. If text is found, ocr will be skipped. If OCR is disabled, text will always try to be retrieved from the PDF file anyways."
+msgstr ""
+
+#. Default: "Auto select layout"
+msgid "Auto select layout"
+msgstr ""
+
+#. Default: "For pdf files."
+msgid "For pdf files."
+msgstr ""
+
+#. Default: "Auto layout file types"
+msgid "Auto layout file types"
+msgstr ""
+
+#. Default: "Extra types only work with openoffice/libreoffice installed."
+msgid "Extra types only work with openoffice/libreoffice installed."
+msgstr ""
+
+#. Default: "Auto Convert"
+msgid "Auto Convert"
+msgstr ""
+
+#. Default: "Automatically convert files on creation and modification."
+msgid "Automatically convert files on creation and modification."
+msgstr ""
+
+#. Default: "Override Contributor "
+msgid "Override Contributor "
+msgstr ""
+
+#. Default: "What to override the contributor field on viewer with.Leave blank to use document owner."
+msgid "What to override the contributor field on viewer with.Leave blank to use document owner."
+msgstr ""
+
+#. Default: "Override Contributor Organization"
+msgid "Override Contributor Organization"
+msgstr ""
+
+#. Default: "What to override the organization field on viewer with.Leave blank to use site title."
+msgid "What to override the organization field on viewer with.Leave blank to use site title."
+msgstr ""
+
+#. Default: "Override Base Resource URL"
+msgid "Override Base Resource URL"
+msgstr ""
+
+#. Default: "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
+msgid "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
+msgstr ""
+
+#. Default: "Viewer Width"
+msgid "Viewer Width"
+msgstr ""
+
+#. Default: "Leave blank to take full width."
+msgid "Leave blank to take full width."
+msgstr ""
+
+#. Default: "Viewer Height"
+msgid "Viewer Height"
+msgstr ""
+
+#. Default: "Default height to use for viewer (only for non-fullscreen mode)."
+msgid "Default height to use for viewer (only for non-fullscreen mode)."
+msgstr ""
+
+#. Default: "Show sidebar"
+msgid "Show sidebar"
+msgstr ""
+
+#. Default: "Default to show sidebar on Document Viewer."
+msgid "Default to show sidebar on Document Viewer."
+msgstr ""
+
+#. Default: "Show search box"
+msgid "Show search box"
+msgstr ""
+
+#. Default: "On Document Viewer."
+msgid "On Document Viewer."
+msgstr ""
+
+#. Default: "Show search on group view"
+msgid "Show search on group view"
+msgstr ""
+
+#. Default: "Enable search on group view."
+msgid "Enable search on group view."
+msgstr ""
+
+#. Default: "Group View Batch Size"
+msgid "Group View Batch Size"
+msgstr ""
+
+#. Default: "For folders. Does not apply to topics."
+msgid "For folders. Does not apply to topics."
+msgstr ""
+
+#. Default: "Async Quota Size"
+msgid "Async Quota Size"
+msgstr ""
+
+#. Default: "Number of conversions to run at a time. The quota name assigned is `dv`."
+msgid "Number of conversions to run at a time. The quota name assigned is `dv`."
+msgstr ""
+
+#. Default: "Global Document Viewer Settings"
+msgid "heading_documentviewer_global_settings_form"
+msgstr ""
+
+#. Default: "Configure the parameters for this Viewer."
+msgid "description_documentviewer_global_settings_form"
+msgstr ""
+
+#. Default: "Document Viewer Settings"
+msgid "heading_documentviewer_settings_form"
+msgstr ""
+
+#. Default: "These settings override the global settings."
+msgid "description_documentviewer_settings_form"
+msgstr ""
+
+#. Default: "Fullscreen Viewer"
+msgid "Fullscreen Viewer"
+msgstr ""
+
+#. Default: "Default to fullscreen viewer."
+msgid "Default to fullscreen viewer."
+msgstr ""
+
+#. Default: "Default to show sidebar."
+msgid "Default to show sidebar."
+msgstr ""
+
+#. Default: "Manage Annotations"
+msgid "Manage Annotations"
+msgstr ""
+
+#. Default: "Manage Sections"
+msgid "Manage Sections"
+msgstr ""
+
+#. Default: "Close"
+msgid "Close"
+msgstr ""
+
+#. Default: "Page:"
+msgid "Page:"
+msgstr ""
+
+#. Default: "Add Annotation"
+msgid "Add Annotation"
+msgstr ""
+
+#. Default: "Click and drag an area of the image to select where the annotation should be."
+msgid "Click and drag an area of the image to select where the annotation should be."
+msgstr ""
+
+#. Default: "Title"
+msgid "Title"
+msgstr ""
+
+#. Default: "Required"
+msgid "Required"
+msgstr ""
+
+#. Default: "The title of the annotation"
+msgid "The title of the annotation"
+msgstr ""
+
+#. Default: "Text"
+msgid "Text"
+msgstr ""
+
+#. Default: "The text for the annotation. Can include html."
+msgid "The text for the annotation. Can include html."
+msgstr ""
+
+#. Default: "Add"
+msgid "Add"
+msgstr ""
+
+#. Default: "Current Annotations"
+msgid "Current Annotations"
+msgstr ""
+
+#. Default: "The page the section is for."
+msgid "The page the section is for."
+msgstr ""
+
+#. Default: "Loading"
+msgid "Loading"
+msgstr ""
+
+#. Default: "The Document Viewer requires that you enable Javascript."
+msgid "The Document Viewer requires that you enable Javascript."
+msgstr ""
+
+#. Default: "Convert this to document viewer"
+msgid "Convert this to document viewer"
+msgstr ""
+
+#. Default: "Are you sure you want to convert this to document viewer?"
+msgid "Are you sure you want to convert this to document viewer?"
+msgstr ""
+
+#. Default: "Convert"
+msgid "Convert"
+msgstr ""
+
+#. Default: "Converting"
+msgid "Converting"
+msgstr ""
+
+#. Default: "This file is currently being converted to document viewer."
+msgid "This file is currently being converted to document viewer."
+msgstr ""
+
+#. Default: "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
+msgid "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
+msgstr ""
+
+#. Default: ""
+msgid ""
+msgstr ""
+
+#. Default: ""
+msgid ""
+msgstr ""
+
+#. Default: ""
+msgid ""
+msgstr ""
+
+#. Default: ""
+msgid ""
+msgstr ""
