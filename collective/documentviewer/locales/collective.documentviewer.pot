@@ -285,19 +285,3 @@ msgstr ""
 #. Default: "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
 msgid "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
 msgstr ""
-
-#. Default: ""
-msgid ""
-msgstr ""
-
-#. Default: ""
-msgid ""
-msgstr ""
-
-#. Default: ""
-msgid ""
-msgstr ""
-
-#. Default: ""
-msgid ""
-msgstr ""

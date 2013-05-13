@@ -28,7 +28,7 @@ msgstr "Ajouter la note"
 
 #. Default: "Are you sure you want to convert this to document viewer?"
 msgid "Are you sure you want to convert this to document viewer?"
-msgstr "Etes-vous certain de vouloir convertir ce fichier avec la visionneuse de documents?"
+msgstr "Etes-vous certain de vouloir convertir ce fichier avec DocumentViewer?"
 
 #. Default: "Async Quota Size"
 msgid "Async Quota Size"
@@ -68,7 +68,7 @@ msgstr "Convertir"
 
 #. Default: "Convert this to document viewer"
 msgid "Convert this to document viewer"
-msgstr "Convetir avec la visionneuse de documents"
+msgstr "Convetir avec DocumentViewer"
 
 #. Default: "Converting"
 msgid "Converting"
@@ -196,7 +196,7 @@ msgstr "Surcharger l'organisation du contributeur"
 
 #. Default: "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
 msgid "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
-msgstr "Ce PDF est en court de conversion par la visionneuse de documents.  Vous verrez ce message tant que le processus de conversion n'est pas terminé."
+msgstr "Ce PDF est en court de conversion par DocumentViewer.  Vous verrez ce message tant que le processus de conversion n'est pas terminé."
 
 #. Default: "Page:"
 msgid "Page:"
@@ -232,7 +232,7 @@ msgstr "Texte"
 
 #. Default: "The Document Viewer requires that you enable Javascript."
 msgid "The Document Viewer requires that you enable Javascript."
-msgstr "La visionneuse de documents nécessite que vous activiez javascript."
+msgstr "DocumentViewer nécessite que vous activiez javascript."
 
 #. Default: "The page the section is for."
 msgid "The page the section is for."
@@ -248,7 +248,7 @@ msgstr "Le titre de la note"
 
 #. Default: "This file is currently being converted to document viewer."
 msgid "This file is currently being converted to document viewer."
-msgstr "Ce fichier est en cours de conversion par la visionneuse de documents."
+msgstr "Ce fichier est en cours de conversion par DocumentViewer."
 
 #. Default: "Thumb Image Size"
 msgid "Thumb Image Size"
@@ -284,8 +284,8 @@ msgstr "Ces paramètres surchargent les paramètres globaux."
 
 #. Default: "Global Document Viewer Settings"
 msgid "heading_documentviewer_global_settings_form"
-msgstr "Paramètres globaux de la visionneuse de documents"
+msgstr "Paramètres globaux de DocumentViewer"
 
 #. Default: "Document Viewer Settings"
 msgid "heading_documentviewer_settings_form"
-msgstr "Paramètres de la visionneuse de documents"
+msgstr "Paramètres de DocumentViewer"
