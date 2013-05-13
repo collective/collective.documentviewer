@@ -40,9 +40,10 @@
 <body>
 
 <div metal:fill-slot="content-core">
-<tal:main-macro metal:define-macro="content-core" 
+<tal:main-macro metal:define-macro="content-core"
          tal:define="size python:here.getObjSize(here);
-                     content_type here/get_content_type|here/Format;">
+                     content_type here/get_content_type|here/Format;"
+         i18n:domain="collective.documentviewer">
   <tal:notshow tal:condition="not: view/enabled">
     <dl id="errorMsg" tal:condition="python: view.can_modify and view.settings.successfully_converted is False">
       <dt>
@@ -56,80 +57,80 @@
     </tal:notshow>
     <tal:show tal:condition="view/enabled">
       <tal:annotate tal:condition="view/can_modify">
-        <a href="#" id="manage-annotations">Manage Annotations</a> | 
-        <a href="#" id="manage-sections">Manage Sections</a>
+        <a href="#" id="manage-annotations" i18n:translate="">Manage Annotations</a> |
+        <a href="#" id="manage-sections" i18n:translate="">Manage Sections</a>
         <div id="annotation-management">
-          <div class="close"><span>Close</span></div>
+          <div class="close"><span i18n:translate="">Close</span></div>
           <div id="image-container">
           </div>
           <div id="pagesel-container">
-            <label>Page:</label>
+            <label i18n:translate="">Page:</label>
             <select id="pselector">
             </select>
           </div>
           <div id="right-container">
             <div id="add-annotation">
               <form class="">
-                <legend>Add Annotation</legend>
-                <p class="discreet">Click and drag an area of the image to 
+                <legend i18n:translate="">Add Annotation</legend>
+                <p class="discreet" i18n:translate="">Click and drag an area of the image to
                   select where the annotation should be.</p>
                 <fieldset>
                   <div class="field">
-                    <label class="formQuestion" for="title">
+                    <label class="formQuestion" for="title" i18n:translate="">
                       Title
-                      <span class="required" title="Required" style="color: #f00;">■</span>
+                      <span class="required" i18n:attributes="title" title="Required" style="color: #f00;">■</span>
                     </label>
-                    <div class="formHelp" id="title_help">The title of the annotation</div>
+                    <div class="formHelp" id="title_help" i18n:translate="">The title of the annotation</div>
                     <div class="fieldErrorBox"></div>
                     <input type="text" id="title" size="30" maxlength="255" />
                   </div>
                   <div class="field">
-                    <label class="formQuestion" for="text">
+                    <label class="formQuestion" for="text" i18n:translate="">
                       Text
-                      <span class="required" title="Required" style="color: #f00;">■</span>
+                      <span class="required" i18n:attributes="title" title="Required" style="color: #f00;">■</span>
                     </label>
-                    <div class="formHelp" id="title_help">The text for the annotation. Can include html.</div>
+                    <div class="formHelp" id="title_help" i18n:translate="">The text for the annotation. Can include html.</div>
                     <div class="fieldErrorBox"></div>
                     <textarea id="text"></textarea>
                   </div>
                   <div class="formControls">
-                    <button class="allowMultiSubmit context add">Add</button>
+                    <button class="allowMultiSubmit context add" i18n:translate="">Add</button>
                   </div>
                 </fieldset>
               </form>
             </div>
             <div id="annotations">
-              <h3>Current Annotations</h3>
+              <h3 i18n:translate="">Current Annotations</h3>
               <ul></ul>
             </div>
           </div>
         </div>
         <div id="section-management">
-          <div class="close"><span>Close</span></div>
+          <div class="close"><span i18n:translate="">Close</span></div>
           <div id="add-section">
             <form>
               <legend>Add Section</legend>
               <fieldset>
                 <div class="field">
-                  <label class="formQuestion" for="section-title">
+                  <label class="formQuestion" for="section-title" i18n:translate="">
                     Title
-                    <span class="required" title="Required" style="color: #f00;">■</span>
+                    <span class="required" i18n:attributes="title" title="Required" style="color: #f00;">■</span>
                   </label>
                   <div class="formHelp" id="title_help">The title of the section</div>
                   <div class="fieldErrorBox"></div>
                   <input type="text" id="section-title" size="30" maxlength="255" />
                 </div>
                 <div class="field">
-                  <label class="formQuestion" for="section-page">
+                  <label class="formQuestion" for="section-page" i18n:translate="">
                     Page
-                    <span class="required" title="Required" style="color: #f00;">■</span>
+                    <span class="required" i18n:attributes="title" title="Required" style="color: #f00;">■</span>
                   </label>
-                  <div class="formHelp" id="title_help">The page the section is for.</div>
+                  <div class="formHelp" id="title_help" i18n:translate="">The page the section is for.</div>
                   <div class="fieldErrorBox"></div>
                   <input type="text" id="section-page" size="4" maxlength="255" />
                 </div>
                 <div class="formControls">
-                  <button class="allowMultiSubmit context add">Add</button>
+                  <button class="allowMultiSubmit context add" i18n:translate="">Add</button>
                 </div>
               </fieldset>
             </form>
@@ -142,9 +143,9 @@
       </tal:annotate>
       <div id="DV-container">
 
-      <div class="DV-loadingDocument"><span>Loading</span></div>
+      <div class="DV-loadingDocument"><span i18n:translate="">Loading</span></div>
         <noscript>
-          <div id="DV-noJS" style="height:500px">The Document Viewer requires that you enable Javascript.</div>
+          <div id="DV-noJS" style="height:500px" i18n:translate="">The Document Viewer requires that you enable Javascript.</div>
         </noscript>
       </div>
       <div id="overlay"></div>
