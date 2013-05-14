@@ -5,6 +5,7 @@ from zope.interface import Attribute
 from zope import schema
 from zope.component.interfaces import IObjectEvent
 from collective.documentviewer.config import CONVERTABLE_TYPES
+from collective.documentviewer import mf as _
 from OFS.interfaces import IItem
 
 
@@ -21,42 +22,42 @@ for id, doc in CONVERTABLE_TYPES.items():
 
 class IGlobalDocumentViewerSettings(Interface):
     large_size = schema.Int(
-        title=u"Large Image Size",
+        title=_("Large Image Size"),
         default=1000)
     normal_size = schema.Int(
-        title=u"Normal Image Size",
+        title=_("Normal Image Size"),
         default=700)
     thumb_size = schema.Int(
-        title=u"Thumb Image Size",
+        title=_("Thumb Image Size"),
         default=180)
     storage_type = schema.Choice(
-        title=u"Storage Type",
-        description=u"Blob storage using the normal ZODB blob mechanism. "
-                    u"File storage is for just storage the files on the "
-                    u"file system with no hard reference on write to the "
-                    u"ZODB. This allows you to easily push the files to "
-                    u"be served off-site.",
+        title=_("Storage Type"),
+        description=_("Blob storage using the normal ZODB blob mechanism. "
+                      "File storage is for just storage the files on the "
+                      "file system with no hard reference on write to the "
+                      "ZODB. This allows you to easily push the files to "
+                      "be served off-site."),
         default='Blob',
         vocabulary=SimpleVocabulary.fromValues([
             'Blob',
             'File']))
     storage_location = schema.TextLine(
-        title=u"Storage location",
-        description=u'Only for file storage not with zodb. '
-                    u'Plone client must have write access to directory.',
+        title=_("Storage location"),
+        description=_('Only for file storage not with zodb. '
+                      'Plone client must have write access to directory.'),
         default=u"/opt/dvpdffiles")
     storage_obfuscate = schema.Bool(
-        title=u"Obfuscate private file paths",
-        description=u"*experimental* If you're serving files straight from "
-                    u"a web server, there is no way to do permission checks "
-                    u"on them. This provides a bit more security as the path "
-                    u"to the resources will be more difficult to guess and "
-                    u"never publisized. Of course, do not have your web "
-                    u"server list directory contents. *If you don't know what "
-                    u"this does, you probably do NOT want to enable it*",
+        title=_("Obfuscate private file paths"),
+        description=_("*experimental* If you're serving files straight from "
+                      "a web server, there is no way to do permission checks "
+                      "on them. This provides a bit more security as the path "
+                      "to the resources will be more difficult to guess and "
+                      "never publisized. Of course, do not have your web "
+                      "server list directory contents. *If you don't know what "
+                      "this does, you probably do NOT want to enable it*"),
         default=False)
     pdf_image_format = schema.Choice(
-        title=u"Image Format",
+        title=_("Image Format"),
         default=u"gif",
         vocabulary=SimpleVocabulary.fromValues([
             'gif',
@@ -64,106 +65,106 @@ class IGlobalDocumentViewerSettings(Interface):
             'jpg'
         ]))
     ocr = schema.Bool(
-        title=u"OCR",
-        description=u"extract the text from the PDF using OCR technology",
+        title=_("OCR"),
+        description=_("Extract the text from the PDF using OCR technology."),
         default=False)
     detect_text = schema.Bool(
-        title=u"Detect text",
-        description=u"Detect if pdf has text before performing OCR on it. "
-                    u"If text is found, ocr will be skipped. "
-                    u"If OCR is disabled, text will always try to be "
-                    u"retrieved from the PDF file anyways.",
+        title=_("Detect text"),
+        description=_("Detect if pdf has text before performing OCR on it. "
+                      "If text is found, ocr will be skipped. "
+                      "If OCR is disabled, text will always try to be "
+                      "retrieved from the PDF file anyways."),
         default=True)
     auto_select_layout = schema.Bool(
-        title=u"Auto select layout",
-        description=u"For pdf files",
+        title=_("Auto select layout"),
+        description=_("For pdf files."),
         default=True)
     auto_layout_file_types = schema.List(
-        title=u"Auto layout file types",
-        description=u"extra types only work with "
-                    u"openoffice/libreoffice installed",
+        title=_("Auto layout file types"),
+        description=_("Extra types only work with "
+                      "openoffice/libreoffice installed."),
         default=['pdf'],
         value_type=schema.Choice(
             vocabulary=SimpleVocabulary(FILE_TYPES_VOCAB))
         )
     auto_convert = schema.Bool(
-        title=u"Auto Convert",
-        description=u"Automatically convert files on creation "
-                    u"and modification. ",
+        title=_("Auto Convert"),
+        description=_("Automatically convert files on creation "
+                      "and modification."),
         default=True)
     override_contributor = schema.TextLine(
-        title=u"Override Contributor",
-        description=u"What to override the contributor field on viewer with."
-                    u"Leave blank to use document owner",
+        title=_("Override Contributor"),
+        description=_("What to override the contributor field on viewer with."
+                      "Leave blank to use document owner."),
         default=None,
         required=False)
     override_organization = schema.TextLine(
-        title=u"Override Contributor Organization",
-        description=u"What to override the organization field on viewer with."
-                    u"Leave blank to use site title.",
+        title=_("Override Contributor Organization"),
+        description=_("What to override the organization field on viewer with."
+                      "Leave blank to use site title."),
         default=None,
         required=False)
     override_base_resource_url = schema.URI(
-        title=u"Override Base Resource URL",
-        description=u"If you're syncing your storage to another server you "
-                    u"would like to serve the pdf resources from, please "
-                    u"specify the base url path.",
+        title=_("Override Base Resource URL"),
+        description=_("If you're syncing your storage to another server you "
+                      "would like to serve the pdf resources from, please "
+                      "specify the base url path."),
         default=None,
         required=False)
     width = schema.Int(
-        title=u"Viewer Width",
-        description=u"Leave blank to take full width.",
+        title=_("Viewer Width"),
+        description=_("Leave blank to take full width."),
         default=None,
         required=False)
     height = schema.Int(
-        title=u"Viewer Height",
-        description=u"Default height to use for viewer(only for "
-                    u"non-fullscreen mode).",
+        title=_("Viewer Height"),
+        description=_("Default height to use for viewer (only for "
+                      "non-fullscreen mode)."),
         default=700)
     show_sidebar = schema.Bool(
-        title=u"Show sidebar",
-        description=u"Default to show sidebar on Document Viewer.",
+        title=_("Show sidebar"),
+        description=_("Default to show sidebar on Document Viewer."),
         default=True)
     show_search = schema.Bool(
-        title=u"Show search box",
-        description=u"On Document Viewer.",
+        title=_("Show search box"),
+        description=_("On Document Viewer."),
         default=True)
     show_search_on_group_view = schema.Bool(
-        title=u"Show search on group view",
-        description=u"Enable search on group view.",
+        title=_("Show search on group view"),
+        description=_("Enable search on group view."),
         default=True)
     group_view_batch_size = schema.Int(
-        title=u"Group View Batch Size",
-        description=u"For folders. Does not apply to topics.",
+        title=_("Group View Batch Size"),
+        description=_("For folders. Does not apply to topics."),
         default=20)
     async_quota_size = schema.Int(
-        title=u"Async Quota Size",
-        description=u"Number of conversions to run at a time. "
-                    u"The quota name assigned is `dv`.",
+        title=_("Async Quota Size"),
+        description=_("Number of conversions to run at a time. "
+                      "The quota name assigned is `dv`."),
         default=3)
 
 
 class IDocumentViewerSettings(Interface):
     width = schema.Int(
-        title=u"Viewer Width",
-        description=u"Leave blank to take full width.",
+        title=_("Viewer Width"),
+        description=_("Leave blank to take full width."),
         default=None,
         required=False)
     height = schema.Int(
-        title=u"Viewer Height",
+        title=_("Viewer Height"),
         default=None,
         required=False)
     fullscreen = schema.Bool(
-        title=u"Fullscreen Viewer",
-        description=u"Default to fullscreen viewer",
+        title=_("Fullscreen Viewer"),
+        description=_("Default to fullscreen viewer."),
         default=False)
     show_sidebar = schema.Bool(
-        title=u"Show sidebar",
-        description=u"Default to show sidebar",
+        title=_("Show sidebar"),
+        description=_("Default to show sidebar."),
         required=False,
         default=None)
     show_search = schema.Bool(
-        title=u"Show search box",
+        title=_("Show search box"),
         default=None)
 
 

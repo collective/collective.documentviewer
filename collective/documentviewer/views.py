@@ -126,7 +126,7 @@ class DocumentViewerView(BrowserView):
         self.can_modify = mtool.checkPermission('cmf.ModifyPortalContent',
                                                 self.context)
         if msg and self.can_modify:
-            utils.addPortalMessage(msg)
+            utils.addPortalMessage(_(msg))
 
         return self.index()
 
@@ -271,7 +271,7 @@ class SettingsForm(form.EditForm):
     label = _(u'heading_documentviewer_settings_form',
         default=u"Document Viewer Settings")
     description = _(u'description_documentviewer_settings_form',
-        default=u"these settings override the global settings.")
+        default=u"These settings override the global settings.")
 
     @button.buttonAndHandler(_('Save'), name='apply')
     def handleApply(self, action):
@@ -398,7 +398,7 @@ class Convert(Utils):
         if self.enabled():
             req = self.request
             if req.get('REQUEST_METHOD', 'POST') and \
-                req.form.get('form.action.queue', '') == 'Convert':
+                'form.action.queue' in req.form.keys():
                 authenticator = getMultiAdapter((self.context, self.request),
                                                 name=u"authenticator")
                 if not authenticator.verify():

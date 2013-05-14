@@ -15,13 +15,14 @@
     zcml:condition="have plone-41"
     />
   <include package="plone.app.contentmenu" />
+  <i18n:registerTranslations directory="locales" />
 
   <genericsetup:registerProfile
     name="default"
     title="Document Viewer"
     directory="profiles/default"
     description="Installs the collective.documentviewer package"
-    provides="Products.GenericSetup.interfaces.EXTENSION" /> 
+    provides="Products.GenericSetup.interfaces.EXTENSION" />
 
   <browser:page
     name="documentviewer"
@@ -30,7 +31,7 @@
     template="templates/documentviewer.pt"
     permission="zope2.View"
     layer=".interfaces.ILayer" />
-  
+
   <browser:menuItem
     for="Products.ATContentTypes.interface.file.IFileContent"
     menu="plone_displayviews"
@@ -59,14 +60,14 @@
     title="PDF Group View"
     action="dvpdf-group-view"
     description="To show thumbnails from pdf and make it searchable." />
-  
+
   <browser:page
     name="documentviewer-settings"
     for="Products.ATContentTypes.interface.file.IFileContent"
     class=".views.SettingsFormView"
     layer=".interfaces.ILayer"
     permission="cmf.ModifyPortalContent" />
-  <adapter 
+  <adapter
     for="Products.ATContentTypes.interface.file.IFileContent"
     provides=".interfaces.IDocumentViewerSettings"
     factory=".settings.Settings" />
@@ -109,11 +110,11 @@
     class=".views.GlobalSettingsFormView"
     layer=".interfaces.ILayer"
     permission="cmf.ManagePortal" />
-  <adapter 
+  <adapter
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     provides=".interfaces.IGlobalDocumentViewerSettings"
     factory=".settings.GlobalSettings" />
-  
+
   <browser:page
     name="documentviewer-utils"
     for="*"
@@ -121,7 +122,7 @@
     class=".views.Utils"
     allowed_interface=".interfaces.IUtils"
     layer=".interfaces.ILayer" />
-  
+
   <browser:page
     name="convert-to-documentviewer"
     for="Products.ATContentTypes.interface.file.IFileContent"
@@ -137,11 +138,11 @@
     class=".views.Utils"
     attribute="cleanup_file_storage"
     layer=".interfaces.ILayer" />
-  
+
   <browser:resourceDirectory
     name="dv.resources"
     directory="resources" />
-  
+
   <subscriber
     for="Products.ATContentTypes.interface.IFileContent
          Products.Archetypes.interfaces.IObjectEditedEvent"
