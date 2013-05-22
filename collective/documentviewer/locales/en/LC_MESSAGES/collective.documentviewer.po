@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"POT-Creation-Date: 2013-05-08 15:00-100\n"
 "PO-Revision-Date: 2013-05-08 15:00-100\n"
 "Last-Translator: Gauthier Bastien <gauthier.bastien@imio.be>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,6 +130,14 @@ msgstr ""
 msgid "Group View Batch Size"
 msgstr ""
 
+#. Default: "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search.  You will need to run conversion again for this parameter to be taken into account."
+msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search.  You will need to run conversion again for this parameter to be taken into account."
+msgstr ""
+
+#. Default: "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search. If this is disabled, the two following parameters 'OCR' and 'Detect text' are not taken into account.  Take care that this will not make already converted elements searchable/not searchable, you will have to convert existing element yourself."
+msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search. If this is disabled, the two following parameters 'OCR' and 'Detect text' are not taken into account.  Take care that this will not make already converted elements searchable/not searchable, you will have to convert existing element yourself."
+msgstr ""
+
 #. Default: "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
 msgid "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
 msgstr ""
@@ -148,6 +156,10 @@ msgstr ""
 
 #. Default: "Loading"
 msgid "Loading"
+msgstr ""
+
+#. Default: "Make searchable"
+msgid "Make searchable"
 msgstr ""
 
 #. Default: "Manage Annotations"
@@ -206,6 +218,10 @@ msgstr ""
 msgid "Required"
 msgstr ""
 
+#. Default: "Save"
+msgid "Save"
+msgstr ""
+
 #. Default: "Show search box"
 msgid "Show search box"
 msgstr ""
@@ -216,6 +232,10 @@ msgstr ""
 
 #. Default: "Show sidebar"
 msgid "Show sidebar"
+msgstr ""
+
+#. Default: "Since you do not have docsplit installed on this system, we can not render the pages of this document."
+msgid "Since you do not have docsplit installed on this system, we can not render the pages of this document."
 msgstr ""
 
 #. Default: "Storage Type"
@@ -234,6 +254,14 @@ msgstr ""
 msgid "The Document Viewer requires that you enable Javascript."
 msgstr ""
 
+#. Default: "The document is currently being converted to the Document Viewer view."
+msgid "The document is currently being converted to the Document Viewer view."
+msgstr ""
+
+#. Default: "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
+msgid "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
+msgstr ""
+
 #. Default: "The page the section is for."
 msgid "The page the section is for."
 msgstr ""
@@ -244,6 +272,14 @@ msgstr ""
 
 #. Default: "The title of the annotation"
 msgid "The title of the annotation"
+msgstr ""
+
+#. Default: "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
+msgid "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
+msgstr ""
+
+#. Default: "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
+msgid "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
 msgstr ""
 
 #. Default: "This file is currently being converted to document viewer."
