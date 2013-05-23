@@ -31,6 +31,7 @@ from z3c.form import form
 from z3c.form import field
 from z3c.form import button
 from plone.app.z3cform.layout import wrap_form
+from Products.CMFPlone import PloneMessageFactory
 from collective.documentviewer.utils import allowedDocumentType
 from collective.documentviewer.interfaces import IDocumentViewerSettings
 from collective.documentviewer.interfaces import IUtils
@@ -49,7 +50,6 @@ from collective.documentviewer.async import JobRunner
 from collective.documentviewer import storage
 from collective.documentviewer.utils import getPortal
 from collective.documentviewer.interfaces import IBlobFileWrapper
-from plone.memoize.request import memoize_diy_request
 
 logger = getLogger('collective.documentviewer')
 
@@ -94,34 +94,34 @@ class DocumentViewerView(BrowserView):
         if allowedDocumentType(self.context,
                 self.global_settings.auto_layout_file_types):
             if not self.installed:
-                msg = "Since you do not have docsplit installed on this " + \
-                      "system, we can not render the pages of this document."
+                msg = _("Since you do not have docsplit installed on this "
+                        "system, we can not render the pages of this document.")
             if self.settings.converting is not None and \
                     self.settings.converting:
                 if self.settings.successfully_converted:
                     # there is a version that is already converted, show it.
                     self.enabled = True
                 else:
-                    msg = "The document is currently being converted to the " + \
-                          "Document Viewer view."
+                    msg = _("The document is currently being converted to the "
+                            "Document Viewer view.")
                     self.enabled = False
             elif self.settings.successfully_converted is not None and \
                     not self.settings.successfully_converted:
-                msg = "There was an error trying to convert the document. " +\
-                      "Maybe the document is encrypted, corrupt or " +\
-                      "malformed? Check log for details."
+                msg = _("There was an error trying to convert the document. "
+                        "Maybe the document is encrypted, corrupt or "
+                        "malformed? Check log for details.")
                 self.enabled = False
             elif self.settings.successfully_converted is None:
                 # must have just switched to this view
-                msg = "This document is not yet converted to document " +\
-                      "viewer. Please click the `Document Viewer Convert` " +\
-                      "button in the actions menu to convert."
+                msg = _("This document is not yet converted to document "
+                        "viewer. Please click the `Document Viewer Convert` "
+                        "button in the actions menu to convert.")
                 self.enabled = False
         else:
             self.enabled = False
-            msg = "The file is not a supported document type. " + \
-                  "Your type may be supported. Check out the document " + \
-                  "viewer configuration settings."
+            msg = _("The file is not a supported document type. "
+                    "Your type may be supported. Check out the document "
+                    "viewer configuration settings.")
         mtool = getToolByName(self.context, 'portal_membership')
         self.can_modify = mtool.checkPermission('cmf.ModifyPortalContent',
                                                 self.context)
@@ -196,14 +196,14 @@ class DocumentViewerView(BrowserView):
                     self.dvpdffiles, dump_path,
                     image_format),
                 'search': '%s/dv-search.json?q={query}' % (
-                        self.context.absolute_url())
+                    self.context.absolute_url())
             }
         }
 
     def javascript(self):
         fullscreen = self.settings.fullscreen
         height = 'height: %i,' % either(self.settings.height,
-                                       self.global_settings.height)
+                                        self.global_settings.height)
         width = either(self.settings.width,
                        self.global_settings.width)
         if width is None:
@@ -284,6 +284,8 @@ class SettingsForm(form.EditForm):
         url = getMultiAdapter((self.context, self.request),
             name='absolute_url')() + '/view'
         self.request.response.redirect(url)
+
+        self.context.plone_utils.addPortalMessage(PloneMessageFactory('Changes saved.'))
 SettingsFormView = wrap_form(SettingsForm)
 
 
@@ -303,7 +305,7 @@ class GlobalSettingsForm(form.EditForm):
             return
         self.applyChanges(data)
 
-        self.status = u'Changes saved...'
+        self.status = PloneMessageFactory('Changes saved.')
 GlobalSettingsFormView = wrap_form(GlobalSettingsForm)
 
 
@@ -398,7 +400,7 @@ class Convert(Utils):
         if self.enabled():
             req = self.request
             if req.get('REQUEST_METHOD', 'POST') and \
-                'form.action.queue' in req.form.keys():
+               'form.action.queue' in req.form.keys():
                 authenticator = getMultiAdapter((self.context, self.request),
                                                 name=u"authenticator")
                 if not authenticator.verify():
@@ -442,12 +444,14 @@ class BlobView(BrowserView):
         else:
             ct = 'image/%s' % ext
         self.request.response.setHeader('Last-Modified',
-            rfc1123_date(self.context._p_mtime))
+                                        rfc1123_date(self.context._p_mtime))
         self.request.response.setHeader('Accept-Ranges', 'bytes')
         self.request.response.setHeader("Content-Length", length)
         self.request.response.setHeader('Content-Type', ct)
-        range = handleRequestRange(self.context, length, self.request,
-            self.request.response)
+        range = handleRequestRange(self.context,
+                                   length,
+                                   self.request,
+                                   self.request.response)
         return BlobStreamIterator(blob, **range)
 
 
@@ -480,8 +484,10 @@ class PDFTraverseBlobFile(SimpleItem):
         if name not in ('large', 'normal', 'small', 'text'):
             filepath = '%s/%s' % (self.previous, name)
             if filepath in self.settings.blob_files:
-                return BlobFileWrapper(self.context, self.settings,
-                    filepath, self.request).__of__(self.context)
+                return BlobFileWrapper(self.context,
+                                       self.settings,
+                                       filepath,
+                                       self.request).__of__(self.context)
             else:
                 raise NotFound
         else:
@@ -559,8 +565,8 @@ class PDFFiles(SimpleItem, DirectoryResource):
             files = PDFFiles(self.context, request, previous)
             files.__parent__ = self
             return files.__of__(self)
-        if len(self.previous) == 2 and (self.previous[0] != name[0] or \
-                self.previous[1] != name[1:2]):
+        if len(self.previous) == 2 and (self.previous[0] != name[0] or
+           self.previous[1] != name[1:2]):
             # make sure the first two were a sub-set of the uid
             raise NotFound
         uidcat = getToolByName(self.site, 'uid_catalog')

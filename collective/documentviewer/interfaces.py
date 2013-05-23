@@ -64,6 +64,17 @@ class IGlobalDocumentViewerSettings(Interface):
             'png',
             'jpg'
         ]))
+    enable_indexation = schema.Bool(
+        title=_("Make searchable"),
+        description=_("If this is enabled, the text will be extracted from "
+                      "the PDF and will be searchable using the search widget and "
+                      "with the Plone search. "
+                      "If this is disabled, the two following parameters 'OCR' "
+                      "and 'Detect text' are not taken into account.  Take care "
+                      "that this will not make already converted elements searchable/"
+                      "not searchable, you will have to convert existing element yourself."
+                      ),
+        default=True)
     ocr = schema.Bool(
         title=_("OCR"),
         description=_("Extract the text from the PDF using OCR technology."),
@@ -158,6 +169,14 @@ class IDocumentViewerSettings(Interface):
         title=_("Fullscreen Viewer"),
         description=_("Default to fullscreen viewer."),
         default=False)
+    enable_indexation = schema.Bool(
+        title=_("Make searchable"),
+        description=_("If this is enabled, the text will be extracted from "
+                      "the PDF and will be searchable using the search widget and "
+                      "with the Plone search.  You will need to run conversion again "
+                      "for this parameter to be taken into account."
+                      ),
+        default=True)
     show_sidebar = schema.Bool(
         title=_("Show sidebar"),
         description=_("Default to show sidebar."),

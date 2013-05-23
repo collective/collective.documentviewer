@@ -1,5 +1,7 @@
 from tempfile import mkdtemp
+from DateTime import DateTime
 from collective.documentviewer.settings import GlobalSettings
+from zope.annotation import IAnnotations
 from zope.event import notify
 from Products.Archetypes.event import ObjectInitializedEvent
 
@@ -92,6 +94,72 @@ class ConvertTest(BaseTest):
         self.assertEqual(len(listdir(join(fi_dir, 'large'))), 1)
         self.assertEqual(len(listdir(join(fi_dir, 'text'))), 1)
         shutil.rmtree(fi_dir)
+
+    def test_indexation_enabled(self):
+        fi = self.createFile('test.pdf')
+        gsettings = GlobalSettings(self.portal)
+        # indexation is enabled by default
+        self.assertEquals(gsettings.enable_indexation, True)
+        notify(ObjectInitializedEvent(fi))
+        annotations = IAnnotations(fi)['collective.documentviewer']
+        self.failUnless(annotations['catalog'] is not None)
+        # we have relevant informations in the catalog
+        self.failUnless('software' in annotations['catalog']['text'].lexicon.words())
+
+    def test_indexation_disabled(self):
+        fi = self.createFile('test.pdf')
+        gsettings = GlobalSettings(self.portal)
+        # indexation is enabled by default, so disable it
+        gsettings.enable_indexation = False
+        notify(ObjectInitializedEvent(fi))
+        annotations = IAnnotations(fi)['collective.documentviewer']
+        self.failUnless(annotations['catalog'] is None)
+
+    def test_indexation_switch_mode(self):
+        '''
+          Test that switching the indexation from enabled to disabled
+          and the other way round keep the state consistent.
+        '''
+        fi = self.createFile('test.pdf')
+        # indexation is enabled by default
+        notify(ObjectInitializedEvent(fi))
+        annotations = IAnnotations(fi)['collective.documentviewer']
+        # something is catalogued
+        self.failUnless(annotations['catalog'] is not None)
+        # now disable indexation and convert again
+        gsettings = GlobalSettings(self.portal)
+        gsettings.enable_indexation = False
+        # make it convertable again by adapting last_updated and filehash
+        annotations['last_updated'] = DateTime('1901/01/01').ISO8601()
+        annotations['filehash'] = 'dummymd5'
+        notify(ObjectInitializedEvent(fi))
+        # nothing indexed anymore
+        self.failIf(annotations['catalog'] is not None)
+
+    def test_indexation_settings(self):
+        '''
+          The enable_indexation setting can be defined on the object
+          local settings or in the global settings.  Local settings are
+          overriding global settings...
+        '''
+        fi = self.createFile('test.pdf')
+        # indexation is enabled by default in the global settings
+        # and nothing is defined in the local settings
+        notify(ObjectInitializedEvent(fi))
+        annotations = IAnnotations(fi)['collective.documentviewer']
+        self.failUnless(annotations['catalog'] is not None)
+        # nothing defined on the 'fi'
+        self.failIf('enable_indexation' in annotations)
+        # if we disable indexation in the local settings, this will be
+        # taken into account as it overrides global settings
+        annotations['enable_indexation'] = False
+        # make it convertable again by adapting last_updated and filehash
+        annotations['last_updated'] = DateTime('1901/01/01').ISO8601()
+        annotations['filehash'] = 'dummymd5'
+        notify(ObjectInitializedEvent(fi))
+        # as indexation is disabled in local settings, the text
+        # of the PDF is no more indexed...
+        self.failIf(annotations['catalog'] is not None)
 
 
 def test_suite():
