@@ -278,8 +278,8 @@ class DocSplitSubProcess(BaseSubProcess):
         shutil.move(converted_path, os.path.join(output_dir, DUMP_FILENAME))
 
     def convert(self, output_dir, inputfilepath=None, filedata=None,
-                converttopdf=False, sizes=(('large', 1000),), ocr=True,
-                detect_text=True, format='gif', filename=None):
+                converttopdf=False, sizes=(('large', 1000),), enable_indexation=True,
+                ocr=True, detect_text=True, format='gif', filename=None):
         if inputfilepath is None and filedata is None:
             raise Exception("Must provide either filepath or filedata params")
         path = os.path.join(output_dir, DUMP_FILENAME)
@@ -296,11 +296,12 @@ class DocSplitSubProcess(BaseSubProcess):
             self.convert_to_pdf(path, filename, output_dir)
 
         self.dump_images(path, output_dir, sizes, format)
-        if ocr and detect_text and textChecker is not None:
+        if enable_indexation and ocr and detect_text and textChecker is not None:
             if textChecker.has(path):
                 logger.info('Text already found in pdf. Skipping OCR.')
                 ocr = False
-        self.dump_text(path, output_dir, ocr)
+        if enable_indexation:
+            self.dump_text(path, output_dir, ocr)
         num_pages = self.get_num_pages(path)
 
         os.remove(path)
@@ -337,7 +338,7 @@ class Converter(object):
         self.gsettings = GlobalSettings(getPortal(context))
         self.storage_dir = self.get_storage_dir()
         self.doc_type = getDocumentType(self.context,
-            self.gsettings.auto_layout_file_types)
+                                        self.gsettings.auto_layout_file_types)
 
     def initialize_filehash(self):
         if md5 is not None and self.filehash is None and self.blob_filepath:
@@ -378,11 +379,12 @@ class Converter(object):
         args = dict(sizes=(('large', gsettings.large_size),
                            ('normal', gsettings.normal_size),
                            ('small', gsettings.thumb_size)),
-                ocr=gsettings.ocr,
-                detect_text=gsettings.detect_text,
-                format=gsettings.pdf_image_format,
-                converttopdf=self.doc_type.requires_conversion,
-                filename=field.getFilename(context))
+                    enable_indexation=self.isIndexationEnabled(),
+                    ocr=gsettings.ocr,
+                    detect_text=gsettings.detect_text,
+                    format=gsettings.pdf_image_format,
+                    converttopdf=self.doc_type.requires_conversion,
+                    filename=field.getFilename(context))
         if self.blob_filepath is None:
             args['filedata'] = str(field.get(context).data)
         else:
@@ -508,7 +510,7 @@ class Converter(object):
         storage_dir = self.storage_dir
         secret_dir = os.path.join(storage_dir,
                                   settings.obfuscate_secret)
-        if self.gsettings.storage_obfuscate == True and \
+        if self.gsettings.storage_obfuscate is True and \
                 settings.storage_type == 'File' and not self.anonCanView():
             # alright, we know we should be obfuscating the path now.
             # conversions are always done on the same path structure
@@ -533,27 +535,43 @@ class Converter(object):
             if os.path.exists(secret_dir):
                 shutil.rmtree(secret_dir)
 
+    def isIndexationEnabled(self):
+        '''
+          Return True if indexation is enabled, False either.
+          The setting 'enable_indexation' can be either defined on the object
+          (annotations) or if not, we take the value defined in the global settings.
+        '''
+        annotations = IAnnotations(self.context)['collective.documentviewer']
+        if 'enable_indexation' in annotations:
+            return annotations['enable_indexation']
+        else:
+            return self.gsettings.enable_indexation
+
     def __call__(self):
         settings = self.settings
 
         savepoint = None
         try:
             pages = self.run_conversion()
-            catalog = CatalogFactory()
-            self.index_pdf(pages, catalog)
             if pages > LARGE_PDF_SIZE:
                 # conversion can take a long time.
                 # let's sync before we save the changes
                 self.sync_db()
                 savepoint = self.savepoint()
-            self.settings.catalog = catalog
+            catalog = None
+            # regarding enable_indexation, either take the value on the context
+            # if it exists or take the value from the global settings
+            if self.isIndexationEnabled():
+                catalog = CatalogFactory()
+                self.index_pdf(pages, catalog)
+            settings.catalog = catalog
+            self.context.reindexObject(idxs=['SearchableText'])
             self.handle_storage()
             self.handle_layout()
             settings.num_pages = pages
             settings.successfully_converted = True
             settings.storage_type = self.gsettings.storage_type
             settings.pdf_image_format = self.gsettings.pdf_image_format
-            self.context.reindexObject(idxs=['SearchableText'])
             # store hash of file
             self.initialize_filehash()
             settings.filehash = self.filehash
