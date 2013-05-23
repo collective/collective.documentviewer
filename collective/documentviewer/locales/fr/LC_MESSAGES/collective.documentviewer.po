@@ -28,7 +28,7 @@ msgstr "Ajouter la note"
 
 #. Default: "Are you sure you want to convert this to document viewer?"
 msgid "Are you sure you want to convert this to document viewer?"
-msgstr "Etes-vous certain de vouloir convertir ce fichier avec DocumentViewer?"
+msgstr "Êtes-vous certain de vouloir convertir ce fichier avec DocumentViewer ?"
 
 #. Default: "Async Quota Size"
 msgid "Async Quota Size"
@@ -56,7 +56,7 @@ msgstr "Stockage 'Blob' pour utiliser la mécanique classique de la ZODB.  Le st
 
 #. Default: "Click and drag an area of the image to select where the annotation should be."
 msgid "Click and drag an area of the image to select where the annotation should be."
-msgstr "Cliquez et dessinez une zone sur l'image à laquelle lier cette note."
+msgstr "Cliquez sur l'image et dessinez une zone à laquelle lier cette note."
 
 #. Default: "Close"
 msgid "Close"
@@ -68,7 +68,7 @@ msgstr "Convertir"
 
 #. Default: "Convert this to document viewer"
 msgid "Convert this to document viewer"
-msgstr "Convetir avec DocumentViewer"
+msgstr "Convertir avec DocumentViewer"
 
 #. Default: "Converting"
 msgid "Converting"
@@ -164,7 +164,7 @@ msgstr "Taille de l'image normale"
 
 #. Default: "Number of conversions to run at a time. The quota name assigned is `dv`."
 msgid "Number of conversions to run at a time. The quota name assigned is `dv`."
-msgstr "Nombre de conversions à lancier à la fois.  Le nom du quota assigné est 'dv'."
+msgstr "Nombre de conversions à lancer à la fois.  Le nom du quota assigné est 'dv'."
 
 #. Default: "OCR"
 msgid "OCR"
@@ -200,7 +200,7 @@ msgstr "Ce PDF est en court de conversion par DocumentViewer.  Vous verrez ce me
 
 #. Default: "Page:"
 msgid "Page:"
-msgstr "Page:"
+msgstr "Page :"
 
 #. Default: "Required"
 msgid "Required"
@@ -240,7 +240,7 @@ msgstr "La page concernée par cette section."
 
 #. Default: "The text for the annotation. Can include html."
 msgid "The text for the annotation. Can include html."
-msgstr "Le texte de la note.  Peut contenir du HTML."
+msgstr "Le texte de la note. Peut contenir du HTML."
 
 #. Default: "The title of the annotation"
 msgid "The title of the annotation"
