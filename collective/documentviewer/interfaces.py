@@ -4,6 +4,7 @@ from zope.interface import Interface
 from zope.interface import Attribute
 from zope import schema
 from zope.component.interfaces import IObjectEvent
+from zope.site.hooks import getSite
 from collective.documentviewer.config import CONVERTABLE_TYPES
 from collective.documentviewer import mf as _
 from OFS.interfaces import IItem
@@ -155,15 +156,50 @@ class IGlobalDocumentViewerSettings(Interface):
         default=3)
 
 
+def default_width():
+    # take the value from the global settings
+    from collective.documentviewer.settings import GlobalSettings
+    gsettings = GlobalSettings(getSite())
+    return gsettings.width
+
+
+def default_height():
+    # take the value from the global settings
+    from collective.documentviewer.settings import GlobalSettings
+    gsettings = GlobalSettings(getSite())
+    return gsettings.height
+
+
+def default_enable_indexation():
+    # take the value from the global settings
+    from collective.documentviewer.settings import GlobalSettings
+    gsettings = GlobalSettings(getSite())
+    return gsettings.enable_indexation
+
+
+def default_show_sidebar():
+    # take the value from the global settings
+    from collective.documentviewer.settings import GlobalSettings
+    gsettings = GlobalSettings(getSite())
+    return gsettings.show_sidebar
+
+
+def default_show_search():
+    # take the value from the global settings
+    from collective.documentviewer.settings import GlobalSettings
+    gsettings = GlobalSettings(getSite())
+    return gsettings.show_search
+
+
 class IDocumentViewerSettings(Interface):
     width = schema.Int(
         title=_("Viewer Width"),
         description=_("Leave blank to take full width."),
-        default=None,
+        defaultFactory=default_width,
         required=False)
     height = schema.Int(
         title=_("Viewer Height"),
-        default=None,
+        defaultFactory=default_height,
         required=False)
     fullscreen = schema.Bool(
         title=_("Fullscreen Viewer"),
@@ -176,15 +212,15 @@ class IDocumentViewerSettings(Interface):
                       "with the Plone search.  You will need to run conversion again "
                       "for this parameter to be taken into account."
                       ),
-        default=True)
+        defaultFactory=default_enable_indexation)
     show_sidebar = schema.Bool(
         title=_("Show sidebar"),
         description=_("Default to show sidebar."),
         required=False,
-        default=None)
+        defaultFactory=default_show_sidebar)
     show_search = schema.Bool(
         title=_("Show search box"),
-        default=None)
+        defaultFactory=default_show_search)
 
 
 class IUtils(Interface):
