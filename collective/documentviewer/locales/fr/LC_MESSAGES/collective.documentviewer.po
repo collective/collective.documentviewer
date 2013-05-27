@@ -68,7 +68,7 @@ msgstr "Convertir"
 
 #. Default: "Convert this to document viewer"
 msgid "Convert this to document viewer"
-msgstr "Convertir avec DocumentViewer"
+msgstr "Convertir en visionneuse"
 
 #. Default: "Converting"
 msgid "Converting"
@@ -188,7 +188,7 @@ msgstr "Brouiller les chemins de fichiers privés"
 
 #. Default: "On Document Viewer."
 msgid "On Document Viewer."
-msgstr "Sur le Viewer de documents."
+msgstr "Sur la visionneuse de documents."
 
 #. Default: "Only for file storage not with zodb. Plone client must have write access to directory."
 msgid "Only for file storage not with zodb. Plone client must have write access to directory."
@@ -208,7 +208,7 @@ msgstr "Surcharger l'organisation du contributeur"
 
 #. Default: "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
 msgid "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
-msgstr "Ce PDF est en court de conversion par DocumentViewer.  Vous verrez ce message tant que le processus de conversion n'est pas terminé."
+msgstr "Ce PDF est en cours de conversion en visionneuse. Vous verrez ce message tant que le processus de conversion n'est pas terminé."
 
 #. Default: "Page:"
 msgid "Page:"
@@ -256,7 +256,7 @@ msgstr "DocumentViewer nécessite que vous activiez javascript."
 
 #. Default: "The document is currently being converted to the Document Viewer view."
 msgid "The document is currently being converted to the Document Viewer view."
-msgstr "Le document est en cours de conversion avec DocumentViewer."
+msgstr "Le document est en cours de conversion en visionneuse."
 
 #. Default: "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
 msgid "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
@@ -280,11 +280,11 @@ msgstr "Une erreur est survenue lors de la conversion du document.  Peut-être e
 
 #. Default: "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
 msgid "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
-msgstr "Ce document n'a pas encore été converti avec DocumentViewer.  Utiliser l'action 'Convertir avec DocumentViewer' disponible dans le menu déroulant 'Actions'."
+msgstr "Ce document n'a pas encore été converti en visionneuse.  Utiliser l'action 'Convertir en visionneuse' disponible dans le menu déroulant 'Actions'."
 
 #. Default: "This file is currently being converted to document viewer."
 msgid "This file is currently being converted to document viewer."
-msgstr "Ce fichier est en cours de conversion par DocumentViewer."
+msgstr "Ce fichier est en cours de conversion en visionneuse."
 
 #. Default: "Thumb Image Size"
 msgid "Thumb Image Size"
@@ -324,5 +324,5 @@ msgstr "Paramètres globaux de DocumentViewer"
 
 #. Default: "Document Viewer Settings"
 msgid "heading_documentviewer_settings_form"
-msgstr "Paramètres de DocumentViewer"
+msgstr "Paramètres de la visionneuse"
 
