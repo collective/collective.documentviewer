@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<object name="portal_javascripts" meta_type="JavaScripts Registry">
-
-    <!-- javascript message used to translate labels in pure js -->
-    <javascript id="dv_javascript_variables.js" />
-
-</object>

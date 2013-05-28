@@ -174,11 +174,11 @@
     layer=".interfaces.ILayer" />
 
   <browser:page
-      for="*"
-      name="dv_javascript_variables.js"
-      class=".jsvariables.JSVariables"
-      permission="zope.Public"
-      />
+    for="*"
+    name="dv_javascript_variables.js"
+    class=".views.DocumentViewerView"
+    attribute="getTranslatedJSLabels"
+    permission="zope.Public" />
 
   <adapter name="SearchableText" factory=".catalog.SearchableText" />
 

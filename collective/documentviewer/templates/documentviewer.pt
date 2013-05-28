@@ -16,6 +16,9 @@
   <link href="/viewer/viewer.css" media="screen" rel="stylesheet" type="text/css"
         tal:attributes="href string:${view/dvstatic}/assets/viewer.css" />
   <![endif]-->
+
+  <script src="/dv_javascript_variables.js"
+      tal:attributes="src string:${portal_url}/dv_javascript_variables.js"></script>
   <link href="/viewer/printviewer.css" media="print" rel="stylesheet" type="text/css"
       tal:attributes="href string:${view/dvstatic}/assets/printviewer.css" />
   <script src="/viewer/viewer.js"
