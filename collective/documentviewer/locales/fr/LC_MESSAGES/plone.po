@@ -16,9 +16,9 @@ msgstr ""
 
 #. Default: "Document Viewer Convert"
 msgid "Document Viewer Convert"
-msgstr "Convertir avec DocumentViewer"
+msgstr "Convertir avec la visionneuse"
 
 #. Default: "Document Viewer Settings"
 msgid "Document Viewer Settings"
-msgstr "Paramètres de DocumentViewer"
+msgstr "Paramètres de la visionneuse"
 

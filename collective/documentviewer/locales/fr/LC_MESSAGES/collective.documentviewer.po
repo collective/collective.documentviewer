@@ -26,9 +26,13 @@ msgstr "Ajouter"
 msgid "Add Annotation"
 msgstr "Ajouter la note"
 
+#. Default: "Add Section"
+msgid "Add Section"
+msgstr "Ajouter une section"
+
 #. Default: "Are you sure you want to convert this to document viewer?"
 msgid "Are you sure you want to convert this to document viewer?"
-msgstr "Etes-vous certain de vouloir convertir ce fichier avec DocumentViewer?"
+msgstr "Etes-vous certain de vouloir convertir ce fichier avec la visionneuse?"
 
 #. Default: "Async Quota Size"
 msgid "Async Quota Size"
@@ -68,7 +72,7 @@ msgstr "Convertir"
 
 #. Default: "Convert this to document viewer"
 msgid "Convert this to document viewer"
-msgstr "Convetir avec DocumentViewer"
+msgstr "Convetir avec la visionneuse de documents"
 
 #. Default: "Converting"
 msgid "Converting"
@@ -76,7 +80,11 @@ msgstr "En cours de conversion"
 
 #. Default: "Current Annotations"
 msgid "Current Annotations"
-msgstr "Annotations existantes"
+msgstr "Notes existantes"
+
+#. Default: "Current Sections"
+msgid "Current Sections"
+msgstr "Sections existantes"
 
 #. Default: "Default height to use for viewer (only for non-fullscreen mode)."
 msgid "Default height to use for viewer (only for non-fullscreen mode)."
@@ -208,7 +216,7 @@ msgstr "Surcharger l'organisation du contributeur"
 
 #. Default: "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
 msgid "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
-msgstr "Ce PDF est en court de conversion par DocumentViewer.  Vous verrez ce message tant que le processus de conversion n'est pas terminé."
+msgstr "Ce PDF est en court de conversion par la visionneuse.  Vous verrez ce message tant que le processus de conversion n'est pas terminé."
 
 #. Default: "Page:"
 msgid "Page:"
@@ -252,15 +260,15 @@ msgstr "Texte"
 
 #. Default: "The Document Viewer requires that you enable Javascript."
 msgid "The Document Viewer requires that you enable Javascript."
-msgstr "DocumentViewer nécessite que vous activiez javascript."
+msgstr "La visionneuse nécessite que vous activiez javascript."
 
 #. Default: "The document is currently being converted to the Document Viewer view."
 msgid "The document is currently being converted to the Document Viewer view."
-msgstr "Le document est en cours de conversion avec DocumentViewer."
+msgstr "Le document est en cours de conversion avec la visionneuse."
 
 #. Default: "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
 msgid "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
-msgstr "Ce type de fichier n'est pas supporté.  Il se peut cependant qu'il le soit, vérifiez dans la configuration de DocumentViewer."
+msgstr "Ce type de fichier n'est pas supporté.  Il se peut cependant qu'il le soit, vérifiez dans la configuration de la visionneuse."
 
 #. Default: "The page the section is for."
 msgid "The page the section is for."
@@ -274,17 +282,21 @@ msgstr "Le texte de la note.  Peut contenir du HTML."
 msgid "The title of the annotation"
 msgstr "Le titre de la note"
 
+#. Default: "The title of the section"
+msgid "The title of the section"
+msgstr "Le titre de la section"
+
 #. Default: "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
 msgid "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
 msgstr "Une erreur est survenue lors de la conversion du document.  Peut-être est il crypté, corrompu ou malformé?  Vérifiez le log pour plus de détails."
 
 #. Default: "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
 msgid "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
-msgstr "Ce document n'a pas encore été converti avec DocumentViewer.  Utiliser l'action 'Convertir avec DocumentViewer' disponible dans le menu déroulant 'Actions'."
+msgstr "Ce document n'a pas encore été converti avec la visionneuse.  Utiliser l'action 'Convertir avec la visionneuse' disponible dans le menu déroulant 'Actions'."
 
 #. Default: "This file is currently being converted to document viewer."
 msgid "This file is currently being converted to document viewer."
-msgstr "Ce fichier est en cours de conversion par DocumentViewer."
+msgstr "Ce fichier est en cours de conversion par la visionneuse."
 
 #. Default: "Thumb Image Size"
 msgid "Thumb Image Size"
@@ -324,5 +336,72 @@ msgstr "Paramètres globaux de DocumentViewer"
 
 #. Default: "Document Viewer Settings"
 msgid "heading_documentviewer_settings_form"
-msgstr "Paramètres de DocumentViewer"
+msgstr "Paramètres de la visionneuse"
 
+#. Default: "CLOSE"
+msgid "js_label_close"
+msgstr "FERMER"
+
+#. Default: "Document"
+msgid "js_label_document"
+msgstr "Document"
+
+#. Default: "for"
+msgid "js_label_for"
+msgstr "pour"
+
+#. Default: "Link to this note"
+msgid "js_label_link_to_note"
+msgstr "Lien vers cette note"
+
+#. Default: "Loading"
+msgid "js_label_loading"
+msgstr "Chargement"
+
+#. Default: "Next"
+msgid "js_label_next"
+msgstr "Suivant"
+
+#. Default: "Next annotation"
+msgid "js_label_next_annotation"
+msgstr "Note suivante"
+
+#. Default: "Notes"
+msgid "js_label_notes"
+msgstr "Notes"
+
+#. Default: "of"
+msgid "js_label_of"
+msgstr "sur"
+
+#. Default: "Page"
+msgid "js_label_page"
+msgstr "Page"
+
+#. Default: "Pages"
+msgid "js_label_pages"
+msgstr "Pages"
+
+#. Default: "Previous"
+msgid "js_label_previous"
+msgstr "Précédent"
+
+#. Default: "Previous annotation"
+msgid "js_label_previous_annotation"
+msgstr "Note précédente"
+
+#. Default: "Remove"
+msgid "js_label_remove"
+msgstr "Supprimer"
+
+#. Default: "Search"
+msgid "js_label_search"
+msgstr "Recherche"
+
+#. Default: "Text"
+msgid "js_label_text"
+msgstr "Texte"
+
+#. Default: "Zoom"
+msgid "js_label_zoom"
+msgstr "Zoom"
