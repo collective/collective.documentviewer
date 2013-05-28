@@ -16,6 +16,9 @@
   <link href="/viewer/viewer.css" media="screen" rel="stylesheet" type="text/css"
         tal:attributes="href string:${view/dvstatic}/assets/viewer.css" />
   <![endif]-->
+
+  <script src="/dv_javascript_variables.js"
+      tal:attributes="src string:${portal_url}/dv_javascript_variables.js"></script>
   <link href="/viewer/printviewer.css" media="print" rel="stylesheet" type="text/css"
       tal:attributes="href string:${view/dvstatic}/assets/printviewer.css" />
   <script src="/viewer/viewer.js"
@@ -76,8 +79,8 @@
                   select where the annotation should be.</p>
                 <fieldset>
                   <div class="field">
-                    <label class="formQuestion" for="title" i18n:translate="">
-                      Title
+                    <label class="formQuestion" for="title">
+                      <span i18n:translate="">Title</span>
                       <span class="required" i18n:attributes="title" title="Required" style="color: #f00;">■</span>
                     </label>
                     <div class="formHelp" id="title_help" i18n:translate="">The title of the annotation</div>
@@ -109,14 +112,14 @@
           <div class="close"><span i18n:translate="">Close</span></div>
           <div id="add-section">
             <form>
-              <legend>Add Section</legend>
+              <legend i18n:translate="">Add Section</legend>
               <fieldset>
                 <div class="field">
-                  <label class="formQuestion" for="section-title" i18n:translate="">
-                    Title
+                  <label class="formQuestion" for="section-title">
+                    <span i18n:translate="">Title</span>
                     <span class="required" i18n:attributes="title" title="Required" style="color: #f00;">■</span>
                   </label>
-                  <div class="formHelp" id="title_help">The title of the section</div>
+                  <div class="formHelp" id="title_help" i18n:translate="">The title of the section</div>
                   <div class="fieldErrorBox"></div>
                   <input type="text" id="section-title" size="30" maxlength="255" />
                 </div>
@@ -136,7 +139,7 @@
             </form>
           </div>
           <div id="sections">
-            <h3>Current Sections</h3>
+            <h3 i18n:translate="">Current Sections</h3>
             <ul></ul>
           </div>
         </div>

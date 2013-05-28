@@ -322,7 +322,91 @@ msgstr ""
 msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search.  You will need to run conversion again for this parameter to be taken into account."
 msgstr ""
 
-#. Default: ""
-msgid ""
+#. Default: "The title of the section"
+msgid "The title of the section"
+msgstr ""
+
+#. Default: "Add Section"
+msgid "Add Section"
+msgstr ""
+
+#. Default: "Current Sections"
+msgid "Current Sections"
+msgstr ""
+
+#. Default: "Zoom"
+msgid "js_label_zoom"
+msgstr ""
+
+#. Default: "Page"
+msgid "js_label_page"
+msgstr ""
+
+#. Default: "of"
+msgid "js_label_of"
+msgstr ""
+
+#. Default: "Document"
+msgid "js_label_document"
+msgstr ""
+
+#. Default: "Pages"
+msgid "js_label_pages"
+msgstr ""
+
+#. Default: "Notes"
+msgid "js_label_notes"
+msgstr ""
+
+#. Default: "Loading"
+msgid "js_label_loading"
+msgstr ""
+
+#. Default: "Text"
+msgid "js_label_text"
+msgstr ""
+
+#. Default: "Search"
+msgid "js_label_search"
+msgstr ""
+
+#. Default: "for"
+msgid "js_label_for"
+msgstr ""
+
+#. Default: "Previous"
+msgid "js_label_previous"
+msgstr ""
+
+#. Default: "Next"
+msgid "js_label_next"
+msgstr ""
+
+#. Default: "CLOSE"
+msgid "js_label_close"
+msgstr ""
+
+#. Default: "Remove"
+msgid "js_label_remove"
+msgstr ""
+
+#. Default: "Link to this note"
+msgid "js_label_link_to_note"
+msgstr ""
+
+#. Default: "Previous annotation"
+msgid "js_label_previous_annotation"
+msgstr ""
+
+#. Default: "Next annotation"
+msgid "js_label_next_annotation"
+msgstr ""
+
+#. Default: "on page"
+msgid "js_label_on_page"
+msgstr ""
+
+#. Default: "for page"
+msgid "js_label_for_page"
 msgstr ""
 
