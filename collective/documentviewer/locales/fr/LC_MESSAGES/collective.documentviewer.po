@@ -350,6 +350,10 @@ msgstr "Document"
 msgid "js_label_for"
 msgstr "pour"
 
+#. Default: "for page"
+msgid "js_label_for_page"
+msgstr "pour la page"
+
 #. Default: "Link to this note"
 msgid "js_label_link_to_note"
 msgstr "Lien vers cette note"
@@ -373,6 +377,10 @@ msgstr "Notes"
 #. Default: "of"
 msgid "js_label_of"
 msgstr "sur"
+
+#. Default: "on page"
+msgid "js_label_on_page"
+msgstr "sur la page"
 
 #. Default: "Page"
 msgid "js_label_page"

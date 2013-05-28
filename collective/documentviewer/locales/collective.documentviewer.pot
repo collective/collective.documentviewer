@@ -401,3 +401,12 @@ msgstr ""
 #. Default: "Next annotation"
 msgid "js_label_next_annotation"
 msgstr ""
+
+#. Default: "on page"
+msgid "js_label_on_page"
+msgstr ""
+
+#. Default: "for page"
+msgid "js_label_for_page"
+msgstr ""
+

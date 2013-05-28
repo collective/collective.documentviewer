@@ -350,6 +350,10 @@ msgstr ""
 msgid "js_label_for"
 msgstr ""
 
+#. Default: "for page"
+msgid "js_label_for_page"
+msgstr ""
+
 #. Default: "Link to this note"
 msgid "js_label_link_to_note"
 msgstr ""
@@ -372,6 +376,10 @@ msgstr ""
 
 #. Default: "of"
 msgid "js_label_of"
+msgstr ""
+
+#. Default: "on page"
+msgid "js_label_on_page"
 msgstr ""
 
 #. Default: "Page"

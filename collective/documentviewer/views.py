@@ -268,6 +268,8 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
         var dv_translated_label_link_to_note = '%(dv_translated_label_link_to_note)s';
         var dv_translated_label_previous_annotation = '%(dv_translated_label_previous_annotation)s';
         var dv_translated_label_next_annotation = '%(dv_translated_label_next_annotation)s';
+        var dv_translated_label_on_page = '%(dv_translated_label_on_page)s';
+        var dv_translated_label_for_page = '%(dv_translated_label_for_page)s';
         """
         d = 'collective.documentviewer'
         r = self.request
@@ -297,6 +299,9 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
                                                         domain=d,
                                                         context=r,
                                                         default='Next annotation')
+        dv_translated_label_on_page = translate('js_label_on_page', domain=d, context=r, default='on page')
+        dv_translated_label_for_page = translate('js_label_on_page', domain=d, context=r, default='for page')
+
         # escape_for_js
         dv_translated_label_zoom = dv_translated_label_zoom.replace("'", "\\'")
         dv_translated_label_page = dv_translated_label_page.replace("'", "\\'")
@@ -315,6 +320,8 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
         dv_translated_label_link_to_note = dv_translated_label_link_to_note.replace("'", "\\'")
         dv_translated_label_previous_annotation = dv_translated_label_previous_annotation.replace("'", "\\'")
         dv_translated_label_next_annotation = dv_translated_label_next_annotation.replace("'", "\\'")
+        dv_translated_label_on_page = dv_translated_label_on_page.replace("'", "\\'")
+        dv_translated_label_for_page = dv_translated_label_for_page.replace("'", "\\'")
 
         return TEMPLATE % dict(
             dv_translated_label_zoom=dv_translated_label_zoom,
@@ -334,6 +341,8 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
             dv_translated_label_link_to_note=dv_translated_label_link_to_note,
             dv_translated_label_previous_annotation=dv_translated_label_previous_annotation,
             dv_translated_label_next_annotation=dv_translated_label_next_annotation,
+            dv_translated_label_on_page=dv_translated_label_on_page,
+            dv_translated_label_for_page=dv_translated_label_for_page,
         )
 
 

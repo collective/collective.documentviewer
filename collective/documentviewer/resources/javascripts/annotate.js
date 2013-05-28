@@ -67,7 +67,7 @@ $(document).ready(function(){
     });
 
     function addToAnnotationList(title, page, id){
-        annotations.append('<li>' + title + ' on page ' + page +
+        annotations.append('<li>' + title +' '+window.dv_translated_label_on_page+' '+page+
                 ' (<a href="#" rel="' + id + '" page="' + page +
                     '" class="remove">'+window.dv_translated_label_remove+'</a>)</li>');
     }
@@ -197,7 +197,7 @@ $(document).ready(function(){
     });
 
     function addToSectionList(title, page){
-        sections.append('<li>' + title + ' for page ' + page +
+        sections.append('<li>' + title +' '+window.dv_translated_label_for_page+' '+ page +
                 '&nbsp;(<a href="#" rel="' + page + '" title="' + title +
                     '" class="remove">'+window.dv_translated_label_remove+'</a>)</li>');
     }
