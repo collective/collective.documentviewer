@@ -67,9 +67,9 @@ $(document).ready(function(){
     });
 
     function addToAnnotationList(title, page, id){
-        annotations.append('<li>' + title + ' on page ' + page +  
-                '(<a href="#" rel="' + id + '" page="' + page +
-                    '" class="remove">Remove</a>)</li>');
+        annotations.append('<li>' + title +' '+window.dv_translated_label_on_page+' '+page+
+                ' (<a href="#" rel="' + id + '" page="' + page +
+                    '" class="remove">'+window.dv_translated_label_remove+'</a>)</li>');
     }
 
     function clearAddAnnotation(){
@@ -197,9 +197,9 @@ $(document).ready(function(){
     });
 
     function addToSectionList(title, page){
-        sections.append('<li>' + title + ' for page ' + page +  
-                '(<a href="#" rel="' + page + '" title="' + title +
-                    '" class="remove">Remove</a>)</li>');
+        sections.append('<li>' + title +' '+window.dv_translated_label_for_page+' '+ page +
+                '&nbsp;(<a href="#" rel="' + page + '" title="' + title +
+                    '" class="remove">'+window.dv_translated_label_remove+'</a>)</li>');
     }
 
     add_section_button.click(function(){
