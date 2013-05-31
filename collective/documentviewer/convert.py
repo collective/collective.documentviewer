@@ -299,13 +299,13 @@ class DocSplitSubProcess(BaseSubProcess):
         if converttopdf:
             self.convert_to_pdf(path, filename, output_dir)
 
-        self.dump_images(path, output_dir, sizes, format)
+        self.dump_images(path, output_dir, sizes, format, language)
         if enable_indexation and ocr and detect_text and textChecker is not None:
             if textChecker.has(path):
                 logger.info('Text already found in pdf. Skipping OCR.')
                 ocr = False
         if enable_indexation:
-            self.dump_text(path, output_dir, ocr)
+            self.dump_text(path, output_dir, ocr, language)
         num_pages = self.get_num_pages(path)
 
         os.remove(path)
