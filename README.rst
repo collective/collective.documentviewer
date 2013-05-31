@@ -41,7 +41,7 @@ Install requirements
 
 - Docsplit: http://documentcloud.github.com/docsplit/
 - GraphicsMagick
-- ghostscript
+- ghostscript (version 9.0 preferred)
 - Poppler
 - tesseract (optional)
 - pdftk (optional)
