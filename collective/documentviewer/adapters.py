@@ -6,6 +6,9 @@ from collective.documentviewer.interfaces import IOCRLanguage
 from collective.documentviewer.iso639_2_utf8 import ISO_UTF_MAP
 
 class StandardOCRLanguageAdapter(object):
+    """ Return the document language through a configurable
+        adapter.
+    """
 
     adapts(IATFile)
     zope.interface.implements(IOCRLanguage)

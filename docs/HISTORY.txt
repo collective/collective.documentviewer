@@ -1,12 +1,16 @@
 Changelog
 =========
 
+
 2.2.2b1 (2013-05-31)
 --------------------
 
 - only use defaultFactory when supported. For older versions of zope.schema
   [vangheem]
 
+- support to pass a document language to tesseract/docsplit based on a
+  configurable adapter implementing IOCRLanguage
+  [ajung]
 
 2.2.2a1 (2013-05-31)
 --------------------
