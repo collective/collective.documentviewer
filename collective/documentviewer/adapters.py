@@ -1,3 +1,4 @@
+import os
 import zope.interface
 from zope.component import adapts
 from Products.CMFCore.utils import getToolByName
@@ -17,7 +18,14 @@ class StandardOCRLanguageAdapter(object):
         self.context = context
 
     def getLanguage(self):
-        """ Return site language as 3-char language code """
+        """ Return OCR language as 3-char language code """
+
+        # First sniff into $OCR_LANGUAGE environment variable
+        lang = os.environ.get('OCR_LANGUAGE')
+        if lang:
+            return lang
+
+        # fallback to site language
         lt = getToolByName(self.context, 'portal_languages')
         lang = lt.getPreferredLanguage()
         return ISO_UTF_MAP.get(lang, 'eng')        
