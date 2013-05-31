@@ -284,7 +284,6 @@ class DocSplitSubProcess(BaseSubProcess):
     def convert(self, output_dir, inputfilepath=None, filedata=None,
                 converttopdf=False, sizes=(('large', 1000),), enable_indexation=True,
                 ocr=True, detect_text=True, format='gif', filename=None, language='eng'):
-        import pdb; pdb.set_trace() 
         if inputfilepath is None and filedata is None:
             raise Exception("Must provide either filepath or filedata params")
         path = os.path.join(output_dir, DUMP_FILENAME)
