@@ -6,6 +6,7 @@ import tempfile
 import re
 import transaction
 import traceback
+import zope.component
 from ZODB.blob import Blob
 from BTrees.OOBTree import OOBTree
 from Acquisition import aq_inner
@@ -23,6 +24,7 @@ from collective.documentviewer.utils import getDocumentType
 from collective.documentviewer import storage
 from collective.documentviewer.utils import mkdir_p
 from collective.documentviewer.events import ConversionFinishedEvent
+from collective.documentviewer.interfaces import IOCRLanguage
 import random
 
 word_re = re.compile('\W+')
@@ -212,10 +214,11 @@ class DocSplitSubProcess(BaseSubProcess):
     else:
         bin_name = 'docsplit'
 
-    def dump_images(self, filepath, output_dir, sizes, format):
+    def dump_images(self, filepath, output_dir, sizes, format, lang='eng'):
         # docsplit images pdf.pdf --size 700x,300x,50x
         # --format gif --output
         cmd = [self.binary, "images", filepath,
+            '--language', lang,
             '--size', ','.join([str(s[1]) + 'x' for s in sizes]),
             '--format', format,
             '--rolling',
@@ -230,11 +233,12 @@ class DocSplitSubProcess(BaseSubProcess):
             source = os.path.join(output_dir, '%ix' % size)
             shutil.move(source, dest)
 
-    def dump_text(self, filepath, output_dir, ocr):
+    def dump_text(self, filepath, output_dir, ocr, lang='eng'):
         # docsplit text pdf.pdf --[no-]ocr --pages all
         output_dir = os.path.join(output_dir, TEXT_REL_PATHNAME)
         ocr = not ocr and 'no-' or ''
         cmd = [self.binary, "text", filepath,
+            '--language', lang,
             '--%socr' % ocr,
             '--pages', 'all',
             '--output', output_dir
@@ -279,7 +283,8 @@ class DocSplitSubProcess(BaseSubProcess):
 
     def convert(self, output_dir, inputfilepath=None, filedata=None,
                 converttopdf=False, sizes=(('large', 1000),), enable_indexation=True,
-                ocr=True, detect_text=True, format='gif', filename=None):
+                ocr=True, detect_text=True, format='gif', filename=None, language='eng'):
+        import pdb; pdb.set_trace() 
         if inputfilepath is None and filedata is None:
             raise Exception("Must provide either filepath or filedata params")
         path = os.path.join(output_dir, DUMP_FILENAME)
@@ -376,6 +381,10 @@ class Converter(object):
         context = self.context
         gsettings = self.gsettings
         field = context.getField('file') or context.getPrimaryField()
+        try:
+            language = IOCRLanguage(context).getLanguage()
+        except zope.component.ComponentLookupError:
+            language = 'eng'
         args = dict(sizes=(('large', gsettings.large_size),
                            ('normal', gsettings.normal_size),
                            ('small', gsettings.thumb_size)),
