@@ -1,10 +1,10 @@
 Changelog
 =========
 
-2.2.2b1 (unreleased)
+2.2.2b1 (2013-05-31)
 --------------------
 
-- only use defaultFactory when supported
+- only use defaultFactory when supported. For older versions of zope.schema
   [vangheem]
 
 
