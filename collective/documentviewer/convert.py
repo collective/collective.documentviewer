@@ -416,11 +416,12 @@ class Converter(object):
                     filepath = os.path.join(path, filename)
                     filename = '%s/%s' % (size, filename)
                     files[filename] = saveFileToBlob(filepath)
-            textfilespath = os.path.join(storage_dir, TEXT_REL_PATHNAME)
-            for filename in os.listdir(textfilespath):
-                filepath = os.path.join(textfilespath, filename)
-                filename = '%s/%s' % (TEXT_REL_PATHNAME, filename)
-                files[filename] = saveFileToBlob(filepath)
+            if self.settings.enable_indexation:
+                textfilespath = os.path.join(storage_dir, TEXT_REL_PATHNAME)
+                for filename in os.listdir(textfilespath):
+                    filepath = os.path.join(textfilespath, filename)
+                    filename = '%s/%s' % (TEXT_REL_PATHNAME, filename)
+                    files[filename] = saveFileToBlob(filepath)
             settings.blob_files = files
             shutil.rmtree(storage_dir)
 
