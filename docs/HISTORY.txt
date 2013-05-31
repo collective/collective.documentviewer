@@ -8,6 +8,10 @@ Changelog
   [gbastien]
 
 
+- support to pass a document language to tesseract/docsplit based on a
+  configurable adapter implementing IOCRLanguage
+  [ajung]
+
 2.2.2b1 (2013-05-31)
 --------------------
 

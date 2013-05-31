@@ -272,3 +272,17 @@ class IConversionFinishedEvent(IObjectEvent):
 
 class IBlobFileWrapper(IItem):
     pass
+
+
+class IOCRLanguage(Interface):
+    """ Adapter interface that returns the relevant
+        language for the OCR converter (Tesseract) encoded
+        as ISO 639-2 code (3 char codes).
+    """
+
+    def getLanguage(context):
+        """ Return ISO 639-2 language code for given
+            Plone context object
+        """
+
+
