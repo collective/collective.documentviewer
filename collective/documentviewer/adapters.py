@@ -22,7 +22,7 @@ class StandardOCRLanguageAdapter(object):
 
         # First sniff into $OCR_LANGUAGE environment variable
         lang = os.environ.get('OCR_LANGUAGE')
-        if lang:
+        if lang not None:
             return lang
 
         # fallback to site language

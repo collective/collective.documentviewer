@@ -392,6 +392,7 @@ class Converter(object):
                     detect_text=gsettings.detect_text,
                     format=gsettings.pdf_image_format,
                     converttopdf=self.doc_type.requires_conversion,
+                    language=language,
                     filename=field.getFilename(context))
         if self.blob_filepath is None:
             args['filedata'] = str(field.get(context).data)
