@@ -9,6 +9,13 @@ from collective.documentviewer.config import CONVERTABLE_TYPES
 from collective.documentviewer import mf as _
 from OFS.interfaces import IItem
 
+try:
+    # older versions of zope.schema do not support defaultFactory
+    schema.Int(title=u"", defaultFactory=lambda x: 5)
+    SUPPORT_DEFAULT_FACTORY = True
+except TypeError:
+    SUPPORT_DEFAULT_FACTORY = False
+
 
 class ILayer(Interface):
     """
@@ -191,16 +198,26 @@ def default_show_search():
     return gsettings.show_search
 
 
+def _default(factory, value):
+    # if defaultFactory supported, use it, otherwise, just use provided default
+    if SUPPORT_DEFAULT_FACTORY:
+        return {'defaultFactory': factory}
+    else:
+        return {'default': value}
+
+
 class IDocumentViewerSettings(Interface):
     width = schema.Int(
         title=_("Viewer Width"),
         description=_("Leave blank to take full width."),
-        defaultFactory=default_width,
-        required=False)
+        required=False,
+        **_default(default_width,
+            IGlobalDocumentViewerSettings['width'].default))
     height = schema.Int(
         title=_("Viewer Height"),
-        defaultFactory=default_height,
-        required=False)
+        required=False,
+        **_default(default_height,
+            IGlobalDocumentViewerSettings['height'].default))
     fullscreen = schema.Bool(
         title=_("Fullscreen Viewer"),
         description=_("Default to fullscreen viewer."),
@@ -212,15 +229,18 @@ class IDocumentViewerSettings(Interface):
                       "with the Plone search.  You will need to run conversion again "
                       "for this parameter to be taken into account."
                       ),
-        defaultFactory=default_enable_indexation)
+        **_default(default_enable_indexation,
+            IGlobalDocumentViewerSettings['width'].default))
     show_sidebar = schema.Bool(
         title=_("Show sidebar"),
         description=_("Default to show sidebar."),
         required=False,
-        defaultFactory=default_show_sidebar)
+        **_default(default_show_sidebar,
+            IGlobalDocumentViewerSettings['width'].default))
     show_search = schema.Bool(
         title=_("Show search box"),
-        defaultFactory=default_show_search)
+        **_default(default_show_search,
+            IGlobalDocumentViewerSettings['width'].default))
 
 
 class IUtils(Interface):
