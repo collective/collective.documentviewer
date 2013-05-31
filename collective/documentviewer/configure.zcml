@@ -190,4 +190,6 @@
     replacement=".patches.pt_queue_job"
     preserveOriginal="True" />
 
+  <adapter factory=".adapters.StandardOCRLanguageAdapter" />
+
 </configure>
