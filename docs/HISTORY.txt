@@ -1,6 +1,21 @@
 Changelog
 =========
 
+2.2.2 (unreleased)
+------------------
+
+- added french translations
+  [gbastien]
+
+- added enable_indexation parameter in global and local settings
+  Fixes : https://github.com/collective/collective.documentviewer/issues/21
+  [gbastien]
+
+- make local settings coherent regarding global settings
+  Fixes : https://github.com/collective/collective.documentviewer/issues/22
+  [gbastien]
+
+
 2.2.1 (2013-03-12)
 ------------------
 
