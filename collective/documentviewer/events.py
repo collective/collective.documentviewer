@@ -6,6 +6,6 @@ from collective.documentviewer.interfaces import IConversionFinishedEvent
 class ConversionFinishedEvent(ObjectEvent):
     implements(IConversionFinishedEvent)
 
-    def __init__(self, object, status):
-        self.object = object
+    def __init__(self, obj, status):
+        self.object = obj
         self.status = status
