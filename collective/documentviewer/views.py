@@ -274,6 +274,9 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
         var dv_translated_label_next_annotation = '%(dv_translated_label_next_annotation)s';
         var dv_translated_label_on_page = '%(dv_translated_label_on_page)s';
         var dv_translated_label_for_page = '%(dv_translated_label_for_page)s';
+        var dv_translated_label_original_document = '%(dv_translated_label_original_document)s';
+        var dv_translated_label_contributed_by = '%(dv_translated_label_contributed_by)s';
+        var dv_translated_label_close_fullscreen = '%(dv_translated_label_close_fullscreen)s';
         """
         d = 'collective.documentviewer'
         r = self.request
@@ -305,6 +308,10 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
                                                         default='Next annotation')
         dv_translated_label_on_page = translate('js_label_on_page', domain=d, context=r, default='on page')
         dv_translated_label_for_page = translate('js_label_on_page', domain=d, context=r, default='for page')
+        dv_translated_label_original_document = translate('js_label_original_document', domain=d, context=r, default='Original Document')
+        dv_translated_label_contributed_by = translate('js_label_contributed_by', domain=d, context=r, default='Contributed by:')
+        dv_translated_label_close_fullscreen = translate('js_label_close_fullscreen', domain=d, context=r, default='Close Fullscreen')
+
 
         # escape_for_js
         dv_translated_label_zoom = dv_translated_label_zoom.replace("'", "\\'")
@@ -347,6 +354,9 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
             dv_translated_label_next_annotation=dv_translated_label_next_annotation,
             dv_translated_label_on_page=dv_translated_label_on_page,
             dv_translated_label_for_page=dv_translated_label_for_page,
+            dv_translated_label_original_document=dv_translated_label_original_document,
+            dv_translated_label_contributed_by=dv_translated_label_contributed_by,
+            dv_translated_label_close_fullscreen=dv_translated_label_close_fullscreen,
         )
 
 

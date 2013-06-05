@@ -89,7 +89,7 @@
                   </div>
                   <div class="field">
                     <label class="formQuestion" for="text" i18n:translate="">
-                      Text
+                      <span i18n:translate="">Text</span>
                       <span class="required" i18n:attributes="title" title="Required" style="color: #f00;">■</span>
                     </label>
                     <div class="formHelp" id="title_help" i18n:translate="">The text for the annotation. Can include html.</div>
