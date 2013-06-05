@@ -173,6 +173,13 @@
     class=".views.BlobView"
     layer=".interfaces.ILayer" />
 
+  <browser:page
+    for="*"
+    name="dv_javascript_variables.js"
+    class=".views.DocumentViewerView"
+    attribute="getTranslatedJSLabels"
+    permission="zope.Public" />
+
   <adapter name="SearchableText" factory=".catalog.SearchableText" />
 
   <monkey:patch
@@ -182,5 +189,7 @@
     original="queue_job"
     replacement=".patches.pt_queue_job"
     preserveOriginal="True" />
+
+  <adapter factory=".adapters.StandardOCRLanguageAdapter" />
 
 </configure>
