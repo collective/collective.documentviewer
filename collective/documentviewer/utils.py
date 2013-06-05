@@ -5,15 +5,16 @@ from collective.documentviewer.config import EXTENSION_TO_ID_MAPPING
 from collective.documentviewer.config import CONVERTABLE_TYPES
 
 
-def getDocumentType(object, allowed_types):
-    ct = object.getContentType()
-    mime_registry = getToolByName(object, 'mimetypes_registry')
+def getDocumentType(obj, allowed_types):
+    ct = obj.getContentType()
+    mime_registry = getToolByName(obj, 'mimetypes_registry')
     for _type in mime_registry.lookup(ct):
         for ext in _type.extensions:
             if ext in EXTENSION_TO_ID_MAPPING:
                 id = EXTENSION_TO_ID_MAPPING[ext]
                 if id in allowed_types:
                     return CONVERTABLE_TYPES[id]
+
     return None
 
 
@@ -31,5 +32,5 @@ def mkdir_p(path):
             raise
 
 
-def getPortal(object):
-    return getToolByName(object, 'portal_url').getPortalObject()
+def getPortal(obj):
+    return getToolByName(obj, 'portal_url').getPortalObject()

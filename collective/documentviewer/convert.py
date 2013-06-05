@@ -84,16 +84,17 @@ class BaseSubProcess(object):
             raise IOError("Unable to find %s binary" % self.bin_name)
 
     def _findbinary(self):
-        import os
         if 'PATH' in os.environ:
             path = os.environ['PATH']
             path = path.split(os.pathsep)
         else:
             path = self.default_paths
-        for dir in path:
-            fullname = os.path.join(dir, self.bin_name)
+
+        for directory in path:
+            fullname = os.path.join(directory, self.bin_name)
             if os.path.exists(fullname):
                 return fullname
+
         return None
 
     def _run_command(self, cmd):
@@ -133,8 +134,8 @@ class MD5SubProcess(BaseSubProcess):
 
     def get(self, filepath):
         cmd = [self.binary, filepath]
-        hash = self._run_command(cmd)
-        return hash.split('=')[1].strip()
+        hashval = self._run_command(cmd)
+        return hashval.split('=')[1].strip()
 
 try:
     md5 = MD5SubProcess()
@@ -155,8 +156,8 @@ class MD5SumSubProcess(BaseSubProcess):
 
     def get(self, filepath):
         cmd = [self.binary, filepath]
-        hash = self._run_command(cmd)
-        return hash.split('  ')[0].strip()
+        hashval = self._run_command(cmd)
+        return hashval.split('  ')[0].strip()
 
 try:
     if md5 is None:
@@ -227,6 +228,7 @@ class DocSplitSubProcess(BaseSubProcess):
             dest = os.path.join(output_dir, name)
             if os.path.exists(dest):
                 shutil.rmtree(dest)
+
             source = os.path.join(output_dir, '%ix' % size)
             shutil.move(source, dest)
 
@@ -273,8 +275,9 @@ class DocSplitSubProcess(BaseSubProcess):
             # We do this in order to keep track of the files being created
             # and used...
             raise Exception("Error converting to pdf")
+
         converted_path = os.path.join(output_dir,
-            [f for f in files - orig_files][0])
+                                      [f for f in files - orig_files][0])
         shutil.move(converted_path, os.path.join(output_dir, DUMP_FILENAME))
 
     def convert(self, output_dir, inputfilepath=None, filedata=None,
@@ -282,9 +285,11 @@ class DocSplitSubProcess(BaseSubProcess):
                 ocr=True, detect_text=True, format='gif', filename=None):
         if inputfilepath is None and filedata is None:
             raise Exception("Must provide either filepath or filedata params")
+
         path = os.path.join(output_dir, DUMP_FILENAME)
         if os.path.exists(path):
             os.remove(path)
+
         if inputfilepath is not None:
             # copy file to be able to work with.
             shutil.copy(inputfilepath, path)
@@ -292,6 +297,7 @@ class DocSplitSubProcess(BaseSubProcess):
             fi = open(path, 'wb')
             fi.write(filedata)
             fi.close()
+
         if converttopdf:
             self.convert_to_pdf(path, filename, output_dir)
 
@@ -300,8 +306,10 @@ class DocSplitSubProcess(BaseSubProcess):
             if textChecker.has(path):
                 logger.info('Text already found in pdf. Skipping OCR.')
                 ocr = False
+
         if enable_indexation:
             self.dump_text(path, output_dir, ocr)
+
         num_pages = self.get_num_pages(path)
 
         os.remove(path)
@@ -365,11 +373,11 @@ class Converter(object):
         if self.gsettings.storage_type == 'Blob':
             storage_dir = tempfile.mkdtemp()
         else:
-            storage_dir = storage.getResourceDirectory(
-                gsettings=self.gsettings,
-                settings=self.settings)
+            storage_dir = storage.getResourceDirectory(gsettings=self.gsettings,
+                                                       settings=self.settings)
             if not os.path.exists(storage_dir):
                 mkdir_p(storage_dir)
+
         return storage_dir
 
     def run_conversion(self):
@@ -389,6 +397,7 @@ class Converter(object):
             args['filedata'] = str(field.get(context).data)
         else:
             args['inputfilepath'] = self.blob_filepath
+
         return docsplit.convert(self.storage_dir, **args)
 
     def index_pdf(self, pages, catalog):
@@ -416,11 +425,13 @@ class Converter(object):
                     filepath = os.path.join(path, filename)
                     filename = '%s/%s' % (size, filename)
                     files[filename] = saveFileToBlob(filepath)
+
             textfilespath = os.path.join(storage_dir, TEXT_REL_PATHNAME)
             for filename in os.listdir(textfilespath):
                 filepath = os.path.join(textfilespath, filename)
                 filename = '%s/%s' % (TEXT_REL_PATHNAME, filename)
                 files[filename] = saveFileToBlob(filepath)
+
             settings.blob_files = files
             shutil.rmtree(storage_dir)
 
@@ -469,6 +480,7 @@ class Converter(object):
         current = self.context.getLayout()
         if current != 'documentviewer':
             self.context.layout = 'documentviewer'
+
         annotations = IAnnotations(self.context)
         # remove page turner related
         data = annotations.get('wc.pageturner', None)
@@ -490,6 +502,7 @@ class Converter(object):
             if perm['name'] == 'Anonymous' and perm["selected"] != "":
                 can = True
                 break
+
         return can
 
     def handleFileObfuscation(self):
@@ -507,6 +520,7 @@ class Converter(object):
         settings = self.settings
         if not settings.obfuscate_secret:
                 settings.obfuscate_secret = str(random.randint(1, 9999999999))
+
         storage_dir = self.storage_dir
         secret_dir = os.path.join(storage_dir,
                                   settings.obfuscate_secret)
@@ -523,11 +537,13 @@ class Converter(object):
                     return
             else:
                 mkdir_p(secret_dir)
+
             for folder in os.listdir(storage_dir):
                 path = os.path.join(storage_dir, folder)
                 if not os.path.isdir(path) or \
                         folder == settings.obfuscate_secret:
                     continue
+
                 newpath = os.path.join(secret_dir, folder)
                 shutil.move(path, newpath)
         else:
@@ -558,12 +574,14 @@ class Converter(object):
                 # let's sync before we save the changes
                 self.sync_db()
                 savepoint = self.savepoint()
+
             catalog = None
             # regarding enable_indexation, either take the value on the context
             # if it exists or take the value from the global settings
             if self.isIndexationEnabled():
                 catalog = CatalogFactory()
                 self.index_pdf(pages, catalog)
+
             settings.catalog = catalog
             self.context.reindexObject(idxs=['SearchableText'])
             self.handle_storage()
@@ -580,6 +598,7 @@ class Converter(object):
         except Exception, ex:
             if savepoint is not None:
                 savepoint.rollback()
+
             logger.exception('Error converting PDF:\n%s\n%s' % (
                 getattr(ex, 'message', ''),
                 traceback.format_exc()))
@@ -587,6 +606,7 @@ class Converter(object):
             settings.exception_msg = getattr(ex, 'message', '')
             settings.exception_traceback = traceback.format_exc()
             result = 'failure'
+
         notify(ConversionFinishedEvent(self.context, result))
         settings.last_updated = DateTime().ISO8601()
         settings.converting = False
