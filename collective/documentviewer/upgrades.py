@@ -28,26 +28,26 @@ def convert_all(context):
     portal = getSite()
     gsettings = GlobalSettings(portal)
     for brain in catalog(object_provides=IFileContent.__identifier__):
-        file = brain.getObject()
+        file_item = brain.getObject()
 
-        if not allowedDocumentType(file,
+        if not allowedDocumentType(file_item,
                 gsettings.auto_layout_file_types):
             continue
 
         # let's not switch to the document viewer view
         # until the document is converted. The conversion
         # process will check if the layout is set correctly.
-        if file.getLayout() != 'documentviewer':
-            settings = Settings(file)
+        if file_item.getLayout() != 'documentviewer':
+            settings = Settings(file_item)
             settings.last_updated = DateTime('1999/01/01').ISO8601()
-            queueJob(file)
+            queueJob(file_item)
         else:
-            settings = Settings(file)
+            settings = Settings(file_item)
             # also convert if there was an error.
             if settings.successfully_converted == False:
                 settings.last_updated = DateTime('1999/01/01').ISO8601()
                 settings.filehash = ''
-                queueJob(file)
+                queueJob(file_item)
 
 
 def migrate_old_storage(context):
@@ -55,9 +55,9 @@ def migrate_old_storage(context):
     portal = getSite()
     gsettings = GlobalSettings(portal)
     for brain in catalog(object_provides=IFileContent.__identifier__):
-        file = brain.getObject()
+        file_item = brain.getObject()
         if file.getLayout() == 'documentviewer':
-            settings = Settings(file)
+            settings = Settings(file_item)
             if settings.storage_version == 1:
                 if settings.storage_type == 'File':
                     current_location = storage.getResourceDirectory(
@@ -66,6 +66,7 @@ def migrate_old_storage(context):
                         raise Exception(
                             "oops, can't find storage location %s" % (
                                 current_location))
+
                     settings.storage_version = STORAGE_VERSION
                     new_location = storage.getResourceDirectory(
                         gsettings=gsettings, settings=settings)
@@ -98,6 +99,7 @@ def upgrade_to_1_2(context):
             methods = list(_type.view_methods)
             if old_display in methods:
                 methods.remove(old_display)
+
             methods.append('dvpdf-group-view')
             _type.view_methods = tuple(set(methods))
 

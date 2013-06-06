@@ -30,9 +30,9 @@ CONVERTABLE_TYPES = {
 
 EXTENSION_TO_ID_MAPPING = {}
 
-for id, doc in CONVERTABLE_TYPES.items():
+for type_id, doc in CONVERTABLE_TYPES.items():
     for ext in doc.extensions:
-        EXTENSION_TO_ID_MAPPING[ext] = id
+        EXTENSION_TO_ID_MAPPING[ext] = type_id
 
 
 GROUP_VIEW_DISPLAY_TYPES = (

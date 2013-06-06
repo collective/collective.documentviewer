@@ -41,10 +41,10 @@ class JobRunner(object):
     queue before adding it to the queue
     """
 
-    def __init__(self, object):
-        self.object = object
+    def __init__(self, obj):
+        self.object = obj
         self.objectpath = self.object.getPhysicalPath()
-        self.portal = getPortal(object)
+        self.portal = getPortal(obj)
         self.portalpath = self.portal.getPhysicalPath()
         self.async = getUtility(IAsyncService)
         self.queue = self.async.getQueues()['']
@@ -130,21 +130,21 @@ class JobRunner(object):
         bucket._data = tuple(jobs)
 
 
-def queueJob(object):
+def queueJob(obj):
     """
     queue a job async if available.
     otherwise, just run normal
     """
-    converter = Converter(object)
+    converter = Converter(obj)
     if not converter.can_convert:
         return
     if asyncInstalled():
         try:
-            runner = JobRunner(object)
+            runner = JobRunner(obj)
             runner.set_quota()
             if runner.already_in_queue:
                 logger.info('object %s already in queue for conversion' % (
-                    repr(object)))
+                    repr(obj)))
             else:
                 runner.queue_it()
             return

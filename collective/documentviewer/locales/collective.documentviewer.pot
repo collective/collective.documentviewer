@@ -410,3 +410,14 @@ msgstr ""
 msgid "js_label_for_page"
 msgstr ""
 
+#. Default: "Original Document"
+msgid "js_label_original_document"
+msgstr ""
+
+#. Default: "Contributed by:"
+msgid "js_label_contributed_by"
+msgstr ""
+
+#. Default: "Close Fullscreen"
+msgid "js_label_close_fullscreen"
+msgstr ""

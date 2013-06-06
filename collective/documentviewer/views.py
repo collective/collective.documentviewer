@@ -159,16 +159,19 @@ class DocumentViewerView(BrowserView):
             contributor = self.global_settings.override_contributor
         else:
             contributor = self.context.Creator()
+
         if self.global_settings.override_organization:
             organization = self.global_settings.override_organization
         else:
             organization = self.site.title
+
         image_format = self.settings.pdf_image_format
         if not image_format:
             # oops, this wasn't set like it should have been
             # on alpha release. We'll default back to global
             # setting.
             image_format = self.global_settings.pdf_image_format
+
         return {
             'access': 'public',
             'annotations': self.annotations(),
@@ -211,6 +214,7 @@ class DocumentViewerView(BrowserView):
             width = "jQuery('#DV-container').width()"
         else:
             width = str(width)
+
         sidebar = either(self.settings.show_sidebar,
                          self.global_settings.show_sidebar)
         search = either(self.settings.show_search,
@@ -270,6 +274,9 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
         var dv_translated_label_next_annotation = '%(dv_translated_label_next_annotation)s';
         var dv_translated_label_on_page = '%(dv_translated_label_on_page)s';
         var dv_translated_label_for_page = '%(dv_translated_label_for_page)s';
+        var dv_translated_label_original_document = '%(dv_translated_label_original_document)s';
+        var dv_translated_label_contributed_by = '%(dv_translated_label_contributed_by)s';
+        var dv_translated_label_close_fullscreen = '%(dv_translated_label_close_fullscreen)s';
         """
         d = 'collective.documentviewer'
         r = self.request
@@ -301,6 +308,10 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
                                                         default='Next annotation')
         dv_translated_label_on_page = translate('js_label_on_page', domain=d, context=r, default='on page')
         dv_translated_label_for_page = translate('js_label_on_page', domain=d, context=r, default='for page')
+        dv_translated_label_original_document = translate('js_label_original_document', domain=d, context=r, default='Original Document')
+        dv_translated_label_contributed_by = translate('js_label_contributed_by', domain=d, context=r, default='Contributed by:')
+        dv_translated_label_close_fullscreen = translate('js_label_close_fullscreen', domain=d, context=r, default='Close Fullscreen')
+
 
         # escape_for_js
         dv_translated_label_zoom = dv_translated_label_zoom.replace("'", "\\'")
@@ -343,6 +354,9 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
             dv_translated_label_next_annotation=dv_translated_label_next_annotation,
             dv_translated_label_on_page=dv_translated_label_on_page,
             dv_translated_label_for_page=dv_translated_label_for_page,
+            dv_translated_label_original_document=dv_translated_label_original_document,
+            dv_translated_label_contributed_by=dv_translated_label_contributed_by,
+            dv_translated_label_close_fullscreen=dv_translated_label_close_fullscreen,
         )
 
 
@@ -358,6 +372,7 @@ class DocumentViewerSearchView(BrowserView):
                 "results": list(results[1]),
                 "query": query
                 })
+
         return json.dumps({"results": [], "query": query})
 
 
@@ -378,6 +393,7 @@ class SettingsForm(form.EditForm):
         if errors:
             self.status = self.formErrorsMessage
             return
+
         self.applyChanges(data)
 
         url = getMultiAdapter((self.context, self.request),
@@ -402,6 +418,7 @@ class GlobalSettingsForm(form.EditForm):
         if errors:
             self.status = self.formErrorsMessage
             return
+
         self.applyChanges(data)
 
         self.status = PloneMessageFactory('Changes saved.')
@@ -477,6 +494,7 @@ class Utils(BrowserView):
         storage_loc = gsettings.storage_location
         if not os.path.exists(storage_loc):
             return 'storage location path "%s" does not exist' % storage_loc
+
         catalog = getToolByName(self.context, 'portal_catalog')
         number = self.clean_folder(catalog, storage_loc)
         return 'cleaned %i' % number
@@ -504,6 +522,7 @@ class Convert(Utils):
                                                 name=u"authenticator")
                 if not authenticator.verify():
                     raise Unauthorized
+
                 settings = Settings(self.context)
                 settings.last_updated = DateTime('1999/01/01').ISO8601()
                 settings.filehash = '--foobar--'
@@ -520,6 +539,7 @@ class Convert(Utils):
                     self.position = JobRunner(self.context).find_position()
                     if self.position > -1:
                         self.converting = True
+
             return super(Convert, self).__call__()
 
         self.request.response.redirect(self.context.absolute_url() + '/view')
@@ -531,6 +551,7 @@ class BlobView(BrowserView):
         sm = getSecurityManager()
         if not sm.checkPermission(permissions.View, self.context.context):
             raise Unauthorized
+
         settings = self.context.settings
         filepath = self.context.filepath
         blob = settings.blob_files[filepath]
@@ -542,6 +563,7 @@ class BlobView(BrowserView):
             ct = 'text/plain'
         else:
             ct = 'image/%s' % ext
+
         self.request.response.setHeader('Last-Modified',
                                         rfc1123_date(self.context._p_mtime))
         self.request.response.setHeader('Accept-Ranges', 'bytes')
@@ -593,6 +615,7 @@ class PDFTraverseBlobFile(SimpleItem):
             if self.previous is not None:
                 # shouldn't be traversing this deep
                 raise NotFound
+
             fi = PDFTraverseBlobFile(self.context, self.settings,
                                      request, name)
             fi.__parent__ = self
@@ -654,16 +677,19 @@ class PDFFiles(SimpleItem, DirectoryResource):
     def publishTraverse(self, request, name):
         if len(self.previous) > 2:
             raise NotFound
+
         if len(name) == 1:
             if len(self.previous) == 0:
                 previous = [name]
             else:
                 previous = self.previous
                 previous.append(name)
+
             self.context.path = os.path.join(self.context.path, name)
             files = PDFFiles(self.context, request, previous)
             files.__parent__ = self
             return files.__of__(self)
+
         if len(self.previous) == 2 and (self.previous[0] != name[0] or
            self.previous[1] != name[1:2]):
             # make sure the first two were a sub-set of the uid
@@ -672,6 +698,7 @@ class PDFFiles(SimpleItem, DirectoryResource):
         brains = uidcat(UID=name)
         if len(brains) == 0:
             raise NotFound
+
         fileobj = brains[0].getObject()
         settings = Settings(fileobj)
         if settings.storage_type == 'Blob':
@@ -696,11 +723,14 @@ class GroupView(BrowserView):
                     full_objects=False, path=None):
         if not object:
             object = self.context
+
         opts = {'portal_type': portal_type}
         if path:
             opts['path'] = path
+
         if 'q' in self.request.form and self.search_enabled:
             opts['SearchableText'] = self.request.form['q']
+
         if object.portal_type == 'Topic':
             res = object.queryCatalog(self.request, batch=True, **opts)
         else:
@@ -711,10 +741,8 @@ class GroupView(BrowserView):
         return res
 
     def results(self, portal_type=('File',)):
-        result = {}
         types = ('Folder', 'Large Plone Folder') + portal_type
         return self.getContents(portal_type=types)
-        return result
 
     def get_files(self, obj, portal_type=('File',)):
         #Handle brains or objects
@@ -722,6 +750,7 @@ class GroupView(BrowserView):
             path = obj.getPath()
         else:
             path = '/'.join(obj.getPhysicalPath())
+
         # Explicitly set path to remove default depth
         return self.getContents(object=obj, portal_type=portal_type, path=path)
 
@@ -730,6 +759,7 @@ class GroupView(BrowserView):
         if self.context.portal_type == 'Topic':
             if self.context.getLimitNumber():
                 return self.context.getItemCount()
+
         return self.global_settings.group_view_batch_size
 
     def __call__(self):
@@ -747,6 +777,7 @@ class GroupView(BrowserView):
     def get_thumb(self, obj):
         if not obj:
             return None
+
         resource_rel = storage.getResourceRelURL(obj=obj)
         if self.resource_url:
             dvpdffiles = '%s/%s' % (self.resource_url.rstrip('/'),
@@ -760,6 +791,7 @@ class GroupView(BrowserView):
                 image_format = settings.pdf_image_format
                 if not image_format:
                     image_format = self.global_settings.pdf_image_format
+
                 return '%s/small/%s_1.%s' % (dvpdffiles, self.dump_path,
                                              image_format)
             else:
@@ -798,6 +830,7 @@ class AsyncMonitor(BrowserView):
             timerunning = self.time_since(lastused)
         else:
             timerunning = '-'
+
         return {
             'status': job.status,
             'user': job.args[3],
@@ -824,6 +857,7 @@ class AsyncMonitor(BrowserView):
             for job in jobs:
                 if isConversion(job, sitepath):
                     results.append(self.get_job_data(job, sitepath))
+
         return results
 
     def redirect(self):
@@ -840,6 +874,7 @@ class AsyncMonitor(BrowserView):
                                             name=u"authenticator")
             if not authenticator.verify():
                 raise Unauthorized
+
             # find the job
             sitepath = self.context.getPhysicalPath()
             async = getUtility(IAsyncService)
@@ -849,6 +884,7 @@ class AsyncMonitor(BrowserView):
             object = self.context.restrictedTraverse(str(objpath), None)
             if object is None:
                 return self.redirect()
+
             objpath = object.getPhysicalPath()
 
             jobs = [job for job in queue]
@@ -861,7 +897,9 @@ class AsyncMonitor(BrowserView):
                         settings.converting = False
                     except LookupError:
                         pass
+
                     return self.redirect()
+
         return self.redirect()
 
 
@@ -874,7 +912,9 @@ class MoveJob(BrowserView):
                                             name=u"authenticator")
             if not authenticator.verify():
                 raise Unauthorized
+
             JobRunner(self.context).move_to_front()
+
         return self.request.response.redirect(
             self.context.absolute_url() + '/@@convert-to-documentviewer')
 
@@ -888,15 +928,18 @@ class Annotate(BrowserView):
         if annotations is None:
             annotations = PersistentDict()
             settings.annotations = annotations
+
         sections = settings.sections
         if sections is None:
             sections = PersistentList()
             settings.sections = sections
+
         action = req.form['action']
         if action == 'addannotation':
             page = int(req.form['page'])
             if page not in annotations:
                 annotations[page] = PersistentList()
+
             pageann = annotations[page]
             data = {
                 "id": random.randint(1, 9999999),
@@ -915,8 +958,10 @@ class Annotate(BrowserView):
                     if ann['id'] == id:
                         found = ann
                         break
+
                 if found:
                     annotations.remove(found)
+
         elif action == 'addsection':
             data = {
                 'page': req.form['page'],

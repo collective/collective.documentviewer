@@ -342,6 +342,14 @@ msgstr "Paramètres de la visionneuse"
 msgid "js_label_close"
 msgstr "FERMER"
 
+#. Default: "Close Fullscreen"
+msgid "js_label_close_fullscreen"
+msgstr "Quitter le plein écran"
+
+#. Default: "Contributed by:"
+msgid "js_label_contributed_by"
+msgstr "Contributeur :"
+
 #. Default: "Document"
 msgid "js_label_document"
 msgstr "Document"
@@ -382,6 +390,10 @@ msgstr "sur"
 msgid "js_label_on_page"
 msgstr "sur la page"
 
+#. Default: "Original Document"
+msgid "js_label_original_document"
+msgstr "Document original"
+
 #. Default: "Page"
 msgid "js_label_page"
 msgstr "Page"
@@ -413,3 +425,4 @@ msgstr "Texte"
 #. Default: "Zoom"
 msgid "js_label_zoom"
 msgstr "Zoom"
+

@@ -13,33 +13,34 @@ from collective.documentviewer.convert import Converter
 logger = getLogger('collective.documentviewer')
 
 
-def handle_file_creation(object, event):
-    qi = getToolByName(object, 'portal_quickinstaller')
+def handle_file_creation(obj, event):
+    qi = getToolByName(obj, 'portal_quickinstaller')
     if not qi.isProductInstalled('collective.documentviewer'):
         return
 
-    site = getPortal(object)
+    site = getPortal(obj)
     gsettings = GlobalSettings(site)
 
-    if not allowedDocumentType(object, gsettings.auto_layout_file_types):
+    if not allowedDocumentType(obj, gsettings.auto_layout_file_types):
         return
 
     auto_layout = gsettings.auto_select_layout
-    if auto_layout and object.getLayout() != 'documentviewer':
-        object.setLayout('documentviewer')
+    if auto_layout and obj.getLayout() != 'documentviewer':
+        obj.setLayout('documentviewer')
 
-    if object.getLayout() == 'documentviewer' and gsettings.auto_convert:
-        queueJob(object)
+    if obj.getLayout() == 'documentviewer' and gsettings.auto_convert:
+        queueJob(obj)
 
 
-def handle_workflow_change(object, event):
-    settings = Settings(object)
-    site = getPortal(object)
+def handle_workflow_change(obj, event):
+    settings = Settings(obj)
+    site = getPortal(obj)
     gsettings = GlobalSettings(site)
     if not gsettings.storage_obfuscate or \
             settings.storage_type != 'File':
         return
-    for perm in object.rolesOfPermission("View"):
+
+    for perm in obj.rolesOfPermission("View"):
         if perm['name'] == 'Anonymous' and perm["selected"] != "":
             # anon can now view, move it to normal
             storage_dir = storage_dir = storage.getResourceDirectory(
@@ -49,13 +50,16 @@ def handle_workflow_change(object, event):
             if not os.path.exists(secret_dir):
                 # already public, oops
                 return
+
             for folder in os.listdir(secret_dir):
                 path = os.path.join(secret_dir, folder)
                 newpath = os.path.join(storage_dir, folder)
                 shutil.move(path, newpath)
+
             shutil.rmtree(secret_dir)
             settings.obfuscated_filepath = False
             return
+
     # if we made it here, the item might have been switched back
     # to being unpublished. Let's just get the converter object
     # and re-move it

@@ -2,6 +2,7 @@ try:
     from zope.app.component.hooks import getSite
 except ImportError:
     from zope.component.hooks import getSite
+
 from Products.CMFCore.utils import getToolByName
 
 
@@ -9,6 +10,7 @@ def dvInstalled():
     qi = getToolByName(getSite(), 'portal_quickinstaller', None)
     if qi is None:
         return False
+
     return qi.isProductInstalled('collective.documentviewer')
 
 

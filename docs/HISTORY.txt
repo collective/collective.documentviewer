@@ -4,6 +4,9 @@ Changelog
 2.2.2b3 (2013-05-31)
 --------------------
 
+- i18n fixes + french translations
+  [thomasdesvenain]
+
 - support to pass a document language to tesseract/docsplit based on a
   configurable adapter implementing IOCRLanguage
   [ajung]

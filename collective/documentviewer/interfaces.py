@@ -24,8 +24,8 @@ class ILayer(Interface):
 
 FILE_TYPES_VOCAB = []
 
-for id, doc in CONVERTABLE_TYPES.items():
-    FILE_TYPES_VOCAB.append(SimpleTerm(id, id, doc.name))
+for type_id, doc in CONVERTABLE_TYPES.items():
+    FILE_TYPES_VOCAB.append(SimpleTerm(type_id, type_id, doc.name))
 
 
 class IGlobalDocumentViewerSettings(Interface):
