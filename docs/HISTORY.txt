@@ -15,7 +15,7 @@ Changelog
 2.2.2b2 (2013-05-31)
 --------------------
 
-- fix bug when using blob storage and text indexing is diabled
+- fix bug when using blob storage and text indexing is disabled
   [gbastien]
 
 
