@@ -88,7 +88,7 @@
                     <input type="text" id="title" size="30" maxlength="255" />
                   </div>
                   <div class="field">
-                    <label class="formQuestion" for="text" i18n:translate="">
+                    <label class="formQuestion" for="text">
                       <span i18n:translate="">Text</span>
                       <span class="required" i18n:attributes="title" title="Required">&nbsp;</span>
                     </label>
@@ -124,8 +124,8 @@
                   <input type="text" id="section-title" size="30" maxlength="255" />
                 </div>
                 <div class="field">
-                  <label class="formQuestion" for="section-page" i18n:translate="">
-                    Page
+                  <label class="formQuestion" for="section-page">
+                    <span i18n:translate="">Page</span>
                     <span class="required" i18n:attributes="title" title="Required">&nbsp;</span>
                   </label>
                   <div class="formHelp" id="title_help" i18n:translate="">The page the section is for.</div>
