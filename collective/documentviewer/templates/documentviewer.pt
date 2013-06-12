@@ -81,7 +81,7 @@
                   <div class="field">
                     <label class="formQuestion" for="title">
                       <span i18n:translate="">Title</span>
-                      <span class="required" i18n:attributes="title" title="Required" style="color: #f00;">■</span>
+                      <span class="required" i18n:attributes="title" title="Required">&nbsp;</span>
                     </label>
                     <div class="formHelp" id="title_help" i18n:translate="">The title of the annotation</div>
                     <div class="fieldErrorBox"></div>
@@ -90,7 +90,7 @@
                   <div class="field">
                     <label class="formQuestion" for="text" i18n:translate="">
                       <span i18n:translate="">Text</span>
-                      <span class="required" i18n:attributes="title" title="Required" style="color: #f00;">■</span>
+                      <span class="required" i18n:attributes="title" title="Required">&nbsp;</span>
                     </label>
                     <div class="formHelp" id="title_help" i18n:translate="">The text for the annotation. Can include html.</div>
                     <div class="fieldErrorBox"></div>
@@ -117,7 +117,7 @@
                 <div class="field">
                   <label class="formQuestion" for="section-title">
                     <span i18n:translate="">Title</span>
-                    <span class="required" i18n:attributes="title" title="Required" style="color: #f00;">■</span>
+                    <span class="required" i18n:attributes="title" title="Required">&nbsp;</span>
                   </label>
                   <div class="formHelp" id="title_help" i18n:translate="">The title of the section</div>
                   <div class="fieldErrorBox"></div>
@@ -126,7 +126,7 @@
                 <div class="field">
                   <label class="formQuestion" for="section-page" i18n:translate="">
                     Page
-                    <span class="required" i18n:attributes="title" title="Required" style="color: #f00;">■</span>
+                    <span class="required" i18n:attributes="title" title="Required">&nbsp;</span>
                   </label>
                   <div class="formHelp" id="title_help" i18n:translate="">The page the section is for.</div>
                   <div class="fieldErrorBox"></div>
