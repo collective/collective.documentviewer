@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: collective.documentviewer\n"
 "POT-Creation-Date: 2013-05-08 15:00-100\n"
-"PO-Revision-Date: 2013-05-22 16:33+0100\n"
+"PO-Revision-Date: 2013-06-12 13:17+0100\n"
 "Last-Translator: Mikel Larreategi <mlarreategi@codesyntax.com>\n"
 "Language-Team: eu <eu@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,6 +26,10 @@ msgstr "Gehitu"
 #. Default: "Add Annotation"
 msgid "Add Annotation"
 msgstr "Oharra gehitu"
+
+#. Default: "Add Section"
+msgid "Add Section"
+msgstr "Sekzioa gehitu"
 
 #. Default: "Are you sure you want to convert this to document viewer?"
 msgid "Are you sure you want to convert this to document viewer?"
@@ -79,6 +83,10 @@ msgstr "Bihurtzen"
 msgid "Current Annotations"
 msgstr "Orain dauden oharrak"
 
+#. Default: "Current Sections"
+msgid "Current Sections"
+msgstr "Uneko sekzioak"
+
 #. Default: "Default height to use for viewer (only for non-fullscreen mode)."
 msgid "Default height to use for viewer (only for non-fullscreen mode)."
 msgstr "Bisorearen defektuzko altuera (pantaila osoko modutik kanpo)"
@@ -131,6 +139,14 @@ msgstr "Pantaila osoko bisorea"
 msgid "Group View Batch Size"
 msgstr "Taldekatutako bistaren multzoaren tamaina"
 
+#. Default: "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search.  You will need to run conversion again for this parameter to be taken into account."
+msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search.  You will need to run conversion again for this parameter to be taken into account."
+msgstr "Aktibatuta badago, PDFtik testua erauzi eta Ploneren bilatzailea bilatu ahalko duzu. Konbertsioa berriz abiarazi beharko duzu aktibatu aurreko dokumentuen testuak erauzteko."
+
+#. Default: "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search. If this is disabled, the two following parameters 'OCR' and 'Detect text' are not taken into account.  Take care that this will not make already converted elements searchable/not searchable, you will have to convert existing element yourself."
+msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search. If this is disabled, the two following parameters 'OCR' and 'Detect text' are not taken into account.  Take care that this will not make already converted elements searchable/not searchable, you will have to convert existing element yourself."
+msgstr "Aktibatuta badago, PDFtik testua erauzi eta Ploneren bilatzailea bilatu ahalko duzu. Desaktibatuta badago, jarraian datozen 'OCR' eta 'Testua detekatu' parametroak ez dira kontuak hartuko. Konbertsioa berriz abiarazi beharko duzu aktibatu aurreko dokumentuen testuak erauzteko."
+
 #. Default: "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
 msgid "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
 msgstr "Zure fitxategiak beste zerbitzari batera sinkronizatu behar badituzu handik PDFak zerbitzatzeko, adierazi hemen bidearen oinarria."
@@ -150,6 +166,10 @@ msgstr "Utzi hutsik zabalera guztia hartzeko."
 #. Default: "Loading"
 msgid "Loading"
 msgstr "Kargatzen"
+
+#. Default: "Make searchable"
+msgid "Make searchable"
+msgstr "Bilaketa aktibatu"
 
 #. Default: "Manage Annotations"
 msgid "Manage Annotations"
@@ -207,6 +227,10 @@ msgstr "Orrialdea:"
 msgid "Required"
 msgstr "Beharrezkoa"
 
+#. Default: "Save"
+msgid "Save"
+msgstr "Gorde"
+
 #. Default: "Show search box"
 msgid "Show search box"
 msgstr "Bilaketa kutxa erakutsi"
@@ -218,6 +242,10 @@ msgstr "Bilaketa erakutsi mult"
 #. Default: "Show sidebar"
 msgid "Show sidebar"
 msgstr "Aldameneko barra erakutsi"
+
+#. Default: "Since you do not have docsplit installed on this system, we can not render the pages of this document."
+msgid "Since you do not have docsplit installed on this system, we can not render the pages of this document."
+msgstr "Sisteman docsplit instalatu gabe duzunez, ezin dira dokumentuaren orrialdeak erakutsi."
 
 #. Default: "Storage Type"
 msgid "Storage Type"
@@ -235,6 +263,14 @@ msgstr "Testua"
 msgid "The Document Viewer requires that you enable Javascript."
 msgstr "Dokumentuen bisorea ikusteko Javascript aktibatuta izan behar duzu."
 
+#. Default: "The document is currently being converted to the Document Viewer view."
+msgid "The document is currently being converted to the Document Viewer view."
+msgstr "Dokumentua Dokumentu bisorera egokitzen ari da."
+
+#. Default: "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
+msgid "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
+msgstr "Fitxategi hau ezin da erakutsi. Fitxategi-mota hau erakutsi daitekeen ala ez jakiteko begiratu dokumentu bisorearen ezarpenak."
+
 #. Default: "The page the section is for."
 msgid "The page the section is for."
 msgstr "Sekzioa zein orrialderentzako den."
@@ -246,6 +282,18 @@ msgstr "Oharraren testua. HTMLa izan dezake"
 #. Default: "The title of the annotation"
 msgid "The title of the annotation"
 msgstr "Oharraren izenburua."
+
+#. Default: "The title of the section"
+msgid "The title of the section"
+msgstr "Sekzioaren izenburua"
+
+#. Default: "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
+msgid "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
+msgstr "Errorea gertatu da dokumentua bihurtzean. Dokumentua enkriptatuta, hondatuta edo izorratuta egon daiteke. Begiratu log fitxategia datu gehiago lortzeko."
+
+#. Default: "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
+msgid "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
+msgstr "Dokumentua ez dago bisorean erakusteko prest. Egin klik akzioen menuko \"Dokumentu Bisorera Bihurtu\" aukeran bihurtzeko."
 
 #. Default: "This file is currently being converted to document viewer."
 msgid "This file is currently being converted to document viewer."
@@ -290,4 +338,92 @@ msgstr "Dokumentu bisorearen ezarpen globalak"
 #. Default: "Document Viewer Settings"
 msgid "heading_documentviewer_settings_form"
 msgstr "Dokumentu bisorearen ezarpenak"
+
+#. Default: "CLOSE"
+msgid "js_label_close"
+msgstr "ITXI"
+
+#. Default: "Close Fullscreen"
+msgid "js_label_close_fullscreen"
+msgstr "Pantaila osoa itxi"
+
+#. Default: "Contributed by:"
+msgid "js_label_contributed_by"
+msgstr "Sortzailea:"
+
+#. Default: "Document"
+msgid "js_label_document"
+msgstr "Dokumentua"
+
+#. Default: "for"
+msgid "js_label_for"
+msgstr "Bilatutakoa:"
+
+#. Default: "for page"
+msgid "js_label_for_page"
+msgstr "orrialdea"
+
+#. Default: "Link to this note"
+msgid "js_label_link_to_note"
+msgstr "Ohar honetarako lotura"
+
+#. Default: "Loading"
+msgid "js_label_loading"
+msgstr "Kargatzen..."
+
+#. Default: "Next"
+msgid "js_label_next"
+msgstr "Hurrengoa"
+
+#. Default: "Next annotation"
+msgid "js_label_next_annotation"
+msgstr "Hurrengo oharra"
+
+#. Default: "Notes"
+msgid "js_label_notes"
+msgstr "Oharrak"
+
+#. Default: "of"
+msgid "js_label_of"
+msgstr "/"
+
+#. Default: "on page"
+msgid "js_label_on_page"
+msgstr "orrialdea"
+
+#. Default: "Original Document"
+msgid "js_label_original_document"
+msgstr "Jatorrizko dokumentua"
+
+#. Default: "Page"
+msgid "js_label_page"
+msgstr "Orrialdea"
+
+#. Default: "Pages"
+msgid "js_label_pages"
+msgstr "Orrialdeak"
+
+#. Default: "Previous"
+msgid "js_label_previous"
+msgstr "Aurrekoa"
+
+#. Default: "Previous annotation"
+msgid "js_label_previous_annotation"
+msgstr "Aurreko oharra"
+
+#. Default: "Remove"
+msgid "js_label_remove"
+msgstr "Ezabatu"
+
+#. Default: "Search"
+msgid "js_label_search"
+msgstr "Bilatu"
+
+#. Default: "Text"
+msgid "js_label_text"
+msgstr "Testua"
+
+#. Default: "Zoom"
+msgid "js_label_zoom"
+msgstr "Zooma"
 
