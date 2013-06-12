@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: collective.documentviewer\n"
-"POT-Creation-Date: 2013-05-08 15:00-100\n"
-"PO-Revision-Date: 2013-06-12 13:17+0100\n"
+"POT-Creation-Date: 2013-06-12 13:42+0000\n"
+"PO-Revision-Date: 2013-06-12 15:52+0100\n"
 "Last-Translator: Mikel Larreategi <mlarreategi@codesyntax.com>\n"
 "Language-Team: eu <eu@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,414 +16,433 @@ msgstr ""
 "X-Poedit-Language: Basque\n"
 
 #. Default: "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
+#: ./interfaces.py:59
 msgid "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
 msgstr "*probakoa * Fitxategiak web zerbitzari bat erabiliz zerbitzatzen ari bazara, ez dago fitxategi horiengan baimen egiaztapenik egiteko modurik. Aukera hau erabiliz fitxategientzat erabiliko diren bideak asmatzeko zailagoak izango dira eta inoiz ez dira argitaratuko. Zure zerbitzaria karpeten edukiak ez zerrendatzeko konfiguratu behar duzu. *Honek zer egiten duen ez badakizu, EZ AKTIBATU*."
 
-#. Default: "Add"
+#: ./templates/documentviewer.pt:100
 msgid "Add"
 msgstr "Gehitu"
 
 #. Default: "Add Annotation"
+#: ./templates/documentviewer.pt:77
 msgid "Add Annotation"
 msgstr "Oharra gehitu"
 
-#. Default: "Add Section"
+#: ./templates/documentviewer.pt:115
 msgid "Add Section"
 msgstr "Sekzioa gehitu"
 
 #. Default: "Are you sure you want to convert this to document viewer?"
+#: ./templates/converting.pt:18
 msgid "Are you sure you want to convert this to document viewer?"
 msgstr "Dokumentu bisorera bihurtu nahi duzu dokumentu hau?"
 
 #. Default: "Async Quota Size"
+#: ./interfaces.py:160
 msgid "Async Quota Size"
 msgstr "Kuota asinkronoaren tamaina"
 
 #. Default: "Auto Convert"
+#: ./interfaces.py:110
 msgid "Auto Convert"
 msgstr "Automatikoki bihurtu"
 
 #. Default: "Auto layout file types"
+#: ./interfaces.py:102
 msgid "Auto layout file types"
 msgstr "Fitxategi mota hauek automatikoki itxuratu"
 
 #. Default: "Auto select layout"
+#: ./interfaces.py:98
 msgid "Auto select layout"
 msgstr "Itxura automatikoki aukeratu"
 
 #. Default: "Automatically convert files on creation and modification."
+#: ./interfaces.py:111
 msgid "Automatically convert files on creation and modification."
 msgstr "Sortu eta aldatzean automatikoki bihurtu"
 
 #. Default: "Blob storage using the normal ZODB blob mechanism. File storage is for just storage the files on the file system with no hard reference on write to the ZODB. This allows you to easily push the files to be served off-site."
+#: ./interfaces.py:43
 msgid "Blob storage using the normal ZODB blob mechanism. File storage is for just storage the files on the file system with no hard reference on write to the ZODB. This allows you to easily push the files to be served off-site."
 msgstr "Blobak erabiliz gorde Ploneren ohiko mekanismoa erabiliz. Fitxategietan gordez gero fitxategi sisteman gordetzen da eta Ploneren datu-basean erreferentzia besterik ez da gordetzen. Honek Plonetik kanpo fitxategiak era erraz baten zerbitzatzeko aukera ematen dizu."
 
 #. Default: "Click and drag an area of the image to select where the annotation should be."
+#: ./templates/documentviewer.pt:78
 msgid "Click and drag an area of the image to select where the annotation should be."
 msgstr "Egin klik eta marraztu irudiaren zati bat oharra gehitzeko."
 
 #. Default: "Close"
+#: ./templates/documentviewer.pt:66
 msgid "Close"
 msgstr "Itxi"
 
 #. Default: "Convert"
+#: ./templates/converting.pt:23
 msgid "Convert"
 msgstr "Bihurtu"
 
 #. Default: "Convert this to document viewer"
+#: ./templates/converting.pt:17
 msgid "Convert this to document viewer"
 msgstr "Dokumentu bisorera bihurtu"
 
 #. Default: "Converting"
+#: ./templates/converting.pt:27
 msgid "Converting"
 msgstr "Bihurtzen"
 
-#. Default: "Current Annotations"
+#: ./templates/documentviewer.pt:106
 msgid "Current Annotations"
-msgstr "Orain dauden oharrak"
+msgstr "Oraingo oharrak"
 
-#. Default: "Current Sections"
+#: ./templates/documentviewer.pt:142
 msgid "Current Sections"
-msgstr "Uneko sekzioak"
+msgstr "Oraingo sekzioak"
 
 #. Default: "Default height to use for viewer (only for non-fullscreen mode)."
+#: ./interfaces.py:140
 msgid "Default height to use for viewer (only for non-fullscreen mode)."
 msgstr "Bisorearen defektuzko altuera (pantaila osoko modutik kanpo)"
 
 #. Default: "Default to fullscreen viewer."
+#: ./interfaces.py:223
 msgid "Default to fullscreen viewer."
 msgstr "Defektuz pantaila osoko bisorea erabili."
 
 #. Default: "Default to show sidebar on Document Viewer."
+#: ./interfaces.py:145
 msgid "Default to show sidebar on Document Viewer."
 msgstr "Dokumentuen bisorean defektuz aldameneko barra erakutsi"
 
 #. Default: "Default to show sidebar."
+#: ./interfaces.py:236
 msgid "Default to show sidebar."
 msgstr "Defektuz aldameneko barra erakuktsi"
 
 #. Default: "Detect if pdf has text before performing OCR on it. If text is found, ocr will be skipped. If OCR is disabled, text will always try to be retrieved from the PDF file anyways."
+#: ./interfaces.py:92
 msgid "Detect if pdf has text before performing OCR on it. If text is found, ocr will be skipped. If OCR is disabled, text will always try to be retrieved from the PDF file anyways."
 msgstr "PDFak testurik duen detektatu OCRa aplikatu aurretik. Testua badu, OCRa ez da aplikatuko. OCRa desaktibatuta badago, testua PDF fitxategitik zuzenean lortzen saiatuko gara."
 
 #. Default: "Detect text"
+#: ./interfaces.py:91
 msgid "Detect text"
 msgstr "Testua detektatu"
 
+#: ./profiles/default/controlpanel.xml
+msgid "Document Viewer Async Tasks"
+msgstr "Dokumentu bisorearen lan-asinkronoak"
+
+#: ./profiles/default/controlpanel.xml
+msgid "Document Viewer Settings"
+msgstr "Dokumentu bisorearen ezarpenak"
+
 #. Default: "Enable search on group view."
+#: ./interfaces.py:153
 msgid "Enable search on group view."
 msgstr "Taldekatutako bistan bilaketa aktibatu."
 
 #. Default: "Extra types only work with openoffice/libreoffice installed."
+#: ./interfaces.py:103
 msgid "Extra types only work with openoffice/libreoffice installed."
 msgstr "Elementu-mota extrak OpenOffice/LibreOffice instalatuta badago bakarrik dabiltza."
 
 #. Default: "Extract the text from the PDF using OCR technology."
+#: ./interfaces.py:88
 msgid "Extract the text from the PDF using OCR technology."
 msgstr "Testua PDFtik erauzi OCR teknologia aplikatuz."
 
 #. Default: "For folders. Does not apply to topics."
+#: ./interfaces.py:157
 msgid "For folders. Does not apply to topics."
 msgstr "Karpetentzat. Ez da bildumentzat."
 
 #. Default: "For pdf files."
+#: ./interfaces.py:99
 msgid "For pdf files."
 msgstr "PDF fitxategientzat"
 
 #. Default: "Fullscreen Viewer"
+#: ./interfaces.py:222
 msgid "Fullscreen Viewer"
 msgstr "Pantaila osoko bisorea"
 
 #. Default: "Group View Batch Size"
+#: ./interfaces.py:156
 msgid "Group View Batch Size"
 msgstr "Taldekatutako bistaren multzoaren tamaina"
 
 #. Default: "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search.  You will need to run conversion again for this parameter to be taken into account."
+#: ./interfaces.py:227
 msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search.  You will need to run conversion again for this parameter to be taken into account."
 msgstr "Aktibatuta badago, PDFtik testua erauzi eta Ploneren bilatzailea bilatu ahalko duzu. Konbertsioa berriz abiarazi beharko duzu aktibatu aurreko dokumentuen testuak erauzteko."
 
 #. Default: "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search. If this is disabled, the two following parameters 'OCR' and 'Detect text' are not taken into account.  Take care that this will not make already converted elements searchable/not searchable, you will have to convert existing element yourself."
+#: ./interfaces.py:77
 msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search. If this is disabled, the two following parameters 'OCR' and 'Detect text' are not taken into account.  Take care that this will not make already converted elements searchable/not searchable, you will have to convert existing element yourself."
 msgstr "Aktibatuta badago, PDFtik testua erauzi eta Ploneren bilatzailea bilatu ahalko duzu. Desaktibatuta badago, jarraian datozen 'OCR' eta 'Testua detekatu' parametroak ez dira kontuak hartuko. Konbertsioa berriz abiarazi beharko duzu aktibatu aurreko dokumentuen testuak erauzteko."
 
 #. Default: "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
+#: ./interfaces.py:128
 msgid "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
 msgstr "Zure fitxategiak beste zerbitzari batera sinkronizatu behar badituzu handik PDFak zerbitzatzeko, adierazi hemen bidearen oinarria."
 
 #. Default: "Image Format"
+#: ./interfaces.py:68
 msgid "Image Format"
 msgstr "Irudiaren formatua"
 
 #. Default: "Large Image Size"
+#: ./interfaces.py:33
 msgid "Large Image Size"
 msgstr "Irudi handiaren tamaina"
 
 #. Default: "Leave blank to take full width."
+#: ./interfaces.py:135
 msgid "Leave blank to take full width."
 msgstr "Utzi hutsik zabalera guztia hartzeko."
 
-#. Default: "Loading"
+#: ./templates/documentviewer.pt:149
 msgid "Loading"
 msgstr "Kargatzen"
 
 #. Default: "Make searchable"
+#: ./interfaces.py:76
 msgid "Make searchable"
 msgstr "Bilaketa aktibatu"
 
 #. Default: "Manage Annotations"
+#: ./templates/documentviewer.pt:63
 msgid "Manage Annotations"
 msgstr "Oharrak kudeatu"
 
 #. Default: "Manage Sections"
+#: ./templates/documentviewer.pt:64
 msgid "Manage Sections"
 msgstr "Sekzioak kudeatu"
 
 #. Default: "Normal Image Size"
+#: ./interfaces.py:36
 msgid "Normal Image Size"
 msgstr "Irudiaren tamaina arrunta"
 
 #. Default: "Number of conversions to run at a time. The quota name assigned is `dv`."
+#: ./interfaces.py:161
 msgid "Number of conversions to run at a time. The quota name assigned is `dv`."
 msgstr "Aldi berean exekutatu beharreko konbertsio kopurua. Kuotaren izena 'dv' da."
 
 #. Default: "OCR"
+#: ./interfaces.py:87
 msgid "OCR"
 msgstr "OCR"
 
 #. Default: "Obfuscate private file paths"
+#: ./interfaces.py:58
 msgid "Obfuscate private file paths"
 msgstr "Fitxategi pribatuen bideak ezkutatu"
 
 #. Default: "On Document Viewer."
+#: ./interfaces.py:149
 msgid "On Document Viewer."
 msgstr "Dokumentu bisorean."
 
 #. Default: "Only for file storage not with zodb. Plone client must have write access to directory."
+#: ./interfaces.py:54
 msgid "Only for file storage not with zodb. Plone client must have write access to directory."
 msgstr "Ploneren datu-basea erabiltzen ez denerako bakarrik. Ploneren zerbitzuak fitxategi honetan idazteko baimena izan behar du"
 
 #. Default: "Override Base Resource URL"
+#: ./interfaces.py:127
 msgid "Override Base Resource URL"
 msgstr "Errekurtsoen oinarri URLa aldatu"
 
-#. Default: "Override Contributor "
-msgid "Override Contributor "
-msgstr "Partehartzaileak gainidatzi"
+#: ./interfaces.py:115
+msgid "Override Contributor"
+msgstr "Laguntzailea gainidatzi"
 
 #. Default: "Override Contributor Organization"
+#: ./interfaces.py:121
 msgid "Override Contributor Organization"
 msgstr "Erakunde partehartzailea gainidatzi"
 
 #. Default: "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
+#: ./templates/converting.pt:31
 msgid "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
 msgstr "PDFa dokumentu-bisorerako bihurtzen ari da. Uneko bista mantenduko da bihurketa prozesua bukatu arte."
 
+#: ./templates/documentviewer.pt:128
+msgid "Page"
+msgstr "Orrialdea"
+
 #. Default: "Page:"
+#: ./templates/documentviewer.pt:70
 msgid "Page:"
 msgstr "Orrialdea:"
 
 #. Default: "Required"
+#: ./templates/documentviewer.pt:84
 msgid "Required"
 msgstr "Beharrezkoa"
 
 #. Default: "Save"
+#: ./views.py:390
 msgid "Save"
 msgstr "Gorde"
 
 #. Default: "Show search box"
+#: ./interfaces.py:148
 msgid "Show search box"
 msgstr "Bilaketa kutxa erakutsi"
 
 #. Default: "Show search on group view"
+#: ./interfaces.py:152
 msgid "Show search on group view"
 msgstr "Bilaketa erakutsi mult"
 
 #. Default: "Show sidebar"
+#: ./interfaces.py:144
 msgid "Show sidebar"
 msgstr "Aldameneko barra erakutsi"
 
 #. Default: "Since you do not have docsplit installed on this system, we can not render the pages of this document."
+#: ./views.py:98
 msgid "Since you do not have docsplit installed on this system, we can not render the pages of this document."
 msgstr "Sisteman docsplit instalatu gabe duzunez, ezin dira dokumentuaren orrialdeak erakutsi."
 
 #. Default: "Storage Type"
+#: ./interfaces.py:42
 msgid "Storage Type"
 msgstr "Fitxategiak gordetzeko modua"
 
 #. Default: "Storage location"
+#: ./interfaces.py:53
 msgid "Storage location"
 msgstr "Fitxategien kokalekua"
 
 #. Default: "Text"
+#: ./templates/documentviewer.pt:92
 msgid "Text"
 msgstr "Testua"
 
-#. Default: "The Document Viewer requires that you enable Javascript."
+#: ./templates/documentviewer.pt:151
 msgid "The Document Viewer requires that you enable Javascript."
-msgstr "Dokumentuen bisorea ikusteko Javascript aktibatuta izan behar duzu."
+msgstr "Dokumentu-bisorea ikusteko Javascript aktibatu behar duzu."
 
 #. Default: "The document is currently being converted to the Document Viewer view."
+#: ./views.py:106
 msgid "The document is currently being converted to the Document Viewer view."
 msgstr "Dokumentua Dokumentu bisorera egokitzen ari da."
 
+#: ./templates/converting.pt:43
+msgid "The file is active in the Queue."
+msgstr "Fitxategia kolan aktibo dago"
+
 #. Default: "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
+#: ./views.py:123
 msgid "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
 msgstr "Fitxategi hau ezin da erakutsi. Fitxategi-mota hau erakutsi daitekeen ala ez jakiteko begiratu dokumentu bisorearen ezarpenak."
 
-#. Default: "The page the section is for."
-msgid "The page the section is for."
-msgstr "Sekzioa zein orrialderentzako den."
+#: ./templates/converting.pt:41
+msgid "The file is number ${position} in the Queue."
+msgstr "Fitxategia ${position} dago kolan"
 
-#. Default: "The text for the annotation. Can include html."
+#: ./templates/documentviewer.pt:131
+msgid "The page the section is for."
+msgstr "Sekzioa zein orrialderentzat den."
+
+#: ./templates/documentviewer.pt:95
 msgid "The text for the annotation. Can include html."
-msgstr "Oharraren testua. HTMLa izan dezake"
+msgstr "Oharraren testua. HTMLa eduki dezake."
 
 #. Default: "The title of the annotation"
+#: ./templates/documentviewer.pt:86
 msgid "The title of the annotation"
 msgstr "Oharraren izenburua."
 
-#. Default: "The title of the section"
+#: ./templates/documentviewer.pt:122
 msgid "The title of the section"
 msgstr "Sekzioaren izenburua"
 
 #. Default: "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
+#: ./views.py:111
 msgid "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
 msgstr "Errorea gertatu da dokumentua bihurtzean. Dokumentua enkriptatuta, hondatuta edo izorratuta egon daiteke. Begiratu log fitxategia datu gehiago lortzeko."
 
 #. Default: "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
+#: ./views.py:117
 msgid "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
 msgstr "Dokumentua ez dago bisorean erakusteko prest. Egin klik akzioen menuko \"Dokumentu Bisorera Bihurtu\" aukeran bihurtzeko."
 
 #. Default: "This file is currently being converted to document viewer."
+#: ./templates/converting.pt:28
 msgid "This file is currently being converted to document viewer."
 msgstr "Fitxategia dokumentu-bisorerako bihurtzen ari da"
 
 #. Default: "Thumb Image Size"
+#: ./interfaces.py:39
 msgid "Thumb Image Size"
 msgstr "Irudi-txikiaren tamaina"
 
 #. Default: "Title"
+#: ./templates/documentviewer.pt:83
 msgid "Title"
 msgstr "Izenburua"
 
 #. Default: "Viewer Height"
+#: ./interfaces.py:139
 msgid "Viewer Height"
 msgstr "Bisorearen altuera"
 
 #. Default: "Viewer Width"
+#: ./interfaces.py:134
 msgid "Viewer Width"
 msgstr "Bisorearen zabalera"
 
 #. Default: "What to override the contributor field on viewer with.Leave blank to use document owner."
+#: ./interfaces.py:116
 msgid "What to override the contributor field on viewer with.Leave blank to use document owner."
 msgstr "Bisorearen argitaratzailearen eremua gainidatzi honekin. Utzi hutsik dokumentuaren jabea erabiltzeko."
 
 #. Default: "What to override the organization field on viewer with.Leave blank to use site title."
+#: ./interfaces.py:122
 msgid "What to override the organization field on viewer with.Leave blank to use site title."
 msgstr "Bisorearen antolakuntzaren eremua gainidatzi honekin. Utzi hutsik atariaren izenburua erabiltzeko."
 
+#: ./templates/converting.pt:35
+msgid "You may visit ${tag} until the conversion is complete."
+msgstr "${tag} ikusi dezakezu konbertsioa bukatu arte."
+
+#: ./templates/converting.pt:55
+msgid "You might also want to ${url}."
+msgstr "${url} ikusi dezakezu."
+
+#: ./templates/converting.pt:55
+msgid "check it in the process queue"
+msgstr "Prozesuen kola"
+
 #. Default: "Configure the parameters for this Viewer."
+#: ./views.py:412
 msgid "description_documentviewer_global_settings_form"
 msgstr "Bisore honen paremetroak konfiguratu"
 
 #. Default: "These settings override the global settings."
+#: ./views.py:387
 msgid "description_documentviewer_settings_form"
 msgstr "Ezarpen hauek ezarpen-globalak gainidatziko dituzte"
 
 #. Default: "Global Document Viewer Settings"
+#: ./views.py:410
 msgid "heading_documentviewer_global_settings_form"
 msgstr "Dokumentu bisorearen ezarpen globalak"
 
 #. Default: "Document Viewer Settings"
+#: ./views.py:385
 msgid "heading_documentviewer_settings_form"
 msgstr "Dokumentu bisorearen ezarpenak"
 
-#. Default: "CLOSE"
-msgid "js_label_close"
-msgstr "ITXI"
-
-#. Default: "Close Fullscreen"
-msgid "js_label_close_fullscreen"
-msgstr "Pantaila osoa itxi"
-
-#. Default: "Contributed by:"
-msgid "js_label_contributed_by"
-msgstr "Sortzailea:"
-
-#. Default: "Document"
-msgid "js_label_document"
-msgstr "Dokumentua"
-
-#. Default: "for"
-msgid "js_label_for"
-msgstr "Bilatutakoa:"
-
-#. Default: "for page"
-msgid "js_label_for_page"
-msgstr "orrialdea"
-
-#. Default: "Link to this note"
-msgid "js_label_link_to_note"
-msgstr "Ohar honetarako lotura"
-
-#. Default: "Loading"
-msgid "js_label_loading"
-msgstr "Kargatzen..."
-
-#. Default: "Next"
-msgid "js_label_next"
-msgstr "Hurrengoa"
-
-#. Default: "Next annotation"
-msgid "js_label_next_annotation"
-msgstr "Hurrengo oharra"
-
-#. Default: "Notes"
-msgid "js_label_notes"
-msgstr "Oharrak"
-
-#. Default: "of"
-msgid "js_label_of"
-msgstr "/"
-
-#. Default: "on page"
-msgid "js_label_on_page"
-msgstr "orrialdea"
-
-#. Default: "Original Document"
-msgid "js_label_original_document"
-msgstr "Jatorrizko dokumentua"
-
-#. Default: "Page"
-msgid "js_label_page"
-msgstr "Orrialdea"
-
-#. Default: "Pages"
-msgid "js_label_pages"
-msgstr "Orrialdeak"
-
-#. Default: "Previous"
-msgid "js_label_previous"
-msgstr "Aurrekoa"
-
-#. Default: "Previous annotation"
-msgid "js_label_previous_annotation"
-msgstr "Aurreko oharra"
-
-#. Default: "Remove"
-msgid "js_label_remove"
-msgstr "Ezabatu"
-
-#. Default: "Search"
-msgid "js_label_search"
-msgstr "Bilatu"
-
-#. Default: "Text"
-msgid "js_label_text"
-msgstr "Testua"
-
-#. Default: "Zoom"
-msgid "js_label_zoom"
-msgstr "Zooma"
+#: ./templates/converting.pt:35
+msgid "the current file"
+msgstr "Uneko fitxategia"
 
