@@ -30,14 +30,17 @@
     </p>
     <p i18n:translate="">PDF is now being converted to Document Viewer. The current view
        will remain until the conversion process is complete.</p>
-    <p>You may visit
-      <a tal:attributes="href string:${context/absolute_url}/view">the current file</a>
+    <p>
+      <span i18n:translate="" tal:omit-tag="">You may visit
+      <a tal:attributes="href string:${context/absolute_url}/view" i18n:name="tag"
+        i18n:translate="">the current file</a>
       until the conversion is complete.
+      </span>
       <tal:queue tal:condition="python: view.manager and view.async_installed">
-        <tal:pos tal:condition="python: view.position > 0">
-          The file is number <tal:pos tal:replace="view/position" /> in the Queue.
+        <tal:pos tal:condition="python: view.position > 0" i18n:translate="">
+          The file is number <tal:pos tal:replace="view/position" i18n:name="position"/> in the Queue.
         </tal:pos>
-        <tal:pos tal:condition="python: view.position == 0">
+        <tal:pos tal:condition="python: view.position == 0" i18n:translate="">
           The file is active in the Queue.
         </tal:pos>
         <tal:move tal:condition="python: view.position > 1 and view.manager">
@@ -47,9 +50,14 @@
           </form>
         </tal:move>
         <br /><br />
+        <span i18n:translate="" tal:omit-tag="">
         You might also want to
-        <a tal:attributes="href string:${context/portal_url}/@@dvasync-monitor">check
+        <a tal:attributes="href string:${context/portal_url}/@@dvasync-monitor"
+          i18n:name="url"
+          i18n:translate=""
+          >check
           it in the process queue</a>.
+        </span>
       </tal:queue>
     </p>
   </tal:converting>
