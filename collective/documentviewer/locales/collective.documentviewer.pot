@@ -1,7 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: collective.documentviewer\n"
-"POT-Creation-Date: 2013-05-08 15:00-100\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-06-12 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -9,415 +12,369 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
-#. Default: "Large Image Size"
-msgid "Large Image Size"
-msgstr ""
-
-#. Default: "Normal Image Size"
-msgid "Normal Image Size"
-msgstr ""
-
-#. Default: "Thumb Image Size"
-msgid "Thumb Image Size"
-msgstr ""
-
-#. Default: "Storage Type"
-msgid "Storage Type"
-msgstr ""
-
-#. Default: "Blob storage using the normal ZODB blob mechanism. File storage is for just storage the files on the file system with no hard reference on write to the ZODB. This allows you to easily push the files to be served off-site."
-msgid "Blob storage using the normal ZODB blob mechanism. File storage is for just storage the files on the file system with no hard reference on write to the ZODB. This allows you to easily push the files to be served off-site."
-msgstr ""
-
-#. Default: "Storage location"
-msgid "Storage location"
-msgstr ""
-
-#. Default: "Only for file storage not with zodb. Plone client must have write access to directory."
-msgid "Only for file storage not with zodb. Plone client must have write access to directory."
-msgstr ""
-
-#. Default: "Obfuscate private file paths"
-msgid "Obfuscate private file paths"
-msgstr ""
-
-#. Default: "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
+#: ./interfaces.py:59
 msgid "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
 msgstr ""
 
-#. Default: "Image Format"
-msgid "Image Format"
-msgstr ""
-
-#. Default: "OCR"
-msgid "OCR"
-msgstr ""
-
-#. Default: "Extract the text from the PDF using OCR technology."
-msgid "Extract the text from the PDF using OCR technology."
-msgstr ""
-
-#. Default: "Detect text"
-msgid "Detect text"
-msgstr ""
-
-#. Default: "Detect if pdf has text before performing OCR on it. If text is found, ocr will be skipped. If OCR is disabled, text will always try to be retrieved from the PDF file anyways."
-msgid "Detect if pdf has text before performing OCR on it. If text is found, ocr will be skipped. If OCR is disabled, text will always try to be retrieved from the PDF file anyways."
-msgstr ""
-
-#. Default: "Auto select layout"
-msgid "Auto select layout"
-msgstr ""
-
-#. Default: "For pdf files."
-msgid "For pdf files."
-msgstr ""
-
-#. Default: "Auto layout file types"
-msgid "Auto layout file types"
-msgstr ""
-
-#. Default: "Extra types only work with openoffice/libreoffice installed."
-msgid "Extra types only work with openoffice/libreoffice installed."
-msgstr ""
-
-#. Default: "Auto Convert"
-msgid "Auto Convert"
-msgstr ""
-
-#. Default: "Automatically convert files on creation and modification."
-msgid "Automatically convert files on creation and modification."
-msgstr ""
-
-#. Default: "Override Contributor "
-msgid "Override Contributor "
-msgstr ""
-
-#. Default: "What to override the contributor field on viewer with.Leave blank to use document owner."
-msgid "What to override the contributor field on viewer with.Leave blank to use document owner."
-msgstr ""
-
-#. Default: "Override Contributor Organization"
-msgid "Override Contributor Organization"
-msgstr ""
-
-#. Default: "What to override the organization field on viewer with.Leave blank to use site title."
-msgid "What to override the organization field on viewer with.Leave blank to use site title."
-msgstr ""
-
-#. Default: "Override Base Resource URL"
-msgid "Override Base Resource URL"
-msgstr ""
-
-#. Default: "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
-msgid "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
-msgstr ""
-
-#. Default: "Viewer Width"
-msgid "Viewer Width"
-msgstr ""
-
-#. Default: "Leave blank to take full width."
-msgid "Leave blank to take full width."
-msgstr ""
-
-#. Default: "Viewer Height"
-msgid "Viewer Height"
-msgstr ""
-
-#. Default: "Default height to use for viewer (only for non-fullscreen mode)."
-msgid "Default height to use for viewer (only for non-fullscreen mode)."
-msgstr ""
-
-#. Default: "Show sidebar"
-msgid "Show sidebar"
-msgstr ""
-
-#. Default: "Default to show sidebar on Document Viewer."
-msgid "Default to show sidebar on Document Viewer."
-msgstr ""
-
-#. Default: "Show search box"
-msgid "Show search box"
-msgstr ""
-
-#. Default: "On Document Viewer."
-msgid "On Document Viewer."
-msgstr ""
-
-#. Default: "Show search on group view"
-msgid "Show search on group view"
-msgstr ""
-
-#. Default: "Enable search on group view."
-msgid "Enable search on group view."
-msgstr ""
-
-#. Default: "Group View Batch Size"
-msgid "Group View Batch Size"
-msgstr ""
-
-#. Default: "For folders. Does not apply to topics."
-msgid "For folders. Does not apply to topics."
-msgstr ""
-
-#. Default: "Async Quota Size"
-msgid "Async Quota Size"
-msgstr ""
-
-#. Default: "Number of conversions to run at a time. The quota name assigned is `dv`."
-msgid "Number of conversions to run at a time. The quota name assigned is `dv`."
-msgstr ""
-
-#. Default: "Global Document Viewer Settings"
-msgid "heading_documentviewer_global_settings_form"
-msgstr ""
-
-#. Default: "Configure the parameters for this Viewer."
-msgid "description_documentviewer_global_settings_form"
-msgstr ""
-
-#. Default: "Document Viewer Settings"
-msgid "heading_documentviewer_settings_form"
-msgstr ""
-
-#. Default: "These settings override the global settings."
-msgid "description_documentviewer_settings_form"
-msgstr ""
-
-#. Default: "Fullscreen Viewer"
-msgid "Fullscreen Viewer"
-msgstr ""
-
-#. Default: "Default to fullscreen viewer."
-msgid "Default to fullscreen viewer."
-msgstr ""
-
-#. Default: "Default to show sidebar."
-msgid "Default to show sidebar."
-msgstr ""
-
-#. Default: "Manage Annotations"
-msgid "Manage Annotations"
-msgstr ""
-
-#. Default: "Manage Sections"
-msgid "Manage Sections"
-msgstr ""
-
-#. Default: "Close"
-msgid "Close"
-msgstr ""
-
-#. Default: "Page:"
-msgid "Page:"
-msgstr ""
-
-#. Default: "Add Annotation"
-msgid "Add Annotation"
-msgstr ""
-
-#. Default: "Click and drag an area of the image to select where the annotation should be."
-msgid "Click and drag an area of the image to select where the annotation should be."
-msgstr ""
-
-#. Default: "Title"
-msgid "Title"
-msgstr ""
-
-#. Default: "Required"
-msgid "Required"
-msgstr ""
-
-#. Default: "The title of the annotation"
-msgid "The title of the annotation"
-msgstr ""
-
-#. Default: "Text"
-msgid "Text"
-msgstr ""
-
-#. Default: "The text for the annotation. Can include html."
-msgid "The text for the annotation. Can include html."
-msgstr ""
-
-#. Default: "Add"
+#: ./templates/documentviewer.pt:100
 msgid "Add"
 msgstr ""
 
-#. Default: "Current Annotations"
-msgid "Current Annotations"
+#: ./templates/documentviewer.pt:77
+msgid "Add Annotation"
 msgstr ""
 
-#. Default: "The page the section is for."
-msgid "The page the section is for."
-msgstr ""
-
-#. Default: "Loading"
-msgid "Loading"
-msgstr ""
-
-#. Default: "The Document Viewer requires that you enable Javascript."
-msgid "The Document Viewer requires that you enable Javascript."
-msgstr ""
-
-#. Default: "Convert this to document viewer"
-msgid "Convert this to document viewer"
-msgstr ""
-
-#. Default: "Are you sure you want to convert this to document viewer?"
-msgid "Are you sure you want to convert this to document viewer?"
-msgstr ""
-
-#. Default: "Convert"
-msgid "Convert"
-msgstr ""
-
-#. Default: "Converting"
-msgid "Converting"
-msgstr ""
-
-#. Default: "This file is currently being converted to document viewer."
-msgid "This file is currently being converted to document viewer."
-msgstr ""
-
-#. Default: "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
-msgid "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
-msgstr ""
-
-#. Default: "Save"
-msgid "Save"
-msgstr ""
-
-#. Default: "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
-msgid "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
-msgstr ""
-
-#. Default: "Since you do not have docsplit installed on this system, we can not render the pages of this document."
-msgid "Since you do not have docsplit installed on this system, we can not render the pages of this document."
-msgstr ""
-
-#. Default: "The document is currently being converted to the Document Viewer view."
-msgid "The document is currently being converted to the Document Viewer view."
-msgstr ""
-
-#. Default: "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
-msgid "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
-msgstr ""
-
-#. Default: "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
-msgid "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
-msgstr ""
-
-#. Default: "Make searchable"
-msgid "Make searchable"
-msgstr ""
-
-#. Default: "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search. If this is disabled, the two following parameters 'OCR' and 'Detect text' are not taken into account.  Take care that this will not make already converted elements searchable/not searchable, you will have to convert existing element yourself."
-msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search. If this is disabled, the two following parameters 'OCR' and 'Detect text' are not taken into account.  Take care that this will not make already converted elements searchable/not searchable, you will have to convert existing element yourself."
-msgstr ""
-
-#. Default: "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search.  You will need to run conversion again for this parameter to be taken into account."
-msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search.  You will need to run conversion again for this parameter to be taken into account."
-msgstr ""
-
-#. Default: "The title of the section"
-msgid "The title of the section"
-msgstr ""
-
-#. Default: "Add Section"
+#: ./templates/documentviewer.pt:115
 msgid "Add Section"
 msgstr ""
 
-#. Default: "Current Sections"
+#: ./templates/converting.pt:18
+msgid "Are you sure you want to convert this to document viewer?"
+msgstr ""
+
+#: ./interfaces.py:160
+msgid "Async Quota Size"
+msgstr ""
+
+#: ./interfaces.py:110
+msgid "Auto Convert"
+msgstr ""
+
+#: ./interfaces.py:102
+msgid "Auto layout file types"
+msgstr ""
+
+#: ./interfaces.py:98
+msgid "Auto select layout"
+msgstr ""
+
+#: ./interfaces.py:111
+msgid "Automatically convert files on creation and modification."
+msgstr ""
+
+#: ./interfaces.py:43
+msgid "Blob storage using the normal ZODB blob mechanism. File storage is for just storage the files on the file system with no hard reference on write to the ZODB. This allows you to easily push the files to be served off-site."
+msgstr ""
+
+#: ./templates/documentviewer.pt:78
+msgid "Click and drag an area of the image to select where the annotation should be."
+msgstr ""
+
+#: ./templates/documentviewer.pt:66
+msgid "Close"
+msgstr ""
+
+#: ./templates/converting.pt:23
+msgid "Convert"
+msgstr ""
+
+#: ./templates/converting.pt:17
+msgid "Convert this to document viewer"
+msgstr ""
+
+#: ./templates/converting.pt:27
+msgid "Converting"
+msgstr ""
+
+#: ./templates/documentviewer.pt:106
+msgid "Current Annotations"
+msgstr ""
+
+#: ./templates/documentviewer.pt:142
 msgid "Current Sections"
 msgstr ""
 
-#. Default: "Zoom"
-msgid "js_label_zoom"
+#: ./interfaces.py:140
+msgid "Default height to use for viewer (only for non-fullscreen mode)."
 msgstr ""
 
-#. Default: "Page"
-msgid "js_label_page"
+#: ./interfaces.py:223
+msgid "Default to fullscreen viewer."
 msgstr ""
 
-#. Default: "of"
-msgid "js_label_of"
+#: ./interfaces.py:145
+msgid "Default to show sidebar on Document Viewer."
 msgstr ""
 
-#. Default: "Document"
-msgid "js_label_document"
+#: ./interfaces.py:236
+msgid "Default to show sidebar."
 msgstr ""
 
-#. Default: "Pages"
-msgid "js_label_pages"
+#: ./interfaces.py:92
+msgid "Detect if pdf has text before performing OCR on it. If text is found, ocr will be skipped. If OCR is disabled, text will always try to be retrieved from the PDF file anyways."
 msgstr ""
 
-#. Default: "Notes"
-msgid "js_label_notes"
+#: ./interfaces.py:91
+msgid "Detect text"
 msgstr ""
 
-#. Default: "Loading"
-msgid "js_label_loading"
+#: ./profiles/default/controlpanel.xml
+msgid "Document Viewer Async Tasks"
 msgstr ""
 
-#. Default: "Text"
-msgid "js_label_text"
+#: ./profiles/default/controlpanel.xml
+msgid "Document Viewer Settings"
 msgstr ""
 
-#. Default: "Search"
-msgid "js_label_search"
+#: ./interfaces.py:153
+msgid "Enable search on group view."
 msgstr ""
 
-#. Default: "for"
-msgid "js_label_for"
+#: ./interfaces.py:103
+msgid "Extra types only work with openoffice/libreoffice installed."
 msgstr ""
 
-#. Default: "Previous"
-msgid "js_label_previous"
+#: ./interfaces.py:88
+msgid "Extract the text from the PDF using OCR technology."
 msgstr ""
 
-#. Default: "Next"
-msgid "js_label_next"
+#: ./interfaces.py:157
+msgid "For folders. Does not apply to topics."
 msgstr ""
 
-#. Default: "CLOSE"
-msgid "js_label_close"
+#: ./interfaces.py:99
+msgid "For pdf files."
 msgstr ""
 
-#. Default: "Remove"
-msgid "js_label_remove"
+#: ./interfaces.py:222
+msgid "Fullscreen Viewer"
 msgstr ""
 
-#. Default: "Link to this note"
-msgid "js_label_link_to_note"
+#: ./interfaces.py:156
+msgid "Group View Batch Size"
 msgstr ""
 
-#. Default: "Previous annotation"
-msgid "js_label_previous_annotation"
+#: ./interfaces.py:227
+msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search.  You will need to run conversion again for this parameter to be taken into account."
 msgstr ""
 
-#. Default: "Next annotation"
-msgid "js_label_next_annotation"
+#: ./interfaces.py:77
+msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search. If this is disabled, the two following parameters 'OCR' and 'Detect text' are not taken into account.  Take care that this will not make already converted elements searchable/not searchable, you will have to convert existing element yourself."
 msgstr ""
 
-#. Default: "on page"
-msgid "js_label_on_page"
+#: ./interfaces.py:128
+msgid "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
 msgstr ""
 
-#. Default: "for page"
-msgid "js_label_for_page"
+#: ./interfaces.py:68
+msgid "Image Format"
 msgstr ""
 
-#. Default: "Original Document"
-msgid "js_label_original_document"
+#: ./interfaces.py:33
+msgid "Large Image Size"
 msgstr ""
 
-#. Default: "Contributed by:"
-msgid "js_label_contributed_by"
+#: ./interfaces.py:135
+msgid "Leave blank to take full width."
 msgstr ""
 
-#. Default: "Close Fullscreen"
-msgid "js_label_close_fullscreen"
+#: ./templates/documentviewer.pt:149
+msgid "Loading"
 msgstr ""
+
+#: ./interfaces.py:76
+msgid "Make searchable"
+msgstr ""
+
+#: ./templates/documentviewer.pt:63
+msgid "Manage Annotations"
+msgstr ""
+
+#: ./templates/documentviewer.pt:64
+msgid "Manage Sections"
+msgstr ""
+
+#: ./interfaces.py:36
+msgid "Normal Image Size"
+msgstr ""
+
+#: ./interfaces.py:161
+msgid "Number of conversions to run at a time. The quota name assigned is `dv`."
+msgstr ""
+
+#: ./interfaces.py:87
+msgid "OCR"
+msgstr ""
+
+#: ./interfaces.py:58
+msgid "Obfuscate private file paths"
+msgstr ""
+
+#: ./interfaces.py:149
+msgid "On Document Viewer."
+msgstr ""
+
+#: ./interfaces.py:54
+msgid "Only for file storage not with zodb. Plone client must have write access to directory."
+msgstr ""
+
+#: ./interfaces.py:127
+msgid "Override Base Resource URL"
+msgstr ""
+
+#: ./interfaces.py:115
+msgid "Override Contributor"
+msgstr ""
+
+#: ./interfaces.py:121
+msgid "Override Contributor Organization"
+msgstr ""
+
+#: ./templates/converting.pt:31
+msgid "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
+msgstr ""
+
+#: ./templates/documentviewer.pt:128
+msgid "Page"
+msgstr ""
+
+#: ./templates/documentviewer.pt:70
+msgid "Page:"
+msgstr ""
+
+#: ./templates/documentviewer.pt:84
+msgid "Required"
+msgstr ""
+
+#: ./views.py:390
+msgid "Save"
+msgstr ""
+
+#: ./interfaces.py:148
+msgid "Show search box"
+msgstr ""
+
+#: ./interfaces.py:152
+msgid "Show search on group view"
+msgstr ""
+
+#: ./interfaces.py:144
+msgid "Show sidebar"
+msgstr ""
+
+#: ./views.py:98
+msgid "Since you do not have docsplit installed on this system, we can not render the pages of this document."
+msgstr ""
+
+#: ./interfaces.py:42
+msgid "Storage Type"
+msgstr ""
+
+#: ./interfaces.py:53
+msgid "Storage location"
+msgstr ""
+
+#: ./templates/documentviewer.pt:92
+msgid "Text"
+msgstr ""
+
+#: ./templates/documentviewer.pt:151
+msgid "The Document Viewer requires that you enable Javascript."
+msgstr ""
+
+#: ./views.py:106
+msgid "The document is currently being converted to the Document Viewer view."
+msgstr ""
+
+#: ./templates/converting.pt:43
+msgid "The file is active in the Queue."
+msgstr ""
+
+#: ./views.py:123
+msgid "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
+msgstr ""
+
+#: ./templates/converting.pt:41
+msgid "The file is number ${position} in the Queue."
+msgstr ""
+
+#: ./templates/documentviewer.pt:131
+msgid "The page the section is for."
+msgstr ""
+
+#: ./templates/documentviewer.pt:95
+msgid "The text for the annotation. Can include html."
+msgstr ""
+
+#: ./templates/documentviewer.pt:86
+msgid "The title of the annotation"
+msgstr ""
+
+#: ./templates/documentviewer.pt:122
+msgid "The title of the section"
+msgstr ""
+
+#: ./views.py:111
+msgid "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
+msgstr ""
+
+#: ./views.py:117
+msgid "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
+msgstr ""
+
+#: ./templates/converting.pt:28
+msgid "This file is currently being converted to document viewer."
+msgstr ""
+
+#: ./interfaces.py:39
+msgid "Thumb Image Size"
+msgstr ""
+
+#: ./templates/documentviewer.pt:83
+msgid "Title"
+msgstr ""
+
+#: ./interfaces.py:139
+msgid "Viewer Height"
+msgstr ""
+
+#: ./interfaces.py:134
+msgid "Viewer Width"
+msgstr ""
+
+#: ./interfaces.py:116
+msgid "What to override the contributor field on viewer with.Leave blank to use document owner."
+msgstr ""
+
+#: ./interfaces.py:122
+msgid "What to override the organization field on viewer with.Leave blank to use site title."
+msgstr ""
+
+#: ./templates/converting.pt:35
+msgid "You may visit ${tag} until the conversion is complete."
+msgstr ""
+
+#: ./templates/converting.pt:55
+msgid "You might also want to ${url}."
+msgstr ""
+
+#: ./templates/converting.pt:55
+msgid "check it in the process queue"
+msgstr ""
+
+#. Default: "Configure the parameters for this Viewer."
+#: ./views.py:412
+msgid "description_documentviewer_global_settings_form"
+msgstr ""
+
+#. Default: "These settings override the global settings."
+#: ./views.py:387
+msgid "description_documentviewer_settings_form"
+msgstr ""
+
+#. Default: "Global Document Viewer Settings"
+#: ./views.py:410
+msgid "heading_documentviewer_global_settings_form"
+msgstr ""
+
+#. Default: "Document Viewer Settings"
+#: ./views.py:385
+msgid "heading_documentviewer_settings_form"
+msgstr ""
+
+#: ./templates/converting.pt:35
+msgid "the current file"
+msgstr ""
+
