@@ -487,7 +487,7 @@ msgstr "Notes"
 
 #. Default: "of"
 msgid "js_label_of"
-msgstr "de"
+msgstr "sur"
 
 #. Default: "on page"
 msgid "js_label_on_page"
