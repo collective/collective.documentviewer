@@ -21,7 +21,7 @@ msgstr "*expérimental* Si les fichiers sont servis directement depuis un serveu
 
 #: ./templates/documentviewer.pt:100
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 #. Default: "Add Annotation"
 #: ./templates/documentviewer.pt:77
@@ -30,7 +30,7 @@ msgstr "Ajouter la note"
 
 #: ./templates/documentviewer.pt:115
 msgid "Add Section"
-msgstr ""
+msgstr "Ajouter la section"
 
 #. Default: "Are you sure you want to convert this to document viewer?"
 #: ./templates/converting.pt:18
@@ -94,11 +94,11 @@ msgstr "En cours de conversion"
 
 #: ./templates/documentviewer.pt:106
 msgid "Current Annotations"
-msgstr ""
+msgstr "Annotations existantes"
 
 #: ./templates/documentviewer.pt:142
 msgid "Current Sections"
-msgstr ""
+msgstr "Sections existantes"
 
 #. Default: "Default height to use for viewer (only for non-fullscreen mode)."
 #: ./interfaces.py:140
@@ -132,11 +132,11 @@ msgstr "Détecter le texte"
 
 #: ./profiles/default/controlpanel.xml
 msgid "Document Viewer Async Tasks"
-msgstr ""
+msgstr "Tâches de fond de la visionneuse"
 
 #: ./profiles/default/controlpanel.xml
 msgid "Document Viewer Settings"
-msgstr ""
+msgstr "Configuration de la visionneuse"
 
 #. Default: "Enable search on group view."
 #: ./interfaces.py:153
@@ -205,7 +205,7 @@ msgstr "Laissez vide pour utiliser toute la largeur disponible."
 
 #: ./templates/documentviewer.pt:149
 msgid "Loading"
-msgstr ""
+msgstr "Chargement"
 
 #. Default: "Make searchable"
 #: ./interfaces.py:76
@@ -259,7 +259,7 @@ msgstr "Surcharger l'url de base des ressources"
 
 #: ./interfaces.py:115
 msgid "Override Contributor"
-msgstr ""
+msgstr "Surcharger le contributeur"
 
 #. Default: "Override Contributor Organization"
 #: ./interfaces.py:121
@@ -273,7 +273,7 @@ msgstr "Ce PDF est en cours de conversion en visionneuse. Vous verrez ce message
 
 #: ./templates/documentviewer.pt:128
 msgid "Page"
-msgstr ""
+msgstr "Page"
 
 #. Default: "Page:"
 #: ./templates/documentviewer.pt:70
@@ -327,7 +327,7 @@ msgstr "Texte"
 
 #: ./templates/documentviewer.pt:151
 msgid "The Document Viewer requires that you enable Javascript."
-msgstr ""
+msgstr "La visionneuse de documents nécessite l'activation de javascript"
 
 #. Default: "The document is currently being converted to the Document Viewer view."
 #: ./views.py:106
@@ -336,7 +336,7 @@ msgstr "Le document est en cours de conversion en visionneuse."
 
 #: ./templates/converting.pt:43
 msgid "The file is active in the Queue."
-msgstr ""
+msgstr "Le fichier est actuellement dans le fil de conversion."
 
 #. Default: "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
 #: ./views.py:123
@@ -345,15 +345,15 @@ msgstr "Ce type de fichier n'est pas supporté.  Il se peut cependant qu'il le s
 
 #: ./templates/converting.pt:41
 msgid "The file is number ${position} in the Queue."
-msgstr ""
+msgstr "Le ficher est numéro ${position} dans le fil de conversion."
 
 #: ./templates/documentviewer.pt:131
 msgid "The page the section is for."
-msgstr ""
+msgstr "La page à laquelle réfère la section."
 
 #: ./templates/documentviewer.pt:95
 msgid "The text for the annotation. Can include html."
-msgstr ""
+msgstr "Le texte de l'annotation. Peut contenir du html."
 
 #. Default: "The title of the annotation"
 #: ./templates/documentviewer.pt:86
@@ -362,7 +362,7 @@ msgstr "Le titre de la note"
 
 #: ./templates/documentviewer.pt:122
 msgid "The title of the section"
-msgstr ""
+msgstr "Le titre de la section"
 
 #. Default: "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
 #: ./views.py:111
@@ -411,15 +411,15 @@ msgstr "Valeur à mettre comme 'Organisation' dans la zone 'Contributeur' affich
 
 #: ./templates/converting.pt:35
 msgid "You may visit ${tag} until the conversion is complete."
-msgstr ""
+msgstr "Vous pouvez visiter ${tag} "
 
 #: ./templates/converting.pt:55
 msgid "You might also want to ${url}."
-msgstr ""
+msgstr "Vous pouvez également consulter ${url}"
 
 #: ./templates/converting.pt:55
 msgid "check it in the process queue"
-msgstr ""
+msgstr "voir dans le fil de traitement"
 
 #. Default: "Configure the parameters for this Viewer."
 #: ./views.py:412
@@ -443,5 +443,5 @@ msgstr "Paramètres de la visionneuse"
 
 #: ./templates/converting.pt:35
 msgid "the current file"
-msgstr ""
+msgstr "le fichier en cours"
 
