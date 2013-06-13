@@ -307,7 +307,7 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
                                                         context=r,
                                                         default='Next annotation')
         dv_translated_label_on_page = translate('js_label_on_page', domain=d, context=r, default='on page')
-        dv_translated_label_for_page = translate('js_label_on_page', domain=d, context=r, default='for page')
+        dv_translated_label_for_page = translate('js_label_for_page', domain=d, context=r, default='for page')
         dv_translated_label_original_document = translate('js_label_original_document', domain=d, context=r, default='Original Document')
         dv_translated_label_contributed_by = translate('js_label_contributed_by', domain=d, context=r, default='Contributed by:')
         dv_translated_label_close_fullscreen = translate('js_label_close_fullscreen', domain=d, context=r, default='Close Fullscreen')

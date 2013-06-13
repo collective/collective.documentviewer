@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-06-12 13:42+0000\n"
+"POT-Creation-Date: 2013-06-13 10:17+0000\n"
 "PO-Revision-Date: 2013-05-08 15:00-100\n"
 "Last-Translator: Gauthier Bastien <gauthier.bastien@imio.be>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -440,6 +440,94 @@ msgstr "Paramètres globaux de DocumentViewer"
 #: ./views.py:385
 msgid "heading_documentviewer_settings_form"
 msgstr "Paramètres de la visionneuse"
+
+#. Default: "CLOSE"
+msgid "js_label_close"
+msgstr "CLOSE"
+
+#. Default: "Close Fullscreen"
+msgid "js_label_close_fullscreen"
+msgstr "Quitter le plein écran"
+
+#. Default: "Contributed by:"
+msgid "js_label_contributed_by"
+msgstr "Créé par :"
+
+#. Default: "Document"
+msgid "js_label_document"
+msgstr "Document"
+
+#. Default: "for"
+msgid "js_label_for"
+msgstr "pour"
+
+#. Default: "for page"
+msgid "js_label_for_page"
+msgstr "pour la page"
+
+#. Default: "Link to this note"
+msgid "js_label_link_to_note"
+msgstr "Lien vers cette annotation"
+
+#. Default: "Loading"
+msgid "js_label_loading"
+msgstr "Chargement"
+
+#. Default: "Next"
+msgid "js_label_next"
+msgstr "Suivant"
+
+#. Default: "Next annotation"
+msgid "js_label_next_annotation"
+msgstr "Annotation suivante"
+
+#. Default: "Notes"
+msgid "js_label_notes"
+msgstr "Notes"
+
+#. Default: "of"
+msgid "js_label_of"
+msgstr "de"
+
+#. Default: "on page"
+msgid "js_label_on_page"
+msgstr "sur la page"
+
+#. Default: "Original Document"
+msgid "js_label_original_document"
+msgstr "Document source"
+
+#. Default: "Page"
+msgid "js_label_page"
+msgstr "Page"
+
+#. Default: "Pages"
+msgid "js_label_pages"
+msgstr "Pages"
+
+#. Default: "Previous"
+msgid "js_label_previous"
+msgstr "Suivant"
+
+#. Default: "Previous annotation"
+msgid "js_label_previous_annotation"
+msgstr "Annotation précédente"
+
+#. Default: "Remove"
+msgid "js_label_remove"
+msgstr "Supprimer"
+
+#. Default: "Search"
+msgid "js_label_search"
+msgstr "Rechercher"
+
+#. Default: "Text"
+msgid "js_label_text"
+msgstr "Texte"
+
+#. Default: "Zoom"
+msgid "js_label_zoom"
+msgstr "Zoom"
 
 #: ./templates/converting.pt:35
 msgid "the current file"

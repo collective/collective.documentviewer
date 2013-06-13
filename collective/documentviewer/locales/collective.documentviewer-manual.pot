@@ -1,0 +1,105 @@
+msgid ""
+msgstr ""
+"ProjectId-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-06-12 13:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+msgid ""
+msgstr ""
+
+#. Default: "CLOSE"
+msgid "js_label_close"
+msgstr ""
+
+#. Default: "Close Fullscreen"
+msgid "js_label_close_fullscreen"
+msgstr ""
+
+#. Default: "Contributed by:"
+msgid "js_label_contributed_by"
+msgstr ""
+
+#. Default: "Document"
+msgid "js_label_document"
+msgstr ""
+
+#. Default: "for"
+msgid "js_label_for"
+msgstr ""
+
+#. Default: "for page"
+msgid "js_label_for_page"
+msgstr ""
+
+#. Default: "Link to this note"
+msgid "js_label_link_to_note"
+msgstr ""
+
+#. Default: "Loading"
+msgid "js_label_loading"
+msgstr ""
+
+#. Default: "Next"
+msgid "js_label_next"
+msgstr ""
+
+#. Default: "Next annotation"
+msgid "js_label_next_annotation"
+msgstr ""
+
+#. Default: "Notes"
+msgid "js_label_notes"
+msgstr ""
+
+#. Default: "of"
+msgid "js_label_of"
+msgstr ""
+
+#. Default: "on page"
+msgid "js_label_on_page"
+msgstr ""
+
+#. Default: "Original Document"
+msgid "js_label_original_document"
+msgstr ""
+
+#. Default: "Page"
+msgid "js_label_page"
+msgstr ""
+
+#. Default: "Pages"
+msgid "js_label_pages"
+msgstr ""
+
+#. Default: "Previous"
+msgid "js_label_previous"
+msgstr ""
+
+#. Default: "Previous annotation"
+msgid "js_label_previous_annotation"
+msgstr ""
+
+#. Default: "Remove"
+msgid "js_label_remove"
+msgstr ""
+
+#. Default: "Search"
+msgid "js_label_search"
+msgstr ""
+
+#. Default: "Text"
+msgid "js_label_text"
+msgstr ""
+
+#. Default: "Zoom"
+msgid "js_label_zoom"

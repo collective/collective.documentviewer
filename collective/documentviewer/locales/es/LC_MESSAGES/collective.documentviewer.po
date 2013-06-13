@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: collective.documentviewer\n"
-"POT-Creation-Date: 2013-06-12 13:42+0000\n"
+"POT-Creation-Date: 2013-06-13 10:17+0000\n"
 "PO-Revision-Date: 2013-06-12 16:01+0100\n"
 "Last-Translator: Mikel Larreategi <mlarreategi@codesyntax.com>\n"
 "Language-Team: es <es@li.org>\n"
@@ -441,6 +441,94 @@ msgstr "Configuración Global del Visor de Documentos"
 #: ./views.py:385
 msgid "heading_documentviewer_settings_form"
 msgstr "Configuración del Visor de Documentos"
+
+#. Default: "CLOSE"
+msgid "js_label_close"
+msgstr ""
+
+#. Default: "Close Fullscreen"
+msgid "js_label_close_fullscreen"
+msgstr ""
+
+#. Default: "Contributed by:"
+msgid "js_label_contributed_by"
+msgstr ""
+
+#. Default: "Document"
+msgid "js_label_document"
+msgstr ""
+
+#. Default: "for"
+msgid "js_label_for"
+msgstr ""
+
+#. Default: "for page"
+msgid "js_label_for_page"
+msgstr ""
+
+#. Default: "Link to this note"
+msgid "js_label_link_to_note"
+msgstr ""
+
+#. Default: "Loading"
+msgid "js_label_loading"
+msgstr ""
+
+#. Default: "Next"
+msgid "js_label_next"
+msgstr ""
+
+#. Default: "Next annotation"
+msgid "js_label_next_annotation"
+msgstr ""
+
+#. Default: "Notes"
+msgid "js_label_notes"
+msgstr ""
+
+#. Default: "of"
+msgid "js_label_of"
+msgstr ""
+
+#. Default: "on page"
+msgid "js_label_on_page"
+msgstr ""
+
+#. Default: "Original Document"
+msgid "js_label_original_document"
+msgstr ""
+
+#. Default: "Page"
+msgid "js_label_page"
+msgstr ""
+
+#. Default: "Pages"
+msgid "js_label_pages"
+msgstr ""
+
+#. Default: "Previous"
+msgid "js_label_previous"
+msgstr ""
+
+#. Default: "Previous annotation"
+msgid "js_label_previous_annotation"
+msgstr ""
+
+#. Default: "Remove"
+msgid "js_label_remove"
+msgstr ""
+
+#. Default: "Search"
+msgid "js_label_search"
+msgstr ""
+
+#. Default: "Text"
+msgid "js_label_text"
+msgstr ""
+
+#. Default: "Zoom"
+msgid "js_label_zoom"
+msgstr ""
 
 #: ./templates/converting.pt:35
 msgid "the current file"
