@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: collective.documentviewer\n"
 "POT-Creation-Date: 2013-06-13 10:17+0000\n"
-"PO-Revision-Date: 2013-06-12 15:52+0100\n"
+"PO-Revision-Date: 2013-06-14 13:14+0100\n"
 "Last-Translator: Mikel Larreategi <mlarreategi@codesyntax.com>\n"
 "Language-Team: eu <eu@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -444,91 +444,91 @@ msgstr "Dokumentu bisorearen ezarpenak"
 
 #. Default: "CLOSE"
 msgid "js_label_close"
-msgstr ""
+msgstr "ITXI"
 
 #. Default: "Close Fullscreen"
 msgid "js_label_close_fullscreen"
-msgstr ""
+msgstr "Pantaila osoa itxi"
 
 #. Default: "Contributed by:"
 msgid "js_label_contributed_by"
-msgstr ""
+msgstr "Laguntzaileak:"
 
 #. Default: "Document"
 msgid "js_label_document"
-msgstr ""
+msgstr "Dokumentua"
 
 #. Default: "for"
 msgid "js_label_for"
-msgstr ""
+msgstr "Hau bilatuz: "
 
 #. Default: "for page"
 msgid "js_label_for_page"
-msgstr ""
+msgstr " "
 
 #. Default: "Link to this note"
 msgid "js_label_link_to_note"
-msgstr ""
+msgstr "Ohar honetarako lotura"
 
 #. Default: "Loading"
 msgid "js_label_loading"
-msgstr ""
+msgstr "Kargatzen"
 
 #. Default: "Next"
 msgid "js_label_next"
-msgstr ""
+msgstr "Hurrengoa"
 
 #. Default: "Next annotation"
 msgid "js_label_next_annotation"
-msgstr ""
+msgstr "Hurrengo oharra"
 
 #. Default: "Notes"
 msgid "js_label_notes"
-msgstr ""
+msgstr "Oharrak"
 
 #. Default: "of"
 msgid "js_label_of"
-msgstr ""
+msgstr "/"
 
 #. Default: "on page"
 msgid "js_label_on_page"
-msgstr ""
+msgstr " "
 
 #. Default: "Original Document"
 msgid "js_label_original_document"
-msgstr ""
+msgstr "Jatorrizko dokumentua"
 
 #. Default: "Page"
 msgid "js_label_page"
-msgstr ""
+msgstr "Orrialdea"
 
 #. Default: "Pages"
 msgid "js_label_pages"
-msgstr ""
+msgstr "Orrialdeak"
 
 #. Default: "Previous"
 msgid "js_label_previous"
-msgstr ""
+msgstr "Aurrekoa"
 
 #. Default: "Previous annotation"
 msgid "js_label_previous_annotation"
-msgstr ""
+msgstr "Aurreko oharra"
 
 #. Default: "Remove"
 msgid "js_label_remove"
-msgstr ""
+msgstr "Ezabatu"
 
 #. Default: "Search"
 msgid "js_label_search"
-msgstr ""
+msgstr "Bilatu"
 
 #. Default: "Text"
 msgid "js_label_text"
-msgstr ""
+msgstr "Testua"
 
 #. Default: "Zoom"
 msgid "js_label_zoom"
-msgstr ""
+msgstr "Zoom"
 
 #: ./templates/converting.pt:35
 msgid "the current file"
