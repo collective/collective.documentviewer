@@ -97,6 +97,7 @@ class DocumentViewerView(BrowserView):
             if not self.installed:
                 msg = _("Since you do not have docsplit installed on this "
                         "system, we can not render the pages of this document.")
+
             if self.settings.converting is not None and \
                     self.settings.converting:
                 if self.settings.successfully_converted:
@@ -136,8 +137,9 @@ class DocumentViewerView(BrowserView):
         annotations = self.settings.annotations
         if annotations is None:
             return data
+
         for page, anns in annotations.items():
-            for idx, ann in enumerate(anns):
+            for ann in anns:
                 data.append({
                     "location": {"image": ann['coord']},
                     "title": ann['title'],
@@ -145,6 +147,7 @@ class DocumentViewerView(BrowserView):
                     "page": page,
                     "access": "public",
                     "content": ann['content']})
+
         return data
 
     def sections(self):
@@ -401,6 +404,7 @@ class SettingsForm(form.EditForm):
         self.request.response.redirect(url)
 
         self.context.plone_utils.addPortalMessage(PloneMessageFactory('Changes saved.'))
+
 SettingsFormView = wrap_form(SettingsForm)
 
 
@@ -422,6 +426,7 @@ class GlobalSettingsForm(form.EditForm):
         self.applyChanges(data)
 
         self.status = PloneMessageFactory('Changes saved.')
+
 GlobalSettingsFormView = wrap_form(GlobalSettingsForm)
 
 
@@ -477,6 +482,7 @@ class Utils(BrowserView):
                                                    None)
                             if data:
                                 del annotations['collective.documentviewer']
+
                     elif settings.storage_type == 'Blob':
                         shutil.rmtree(folderpath)
                         count += 1
@@ -569,11 +575,11 @@ class BlobView(BrowserView):
         self.request.response.setHeader('Accept-Ranges', 'bytes')
         self.request.response.setHeader("Content-Length", length)
         self.request.response.setHeader('Content-Type', ct)
-        range = handleRequestRange(self.context,
+        request_range = handleRequestRange(self.context,
                                    length,
                                    self.request,
                                    self.request.response)
-        return BlobStreamIterator(blob, **range)
+        return BlobStreamIterator(blob, **request_range)
 
 
 class BlobFileWrapper(SimpleItem):
@@ -694,6 +700,7 @@ class PDFFiles(SimpleItem, DirectoryResource):
            self.previous[1] != name[1:2]):
             # make sure the first two were a sub-set of the uid
             raise NotFound
+
         uidcat = getToolByName(self.site, 'uid_catalog')
         brains = uidcat(UID=name)
         if len(brains) == 0:
@@ -713,6 +720,7 @@ class PDFFiles(SimpleItem, DirectoryResource):
                 # check if this thing isn't published...
                 self.context.path = os.path.join(self.context.path, name)
                 name = settings.obfuscate_secret
+
             fi = super(PDFFiles, self).publishTraverse(request, name)
             return fi
 
@@ -881,11 +889,11 @@ class AsyncMonitor(BrowserView):
             queue = async.getQueues()['']
 
             objpath = self.request.form.get('path')
-            object = self.context.restrictedTraverse(str(objpath), None)
-            if object is None:
+            obj = self.context.restrictedTraverse(str(objpath), None)
+            if obj is None:
                 return self.redirect()
 
-            objpath = object.getPhysicalPath()
+            objpath = obj.getPhysicalPath()
 
             jobs = [job for job in queue]
             for job in jobs:
@@ -893,7 +901,7 @@ class AsyncMonitor(BrowserView):
                         job.args[0] == objpath:
                     try:
                         queue.remove(job)
-                        settings = Settings(object)
+                        settings = Settings(obj)
                         settings.converting = False
                     except LookupError:
                         pass
@@ -951,11 +959,11 @@ class Annotate(BrowserView):
         elif action == 'removeannotation':
             page = int(req.form['page'])
             if page in annotations:
-                id = int(req.form['id'])
+                ann_id = int(req.form['id'])
                 found = False
                 annotations = annotations[page]
                 for ann in annotations:
-                    if ann['id'] == id:
+                    if ann['id'] == ann_id:
                         found = ann
                         break
 
