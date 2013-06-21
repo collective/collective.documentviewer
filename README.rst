@@ -1,7 +1,7 @@
 Introduction
 ============
 
-.. image:: http://wildcardcorp.com/logo.png
+.. image:: https://www.wildcardcorp.com/logo.png
    :height: 50
    :width: 382
    :alt: Produced by wildcardcorp.com
@@ -138,6 +138,21 @@ Installation on Cent OS/Red hat
 
 Special instructions for centos have been contributed by Eric Tyrer.
 You can access them via `the git hub repo file location <https://github.com/collective/collective.documentviewer/blob/master/CENTOS-INSTALL.rst>`_.
+
+Installation
+-------------------------------
+If on a linux/ubuntu/debian machine you run into an error like:
+
+/var/lib/gems/1.9.1/gems/docsplit-0.7.2/lib/docsplit/image_extractor.rb:51:in `exists?': can't convert nil into String (TypeError)
+   from /var/lib/gems/1.9.1/gems/docsplit-0.7.2/lib/docsplit/image_extractor.rb:51:in `ensure in convert'
+
+This is because the ruby docsplit library is having an issue with the temp folder accesses, and removal of temp files.   Just run the following command:
+
+sudo chmod 1777 /tmp && sudo chmod 1777 /var/tmp
+
+And retry the conversion of your document
+
+
 
 TODO
 ----
