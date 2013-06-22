@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-06-13 10:17+0000\n"
+"POT-Creation-Date: 2013-06-22 12:10+0000\n"
 "PO-Revision-Date: 2013-05-08 15:00-100\n"
 "Last-Translator: Gauthier Bastien <gauthier.bastien@imio.be>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,10 @@ msgstr ""
 #. Default: "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
 #: ./interfaces.py:59
 msgid "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
+msgstr ""
+
+#: ./views.py:106
+msgid "A new conversion to the Document Viewer is currently being generated for this document."
 msgstr ""
 
 #: ./templates/documentviewer.pt:100
@@ -286,7 +290,7 @@ msgid "Required"
 msgstr ""
 
 #. Default: "Save"
-#: ./views.py:390
+#: ./views.py:396
 msgid "Save"
 msgstr ""
 
@@ -330,7 +334,7 @@ msgid "The Document Viewer requires that you enable Javascript."
 msgstr ""
 
 #. Default: "The document is currently being converted to the Document Viewer view."
-#: ./views.py:106
+#: ./views.py:110
 msgid "The document is currently being converted to the Document Viewer view."
 msgstr ""
 
@@ -339,7 +343,7 @@ msgid "The file is active in the Queue."
 msgstr ""
 
 #. Default: "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
-#: ./views.py:123
+#: ./views.py:127
 msgid "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
 msgstr ""
 
@@ -365,12 +369,12 @@ msgid "The title of the section"
 msgstr ""
 
 #. Default: "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
-#: ./views.py:111
+#: ./views.py:115
 msgid "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
 msgstr ""
 
 #. Default: "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
-#: ./views.py:117
+#: ./views.py:121
 msgid "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
 msgstr ""
 
@@ -422,22 +426,22 @@ msgid "check it in the process queue"
 msgstr ""
 
 #. Default: "Configure the parameters for this Viewer."
-#: ./views.py:412
+#: ./views.py:419
 msgid "description_documentviewer_global_settings_form"
 msgstr ""
 
 #. Default: "These settings override the global settings."
-#: ./views.py:387
+#: ./views.py:393
 msgid "description_documentviewer_settings_form"
 msgstr ""
 
 #. Default: "Global Document Viewer Settings"
-#: ./views.py:410
+#: ./views.py:417
 msgid "heading_documentviewer_global_settings_form"
 msgstr ""
 
 #. Default: "Document Viewer Settings"
-#: ./views.py:385
+#: ./views.py:391
 msgid "heading_documentviewer_settings_form"
 msgstr ""
 
