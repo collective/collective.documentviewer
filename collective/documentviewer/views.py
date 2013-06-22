@@ -103,6 +103,9 @@ class DocumentViewerView(BrowserView):
                 if self.settings.successfully_converted:
                     # there is a version that is already converted, show it.
                     self.enabled = True
+                    msg = _("A new conversion to the Document Viewer "
+                            "is currently being generated for this document."
+                            )
                 else:
                     msg = _("The document is currently being converted to the "
                             "Document Viewer view.")
