@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.2.2 (Unreleased)
+------------------
+
+- When a new release of the document is currently generated,
+  user is notified by a status message.
+  [thomasdesvenain]
+
+
 2.2.2b3 (2013-05-31)
 --------------------
 
