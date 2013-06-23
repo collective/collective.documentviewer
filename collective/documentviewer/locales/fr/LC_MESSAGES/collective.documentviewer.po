@@ -39,7 +39,7 @@ msgstr "Ajouter la section"
 #. Default: "Are you sure you want to convert this to document viewer?"
 #: ./templates/converting.pt:18
 msgid "Are you sure you want to convert this to document viewer?"
-msgstr "Etes-vous certain de vouloir convertir ce fichier avec la visionneuse?"
+msgstr "Êtes-vous certain de vouloir convertir ce fichier avec la visionneuse?"
 
 #. Default: "Async Quota Size"
 #: ./interfaces.py:160
