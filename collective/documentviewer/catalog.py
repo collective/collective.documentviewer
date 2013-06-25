@@ -11,7 +11,7 @@ def SearchableText(obj):
     """
     text = obj.SearchableText()
     if obj.getLayout() != 'documentviewer':
-        return ''
+        return text
 
     settings = Settings(obj)
     catalog = settings.catalog
