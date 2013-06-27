@@ -224,6 +224,11 @@ class DocSplitSubProcess(BaseSubProcess):
             '--format', format,
             '--rolling',
             '--output', output_dir]
+        if lang != 'eng':
+            # cf https://github.com/documentcloud/docsplit/issues/72
+            # the cleaning functions are only suited for english
+            cmd.append('--no-clean')
+
         self._run_command(cmd)
 
         # now, move images to correctly named folders
@@ -245,6 +250,11 @@ class DocSplitSubProcess(BaseSubProcess):
             '--pages', 'all',
             '--output', output_dir
         ]
+        if lang != 'eng':
+            # cf https://github.com/documentcloud/docsplit/issues/72
+            # the cleaning functions are only suited for english
+            cmd.append('--no-clean')
+
         self._run_command(cmd)
 
     def get_num_pages(self, filepath):
@@ -392,6 +402,7 @@ class Converter(object):
             language = IOCRLanguage(context).getLanguage()
         except zope.component.ComponentLookupError:
             language = 'eng'
+
         args = dict(sizes=(('large', gsettings.large_size),
                            ('normal', gsettings.normal_size),
                            ('small', gsettings.thumb_size)),
