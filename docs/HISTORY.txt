@@ -4,6 +4,9 @@ Changelog
 2.2.2 (Unreleased)
 ------------------
 
+- Plain text indexation is fixed for non converted contents.
+  [thomasdesvenain]
+
 - When a new release of the document is currently generated,
   user is notified by a status message.
   [thomasdesvenain]
