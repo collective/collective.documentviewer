@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: documentviewer\n"
-"POT-Creation-Date: 2013-06-22 12:10+0000\n"
+"POT-Creation-Date: 2013-06-27 09:55+0000\n"
 "PO-Revision-Date: 2013-06-24 09:34+0800\n"
 "Last-Translator: adam <yuejun.tang@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -292,6 +292,10 @@ msgstr ""
 #. Default: "Save"
 #: ./views.py:396
 msgid "Save"
+msgstr ""
+
+#: ./templates/documentviewer.pt:53
+msgid "Show Document Viewer Conversion Error"
 msgstr ""
 
 #. Default: "Show search box"

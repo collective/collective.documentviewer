@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: collective.documentviewer\n"
-"POT-Creation-Date: 2013-06-22 12:10+0000\n"
+"POT-Creation-Date: 2013-06-27 09:55+0000\n"
 "PO-Revision-Date: 2013-06-14 13:14+0100\n"
 "Last-Translator: Mikel Larreategi <mlarreategi@codesyntax.com>\n"
 "Language-Team: eu <eu@li.org>\n"
@@ -294,6 +294,10 @@ msgstr "Beharrezkoa"
 #: ./views.py:396
 msgid "Save"
 msgstr "Gorde"
+
+#: ./templates/documentviewer.pt:53
+msgid "Show Document Viewer Conversion Error"
+msgstr ""
 
 #. Default: "Show search box"
 #: ./interfaces.py:148
