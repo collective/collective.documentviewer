@@ -32,8 +32,25 @@
     permission="zope2.View"
     layer=".interfaces.ILayer" />
 
+  <browser:page
+    zcml:condition="installed plone.app.contenttypes"
+    name="documentviewer"
+    for="plone.app.contenttypes.interfaces.IFile"
+    class=".views.DXDocumentViewerView"
+    template="templates/documentviewerdx.pt"
+    permission="zope2.View"
+    layer=".interfaces.ILayer" />
+
   <browser:menuItem
     for="Products.ATContentTypes.interface.file.IFileContent"
+    menu="plone_displayviews"
+    title="Document Viewer"
+    action="documentviewer"
+    description="Displays a PDF embedded in the web page via document cloud viewer." />
+
+  <browser:menuItem
+    zcml:condition="installed plone.app.contenttypes"
+    for="plone.app.contenttypes.interfaces.IFile"
     menu="plone_displayviews"
     title="Document Viewer"
     action="documentviewer"
@@ -42,6 +59,14 @@
   <browser:page
     name="dv-search.json"
     for="Products.ATContentTypes.interface.file.IFileContent"
+    class=".views.DocumentViewerSearchView"
+    permission="zope2.View"
+    layer=".interfaces.ILayer" />
+
+  <browser:page
+    zcml:condition="installed plone.app.contenttypes"
+    name="dv-search.json"
+    for="plone.app.contenttypes.interfaces.IFile"
     class=".views.DocumentViewerSearchView"
     permission="zope2.View"
     layer=".interfaces.ILayer" />
@@ -79,6 +104,26 @@
     permission="cmf.ModifyPortalContent" />
 
   <browser:page
+    zcml:condition="installed plone.app.contenttypes"
+    name="documentviewer-settings"
+    for="plone.app.contenttypes.interfaces.IFile"
+    class=".views.SettingsFormView"
+    layer=".interfaces.ILayer"
+    permission="cmf.ModifyPortalContent" />
+  <adapter
+    zcml:condition="installed plone.app.contenttypes"
+    for="plone.app.contenttypes.interfaces.IFile"
+    provides=".interfaces.IDocumentViewerSettings"
+    factory=".settings.Settings" />
+  <browser:page
+    zcml:condition="installed plone.app.contenttypes"
+    name="documentviewer-annotate"
+    for="plone.app.contenttypes.interfaces.IFile"
+    class=".views.Annotate"
+    layer=".interfaces.ILayer"
+    permission="cmf.ModifyPortalContent" />
+
+  <browser:page
     zcml:condition="installed plone.app.async"
     name="dvasync-monitor"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
@@ -103,6 +148,17 @@
     class=".views.MoveJob"
     permission="cmf.ManagePortal"
     layer=".interfaces.ILayer" />
+
+  <configure
+    zcml:condition="installed plone.app.contenttypes">
+  <browser:page
+    zcml:condition="installed plone.app.async"
+    name="dvmove-to-front"
+    for="plone.app.contenttypes.interfaces.IFile"
+    class=".views.MoveJob"
+    permission="cmf.ManagePortal"
+    layer=".interfaces.ILayer" />
+  </configure>
 
   <browser:page
     name="global-documentviewer-settings"
@@ -132,6 +188,15 @@
     layer=".interfaces.ILayer" />
 
   <browser:page
+    name="convert-to-documentviewer"
+    zcml:condition="installed plone.app.contenttypes"
+    for="plone.app.contenttypes.interfaces.IFile"
+    permission="cmf.ModifyPortalContent"
+    class=".views.Convert"
+    template="templates/converting.pt"
+    layer=".interfaces.ILayer" />
+
+  <browser:page
     name="dvcleanup-filestorage"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     permission="cmf.ManagePortal"
@@ -155,6 +220,24 @@
 
   <subscriber
     for="Products.ATContentTypes.interface.IFileContent
+         Products.CMFCore.interfaces.IActionSucceededEvent"
+    handler=".subscribers.handle_workflow_change" />
+
+  <subscriber
+    zcml:condition="installed plone.app.contenttypes"
+    for="plone.app.contenttypes.interfaces.IFile
+         Products.Archetypes.interfaces.IObjectEditedEvent"
+    handler=".subscribers.handle_file_creation" />
+
+  <subscriber
+    zcml:condition="installed plone.app.contenttypes"
+    for="plone.app.contenttypes.interfaces.IFile
+         Products.Archetypes.interfaces.IObjectInitializedEvent"
+    handler=".subscribers.handle_file_creation" />
+
+  <subscriber
+    zcml:condition="installed plone.app.contenttypes"
+    for="plone.app.contenttypes.interfaces.IFile
          Products.CMFCore.interfaces.IActionSucceededEvent"
     handler=".subscribers.handle_workflow_change" />
 

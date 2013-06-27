@@ -342,9 +342,12 @@ class Converter(object):
     def __init__(self, context):
         self.context = aq_inner(context)
         self.settings = Settings(self.context)
-        field = self.context.getField('file') or context.getPrimaryField()
-        wrapper = field.get(self.context)
-        self.blob = wrapper.getBlob()
+        try:
+            field = self.context.getField('file') or context.getPrimaryField()
+            wrapper = field.get(self.context)
+            self.blob = wrapper.getBlob()
+        except AttributeError:  # Dexterity doesn't have getField
+            self.blob = self.context.file._blob
         self.initialize_blob_filepath()
         self.filehash = None
         self.gsettings = GlobalSettings(getPortal(context))
@@ -387,10 +390,16 @@ class Converter(object):
     def run_conversion(self):
         context = self.context
         gsettings = self.gsettings
-        field = context.getField('file') or context.getPrimaryField()
         try:
-            language = IOCRLanguage(context).getLanguage()
-        except zope.component.ComponentLookupError:
+            field = context.getField('file') or context.getPrimaryField()
+            filename = field.getFilename(context)
+        except AttributeError:  # Dexterity doesn't have getField
+            field = self.context.file
+            filename = field.filename
+        ocrlanguage = zope.component.queryAdapter(context, IOCRLanguage)
+        if ocrlanguage is not None:
+            language = ocrlanguage.getLanguage()
+        else:
             language = 'eng'
         args = dict(sizes=(('large', gsettings.large_size),
                            ('normal', gsettings.normal_size),
@@ -401,7 +410,7 @@ class Converter(object):
                     format=gsettings.pdf_image_format,
                     converttopdf=self.doc_type.requires_conversion,
                     language=language,
-                    filename=field.getFilename(context))
+                    filename=filename)
         if self.blob_filepath is None:
             args['filedata'] = str(field.get(context).data)
         else:
@@ -498,9 +507,12 @@ class Converter(object):
             del annotations['wc.pageturner']
 
         # remove pdfpal related
-        field = self.context.getField('ocrText')
-        if field:
-            field.set(self.context, '')
+        try:
+            field = self.context.getField('ocrText')
+            if field:
+                field.set(self.context, '')
+        except AttributeError:  # Dexterity doesn't have getField
+            pass
 
         data = annotations.get('wildcard.pdfpal', None)
         if data:

@@ -366,6 +366,18 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
         )
 
 
+try:
+    from plone.dexterity.browser.view import DefaultView
+
+    class DXDocumentViewerView(DocumentViewerView, DefaultView):
+        def __call__(self):
+            self._update()
+            self.update()
+            return super(DXDocumentViewerView, self).__call__()
+except ImportError:
+    pass
+
+
 class DocumentViewerSearchView(BrowserView):
 
     def __call__(self):
@@ -438,15 +450,15 @@ class Utils(BrowserView):
 
     def enabled(self):
         try:
-            if IFileContent.providedBy(self.context):
+#            if IFileContent.providedBy(self.context):
                 if self.context.getLayout() == 'documentviewer':
                     return True
                 else:
                     return allowedDocumentType(self.context,
                         GlobalSettings(
                             getPortal(self.context)).auto_layout_file_types)
-            else:
-                return False
+#            else:
+#                return False
         except:
             return False
 
@@ -704,12 +716,17 @@ class PDFFiles(SimpleItem, DirectoryResource):
             # make sure the first two were a sub-set of the uid
             raise NotFound
 
-        uidcat = getToolByName(self.site, 'uid_catalog')
-        brains = uidcat(UID=name)
+#        uidcat = getToolByName(self.site, 'uid_catalog')
+#        brains = uidcat(UID=name)
+#        Dexterity items are not indexed in uid_catalog
+        cat = getToolByName(self.site, 'portal_catalog')
+        brains = cat.unrestrictedSearchResults(UID=name)
         if len(brains) == 0:
             raise NotFound
 
-        fileobj = brains[0].getObject()
+#        fileobj = brains[0].getObject()
+#        getObject raise Unauthorized because we are Anonymous in the traverser
+        fileobj = brains[0]._unrestrictedGetObject()
         settings = Settings(fileobj)
         if settings.storage_type == 'Blob':
             fi = PDFTraverseBlobFile(fileobj, settings, request)
