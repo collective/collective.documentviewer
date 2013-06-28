@@ -296,7 +296,7 @@ msgstr "Enregistrer"
 
 #: ./templates/documentviewer.pt:53
 msgid "Show Document Viewer Conversion Error"
-msgstr "Afficher l'erreur de conversion de la liseuse"
+msgstr "Afficher l'erreur de conversion de la visionneuse"
 
 #. Default: "Show search box"
 #: ./interfaces.py:148
@@ -410,7 +410,7 @@ msgstr "Largeur de la visionneuse"
 #. Default: "What to override the contributor field on viewer with.Leave blank to use document owner."
 #: ./interfaces.py:116
 msgid "What to override the contributor field on viewer with.Leave blank to use document owner."
-msgstr "Valeur à mettre dans la zone 'Contributeur' affichée sur la visionneuse.  Laissez vide pour utiliser le propirétaire du document."
+msgstr "Valeur à mettre dans la zone 'Contributeur' affichée sur la visionneuse.  Laissez vide pour utiliser le propriétaire du document."
 
 #. Default: "What to override the organization field on viewer with.Leave blank to use site title."
 #: ./interfaces.py:122

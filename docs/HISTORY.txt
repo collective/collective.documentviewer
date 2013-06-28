@@ -4,6 +4,10 @@ Changelog
 2.2.2 (Unreleased)
 ------------------
 
+- Show contributor fullname if possible.
+  Contributor and organization are in a span.
+  [thomasdesvenain]
+
 - Avoid replacing non-ascii characters by (?) during OCR process
   for non english languages.
   [thomasdesvenain]
