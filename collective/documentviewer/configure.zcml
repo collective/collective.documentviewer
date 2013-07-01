@@ -226,13 +226,13 @@
   <subscriber
     zcml:condition="installed plone.app.contenttypes"
     for="plone.app.contenttypes.interfaces.IFile
-         Products.Archetypes.interfaces.IObjectEditedEvent"
+         zope.lifecycleevent.interfaces.IObjectAddedEvent"
     handler=".subscribers.handle_file_creation" />
 
   <subscriber
     zcml:condition="installed plone.app.contenttypes"
     for="plone.app.contenttypes.interfaces.IFile
-         Products.Archetypes.interfaces.IObjectInitializedEvent"
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
     handler=".subscribers.handle_file_creation" />
 
   <subscriber
