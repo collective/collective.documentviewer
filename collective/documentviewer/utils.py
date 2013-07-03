@@ -9,7 +9,11 @@ def getDocumentType(obj, allowed_types):
     try:
         ct = obj.getContentType()
     except AttributeError:  # Dexterity
+        if obj.file is None:
+            return None
+
         ct = obj.file.contentType
+
     mime_registry = getToolByName(obj, 'mimetypes_registry')
     for _type in mime_registry.lookup(ct):
         for ext in _type.extensions:
