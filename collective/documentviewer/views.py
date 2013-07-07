@@ -128,7 +128,7 @@ class DocumentViewerView(BrowserView):
                     "Your type may be supported. Check out the document "
                     "viewer configuration settings.")
         mtool = getToolByName(self.context, 'portal_membership')
-        self.can_modify = mtool.checkPermission('cmf.ModifyPortalContent',
+        self.can_modify = mtool.checkPermission('Modify portal content',
                                                 self.context)
         if msg and self.can_modify:
             utils.addPortalMessage(_(msg))
