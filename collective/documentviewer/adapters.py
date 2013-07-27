@@ -101,7 +101,12 @@ class DexterityItem(BaseItem):
 
     def __init__(self, context):
         super(DexterityItem, self).__init__(context)
-        self.primary = IPrimaryFieldInfo(self.context, None)
+        try:
+            self.primary = IPrimaryFieldInfo(self.context, None)
+        except TypeError:
+            # plone/dexterity/primary.py raises TypeError("Could not adapt")
+            # if there is not primary field
+            self.primary = None
 
     @property
     def has_enclosure(self):

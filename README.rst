@@ -84,6 +84,18 @@ Auto layout file types
     Types that should automatically be converted to document viewer
 
 
+Dexterity support
+-----------------
+
+If you want to use it with your own Dexterity content type. You need to edit
+the fti in ZMI/portal_types/yourtype to add "documentviewer" in
+the available view methods and to set the primary field in the schema,
+for example::
+
+    <field name="myfile" marshal:primary="true"
+           type="plone.namedfile.field.NamedBlobFile">
+
+
 File storage integration
 ------------------------
 

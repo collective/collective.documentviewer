@@ -8,6 +8,8 @@ from collective.documentviewer.interfaces import IFileWrapper
 
 def getDocumentType(obj, allowed_types):
     ct = IFileWrapper(obj).file_type
+    if ct is None:
+        return None
 
     mime_registry = getToolByName(obj, 'mimetypes_registry')
     for _type in mime_registry.lookup(ct):

@@ -4,9 +4,9 @@ Changelog
 2.2.2 (Unreleased)
 ------------------
 
-- Add Dexterity compatibility, it works if you use
-  the File content type from plone.app.contentypes or if your content type
-  implements plone.app.contentypes.interfaces.IFile.
+- Add Dexterity compatibility. To enable it on your content type, you have
+  to define a primary field and add documentviewer in the available view
+  methods, see documentation.
   [vincentfretin]
 
 - Fix: users that can modify can now view info messages
