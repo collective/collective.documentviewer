@@ -274,5 +274,7 @@
     preserveOriginal="True" />
 
   <adapter factory=".adapters.StandardOCRLanguageAdapter" />
+  <adapter factory=".adapters.BaseItem" />
+  <adapter factory=".adapters.DexterityItem" />
 
 </configure>

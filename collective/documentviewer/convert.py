@@ -24,7 +24,7 @@ from collective.documentviewer.utils import getDocumentType
 from collective.documentviewer import storage
 from collective.documentviewer.utils import mkdir_p
 from collective.documentviewer.events import ConversionFinishedEvent
-from collective.documentviewer.interfaces import IOCRLanguage
+from collective.documentviewer.interfaces import IFileWrapper, IOCRLanguage
 import random
 
 word_re = re.compile('\W+')
@@ -342,12 +342,8 @@ class Converter(object):
     def __init__(self, context):
         self.context = aq_inner(context)
         self.settings = Settings(self.context)
-        try:
-            field = self.context.getField('file') or context.getPrimaryField()
-            wrapper = field.get(self.context)
-            self.blob = wrapper.getBlob()
-        except AttributeError:  # Dexterity doesn't have getField
-            self.blob = self.context.file._blob
+        fw = IFileWrapper(self.context)
+        self.blob = fw.blob
         self.initialize_blob_filepath()
         self.filehash = None
         self.gsettings = GlobalSettings(getPortal(context))
@@ -390,12 +386,8 @@ class Converter(object):
     def run_conversion(self):
         context = self.context
         gsettings = self.gsettings
-        try:
-            field = context.getField('file') or context.getPrimaryField()
-            filename = field.getFilename(context)
-        except AttributeError:  # Dexterity doesn't have getField
-            field = self.context.file
-            filename = field.filename
+        fw = IFileWrapper(self.context)
+        filename = fw.filename
         ocrlanguage = zope.component.queryAdapter(context, IOCRLanguage)
         if ocrlanguage is not None:
             language = ocrlanguage.getLanguage()
@@ -412,7 +404,7 @@ class Converter(object):
                     language=language,
                     filename=filename)
         if self.blob_filepath is None:
-            args['filedata'] = str(field.get(context).data)
+            args['filedata'] = str(fw.file.data)
         else:
             args['inputfilepath'] = self.blob_filepath
 
