@@ -6,10 +6,10 @@ except ImportError:
     from zope.component.hooks import getSite
 from zope.annotation.interfaces import IAnnotations
 from collective.documentviewer.settings import GlobalSettings
-from Products.ATContentTypes.interface.file import IFileContent
 from Products.CMFCore.utils import getToolByName
 from collective.documentviewer.config import GROUP_VIEW_DISPLAY_TYPES
 from collective.documentviewer import storage
+from collective.documentviewer.upgrades import OBJECT_PROVIDES
 
 
 def install(context):
@@ -62,7 +62,7 @@ def uninstall(context, reinstall=False):
                 object_buttons.manage_delObjects([action])
 
         catalog = getToolByName(portal, 'portal_catalog')
-        objs = catalog(object_provides=IFileContent.__identifier__)
+        objs = catalog(object_provides=OBJECT_PROVIDES)
         settings = GlobalSettings(portal)
 
         # remove annotations and reset view

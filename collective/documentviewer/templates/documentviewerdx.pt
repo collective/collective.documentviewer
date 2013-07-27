@@ -1,0 +1,176 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+
+  <metal:js fill-slot="javascript_head_slot">
+  <!--[if (!IE)|(gte IE 8)]>
+  <!-->
+  <link href="/viewer/viewer-datauri.css" media="screen" rel="stylesheet" type="text/css"
+      tal:attributes="href string:${view/dvstatic}/assets/viewer-datauri.css" />
+  <!--<![endif]-->
+  <!--[if lte IE 7]>
+  <link href="/viewer/viewer.css" media="screen" rel="stylesheet" type="text/css"
+        tal:attributes="href string:${view/dvstatic}/assets/viewer.css" />
+  <![endif]-->
+
+  <script src="/dv_javascript_variables.js"
+      tal:attributes="src string:${portal_url}/dv_javascript_variables.js"></script>
+  <link href="/viewer/printviewer.css" media="print" rel="stylesheet" type="text/css"
+      tal:attributes="href string:${view/dvstatic}/assets/printviewer.css" />
+  <script src="/viewer/viewer.js"
+      tal:attributes="src string:${view/dvstatic}/assets/viewer.js"></script>
+  <script src="/viewer/viewer.js"
+      tal:attributes="src string:${view/dvstatic}/javascripts/viewer.js"></script>
+
+  <tal:annotate tal:condition="view/can_modify">
+    <link rel="stylesheet" type="text/css"
+      tal:attributes="href string:${view/dvstatic}/jquery.imgareaselect/css/imgareaselect-default.css" />
+    <link rel="stylesheet" type="text/css"
+      tal:attributes="href string:${view/dvstatic}/stylesheets/annotate.css" />
+    <script tal:attributes="src string:${view/dvstatic}/jquery.imgareaselect/scripts/jquery.imgareaselect.min.js"></script>
+    <script tal:attributes="src string:${view/dvstatic}/javascripts/annotate.js"></script>
+  </tal:annotate>
+</metal:js>
+<metal:css fill-slot="style_slot">
+<link rel="stylesheet" type="text/css" media="screen" href="group.css"
+      tal:attributes="href string:${context/portal_url}/++resource++dv.resources/stylesheets/viewer.css" />
+</metal:css>
+
+<body>
+
+<div metal:fill-slot="content-core">
+<tal:main-macro metal:define-macro="content-core"
+         tal:define="size python:here.getObjSize(here);
+                     content_type here/get_content_type|here/Format;"
+         i18n:domain="collective.documentviewer">
+  <tal:notshow tal:condition="not: view/enabled">
+    <dl id="errorMsg" tal:condition="python: view.can_modify and view.settings.successfully_converted is False">
+      <dt>
+        <a href="#">Show Document Viewer Conversion Error</a>
+      </dt>
+      <dd>
+        <pre tal:content="python: view.settings.exception_msg" />
+          <pre tal:content="python: view.settings.exception_traceback" />
+        </dd>
+      </dl>
+    </tal:notshow>
+    <tal:show tal:condition="view/enabled">
+      <tal:annotate tal:condition="view/can_modify">
+        <a href="#" id="manage-annotations" i18n:translate="">Manage Annotations</a> |
+        <a href="#" id="manage-sections" i18n:translate="">Manage Sections</a>
+        <div id="annotation-management">
+          <div class="close"><span i18n:translate="">Close</span></div>
+          <div id="image-container">
+          </div>
+          <div id="pagesel-container">
+            <label i18n:translate="">Page:</label>
+            <select id="pselector">
+            </select>
+          </div>
+          <div id="right-container">
+            <div id="add-annotation">
+              <form class="">
+                <legend i18n:translate="">Add Annotation</legend>
+                <p class="discreet" i18n:translate="">Click and drag an area of the image to
+                  select where the annotation should be.</p>
+                <fieldset>
+                  <div class="field">
+                    <label class="formQuestion" for="title">
+                      <span i18n:translate="">Title</span>
+                      <span class="required" i18n:attributes="title" title="Required">&nbsp;</span>
+                    </label>
+                    <div class="formHelp" id="title_help" i18n:translate="">The title of the annotation</div>
+                    <div class="fieldErrorBox"></div>
+                    <input type="text" id="title" size="30" maxlength="255" />
+                  </div>
+                  <div class="field">
+                    <label class="formQuestion" for="text">
+                      <span i18n:translate="">Text</span>
+                      <span class="required" i18n:attributes="title" title="Required">&nbsp;</span>
+                    </label>
+                    <div class="formHelp" id="title_help" i18n:translate="">The text for the annotation. Can include html.</div>
+                    <div class="fieldErrorBox"></div>
+                    <textarea id="text"></textarea>
+                  </div>
+                  <div class="formControls">
+                    <button class="allowMultiSubmit context add" i18n:translate="">Add</button>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+            <div id="annotations">
+              <h3 i18n:translate="">Current Annotations</h3>
+              <ul></ul>
+            </div>
+          </div>
+        </div>
+        <div id="section-management">
+          <div class="close"><span i18n:translate="">Close</span></div>
+          <div id="add-section">
+            <form>
+              <legend i18n:translate="">Add Section</legend>
+              <fieldset>
+                <div class="field">
+                  <label class="formQuestion" for="section-title">
+                    <span i18n:translate="">Title</span>
+                    <span class="required" i18n:attributes="title" title="Required">&nbsp;</span>
+                  </label>
+                  <div class="formHelp" id="title_help" i18n:translate="">The title of the section</div>
+                  <div class="fieldErrorBox"></div>
+                  <input type="text" id="section-title" size="30" maxlength="255" />
+                </div>
+                <div class="field">
+                  <label class="formQuestion" for="section-page">
+                    <span i18n:translate="">Page</span>
+                    <span class="required" i18n:attributes="title" title="Required">&nbsp;</span>
+                  </label>
+                  <div class="formHelp" id="title_help" i18n:translate="">The page the section is for.</div>
+                  <div class="fieldErrorBox"></div>
+                  <input type="text" id="section-page" size="4" maxlength="255" />
+                </div>
+                <div class="formControls">
+                  <button class="allowMultiSubmit context add" i18n:translate="">Add</button>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+          <div id="sections">
+            <h3 i18n:translate="">Current Sections</h3>
+            <ul></ul>
+          </div>
+        </div>
+      </tal:annotate>
+      <div id="DV-container">
+
+      <div class="DV-loadingDocument"><span i18n:translate="">Loading</span></div>
+        <noscript>
+          <div id="DV-noJS" style="height:500px" i18n:translate="">The Document Viewer requires that you enable Javascript.</div>
+        </noscript>
+      </div>
+      <div id="overlay"></div>
+      <script type="text/javascript" tal:content="structure view/javascript"></script>
+    </tal:show>
+
+    <tal:block repeat="widget view/widgets/values">
+        <tal:block tal:condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description',)">
+            <tal:widget tal:replace="structure widget/@@ploneform-render-widget"/>
+        </tal:block>
+    </tal:block>
+
+    <fieldset tal:repeat="group view/groups"
+              tal:attributes="id python:''.join((group.prefix, 'groups.', group.__name__)).replace('.', '-')">
+        <legend tal:content="group/label" />
+        <tal:block tal:repeat="widget group/widgets/values">
+            <tal:widget tal:replace="structure widget/@@ploneform-render-widget"/>
+        </tal:block>
+    </fieldset>                                                               
+  </tal:main-macro>
+</div>
+
+</body>
+
+</html>
