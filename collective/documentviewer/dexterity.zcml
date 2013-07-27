@@ -1,0 +1,86 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    zcml:condition="installed plone.app.contenttypes"
+    i18n_domain="collective.documentviewer">
+
+  <browser:page
+    name="documentviewer"
+    for="plone.app.contenttypes.interfaces.IFile"
+    class=".views.DXDocumentViewerView"
+    template="templates/documentviewerdx.pt"
+    permission="zope2.View"
+    layer=".interfaces.ILayer" />
+
+  <browser:menuItem
+    for="plone.app.contenttypes.interfaces.IFile"
+    menu="plone_displayviews"
+    title="Document Viewer"
+    action="documentviewer"
+    description="Displays a PDF embedded in the web page via document cloud viewer." />
+
+  <browser:page
+    name="dv-search.json"
+    for="plone.app.contenttypes.interfaces.IFile"
+    class=".views.DocumentViewerSearchView"
+    permission="zope2.View"
+    layer=".interfaces.ILayer" />
+
+  <browser:page
+    name="documentviewer-settings"
+    for="plone.app.contenttypes.interfaces.IFile"
+    class=".views.SettingsFormView"
+    layer=".interfaces.ILayer"
+    permission="cmf.ModifyPortalContent" />
+
+  <adapter
+    for="plone.app.contenttypes.interfaces.IFile"
+    provides=".interfaces.IDocumentViewerSettings"
+    factory=".settings.Settings" />
+
+  <browser:page
+    name="documentviewer-annotate"
+    for="plone.app.contenttypes.interfaces.IFile"
+    class=".views.Annotate"
+    layer=".interfaces.ILayer"
+    permission="cmf.ModifyPortalContent" />
+
+  <browser:page
+    zcml:condition="installed plone.app.async"
+    name="dvmove-to-front"
+    for="plone.app.contenttypes.interfaces.IFile"
+    class=".views.MoveJob"
+    permission="cmf.ManagePortal"
+    layer=".interfaces.ILayer" />
+
+  <browser:page
+    name="convert-to-documentviewer"
+    for="plone.app.contenttypes.interfaces.IFile"
+    permission="cmf.ModifyPortalContent"
+    class=".views.Convert"
+    template="templates/converting.pt"
+    layer=".interfaces.ILayer" />
+
+  <subscriber
+    for="plone.app.contenttypes.interfaces.IFile
+         zope.lifecycleevent.interfaces.IObjectAddedEvent"
+    handler=".subscribers.handle_file_creation" />
+
+  <subscriber
+    for="plone.app.contenttypes.interfaces.IFile
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    handler=".subscribers.handle_file_creation" />
+
+  <subscriber
+    for="plone.app.contenttypes.interfaces.IFile
+         Products.CMFCore.interfaces.IActionSucceededEvent"
+    handler=".subscribers.handle_workflow_change" />
+
+  <adapter name="SearchableText" factory=".catalog.SearchableTextDexterity" />
+
+</configure>

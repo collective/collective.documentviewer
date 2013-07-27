@@ -286,3 +286,10 @@ class IOCRLanguage(Interface):
         """
 
 
+class IFileWrapper(Interface):
+    has_enclosure = Attribute("If object has enclosure")
+    file = Attribute("BlobWrapper or NamedFile")
+    file_length = Attribute("File size")
+    file_type = Attribute("File mime type")
+    blob = Attribute("ZODB blob")
+    filename = Attribute("Filename")

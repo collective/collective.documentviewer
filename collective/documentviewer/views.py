@@ -22,7 +22,6 @@ from zope.annotation.interfaces import IAnnotations
 from zope.i18n import translate
 from Products.CMFCore import permissions
 from Products.CMFCore.utils import getToolByName
-from Products.ATContentTypes.interface.file import IFileContent
 from Products.CMFPlone.utils import base_hasattr
 from repoze.catalog.query import Contains
 from plone.app.blob.download import handleRequestRange
@@ -50,7 +49,7 @@ from collective.documentviewer.async import queueJob
 from collective.documentviewer.async import JobRunner
 from collective.documentviewer import storage
 from collective.documentviewer.utils import getPortal
-from collective.documentviewer.interfaces import IBlobFileWrapper
+from collective.documentviewer.interfaces import IBlobFileWrapper, IFileWrapper
 
 logger = getLogger('collective.documentviewer')
 
@@ -375,6 +374,18 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
         )
 
 
+try:
+    from plone.dexterity.browser.view import DefaultView
+
+    class DXDocumentViewerView(DocumentViewerView, DefaultView):
+        def __call__(self):
+            self._update()
+            self.update()
+            return super(DXDocumentViewerView, self).__call__()
+except ImportError:
+    pass
+
+
 class DocumentViewerSearchView(BrowserView):
 
     def __call__(self):
@@ -447,7 +458,8 @@ class Utils(BrowserView):
 
     def enabled(self):
         try:
-            if IFileContent.providedBy(self.context):
+            fw = IFileWrapper(self.context)
+            if fw.has_enclosure:
                 if self.context.getLayout() == 'documentviewer':
                     return True
                 else:
@@ -713,12 +725,17 @@ class PDFFiles(SimpleItem, DirectoryResource):
             # make sure the first two were a sub-set of the uid
             raise NotFound
 
-        uidcat = getToolByName(self.site, 'uid_catalog')
-        brains = uidcat(UID=name)
+#        uidcat = getToolByName(self.site, 'uid_catalog')
+#        brains = uidcat(UID=name)
+#        Dexterity items are not indexed in uid_catalog
+        cat = getToolByName(self.site, 'portal_catalog')
+        brains = cat.unrestrictedSearchResults(UID=name)
         if len(brains) == 0:
             raise NotFound
 
-        fileobj = brains[0].getObject()
+#        fileobj = brains[0].getObject()
+#        getObject raise Unauthorized because we are Anonymous in the traverser
+        fileobj = brains[0]._unrestrictedGetObject()
         settings = Settings(fileobj)
         if settings.storage_type == 'Blob':
             fi = PDFTraverseBlobFile(fileobj, settings, request)

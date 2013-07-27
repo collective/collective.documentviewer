@@ -3,10 +3,12 @@ import errno
 from Products.CMFCore.utils import getToolByName
 from collective.documentviewer.config import EXTENSION_TO_ID_MAPPING
 from collective.documentviewer.config import CONVERTABLE_TYPES
+from collective.documentviewer.interfaces import IFileWrapper
 
 
 def getDocumentType(obj, allowed_types):
-    ct = obj.getContentType()
+    ct = IFileWrapper(obj).file_type
+
     mime_registry = getToolByName(obj, 'mimetypes_registry')
     for _type in mime_registry.lookup(ct):
         for ext in _type.extensions:

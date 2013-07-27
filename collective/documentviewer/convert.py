@@ -6,7 +6,6 @@ import tempfile
 import re
 import transaction
 import traceback
-import zope.component
 from ZODB.blob import Blob
 from BTrees.OOBTree import OOBTree
 from Acquisition import aq_inner
@@ -24,7 +23,7 @@ from collective.documentviewer.utils import getDocumentType
 from collective.documentviewer import storage
 from collective.documentviewer.utils import mkdir_p
 from collective.documentviewer.events import ConversionFinishedEvent
-from collective.documentviewer.interfaces import IOCRLanguage
+from collective.documentviewer.interfaces import IFileWrapper, IOCRLanguage
 import random
 
 word_re = re.compile('\W+')
@@ -352,9 +351,8 @@ class Converter(object):
     def __init__(self, context):
         self.context = aq_inner(context)
         self.settings = Settings(self.context)
-        field = self.context.getField('file') or context.getPrimaryField()
-        wrapper = field.get(self.context)
-        self.blob = wrapper.getBlob()
+        fw = IFileWrapper(self.context)
+        self.blob = fw.blob
         self.initialize_blob_filepath()
         self.filehash = None
         self.gsettings = GlobalSettings(getPortal(context))
@@ -397,12 +395,9 @@ class Converter(object):
     def run_conversion(self):
         context = self.context
         gsettings = self.gsettings
-        field = context.getField('file') or context.getPrimaryField()
-        try:
-            language = IOCRLanguage(context).getLanguage()
-        except zope.component.ComponentLookupError:
-            language = 'eng'
-
+        fw = IFileWrapper(context)
+        filename = fw.filename
+        language = IOCRLanguage(context).getLanguage()
         args = dict(sizes=(('large', gsettings.large_size),
                            ('normal', gsettings.normal_size),
                            ('small', gsettings.thumb_size)),
@@ -412,9 +407,9 @@ class Converter(object):
                     format=gsettings.pdf_image_format,
                     converttopdf=self.doc_type.requires_conversion,
                     language=language,
-                    filename=field.getFilename(context))
+                    filename=filename)
         if self.blob_filepath is None:
-            args['filedata'] = str(field.get(context).data)
+            args['filedata'] = str(fw.file.data)
         else:
             args['inputfilepath'] = self.blob_filepath
 
@@ -509,9 +504,12 @@ class Converter(object):
             del annotations['wc.pageturner']
 
         # remove pdfpal related
-        field = self.context.getField('ocrText')
-        if field:
-            field.set(self.context, '')
+        try:
+            field = self.context.getField('ocrText')
+            if field:
+                field.set(self.context, '')
+        except AttributeError:  # Dexterity doesn't have getField
+            pass
 
         data = annotations.get('wildcard.pdfpal', None)
         if data:

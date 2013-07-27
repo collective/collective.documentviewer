@@ -25,28 +25,6 @@
     provides="Products.GenericSetup.interfaces.EXTENSION" />
 
   <browser:page
-    name="documentviewer"
-    for="Products.ATContentTypes.interface.file.IFileContent"
-    class=".views.DocumentViewerView"
-    template="templates/documentviewer.pt"
-    permission="zope2.View"
-    layer=".interfaces.ILayer" />
-
-  <browser:menuItem
-    for="Products.ATContentTypes.interface.file.IFileContent"
-    menu="plone_displayviews"
-    title="Document Viewer"
-    action="documentviewer"
-    description="Displays a PDF embedded in the web page via document cloud viewer." />
-
-  <browser:page
-    name="dv-search.json"
-    for="Products.ATContentTypes.interface.file.IFileContent"
-    class=".views.DocumentViewerSearchView"
-    permission="zope2.View"
-    layer=".interfaces.ILayer" />
-
-  <browser:page
     name="dvpdf-group-view"
     for="OFS.interfaces.IFolder"
     class=".views.GroupView"
@@ -60,23 +38,6 @@
     title="PDF Group View"
     action="dvpdf-group-view"
     description="To show thumbnails from pdf and make it searchable." />
-
-  <browser:page
-    name="documentviewer-settings"
-    for="Products.ATContentTypes.interface.file.IFileContent"
-    class=".views.SettingsFormView"
-    layer=".interfaces.ILayer"
-    permission="cmf.ModifyPortalContent" />
-  <adapter
-    for="Products.ATContentTypes.interface.file.IFileContent"
-    provides=".interfaces.IDocumentViewerSettings"
-    factory=".settings.Settings" />
-  <browser:page
-    name="documentviewer-annotate"
-    for="Products.ATContentTypes.interface.file.IFileContent"
-    class=".views.Annotate"
-    layer=".interfaces.ILayer"
-    permission="cmf.ModifyPortalContent" />
 
   <browser:page
     zcml:condition="installed plone.app.async"
@@ -93,14 +54,6 @@
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     class=".views.AsyncMonitor"
     attribute="remove"
-    permission="cmf.ManagePortal"
-    layer=".interfaces.ILayer" />
-
-  <browser:page
-    zcml:condition="installed plone.app.async"
-    name="dvmove-to-front"
-    for="Products.ATContentTypes.interface.file.IFileContent"
-    class=".views.MoveJob"
     permission="cmf.ManagePortal"
     layer=".interfaces.ILayer" />
 
@@ -124,14 +77,6 @@
     layer=".interfaces.ILayer" />
 
   <browser:page
-    name="convert-to-documentviewer"
-    for="Products.ATContentTypes.interface.file.IFileContent"
-    permission="cmf.ModifyPortalContent"
-    class=".views.Convert"
-    template="templates/converting.pt"
-    layer=".interfaces.ILayer" />
-
-  <browser:page
     name="dvcleanup-filestorage"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     permission="cmf.ManagePortal"
@@ -142,21 +87,6 @@
   <browser:resourceDirectory
     name="dv.resources"
     directory="resources" />
-
-  <subscriber
-    for="Products.ATContentTypes.interface.IFileContent
-         Products.Archetypes.interfaces.IObjectEditedEvent"
-    handler=".subscribers.handle_file_creation" />
-
-  <subscriber
-    for="Products.ATContentTypes.interface.IFileContent
-         Products.Archetypes.interfaces.IObjectInitializedEvent"
-    handler=".subscribers.handle_file_creation" />
-
-  <subscriber
-    for="Products.ATContentTypes.interface.IFileContent
-         Products.CMFCore.interfaces.IActionSucceededEvent"
-    handler=".subscribers.handle_workflow_change" />
 
   <browser:page
     name="dvpdffiles"
@@ -180,8 +110,6 @@
     attribute="getTranslatedJSLabels"
     permission="zope.Public" />
 
-  <adapter name="SearchableText" factory=".catalog.SearchableText" />
-
   <monkey:patch
     zcml:condition="installed wc.pageturner"
     description="Patch object modify/creation subscribers to not run with dv"
@@ -191,5 +119,9 @@
     preserveOriginal="True" />
 
   <adapter factory=".adapters.StandardOCRLanguageAdapter" />
+  <adapter factory=".adapters.BaseItem" />
+  <adapter factory=".adapters.DexterityItem" />
+  <include file="archetypes.zcml" />
+  <include file="dexterity.zcml" />
 
 </configure>
