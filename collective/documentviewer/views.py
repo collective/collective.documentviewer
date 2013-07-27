@@ -22,7 +22,6 @@ from zope.annotation.interfaces import IAnnotations
 from zope.i18n import translate
 from Products.CMFCore import permissions
 from Products.CMFCore.utils import getToolByName
-from Products.ATContentTypes.interface.file import IFileContent
 from Products.CMFPlone.utils import base_hasattr
 from repoze.catalog.query import Contains
 from plone.app.blob.download import handleRequestRange
@@ -50,7 +49,7 @@ from collective.documentviewer.async import queueJob
 from collective.documentviewer.async import JobRunner
 from collective.documentviewer import storage
 from collective.documentviewer.utils import getPortal
-from collective.documentviewer.interfaces import IBlobFileWrapper
+from collective.documentviewer.interfaces import IBlobFileWrapper, IFileWrapper
 
 logger = getLogger('collective.documentviewer')
 
@@ -450,15 +449,16 @@ class Utils(BrowserView):
 
     def enabled(self):
         try:
-#            if IFileContent.providedBy(self.context):
+            fw = IFileWrapper(self.context)
+            if fw.has_enclosure:
                 if self.context.getLayout() == 'documentviewer':
                     return True
                 else:
                     return allowedDocumentType(self.context,
                         GlobalSettings(
                             getPortal(self.context)).auto_layout_file_types)
-#            else:
-#                return False
+            else:
+                return False
         except:
             return False
 

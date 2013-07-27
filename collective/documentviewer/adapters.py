@@ -8,6 +8,7 @@ from zope.interface import implements, Interface
 from OFS.interfaces import IItem
 from Products.CMFCore.utils import getToolByName
 from Products.ATContentTypes.interfaces.file import IATFile
+from Products.ATContentTypes.interface.file import IFileContent
 
 from collective.documentviewer.interfaces import IFileWrapper, IOCRLanguage
 from collective.documentviewer.iso639_2_utf8 import ISO_UTF_MAP
@@ -63,7 +64,7 @@ class BaseItem(object):
 
     @property
     def has_enclosure(self):
-        return True
+        return IFileContent.providedBy(self.context)
 
     @lazy_property
     def _field(self):
@@ -71,8 +72,9 @@ class BaseItem(object):
 
     @lazy_property
     def file(self):
-        wrapper = self._field.get(self.context)
-        return wrapper
+        if self.has_enclosure:
+            wrapper = self._field.get(self.context)
+            return wrapper
 
     @property
     def file_length(self):
