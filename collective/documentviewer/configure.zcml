@@ -110,8 +110,6 @@
     attribute="getTranslatedJSLabels"
     permission="zope.Public" />
 
-  <adapter name="SearchableText" factory=".catalog.SearchableText" />
-
   <monkey:patch
     zcml:condition="installed wc.pageturner"
     description="Patch object modify/creation subscribers to not run with dv"

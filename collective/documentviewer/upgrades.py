@@ -9,7 +9,6 @@ try:
 except ImportError:
     from zope.component.hooks import getSite
 from Products.CMFCore.utils import getToolByName
-from Products.ATContentTypes.interface.file import IFileContent
 from collective.documentviewer.config import GROUP_VIEW_DISPLAY_TYPES
 from collective.documentviewer.settings import GlobalSettings
 from collective.documentviewer.settings import Settings
@@ -19,6 +18,20 @@ from collective.documentviewer.async import queueJob
 from collective.documentviewer import storage
 from collective.documentviewer.utils import mkdir_p
 
+OBJECT_PROVIDES = []
+try:
+    from plone.app.contenttypes.interfaces import IFile
+    OBJECT_PROVIDES.append(IFile.__identifier__)
+except ImportError:
+    pass
+try:
+    from Products.ATContentTypes.interface.file import IFileContent
+    OBJECT_PROVIDES.append(IFileContent.__identifier__)
+except ImportError:
+    pass
+
+OBJECT_PROVIDES = tuple(OBJECT_PROVIDES)
+
 default_profile = 'profile-collective.documentviewer:default'
 logger = getLogger('collective.documentviewer')
 
@@ -27,7 +40,7 @@ def convert_all(context):
     catalog = getToolByName(context, 'portal_catalog')
     portal = getSite()
     gsettings = GlobalSettings(portal)
-    for brain in catalog(object_provides=IFileContent.__identifier__):
+    for brain in catalog(object_provides=OBJECT_PROVIDES):
         file_item = brain.getObject()
 
         if not allowedDocumentType(file_item,
