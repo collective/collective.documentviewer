@@ -7,12 +7,16 @@ from zope.interface import implements, Interface
 
 from OFS.interfaces import IItem
 from Products.CMFCore.utils import getToolByName
-from Products.ATContentTypes.interfaces.file import IATFile
-from Products.ATContentTypes.interface.file import IFileContent
 
 from collective.documentviewer.interfaces import IFileWrapper, IOCRLanguage
 from collective.documentviewer.iso639_2_utf8 import ISO_UTF_MAP
 
+try:
+    from Products.ATContentTypes.interfaces.file import IATFile
+    from Products.ATContentTypes.interface.file import IFileContent
+except ImportError:
+    class IATFile(Interface):
+        pass
 try:
     from plone.dexterity.interfaces import IDexterityContent
 except ImportError:
