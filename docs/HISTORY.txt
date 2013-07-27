@@ -4,6 +4,11 @@ Changelog
 2.2.2 (Unreleased)
 ------------------
 
+- Add Dexterity compatibility, it works if you use
+  the File content type from plone.app.contentypes or if your content type
+  implements plone.app.contentypes.interfaces.IFile.
+  [vincentfretin]
+
 - Fix: users that can modify can now view info messages
   and 'annotations'/'sections' feature.
   [thomasdesvenain]
