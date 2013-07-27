@@ -388,11 +388,7 @@ class Converter(object):
         gsettings = self.gsettings
         fw = IFileWrapper(self.context)
         filename = fw.filename
-        ocrlanguage = zope.component.queryAdapter(context, IOCRLanguage)
-        if ocrlanguage is not None:
-            language = ocrlanguage.getLanguage()
-        else:
-            language = 'eng'
+        language = IOCRLanguage(context).getLanguage()
         args = dict(sizes=(('large', gsettings.large_size),
                            ('normal', gsettings.normal_size),
                            ('small', gsettings.thumb_size)),

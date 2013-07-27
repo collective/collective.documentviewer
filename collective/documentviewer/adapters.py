@@ -12,10 +12,9 @@ from collective.documentviewer.interfaces import IFileWrapper, IOCRLanguage
 from collective.documentviewer.iso639_2_utf8 import ISO_UTF_MAP
 
 try:
-    from Products.ATContentTypes.interfaces.file import IATFile
     from Products.ATContentTypes.interface.file import IFileContent
 except ImportError:
-    class IATFile(Interface):
+    class IFileContent(Interface):
         pass
 try:
     from plone.dexterity.interfaces import IDexterityContent
@@ -39,7 +38,7 @@ class StandardOCRLanguageAdapter(object):
         adapter.
     """
 
-    adapts(IATFile)
+    adapts(IItem)
     zope.interface.implements(IOCRLanguage)
 
     def __init__(self, context):
