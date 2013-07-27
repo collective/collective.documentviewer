@@ -6,7 +6,6 @@ import tempfile
 import re
 import transaction
 import traceback
-import zope.component
 from ZODB.blob import Blob
 from BTrees.OOBTree import OOBTree
 from Acquisition import aq_inner
@@ -224,6 +223,11 @@ class DocSplitSubProcess(BaseSubProcess):
             '--format', format,
             '--rolling',
             '--output', output_dir]
+        if lang != 'eng':
+            # cf https://github.com/documentcloud/docsplit/issues/72
+            # the cleaning functions are only suited for english
+            cmd.append('--no-clean')
+
         self._run_command(cmd)
 
         # now, move images to correctly named folders
@@ -245,6 +249,11 @@ class DocSplitSubProcess(BaseSubProcess):
             '--pages', 'all',
             '--output', output_dir
         ]
+        if lang != 'eng':
+            # cf https://github.com/documentcloud/docsplit/issues/72
+            # the cleaning functions are only suited for english
+            cmd.append('--no-clean')
+
         self._run_command(cmd)
 
     def get_num_pages(self, filepath):
@@ -386,7 +395,7 @@ class Converter(object):
     def run_conversion(self):
         context = self.context
         gsettings = self.gsettings
-        fw = IFileWrapper(self.context)
+        fw = IFileWrapper(context)
         filename = fw.filename
         language = IOCRLanguage(context).getLanguage()
         args = dict(sizes=(('large', gsettings.large_size),

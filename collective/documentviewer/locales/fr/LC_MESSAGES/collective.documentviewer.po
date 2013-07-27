@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-06-22 12:10+0000\n"
+"POT-Creation-Date: 2013-06-27 09:55+0000\n"
 "PO-Revision-Date: 2013-05-08 15:00-100\n"
 "Last-Translator: Gauthier Bastien <gauthier.bastien@imio.be>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,7 @@ msgstr "Ajouter la section"
 #. Default: "Are you sure you want to convert this to document viewer?"
 #: ./templates/converting.pt:18
 msgid "Are you sure you want to convert this to document viewer?"
-msgstr "Etes-vous certain de vouloir convertir ce fichier avec la visionneuse?"
+msgstr "Êtes-vous certain de vouloir convertir ce fichier avec la visionneuse?"
 
 #. Default: "Async Quota Size"
 #: ./interfaces.py:160
@@ -294,6 +294,10 @@ msgstr "Requis"
 msgid "Save"
 msgstr "Enregistrer"
 
+#: ./templates/documentviewer.pt:53
+msgid "Show Document Viewer Conversion Error"
+msgstr "Afficher l'erreur de conversion de la visionneuse"
+
 #. Default: "Show search box"
 #: ./interfaces.py:148
 msgid "Show search box"
@@ -406,7 +410,7 @@ msgstr "Largeur de la visionneuse"
 #. Default: "What to override the contributor field on viewer with.Leave blank to use document owner."
 #: ./interfaces.py:116
 msgid "What to override the contributor field on viewer with.Leave blank to use document owner."
-msgstr "Valeur à mettre dans la zone 'Contributeur' affichée sur la visionneuse.  Laissez vide pour utiliser le propirétaire du document."
+msgstr "Valeur à mettre dans la zone 'Contributeur' affichée sur la visionneuse.  Laissez vide pour utiliser le propriétaire du document."
 
 #. Default: "What to override the organization field on viewer with.Leave blank to use site title."
 #: ./interfaces.py:122

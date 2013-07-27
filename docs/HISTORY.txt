@@ -4,6 +4,18 @@ Changelog
 2.2.2 (Unreleased)
 ------------------
 
+- Fix: users that can modify can now view info messages
+  and 'annotations'/'sections' feature.
+  [thomasdesvenain]
+
+- Show contributor fullname if possible.
+  Contributor and organization are in a span.
+  [thomasdesvenain]
+
+- Avoid replacing non-ascii characters by (?) during OCR process
+  for non english languages.
+  [thomasdesvenain]
+
 - Plain text indexation is fixed for non converted contents.
   [thomasdesvenain]
 

@@ -1,19 +1,36 @@
 <?xml version="1.0"?>
-<object name="portal_actions" meta_type="Plone Actions Tool">
-  <action-provider name="portal_actions">
-
-    <action title="Document Viewer Settings" action_id="documentviewer_settings" category="object"
-        condition_expr="object/@@documentviewer-utils/settings_enabled"
-        url_expr="string:${object_url}/@@documentviewer-settings" visible="True">
-        <permission>Modify view template</permission>
-    </action>
-
-    <action title="Document Viewer Convert" action_id="documentviewer_convert"
-            category="object_buttons"
-        condition_expr="object/@@documentviewer-utils/enabled"
-        url_expr="string:${object_url}/@@convert-to-documentviewer" visible="True">
-        <permission>Modify view template</permission>
-    </action>
-
-  </action-provider>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+   xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+ <object name="object" meta_type="CMF Action Category">
+  <object name="documentviewer_settings" meta_type="CMF Action">
+   <property name="title">Document Viewer Settings</property>
+   <property name="description"></property>
+   <property
+      name="url_expr">string:${object_url}/@@documentviewer-settings</property>
+   <property name="link_target"></property>
+   <property name="icon_expr"></property>
+   <property
+      name="available_expr">object/@@documentviewer-utils/settings_enabled</property>
+   <property name="permissions">
+    <element value="Modify view template"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+ </object>
+ <object name="object_buttons" meta_type="CMF Action Category">
+  <object name="documentviewer_convert" meta_type="CMF Action">
+   <property name="title">Document Viewer Convert</property>
+   <property name="description"></property>
+   <property
+      name="url_expr">string:${object_url}/@@convert-to-documentviewer</property>
+   <property name="link_target"></property>
+   <property name="icon_expr"></property>
+   <property
+      name="available_expr">object/@@documentviewer-utils/enabled</property>
+   <property name="permissions">
+    <element value="Modify view template"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+ </object>
 </object>

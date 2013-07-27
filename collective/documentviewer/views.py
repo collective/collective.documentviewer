@@ -127,7 +127,7 @@ class DocumentViewerView(BrowserView):
                     "Your type may be supported. Check out the document "
                     "viewer configuration settings.")
         mtool = getToolByName(self.context, 'portal_membership')
-        self.can_modify = mtool.checkPermission('cmf.ModifyPortalContent',
+        self.can_modify = mtool.checkPermission('Modify portal content',
                                                 self.context)
         if msg and self.can_modify:
             utils.addPortalMessage(_(msg))
@@ -165,11 +165,20 @@ class DocumentViewerView(BrowserView):
         else:
             contributor = self.context.Creator()
 
+        mtool = getToolByName(self.context, 'portal_membership')
+        contributor_user = mtool.getMemberById(contributor)
+        if contributor_user is not None:
+            contributor = contributor_user.getProperty('fullname', None) \
+                or contributor
+
+        contributor = '<span class="DV-Contributor">%s</span>' % contributor
+
         if self.global_settings.override_organization:
             organization = self.global_settings.override_organization
         else:
             organization = self.site.title
 
+        organization = '<span class="DV-Organization">%s</span>' % organization
         image_format = self.settings.pdf_image_format
         if not image_format:
             # oops, this wasn't set like it should have been
