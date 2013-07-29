@@ -29,9 +29,9 @@ except ImportError:
     pass
 
 try:
-    from plone.app.contenttypes.interfaces import IFile
+    from plone.dexterity.interfaces import IDexterityContent
 
-    @indexer(IFile)
+    @indexer(IDexterityContent)
     def SearchableTextDexterity(obj):
         return SearchableTextIndexer(obj)
 except ImportError:
