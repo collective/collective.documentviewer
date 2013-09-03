@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.2.2 (Unreleased)
+3.0a1 (2013-09-03)
 ------------------
 
 - Add Dexterity compatibility. To enable it on your content type, you have
