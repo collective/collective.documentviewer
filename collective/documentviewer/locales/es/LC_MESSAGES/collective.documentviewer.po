@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: collective.documentviewer\n"
 "POT-Creation-Date: 2013-06-27 09:55+0000\n"
-"PO-Revision-Date: 2013-06-14 13:18+0100\n"
+"PO-Revision-Date: 2014-03-04 09:32+0100\n"
 "Last-Translator: Mikel Larreategi <mlarreategi@codesyntax.com>\n"
 "Language-Team: es <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr "*experimental* Si está sirviendo los archivos directamente desde un ser
 
 #: ./views.py:106
 msgid "A new conversion to the Document Viewer is currently being generated for this document."
-msgstr ""
+msgstr "Se está creando una nueva conversión de este documento"
 
 #: ./templates/documentviewer.pt:100
 msgid "Add"
@@ -297,7 +297,7 @@ msgstr "Guardar"
 
 #: ./templates/documentviewer.pt:53
 msgid "Show Document Viewer Conversion Error"
-msgstr ""
+msgstr "Mostrar error del Visor de Documentos"
 
 #. Default: "Show search box"
 #: ./interfaces.py:148
