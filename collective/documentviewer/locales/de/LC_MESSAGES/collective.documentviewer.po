@@ -1,0 +1,543 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-06-27 09:55+0000\n"
+"PO-Revision-Date: 2014-04-12 00:24+0100\n"
+"Last-Translator: Joerg Baach <mail@baach.de>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.documentviewer\n"
+
+#. Default: "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
+#: ./interfaces.py:59
+msgid "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
+msgstr "*Experimental* Wenn die Dateien direkt vom Webserver ausgeliefert werden, git es keine Möglichkeit, Sicherheitschecks durchzuführen. Diese Einstellung ehöht die Sicherheit etwas, indem die Pfade zu den Inhalten schwieriger zu erraten sind, und die Pfade werden nie publiziert. Natürlich sollte der Webserver keine Inhaltsangabe des Verzeichnisinhaltes auslieferen. *Wenn Sie nicht verstehst, was das heißt, sollten Sie es lieber NICHT aktivieren*"
+
+#: ./views.py:106
+msgid "A new conversion to the Document Viewer is currently being generated for this document."
+msgstr "Eine neue Umwandlung für die Dokumentenanzeige wird im Augenblick erzeugt."
+
+#: ./templates/documentviewer.pt:100
+msgid "Add"
+msgstr "Hinzufügen"
+
+#. Default: "Add Annotation"
+#: ./templates/documentviewer.pt:77
+msgid "Add Annotation"
+msgstr "Bemerkung hinzufügen"
+
+#: ./templates/documentviewer.pt:115
+msgid "Add Section"
+msgstr "Abschnitt hinzufügen"
+
+#. Default: "Are you sure you want to convert this to document viewer?"
+#: ./templates/converting.pt:18
+msgid "Are you sure you want to convert this to document viewer?"
+msgstr "Wollen Sie den Inhalt wirklich für die Dokumentenanzeige umwandeln?"
+
+#. Default: "Async Quota Size"
+#: ./interfaces.py:160
+msgid "Async Quota Size"
+msgstr "Asynchrone Größenbeschränkung"
+
+#. Default: "Auto Convert"
+#: ./interfaces.py:110
+msgid "Auto Convert"
+msgstr "Automatische Umwandlung"
+
+#. Default: "Auto layout file types"
+#: ./interfaces.py:102
+msgid "Auto layout file types"
+msgstr "Automatische umgewandelte Dateitypen"
+
+#. Default: "Auto select layout"
+#: ./interfaces.py:98
+msgid "Auto select layout"
+msgstr "Autmatische Layout Auswahl"
+
+#. Default: "Automatically convert files on creation and modification."
+#: ./interfaces.py:111
+msgid "Automatically convert files on creation and modification."
+msgstr "Automatisches Umwandeln von  Dateien bei Neuerstellung und bei  Änderung."
+
+#. Default: "Blob storage using the normal ZODB blob mechanism. File storage is for just storage the files on the file system with no hard reference on write to the ZODB. This allows you to easily push the files to be served off-site."
+#: ./interfaces.py:43
+msgid "Blob storage using the normal ZODB blob mechanism. File storage is for just storage the files on the file system with no hard reference on write to the ZODB. This allows you to easily push the files to be served off-site."
+msgstr "\"Blob\" benutzt den normalen ZODB \"Blob\" Speichermechanismus. \"File storage\" ist für die direkte Speicherung der Dateien im Dateisystem. Dies erlaubt die Auslieferung der Dateien \"off-site\""
+
+#. Default: "Click and drag an area of the image to select where the annotation should be."
+#: ./templates/documentviewer.pt:78
+msgid "Click and drag an area of the image to select where the annotation should be."
+msgstr "Anklicken und Rahmen ziehen um die Stelle auszuwählen, wo die Anmerkung stehen soll."
+
+#. Default: "Close"
+#: ./templates/documentviewer.pt:66
+msgid "Close"
+msgstr "Schließen"
+
+#. Default: "Convert"
+#: ./templates/converting.pt:23
+msgid "Convert"
+msgstr "Umwandeln"
+
+#. Default: "Convert this to document viewer"
+#: ./templates/converting.pt:17
+msgid "Convert this to document viewer"
+msgstr "Umwandeln für die Direktanzeige"
+
+#. Default: "Converting"
+#: ./templates/converting.pt:27
+msgid "Converting"
+msgstr "Umwandeln"
+
+#: ./templates/documentviewer.pt:106
+msgid "Current Annotations"
+msgstr "Vorhandene Anmerkungen"
+
+#: ./templates/documentviewer.pt:142
+msgid "Current Sections"
+msgstr "Vorhandene Abschnitte"
+
+#. Default: "Default height to use for viewer (only for non-fullscreen mode)."
+#: ./interfaces.py:140
+msgid "Default height to use for viewer (only for non-fullscreen mode)."
+msgstr "Voreinstellung für die Höhe die Direktanzeige (nicht im Vollbild-Modus)"
+
+#. Default: "Default to fullscreen viewer."
+#: ./interfaces.py:223
+msgid "Default to fullscreen viewer."
+msgstr "Vollbild-Modus wird voreingestellt."
+
+#. Default: "Default to show sidebar on Document Viewer."
+#: ./interfaces.py:145
+msgid "Default to show sidebar on Document Viewer."
+msgstr "Anzeige der Seitenspalte in der Direktanzeige wird voreingestellt."
+
+#. Default: "Default to show sidebar."
+#: ./interfaces.py:236
+msgid "Default to show sidebar."
+msgstr "Anzeige der Seitenspalte wird voreingestellt."
+
+#. Default: "Detect if pdf has text before performing OCR on it. If text is found, ocr will be skipped. If OCR is disabled, text will always try to be retrieved from the PDF file anyways."
+#: ./interfaces.py:92
+msgid "Detect if pdf has text before performing OCR on it. If text is found, ocr will be skipped. If OCR is disabled, text will always try to be retrieved from the PDF file anyways."
+msgstr "Versucht herauszufinden, ob PDFs Text beinhalten, bevor die Texterkennung durchgeführt wird. Wenn Text vorhanden ist, wird keine Erkennung vorgenommen. Wenn die Texterkennung ausgeschaltet ist, wird immer versucht, den Text direkt dem PDF zu entnehmen."
+
+#. Default: "Detect text"
+#: ./interfaces.py:91
+msgid "Detect text"
+msgstr "Erkenne Text"
+
+#: ./profiles/default/controlpanel.xml
+msgid "Document Viewer Async Tasks"
+msgstr "Asynchrone Einstellungen für die Direktanzeige"
+
+#: ./profiles/default/controlpanel.xml
+msgid "Document Viewer Settings"
+msgstr "Direktanzeige"
+
+#. Default: "Enable search on group view."
+#: ./interfaces.py:153
+msgid "Enable search on group view."
+msgstr "Schalte Suche in der Gruppendarstellung ein."
+
+#. Default: "Extra types only work with openoffice/libreoffice installed."
+#: ./interfaces.py:103
+msgid "Extra types only work with openoffice/libreoffice installed."
+msgstr "Extratypen funktionen nur wenn OpenOffice/LibreOffice installiert ist."
+
+#. Default: "Extract the text from the PDF using OCR technology."
+#: ./interfaces.py:88
+msgid "Extract the text from the PDF using OCR technology."
+msgstr "Texterkennung im PDF mit OCR Technik."
+
+#. Default: "For folders. Does not apply to topics."
+#: ./interfaces.py:157
+msgid "For folders. Does not apply to topics."
+msgstr "Für Ordner, nicht für Kollektionen."
+
+#. Default: "For pdf files."
+#: ./interfaces.py:99
+msgid "For pdf files."
+msgstr "Für PDF Dateien."
+
+#. Default: "Fullscreen Viewer"
+#: ./interfaces.py:222
+msgid "Fullscreen Viewer"
+msgstr "Vollbild Direktanzeige"
+
+#. Default: "Group View Batch Size"
+#: ./interfaces.py:156
+msgid "Group View Batch Size"
+msgstr "Gruppenanzeige Batchgröße"
+
+#. Default: "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search.  You will need to run conversion again for this parameter to be taken into account."
+#: ./interfaces.py:227
+msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search.  You will need to run conversion again for this parameter to be taken into account."
+msgstr "Aktiviert: Text wird aus dem PDF extrahiert, und ist in der Suche findbar. Damit sich diese Einstellung auswirkt, muß die Umwandlung erneut vorgenommen werden."
+
+#. Default: "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search. If this is disabled, the two following parameters 'OCR' and 'Detect text' are not taken into account.  Take care that this will not make already converted elements searchable/not searchable, you will have to convert existing element yourself."
+#: ./interfaces.py:77
+msgid "If this is enabled, the text will be extracted from the PDF and will be searchable using the search widget and with the Plone search. If this is disabled, the two following parameters 'OCR' and 'Detect text' are not taken into account.  Take care that this will not make already converted elements searchable/not searchable, you will have to convert existing element yourself."
+msgstr "Aktiviert: Text wird aus dem PDF extrahiert, und ist in der Suche findbar. Wenn die Einstellung deaktiviert ist, werden die beiden nachfolgendenen Einstellungen OCR und Texterkennung nicht beachtet. Dies hat keine Auswirkung auf schon umgewandelte Dokumente, ggf. müßßen die Dokumente nochmals manuell umgewandelt werden."
+
+#. Default: "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
+#: ./interfaces.py:128
+msgid "If you're syncing your storage to another server you would like to serve the pdf resources from, please specify the base url path."
+msgstr "Wenn die Dateien mit einem anderen Server synchronsiert werden sollen, der dann die PDF Inhalte ausliefert, geben Sie bitte dessen Basis URL an."
+
+#. Default: "Image Format"
+#: ./interfaces.py:68
+msgid "Image Format"
+msgstr "Bildformat"
+
+#. Default: "Large Image Size"
+#: ./interfaces.py:33
+msgid "Large Image Size"
+msgstr "Große Bildgröße"
+
+#. Default: "Leave blank to take full width."
+#: ./interfaces.py:135
+msgid "Leave blank to take full width."
+msgstr "Leer lassen um die volle Breite zu wählen."
+
+#: ./templates/documentviewer.pt:149
+msgid "Loading"
+msgstr "Laden"
+
+#. Default: "Make searchable"
+#: ./interfaces.py:76
+msgid "Make searchable"
+msgstr "Suchbar machen"
+
+#. Default: "Manage Annotations"
+#: ./templates/documentviewer.pt:63
+msgid "Manage Annotations"
+msgstr "Anmerkungen bearbeiten"
+
+#. Default: "Manage Sections"
+#: ./templates/documentviewer.pt:64
+msgid "Manage Sections"
+msgstr "Abschnitte bearbeiten"
+
+#. Default: "Normal Image Size"
+#: ./interfaces.py:36
+msgid "Normal Image Size"
+msgstr "Normale Bildgröße"
+
+#. Default: "Number of conversions to run at a time. The quota name assigned is `dv`."
+#: ./interfaces.py:161
+msgid "Number of conversions to run at a time. The quota name assigned is `dv`."
+msgstr "Anzahl der gleichzeitig laufenden Umwandlungen. Der zugewissene Quota-Name ist \"dv\"."
+
+#. Default: "OCR"
+#: ./interfaces.py:87
+msgid "OCR"
+msgstr "OCR"
+
+#. Default: "Obfuscate private file paths"
+#: ./interfaces.py:58
+msgid "Obfuscate private file paths"
+msgstr "Private Dateipfade verschleiern"
+
+#. Default: "On Document Viewer."
+#: ./interfaces.py:149
+msgid "On Document Viewer."
+msgstr "Über die Direktanzeige."
+
+#. Default: "Only for file storage not with zodb. Plone client must have write access to directory."
+#: ./interfaces.py:54
+msgid "Only for file storage not with zodb. Plone client must have write access to directory."
+msgstr "Nur für Speicherung im Dateisystem, nicht mit der ZODB. Der Ploneclient muß Schreibrechte für das Verzeichnis haben."
+
+#. Default: "Override Base Resource URL"
+#: ./interfaces.py:127
+msgid "Override Base Resource URL"
+msgstr "Basis Resourcen URL überschreiben"
+
+#: ./interfaces.py:115
+msgid "Override Contributor"
+msgstr "Mitwirkende überschreiben"
+
+#. Default: "Override Contributor Organization"
+#: ./interfaces.py:121
+msgid "Override Contributor Organization"
+msgstr "Überschreibe beitragende Organisation"
+
+#. Default: "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
+#: ./templates/converting.pt:31
+msgid "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
+msgstr "Das PDF wird nun für die Direktanzeige umgewandelt. Die aktuelle Darstellung bleibt bis die Umwandlung fertig ist."
+
+#: ./templates/documentviewer.pt:128
+msgid "Page"
+msgstr "Seite"
+
+#. Default: "Page:"
+#: ./templates/documentviewer.pt:70
+msgid "Page:"
+msgstr "Seite:"
+
+#. Default: "Required"
+#: ./templates/documentviewer.pt:84
+msgid "Required"
+msgstr "Notwendig"
+
+#. Default: "Save"
+#: ./views.py:396
+msgid "Save"
+msgstr "Speichern"
+
+#: ./templates/documentviewer.pt:53
+msgid "Show Document Viewer Conversion Error"
+msgstr "Zeige Umwandlungsfehler die Direktanzeiges"
+
+#. Default: "Show search box"
+#: ./interfaces.py:148
+msgid "Show search box"
+msgstr "Suchfeld anzeigen"
+
+#. Default: "Show search on group view"
+#: ./interfaces.py:152
+msgid "Show search on group view"
+msgstr "Einblenden der Suche in der Gruppen Anzeige"
+
+#. Default: "Show sidebar"
+#: ./interfaces.py:144
+msgid "Show sidebar"
+msgstr "Seitenspalte anzeigen"
+
+#. Default: "Since you do not have docsplit installed on this system, we can not render the pages of this document."
+#: ./views.py:98
+msgid "Since you do not have docsplit installed on this system, we can not render the pages of this document."
+msgstr "Da docsplit nicht installiert ist, können die Seiten des Dokumentes nicht anzeigt werden."
+
+#. Default: "Storage Type"
+#: ./interfaces.py:42
+msgid "Storage Type"
+msgstr "Speichertyp"
+
+#. Default: "Storage location"
+#: ./interfaces.py:53
+msgid "Storage location"
+msgstr "Speicherort"
+
+#. Default: "Text"
+#: ./templates/documentviewer.pt:92
+msgid "Text"
+msgstr "Text"
+
+#: ./templates/documentviewer.pt:151
+msgid "The Document Viewer requires that you enable Javascript."
+msgstr "Die Direktanzeige setzt Javascript voraus."
+
+#. Default: "The document is currently being converted to the Document Viewer view."
+#: ./views.py:110
+msgid "The document is currently being converted to the Document Viewer view."
+msgstr "Diese Dokument wird im Augenblick für die Direktanzeige umgewandelt."
+
+#: ./templates/converting.pt:43
+msgid "The file is active in the Queue."
+msgstr "Diese Datei ist in der Warteschlange."
+
+#. Default: "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
+#: ./views.py:127
+msgid "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
+msgstr "Nicht unterstützter Dokumententyp. Es kann sein, dass der Typ unterstützt wird. Bitte überprüfen Sie die Einstellungen der Direktanzeige."
+
+#: ./templates/converting.pt:41
+msgid "The file is number ${position} in the Queue."
+msgstr "Die Datei hat Position ${position} in der Warteschlange."
+
+#: ./templates/documentviewer.pt:131
+msgid "The page the section is for."
+msgstr "Die Seite des Abschnitts."
+
+#: ./templates/documentviewer.pt:95
+msgid "The text for the annotation. Can include html."
+msgstr "Der Text der Anmerkung. Kann HTML beiinhalten."
+
+#. Default: "The title of the annotation"
+#: ./templates/documentviewer.pt:86
+msgid "The title of the annotation"
+msgstr "Der Titel der Anmerkung"
+
+#: ./templates/documentviewer.pt:122
+msgid "The title of the section"
+msgstr "Der Titel des Abschnitts"
+
+#. Default: "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
+#: ./views.py:115
+msgid "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
+msgstr "Es gab einen Fehler bei der Umwandlung des Dokuments. Evtl. ist das Dokument verschlüsselt, beschädigt oder mißformatiert? Bitte beachten sie das Protokoll."
+
+#. Default: "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
+#: ./views.py:121
+msgid "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
+msgstr "Das Dokument ist noch nicht umgewandelt. Bitte klicken Sie auf \"Umwandeln für die Direktanzeige\" im Aktions Menü."
+
+#. Default: "This file is currently being converted to document viewer."
+#: ./templates/converting.pt:28
+msgid "This file is currently being converted to document viewer."
+msgstr "Diese Datei wird im Augenblick umgewandelt."
+
+#. Default: "Thumb Image Size"
+#: ./interfaces.py:39
+msgid "Thumb Image Size"
+msgstr "Größe des Vorschaubildes"
+
+#. Default: "Title"
+#: ./templates/documentviewer.pt:83
+msgid "Title"
+msgstr "Titel"
+
+#. Default: "Viewer Height"
+#: ./interfaces.py:139
+msgid "Viewer Height"
+msgstr "Höhe der Direktanzeige"
+
+#. Default: "Viewer Width"
+#: ./interfaces.py:134
+msgid "Viewer Width"
+msgstr "Breite der Direktanzeige"
+
+#. Default: "What to override the contributor field on viewer with.Leave blank to use document owner."
+#: ./interfaces.py:116
+msgid "What to override the contributor field on viewer with.Leave blank to use document owner."
+msgstr "Hiermit soll das Feld \"Beitragende\" in der Direktanzeige überschrieben werden. Leer lassen, um den Besitzer zu verwenden."
+
+#. Default: "What to override the organization field on viewer with.Leave blank to use site title."
+#: ./interfaces.py:122
+msgid "What to override the organization field on viewer with.Leave blank to use site title."
+msgstr "Hiermit soll das Feld \"Organisation\" in der Direktanzeige überschrieben werden. Leer lassen, um den Namen der Site zu verwenden."
+
+#: ./templates/converting.pt:35
+msgid "You may visit ${tag} until the conversion is complete."
+msgstr "Sie können zu ${tag} gehen, solange die Umwandlung läuft."
+
+#: ./templates/converting.pt:55
+msgid "You might also want to ${url}."
+msgstr "Sie könnten auch zu ${url}"
+
+#: ./templates/converting.pt:55
+msgid "check it in the process queue"
+msgstr "Überprüfen sie die Warteschlange"
+
+#. Default: "Configure the parameters for this Viewer."
+#: ./views.py:419
+msgid "description_documentviewer_global_settings_form"
+msgstr "Konfiguration der Einstellungen der Direktanzeige"
+
+#. Default: "These settings override the global settings."
+#: ./views.py:393
+msgid "description_documentviewer_settings_form"
+msgstr "Diese Einstellungen überschreiben die allgeimeinen Einstellungen"
+
+#. Default: "Global Document Viewer Settings"
+#: ./views.py:417
+msgid "heading_documentviewer_global_settings_form"
+msgstr "Allgemeine Einstellungen der Direktanzeige"
+
+#. Default: "Document Viewer Settings"
+#: ./views.py:391
+msgid "heading_documentviewer_settings_form"
+msgstr "Eintellungen der Direktanzeige"
+
+#. Default: "CLOSE"
+msgid "js_label_close"
+msgstr "Schließen"
+
+#. Default: "Close Fullscreen"
+msgid "js_label_close_fullscreen"
+msgstr "Schließe Vollbild"
+
+#. Default: "Contributed by:"
+msgid "js_label_contributed_by"
+msgstr "Beitragende"
+
+#. Default: "Document"
+msgid "js_label_document"
+msgstr "Dokument"
+
+#. Default: "for"
+msgid "js_label_for"
+msgstr "für"
+
+#. Default: "for page"
+msgid "js_label_for_page"
+msgstr "für Seite"
+
+#. Default: "Link to this note"
+msgid "js_label_link_to_note"
+msgstr "Verknüfung auf diese Notiz"
+
+#. Default: "Loading"
+msgid "js_label_loading"
+msgstr "Laden"
+
+#. Default: "Next"
+msgid "js_label_next"
+msgstr "Vor"
+
+#. Default: "Next annotation"
+msgid "js_label_next_annotation"
+msgstr "nächste Anmerkung"
+
+#. Default: "Notes"
+msgid "js_label_notes"
+msgstr "Notizen"
+
+#. Default: "of"
+msgid "js_label_of"
+msgstr "von"
+
+#. Default: "on page"
+msgid "js_label_on_page"
+msgstr "Auf Seite"
+
+#. Default: "Original Document"
+msgid "js_label_original_document"
+msgstr "Orginaldokument"
+
+#. Default: "Page"
+msgid "js_label_page"
+msgstr "Seite"
+
+#. Default: "Pages"
+msgid "js_label_pages"
+msgstr "Seiten"
+
+#. Default: "Previous"
+msgid "js_label_previous"
+msgstr "Zurück"
+
+#. Default: "Previous annotation"
+msgid "js_label_previous_annotation"
+msgstr "Vorherige Anmerkung"
+
+#. Default: "Remove"
+msgid "js_label_remove"
+msgstr "Entfernen"
+
+#. Default: "Search"
+msgid "js_label_search"
+msgstr "Suche"
+
+#. Default: "Text"
+msgid "js_label_text"
+msgstr "Text"
+
+#. Default: "Zoom"
+msgid "js_label_zoom"
+msgstr "Zoom"
+
+#: ./templates/converting.pt:35
+msgid "the current file"
+msgstr "Aktuelle Datei"
+
