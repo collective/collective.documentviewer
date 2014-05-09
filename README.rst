@@ -153,22 +153,24 @@ You can access them via `the git hub repo file location <https://github.com/coll
 
 Installation
 -------------------------------
-If on a linux/ubuntu/debian machine you run into an error like:
+If on a linux/ubuntu/debian machine you run into an error like::
 
-/var/lib/gems/1.9.1/gems/docsplit-0.7.2/lib/docsplit/image_extractor.rb:51:in `exists?': can't convert nil into String (TypeError)
-   from /var/lib/gems/1.9.1/gems/docsplit-0.7.2/lib/docsplit/image_extractor.rb:51:in `ensure in convert'
+    /var/lib/gems/1.9.1/gems/docsplit-0.7.2/lib/docsplit/image_extractor.rb:51:in `exists?': can't convert nil into String (TypeError)
+    from /var/lib/gems/1.9.1/gems/docsplit-0.7.2/lib/docsplit/image_extractor.rb:51:in `ensure in convert'
 
-This is because the ruby docsplit library is having an issue with the temp folder accesses, and removal of temp files.   Just run the following command:
+This is because the ruby docsplit library is having an issue with the temp
+folder accesses, and removal of temp files.   Just run the following command::
 
-sudo chmod 1777 /tmp && sudo chmod 1777 /var/tmp
+    sudo chmod 1777 /tmp && sudo chmod 1777 /var/tmp
 
 And retry the conversion of your document
-
 
 
 TODO
 ----
 
 - check why there are some error during async operations:
-    - ConflictError: database conflict error (oid 0x4d10, class BTrees.IOBTree.IOBucket, serial this txn started with 0x0395f478bc2cb377 2012-04-21 03:36:44.103425, serial currently committed 0x0395f479b09de4cc 2012-04-21 03:37:41.394556)
+    - ConflictError: database conflict error (oid 0x4d10, class BTrees.IOBTree.IOBucket,
+      serial this txn started with 0x0395f478bc2cb377 2012-04-21 03:36:44.103425,
+      serial currently committed 0x0395f479b09de4cc 2012-04-21 03:37:41.394556)
     - ERROR ZODB.Connection Shouldn't load state for 0x319d when the connection is closed
