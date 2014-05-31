@@ -14,7 +14,11 @@ logger = getLogger('collective.documentviewer')
 
 
 def handle_file_creation(obj, event):
-    qi = getToolByName(obj, 'portal_quickinstaller')
+    qi = getToolByName(obj, 'portal_quickinstaller', None)
+    if not qi:
+        return
+    if not qi:
+        return
     if not qi.isProductInstalled('collective.documentviewer'):
         return
 

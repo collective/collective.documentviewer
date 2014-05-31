@@ -1,7 +1,14 @@
 Changelog
 =========
 
-3.0.q (2014-05-08)
+3.0.2 (2014-05-31)
+------------------
+
+- fix bug where it wouldn't work with collective.geo.*
+  [vangheem]
+
+
+3.0.1 (2014-05-08)
 ------------------
 
 - add german translation
