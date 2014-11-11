@@ -391,8 +391,8 @@ class DocumentViewerSearchView(BrowserView):
     def __call__(self):
         settings = Settings(self.context)
         catalog = settings.catalog
+        query = self.request.form.get('q')
         if catalog:
-            query = self.request.form.get('q')
             results = catalog.query(Contains('text', query))
             return json.dumps({
                 "results": list(results[1]),
