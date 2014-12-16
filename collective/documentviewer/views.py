@@ -348,6 +348,10 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
         dv_translated_label_on_page = dv_translated_label_on_page.replace("'", "\\'")
         dv_translated_label_for_page = dv_translated_label_for_page.replace("'", "\\'")
 
+        self.request.response.setHeader('Content-Type',
+                                        'application/x-javascript;;charset="utf-8"')
+
+
         return TEMPLATE % dict(
             dv_translated_label_zoom=dv_translated_label_zoom,
             dv_translated_label_page=dv_translated_label_page,
