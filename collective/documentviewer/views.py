@@ -268,6 +268,7 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
     def getTranslatedJSLabels(self):
         """
         """
+        self.request.response.setHeader("Content-type", "application/javascript")
         TEMPLATE = """\
         var dv_translated_label_zoom = '%(dv_translated_label_zoom)s';
         var dv_translated_label_page = '%(dv_translated_label_page)s';

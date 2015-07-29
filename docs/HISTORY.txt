@@ -1,6 +1,12 @@
 Changelog
 =========
 
+3.0.3 (2015-07-29)
+------------------
+
+- set response header on javascript variable file. Prevents js errors on chrome.
+  [vangheem]
+
 3.0.2 (2014-05-31)
 ------------------
 
