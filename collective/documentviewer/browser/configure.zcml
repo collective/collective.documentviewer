@@ -1,0 +1,89 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="collective.documentviewer">
+
+  <browser:page
+    name="dvpdf-group-view"
+    for="OFS.interfaces.IFolder"
+    class=".views.GroupView"
+    template="templates/group-view.pt"
+    permission="zope2.View"
+    layer="..interfaces.ILayer" />
+
+  <browser:menuItem
+    for="Products.CMFCore.interfaces._content.IFolderish"
+    menu="plone_displayviews"
+    title="PDF Group View"
+    action="dvpdf-group-view"
+    description="To show thumbnails from pdf and make it searchable." />
+
+  <browser:page
+    zcml:condition="installed plone.app.async"
+    name="dvasync-monitor"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".controlpanel.AsyncMonitor"
+    template="templates/async-monitor.pt"
+    permission="cmf.ManagePortal"
+    layer="..interfaces.ILayer" />
+
+  <browser:page
+    zcml:condition="installed plone.app.async"
+    name="dv-remove-from-queue"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".views.AsyncMonitor"
+    attribute="remove"
+    permission="cmf.ManagePortal"
+    layer="..interfaces.ILayer" />
+
+  <browser:page
+    name="global-documentviewer-settings"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".controlpanel.GlobalSettingsFormView"
+    layer="..interfaces.ILayer"
+    permission="cmf.ManagePortal" />
+
+  <browser:page
+    name="documentviewer-utils"
+    for="*"
+    permission="zope2.View"
+    class=".views.Utils"
+    allowed_interface="..interfaces.IUtils"
+    layer="..interfaces.ILayer" />
+
+  <browser:page
+    name="dvcleanup-filestorage"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    permission="cmf.ManagePortal"
+    class=".views.Utils"
+    attribute="cleanup_file_storage"
+    layer="..interfaces.ILayer" />
+
+  <browser:page
+    name="dvpdffiles"
+    for="plone.app.layout.navigation.interfaces.INavigationRoot"
+    permission="zope2.View"
+    class=".traverse.PDFFiles"
+    allowed_interface="OFS.interfaces.IItem"
+    layer="..interfaces.ILayer" />
+
+  <browser:page
+    name="view"
+    for="..interfaces.IBlobFileWrapper"
+    permission="zope2.View"
+    class=".traverse.BlobView"
+    layer="..interfaces.ILayer" />
+
+  <browser:page
+    for="*"
+    name="dv_javascript_variables.js"
+    class=".views.DocumentViewerView"
+    attribute="getTranslatedJSLabels"
+    permission="zope.Public" />
+
+</configure>
