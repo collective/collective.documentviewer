@@ -4,6 +4,15 @@ Changelog
 4.0.0 (unreleased)
 ------------------
 
+- fix Plone 5 compatibility
+  [vangheem]
+
+- upgrade jquery.imgareaselect to latest
+  [vangheem]
+
+- upgrade document viewer to latest
+  [vangheem]
+
 - do not support upgrading from wildcard.pdfpal and wc.pageturner anymore. Use 3.x series
   [vangheem]
 

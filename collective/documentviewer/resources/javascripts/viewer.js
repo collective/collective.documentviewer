@@ -1,7 +1,7 @@
 (function($){
 $(document).ready(function(){
 
-$('.close-fullscreen').live('click', function(){
+$('.close-fullscreen').on('click', function(){
   if(window.opener){
     window.close();
     window.opener.location = jQuery('base').attr('href') + '/view#bypass-fullscreen';

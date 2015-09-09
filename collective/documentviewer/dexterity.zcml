@@ -12,8 +12,8 @@
   <browser:page
     name="documentviewer"
     for="plone.dexterity.interfaces.IDexterityContent"
-    class=".views.DXDocumentViewerView"
-    template="templates/documentviewerdx.pt"
+    class=".browser.views.DXDocumentViewerView"
+    template="browser/templates/documentviewerdx.pt"
     permission="zope2.View"
     layer=".interfaces.ILayer" />
 
@@ -27,14 +27,14 @@
   <browser:page
     name="dv-search.json"
     for="plone.dexterity.interfaces.IDexterityContent"
-    class=".views.DocumentViewerSearchView"
+    class=".browser.views.DocumentViewerSearchView"
     permission="zope2.View"
     layer=".interfaces.ILayer" />
 
   <browser:page
     name="documentviewer-settings"
     for="plone.dexterity.interfaces.IDexterityContent"
-    class=".views.SettingsFormView"
+    class=".browser.settings.SettingsFormView"
     layer=".interfaces.ILayer"
     permission="cmf.ModifyPortalContent" />
 
@@ -46,7 +46,7 @@
   <browser:page
     name="documentviewer-annotate"
     for="plone.dexterity.interfaces.IDexterityContent"
-    class=".views.Annotate"
+    class=".browser.views.Annotate"
     layer=".interfaces.ILayer"
     permission="cmf.ModifyPortalContent" />
 
@@ -54,7 +54,7 @@
     zcml:condition="installed plone.app.async"
     name="dvmove-to-front"
     for="plone.dexterity.interfaces.IDexterityContent"
-    class=".views.MoveJob"
+    class=".browser.views.MoveJob"
     permission="cmf.ManagePortal"
     layer=".interfaces.ILayer" />
 
@@ -62,8 +62,8 @@
     name="convert-to-documentviewer"
     for="plone.dexterity.interfaces.IDexterityContent"
     permission="cmf.ModifyPortalContent"
-    class=".views.Convert"
-    template="templates/converting.pt"
+    class=".browser.views.Convert"
+    template="browser/templates/converting.pt"
     layer=".interfaces.ILayer" />
 
   <subscriber

@@ -24,91 +24,14 @@
     description="Installs the collective.documentviewer package"
     provides="Products.GenericSetup.interfaces.EXTENSION" />
 
-  <browser:page
-    name="dvpdf-group-view"
-    for="OFS.interfaces.IFolder"
-    class=".views.GroupView"
-    template="templates/group-view.pt"
-    permission="zope2.View"
-    layer=".interfaces.ILayer" />
-
-  <browser:menuItem
-    for="Products.CMFCore.interfaces._content.IFolderish"
-    menu="plone_displayviews"
-    title="PDF Group View"
-    action="dvpdf-group-view"
-    description="To show thumbnails from pdf and make it searchable." />
-
-  <browser:page
-    zcml:condition="installed plone.app.async"
-    name="dvasync-monitor"
-    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-    class=".views.AsyncMonitor"
-    template="templates/async-monitor.pt"
-    permission="cmf.ManagePortal"
-    layer=".interfaces.ILayer" />
-
-  <browser:page
-    zcml:condition="installed plone.app.async"
-    name="dv-remove-from-queue"
-    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-    class=".views.AsyncMonitor"
-    attribute="remove"
-    permission="cmf.ManagePortal"
-    layer=".interfaces.ILayer" />
-
-  <browser:page
-    name="global-documentviewer-settings"
-    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-    class=".views.GlobalSettingsFormView"
-    layer=".interfaces.ILayer"
-    permission="cmf.ManagePortal" />
   <adapter
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     provides=".interfaces.IGlobalDocumentViewerSettings"
     factory=".settings.GlobalSettings" />
 
-  <browser:page
-    name="documentviewer-utils"
-    for="*"
-    permission="zope2.View"
-    class=".views.Utils"
-    allowed_interface=".interfaces.IUtils"
-    layer=".interfaces.ILayer" />
-
-  <browser:page
-    name="dvcleanup-filestorage"
-    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-    permission="cmf.ManagePortal"
-    class=".views.Utils"
-    attribute="cleanup_file_storage"
-    layer=".interfaces.ILayer" />
-
   <browser:resourceDirectory
     name="dv.resources"
     directory="resources" />
-
-  <browser:page
-    name="dvpdffiles"
-    for="plone.app.layout.navigation.interfaces.INavigationRoot"
-    permission="zope2.View"
-    class=".views.PDFFiles"
-    allowed_interface="OFS.interfaces.IItem"
-    layer=".interfaces.ILayer" />
-
-  <browser:page
-    name="view"
-    for=".interfaces.IBlobFileWrapper"
-    permission="zope2.View"
-    class=".views.BlobView"
-    layer=".interfaces.ILayer" />
-
-  <browser:page
-    for="*"
-    name="dv_javascript_variables.js"
-    class=".views.DocumentViewerView"
-    attribute="getTranslatedJSLabels"
-    permission="zope.Public" />
 
   <adapter factory=".adapters.StandardOCRLanguageAdapter" />
   <adapter factory=".adapters.BaseItem" />
@@ -116,4 +39,5 @@
   <include file="archetypes.zcml" />
   <include file="dexterity.zcml" />
 
+  <include package=".browser" />
 </configure>

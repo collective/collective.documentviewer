@@ -2,6 +2,12 @@ SELECTION = null;
 
 (function($){
 $(document).ready(function(){
+    'use strict';
+
+    var baseUrl = $('base').attr('href');
+    if(!baseUrl){
+        baseUrl = $('body').attr('data-base-url');
+    }
     var annotation_container = $('#annotation-management');
     var img_container = $('#image-container');
     var add_container = $('#add-annotation');
@@ -114,14 +120,15 @@ $(document).ready(function(){
             return false;
         }
         $.ajax({
-            url: $('base').attr('href') + '/@@documentviewer-annotate',
+            url: baseUrl + '/@@documentviewer-annotate',
             type: 'POST',
             data: {
                 'action': 'addannotation',
                 'title': titleval,
                 'content': textval,
                 'coord': SELECTION.y1 + ',' + SELECTION.x2 + ',' + SELECTION.y2 + ',' + SELECTION.x1,
-                'page': pselect.val()
+                'page': pselect.val(),
+                '_authenticator': $('[name="_authenticator"]').val()
             },
             dataType: 'json',
             success: function(data){
@@ -140,17 +147,18 @@ $(document).ready(function(){
         return false;
     });
 
-    $('#annotations a.remove').live('click', function(){
+    $('#annotations').on('click', 'a.remove', function(){
         var link = $(this);
         var id = parseInt($(this).attr('rel'));
         var page = parseInt($(this).attr('page'));
         $.ajax({
-            url: $('base').attr('href') + '/@@documentviewer-annotate',
+            url: baseUrl + '/@@documentviewer-annotate',
             type: 'POST',
             data: {
                 'action': 'removeannotation',
                 'id': id,
-                'page': page
+                'page': page,
+                '_authenticator': $('[name="_authenticator"]').val()
             },
             success: function(){
                 link.parent().remove();
@@ -234,12 +242,13 @@ $(document).ready(function(){
             return false;
         }
         $.ajax({
-            url: $('base').attr('href') + '/@@documentviewer-annotate',
+            url: baseUrl + '/@@documentviewer-annotate',
             type: 'POST',
             data: {
                 'action': 'addsection',
                 'title': titleval,
-                'page': pageval
+                'page': pageval,
+                '_authenticator': $('[name="_authenticator"]').val()
             },
             dataType: 'json',
             success: function(data){
@@ -254,17 +263,18 @@ $(document).ready(function(){
         return false;
     });
 
-    $('#sections a.remove').live('click', function(){
+    $('#sections').on('click', 'a.remove', function(){
         var link = $(this);
         var titleval = $(this).attr('title');
         var pageval = parseInt($(this).attr('rel'));
         $.ajax({
-            url: $('base').attr('href') + '/@@documentviewer-annotate',
+            url: baseUrl + '/@@documentviewer-annotate',
             type: 'POST',
             data: {
                 'action': 'removesection',
                 'title': titleval,
-                'page': pageval
+                'page': pageval,
+                '_authenticator': $('[name="_authenticator"]').val()
             },
             success: function(){
                 link.parent().remove();

@@ -12,8 +12,8 @@
   <browser:page
     name="documentviewer"
     for="Products.ATContentTypes.interface.file.IFileContent"
-    class=".views.DocumentViewerView"
-    template="templates/documentviewer.pt"
+    class=".browser.views.DocumentViewerView"
+    template="browser/templates/documentviewer.pt"
     permission="zope2.View"
     layer=".interfaces.ILayer" />
 
@@ -27,14 +27,14 @@
   <browser:page
     name="dv-search.json"
     for="Products.ATContentTypes.interface.file.IFileContent"
-    class=".views.DocumentViewerSearchView"
+    class=".browser.views.DocumentViewerSearchView"
     permission="zope2.View"
     layer=".interfaces.ILayer" />
 
   <browser:page
     name="documentviewer-settings"
     for="Products.ATContentTypes.interface.file.IFileContent"
-    class=".views.SettingsFormView"
+    class=".browser.settings.SettingsFormView"
     layer=".interfaces.ILayer"
     permission="cmf.ModifyPortalContent" />
 
@@ -46,7 +46,7 @@
   <browser:page
     name="documentviewer-annotate"
     for="Products.ATContentTypes.interface.file.IFileContent"
-    class=".views.Annotate"
+    class=".browser.views.Annotate"
     layer=".interfaces.ILayer"
     permission="cmf.ModifyPortalContent" />
 
@@ -54,7 +54,7 @@
     zcml:condition="installed plone.app.async"
     name="dvmove-to-front"
     for="Products.ATContentTypes.interface.file.IFileContent"
-    class=".views.MoveJob"
+    class=".browser.views.MoveJob"
     permission="cmf.ManagePortal"
     layer=".interfaces.ILayer" />
 
@@ -62,8 +62,8 @@
     name="convert-to-documentviewer"
     for="Products.ATContentTypes.interface.file.IFileContent"
     permission="cmf.ModifyPortalContent"
-    class=".views.Convert"
-    template="templates/converting.pt"
+    class=".browser.views.Convert"
+    template="browser/templates/converting.pt"
     layer=".interfaces.ILayer" />
 
   <subscriber

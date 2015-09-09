@@ -23,6 +23,8 @@
       tal:attributes="href string:${view/dvstatic}/assets/printviewer.css" />
   <script src="/viewer/viewer.js"
       tal:attributes="src string:${view/dvstatic}/assets/viewer.js"></script>
+    <script src="/viewer/templates.js"
+      tal:attributes="src string:${view/dvstatic}/assets/templates.js"></script>
   <script src="/viewer/viewer.js"
       tal:attributes="src string:${view/dvstatic}/javascripts/viewer.js"></script>
 
@@ -50,7 +52,7 @@
   <tal:notshow tal:condition="not: view/enabled">
     <dl id="errorMsg" tal:condition="python: view.can_modify and view.settings.successfully_converted is False">
       <dt>
-        <a href="#" i18n:translate="">Show Document Viewer Conversion Error</a>
+        <a href="#">Show Document Viewer Conversion Error</a>
       </dt>
       <dd>
         <pre tal:content="python: view.settings.exception_msg" />
@@ -155,9 +157,19 @@
       <script type="text/javascript" tal:content="structure view/javascript"></script>
     </tal:show>
 
-    <p>
-      <metal:field use-macro="python:here.widget('file', mode='view')">File</metal:field>
-    </p>
+    <tal:block repeat="widget view/widgets/values">
+        <tal:block tal:condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description',)">
+            <tal:widget tal:replace="structure widget/@@ploneform-render-widget"/>
+        </tal:block>
+    </tal:block>
+
+    <fieldset tal:repeat="group view/groups"
+              tal:attributes="id python:''.join((group.prefix, 'groups.', group.__name__)).replace('.', '-')">
+        <legend tal:content="group/label" />
+        <tal:block tal:repeat="widget group/widgets/values">
+            <tal:widget tal:replace="structure widget/@@ploneform-render-widget"/>
+        </tal:block>
+    </fieldset>                                                               
   </tal:main-macro>
 </div>
 

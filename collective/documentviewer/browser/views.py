@@ -1,62 +1,37 @@
-import random
-from persistent.list import PersistentList
-from persistent.dict import PersistentDict
-from AccessControl import Unauthorized
-import os
 import json
-import shutil
 from logging import getLogger
-from zExceptions import NotFound
-from OFS.SimpleItem import SimpleItem
-from Products.Five.browser import BrowserView
+import os
+import random
+import shutil
+
+from AccessControl import Unauthorized
 from DateTime import DateTime
-from AccessControl import getSecurityManager
-from webdav.common import rfc1123_date
-from zope.component import getMultiAdapter
-from zope.interface import implements
-from zope.component import getUtility
-from Products.Five.browser.resource import DirectoryResource
-from Products.Five.browser.resource import Directory
-from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.annotation.interfaces import IAnnotations
-from zope.i18n import translate
-from Products.CMFCore import permissions
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import base_hasattr
-from repoze.catalog.query import Contains
-from plone.app.blob.download import handleRequestRange
-from plone.app.blob.iterators import BlobStreamIterator
-from plone.app.blob.utils import openBlob
-from z3c.form import form
-from z3c.form import field
-from z3c.form import button
-from plone.app.z3cform.layout import wrap_form
-from Products.CMFPlone import PloneMessageFactory
-from collective.documentviewer.utils import allowedDocumentType
-from collective.documentviewer.interfaces import IDocumentViewerSettings
-from collective.documentviewer.interfaces import IUtils
-from collective.documentviewer.interfaces import IGlobalDocumentViewerSettings
-from collective.documentviewer.settings import Settings
-from collective.documentviewer.settings import GlobalSettings
+from Products.Five.browser import BrowserView
 from collective.documentviewer import mf as _
-from collective.documentviewer.convert import docsplit
+from collective.documentviewer import storage
+from collective.documentviewer.async import JobRunner
+from collective.documentviewer.async import asyncInstalled
+from collective.documentviewer.async import queueJob
 from collective.documentviewer.convert import DUMP_FILENAME
 from collective.documentviewer.convert import TEXT_REL_PATHNAME
-from collective.documentviewer.async import isConversion
-from collective.documentviewer.async import asyncInstalled
-from collective.documentviewer.async import QUOTA_NAME
-from collective.documentviewer.async import queueJob
-from collective.documentviewer.async import JobRunner
-from collective.documentviewer import storage
+from collective.documentviewer.convert import docsplit
+from collective.documentviewer.interfaces import IFileWrapper
+from collective.documentviewer.interfaces import IUtils
+from collective.documentviewer.settings import GlobalSettings
+from collective.documentviewer.settings import Settings
+from collective.documentviewer.utils import allowedDocumentType
 from collective.documentviewer.utils import getPortal
-from collective.documentviewer.interfaces import IBlobFileWrapper, IFileWrapper
+from persistent.dict import PersistentDict
+from persistent.list import PersistentList
+from repoze.catalog.query import Contains
+from zope.annotation.interfaces import IAnnotations
+from zope.component import getMultiAdapter
+from zope.i18n import translate
+from zope.interface import implements
 
 logger = getLogger('collective.documentviewer')
-
-try:
-    from plone.app.async.interfaces import IAsyncService
-except ImportError:
-    pass
 
 
 def either(one, two):
@@ -172,14 +147,11 @@ class DocumentViewerView(BrowserView):
             contributor = contributor_user.getProperty('fullname', None) \
                 or contributor
 
-        contributor = '<span class="DV-Contributor">%s</span>' % contributor
-
         if self.global_settings.override_organization:
             organization = self.global_settings.override_organization
         else:
             organization = self.site.title
 
-        organization = '<span class="DV-Organization">%s</span>' % organization
         image_format = self.settings.pdf_image_format
         if not image_format:
             # oops, this wasn't set like it should have been
@@ -334,57 +306,6 @@ class DocumentViewerSearchView(BrowserView):
         return json.dumps({"results": [], "query": query})
 
 
-class SettingsForm(form.EditForm):
-    """
-    The page that holds all the slider settings
-    """
-    fields = field.Fields(IDocumentViewerSettings)
-
-    label = _(u'heading_documentviewer_settings_form',
-              default=u"Document Viewer Settings")
-    description = _(u'description_documentviewer_settings_form',
-                    default=u"These settings override the global settings.")
-
-    @button.buttonAndHandler(_('Save'), name='apply')
-    def handleApply(self, action):
-        data, errors = self.extractData()
-        if errors:
-            self.status = self.formErrorsMessage
-            return
-
-        self.applyChanges(data)
-
-        url = getMultiAdapter((self.context, self.request),
-                              name='absolute_url')() + '/view'
-        self.request.response.redirect(url)
-
-        self.context.plone_utils.addPortalMessage(PloneMessageFactory('Changes saved.'))
-
-SettingsFormView = wrap_form(SettingsForm)
-
-
-class GlobalSettingsForm(form.EditForm):
-    fields = field.Fields(IGlobalDocumentViewerSettings)
-
-    label = _(u'heading_documentviewer_global_settings_form',
-              default=u"Global Document Viewer Settings")
-    description = _(u'description_documentviewer_global_settings_form',
-                    default=u"Configure the parameters for this Viewer.")
-
-    @button.buttonAndHandler(_('Save'), name='apply')
-    def handleApply(self, action):
-        data, errors = self.extractData()
-        if errors:
-            self.status = self.formErrorsMessage
-            return
-
-        self.applyChanges(data)
-
-        self.status = PloneMessageFactory('Changes saved.')
-
-GlobalSettingsFormView = wrap_form(GlobalSettingsForm)
-
-
 class Utils(BrowserView):
     implements(IUtils)
 
@@ -507,183 +428,6 @@ class Convert(Utils):
         self.request.response.redirect(self.context.absolute_url() + '/view')
 
 
-class BlobView(BrowserView):
-
-    def __call__(self):
-        sm = getSecurityManager()
-        if not sm.checkPermission(permissions.View, self.context.context):
-            raise Unauthorized
-
-        settings = self.context.settings
-        filepath = self.context.filepath
-        blob = settings.blob_files[filepath]
-        blobfi = openBlob(blob)
-        length = os.fstat(blobfi.fileno()).st_size
-        blobfi.close()
-        ext = os.path.splitext(os.path.normcase(filepath))[1][1:]
-        if ext == 'txt':
-            ct = 'text/plain'
-        else:
-            ct = 'image/%s' % ext
-
-        self.request.response.setHeader('Last-Modified',
-                                        rfc1123_date(self.context._p_mtime))
-        self.request.response.setHeader('Accept-Ranges', 'bytes')
-        self.request.response.setHeader("Content-Length", length)
-        self.request.response.setHeader('Content-Type', ct)
-        request_range = handleRequestRange(
-            self.context, length, self.request, self.request.response)
-        return BlobStreamIterator(blob, **request_range)
-
-
-class BlobFileWrapper(SimpleItem):
-    implements(IBlobFileWrapper, IBrowserPublisher)
-
-    def __init__(self, fileobj, settings, filepath, request):
-        self.context = fileobj
-        self.settings = settings
-        self.filepath = filepath
-        self.request = request
-
-    def browserDefault(self, request):
-        return self, ('@@view',)
-
-
-class PDFTraverseBlobFile(SimpleItem):
-    """
-    For traversing blob data store
-    """
-    implements(IBrowserPublisher)
-
-    def __init__(self, fileobj, settings, request, previous=None):
-        self.context = fileobj
-        self.settings = settings
-        self.request = request
-        self.previous = previous
-
-    def publishTraverse(self, request, name):
-        if name not in ('large', 'normal', 'small', 'text'):
-            filepath = '%s/%s' % (self.previous, name)
-            if filepath in self.settings.blob_files:
-                return BlobFileWrapper(self.context,
-                                       self.settings,
-                                       filepath,
-                                       self.request).__of__(self.context)
-            else:
-                raise NotFound
-        else:
-            if self.previous is not None:
-                # shouldn't be traversing this deep
-                raise NotFound
-
-            fi = PDFTraverseBlobFile(self.context, self.settings,
-                                     request, name)
-            fi.__parent__ = self
-            return fi.__of__(self)
-
-    def browserDefault(self, request):
-        '''See interface IBrowserPublisher'''
-        return lambda: '', ()
-
-
-_marker = object()
-
-
-class RequestMemo(object):
-
-    key = 'plone.memoize_request'
-
-    def __call__(self, func):
-
-        def memogetter(*args, **kwargs):
-            request = args[0]
-
-            annotations = IAnnotations(request)
-            cache = annotations.get(self.key, _marker)
-
-            if cache is _marker:
-                cache = annotations[self.key] = dict()
-
-            key = (func.__module__, func.__name__)
-            value = cache.get(key, _marker)
-            if value is _marker:
-                value = cache[key] = func(*args, **kwargs)
-            return value
-        return memogetter
-
-
-@RequestMemo()
-def _getPortal(request, context):
-    return getPortal(context)
-
-
-class PDFFiles(SimpleItem, DirectoryResource):
-    implements(IBrowserPublisher)
-
-    def __init__(self, context, request, previous=[]):
-        SimpleItem.__init__(self, context, request)
-        self.previous = previous
-
-        self.__name__ = 'dvpdffiles'
-        self.site = _getPortal(request, context)
-        self.global_settings = GlobalSettings(self.site)
-        self.storage_type = self.global_settings.storage_type
-        self.__dir = Directory(
-            os.path.join(self.global_settings.storage_location, *previous),
-            self.__name__)
-
-        DirectoryResource.__init__(self, self.__dir, request)
-
-    def publishTraverse(self, request, name):
-        if len(self.previous) > 2:
-            raise NotFound
-
-        if len(name) == 1:
-            if len(self.previous) == 0:
-                previous = [name]
-            else:
-                previous = self.previous
-                previous.append(name)
-
-            self.context.path = os.path.join(self.context.path, name)
-            files = PDFFiles(self.context, request, previous)
-            files.__parent__ = self
-            return files.__of__(self)
-
-        if len(self.previous) == 2 and (self.previous[0] != name[0] or
-           self.previous[1] != name[1:2]):
-            # make sure the first two were a sub-set of the uid
-            raise NotFound
-
-#        uidcat = getToolByName(self.site, 'uid_catalog')
-#        brains = uidcat(UID=name)
-#        Dexterity items are not indexed in uid_catalog
-        cat = getToolByName(self.site, 'portal_catalog')
-        brains = cat.unrestrictedSearchResults(UID=name)
-        if len(brains) == 0:
-            raise NotFound
-
-#        fileobj = brains[0].getObject()
-#        getObject raise Unauthorized because we are Anonymous in the traverser
-        fileobj = brains[0]._unrestrictedGetObject()
-        settings = Settings(fileobj)
-        if settings.storage_type == 'Blob':
-            fi = PDFTraverseBlobFile(fileobj, settings, request)
-            fi.__parent__ = self
-            return fi.__of__(self)
-        else:
-            # so permission checks for file object are applied
-            # to file resource
-            self.__roles__ = tuple(fileobj.__roles__) + ()
-            if settings.obfuscated_filepath:
-                # check if this thing isn't published...
-                self.context.path = os.path.join(self.context.path, name)
-                name = settings.obfuscate_secret
-
-            fi = super(PDFFiles, self).publishTraverse(request, name)
-            return fi
-
-
 class GroupView(BrowserView):
 
     def getContents(self, object=None, portal_type=('File',),
@@ -767,108 +511,6 @@ class GroupView(BrowserView):
         elif obj.portal_type == 'Image':
             url = obj.absolute_url()
             return '%s/image_thumb' % url
-
-
-class AsyncMonitor(BrowserView):
-    """
-    Monitor document conversions async jobs
-    """
-
-    def time_since(self, dt):
-        now = DateTime('UTC')
-        diff = now - dt
-
-        secs = int(diff * 24 * 60 * 60)
-        minutes = secs / 60
-        hours = minutes / 60
-        days = hours / 24
-
-        if days:
-            return '%i day%s' % (days, days > 1 and 's' or '')
-        elif hours:
-            return '%i hour%s' % (hours, hours > 1 and 's' or '')
-        elif minutes:
-            return '%i minute%s' % (minutes, minutes > 1 and 's' or '')
-        else:
-            return '%i second%s' % (secs, secs > 1 and 's' or '')
-
-    def get_job_data(self, job, sitepath, removable=True):
-        lastused = DateTime(job._p_mtime)
-        if job.status != 'pending-status':
-            timerunning = self.time_since(lastused)
-        else:
-            timerunning = '-'
-
-        return {
-            'status': job.status,
-            'user': job.args[3],
-            'object_path': '/'.join(job.args[0][len(sitepath):]),
-            'lastused': lastused.toZone('UTC').pCommon(),
-            'timerunning': timerunning,
-            'removable': removable
-        }
-
-    @property
-    def jobs(self):
-        results = []
-        if asyncInstalled():
-            sitepath = self.context.getPhysicalPath()
-            async = getUtility(IAsyncService)
-            queue = async.getQueues()['']
-            quota = queue.quotas[QUOTA_NAME]
-
-            for job in quota._data:
-                if isConversion(job, sitepath):
-                    results.append(self.get_job_data(job, sitepath, False))
-
-            jobs = [job for job in queue]
-            for job in jobs:
-                if isConversion(job, sitepath):
-                    results.append(self.get_job_data(job, sitepath))
-
-        return results
-
-    def redirect(self):
-        return self.request.response.redirect("%s/@@dvasync-monitor" % (
-            self.context.absolute_url()))
-
-    def move(self):
-        pass
-
-    def remove(self):
-        if self.request.get('REQUEST_METHOD', 'POST') and \
-                self.request.form.get('form.action.remove', '') == 'Remove':
-            authenticator = getMultiAdapter((self.context, self.request),
-                                            name=u"authenticator")
-            if not authenticator.verify():
-                raise Unauthorized
-
-            # find the job
-            sitepath = self.context.getPhysicalPath()
-            async = getUtility(IAsyncService)
-            queue = async.getQueues()['']
-
-            objpath = self.request.form.get('path')
-            obj = self.context.restrictedTraverse(str(objpath), None)
-            if obj is None:
-                return self.redirect()
-
-            objpath = obj.getPhysicalPath()
-
-            jobs = [job for job in queue]
-            for job in jobs:
-                if isConversion(job, sitepath) and \
-                        job.args[0] == objpath:
-                    try:
-                        queue.remove(job)
-                        settings = Settings(obj)
-                        settings.converting = False
-                    except LookupError:
-                        pass
-
-                    return self.redirect()
-
-        return self.redirect()
 
 
 class MoveJob(BrowserView):
