@@ -75,7 +75,8 @@ class DocumentViewerView(BrowserView):
         self.settings = Settings(self.context)
         self.global_settings = GlobalSettings(self.site)
 
-        self.portal_url = getMultiAdapter((self.context, self.request),
+        self.portal_url = getMultiAdapter(
+            (self.context, self.request),
             name="plone_portal_state").portal_url()
         self.dvstatic = "%s/++resource++dv.resources" % (
             self.portal_url)
@@ -92,7 +93,7 @@ class DocumentViewerView(BrowserView):
         self.enabled = True
 
         if allowedDocumentType(self.context,
-                self.global_settings.auto_layout_file_types):
+                               self.global_settings.auto_layout_file_types):
             if not self.installed:
                 msg = _("Since you do not have docsplit installed on this "
                         "system, we can not render the pages of this document.")
@@ -256,123 +257,53 @@ if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
     jQuery('body').addClass('not-fullscreen');
 }
 """ % {
-    'portal_url': self.portal_url,
-    'height': height,
-    'fullscreen': str(fullscreen).lower(),
-    'sidebar': str(sidebar).lower(),
-    'search': str(search).lower(),
-    'width': width,
-    'data': json.dumps(self.dv_data())
-}
+            'portal_url': self.portal_url,
+            'height': height,
+            'fullscreen': str(fullscreen).lower(),
+            'sidebar': str(sidebar).lower(),
+            'search': str(search).lower(),
+            'width': width,
+            'data': json.dumps(self.dv_data())
+        }
 
     def getTranslatedJSLabels(self):
         """
         """
+        labels = [
+            ('zoom', 'Zoom'),
+            ('page', 'Page'),
+            ('of', 'of'),
+            ('document', 'Document'),
+            ('pages', 'Pages'),
+            ('notes', 'Notes'),
+            ('loading', 'Loading'),
+            ('text', 'Text'),
+            ('search', 'Search'),
+            ('for', 'for'),
+            ('previous', 'Previous'),
+            ('next', 'Next'),
+            ('close', 'Close'),
+            ('remove', 'Remove'),
+            ('link_to_note', 'Link to this note'),
+            ('previous_annotation', 'Previous annotation'),
+            ('next_annotation', 'Next annotation'),
+            ('on_page', 'on page'),
+            ('for_page', 'for page'),
+            ('original_document', 'Original Document'),
+            ('contributed_by', 'Contributed by:'),
+            ('close_fullscreen', 'Close Fullscreen')
+        ]
+        result = ''
+        for lid, default in labels:
+            translated = translate(
+                'js_label_%s' % lid, domain='collective.documentviewer',
+                context=self.request, default=default)
+            result += "var dv_translated_label_%s = '%s';\n" % (
+                lid, translated.replace("'", "\\'")
+            )
         self.request.response.setHeader("Content-type", "application/javascript")
-        TEMPLATE = """\
-        var dv_translated_label_zoom = '%(dv_translated_label_zoom)s';
-        var dv_translated_label_page = '%(dv_translated_label_page)s';
-        var dv_translated_label_of = '%(dv_translated_label_of)s';
-        var dv_translated_label_document = '%(dv_translated_label_document)s';
-        var dv_translated_label_pages = '%(dv_translated_label_pages)s';
-        var dv_translated_label_notes = '%(dv_translated_label_notes)s';
-        var dv_translated_label_text = '%(dv_translated_label_text)s';
-        var dv_translated_label_loading = '%(dv_translated_label_loading)s';
-        var dv_translated_label_search = '%(dv_translated_label_search)s';
-        var dv_translated_label_for = '%(dv_translated_label_for)s';
-        var dv_translated_label_previous = '%(dv_translated_label_previous)s';
-        var dv_translated_label_next = '%(dv_translated_label_next)s';
-        var dv_translated_label_close = '%(dv_translated_label_close)s';
-        var dv_translated_label_remove = '%(dv_translated_label_remove)s';
-        var dv_translated_label_link_to_note = '%(dv_translated_label_link_to_note)s';
-        var dv_translated_label_previous_annotation = '%(dv_translated_label_previous_annotation)s';
-        var dv_translated_label_next_annotation = '%(dv_translated_label_next_annotation)s';
-        var dv_translated_label_on_page = '%(dv_translated_label_on_page)s';
-        var dv_translated_label_for_page = '%(dv_translated_label_for_page)s';
-        var dv_translated_label_original_document = '%(dv_translated_label_original_document)s';
-        var dv_translated_label_contributed_by = '%(dv_translated_label_contributed_by)s';
-        var dv_translated_label_close_fullscreen = '%(dv_translated_label_close_fullscreen)s';
-        """
-        d = 'collective.documentviewer'
-        r = self.request
-        dv_translated_label_zoom = translate('js_label_zoom', domain=d, context=r, default='Zoom')
-        dv_translated_label_page = translate('js_label_page', domain=d, context=r, default='Page')
-        dv_translated_label_of = translate('js_label_of', domain=d, context=r, default='of')
-        dv_translated_label_document = translate('js_label_document', domain=d, context=r, default='Document')
-        dv_translated_label_pages = translate('js_label_pages', domain=d, context=r, default='Pages')
-        dv_translated_label_notes = translate('js_label_notes', domain=d, context=r, default='Notes')
-        dv_translated_label_loading = translate('js_label_loading', domain=d, context=r, default='Loading')
-        dv_translated_label_text = translate('js_label_text', domain=d, context=r, default='Text')
-        dv_translated_label_search = translate('js_label_search', domain=d, context=r, default='Search')
-        dv_translated_label_for = translate('js_label_for', domain=d, context=r, default='for')
-        dv_translated_label_previous = translate('js_label_previous', domain=d, context=r, default='Previous')
-        dv_translated_label_next = translate('js_label_next', domain=d, context=r, default='Next')
-        dv_translated_label_close = translate('js_label_close', domain=d, context=r, default='Close')
-        dv_translated_label_remove = translate('js_label_remove', domain=d, context=r, default='Remove')
-        dv_translated_label_link_to_note = translate('js_label_link_to_note',
-                                                     domain=d,
-                                                     context=r,
-                                                     default='Link to this note')
-        dv_translated_label_previous_annotation = translate('js_label_previous_annotation',
-                                                            domain=d,
-                                                            context=r,
-                                                            default='Previous annotation')
-        dv_translated_label_next_annotation = translate('js_label_next_annotation',
-                                                        domain=d,
-                                                        context=r,
-                                                        default='Next annotation')
-        dv_translated_label_on_page = translate('js_label_on_page', domain=d, context=r, default='on page')
-        dv_translated_label_for_page = translate('js_label_for_page', domain=d, context=r, default='for page')
-        dv_translated_label_original_document = translate('js_label_original_document', domain=d, context=r, default='Original Document')
-        dv_translated_label_contributed_by = translate('js_label_contributed_by', domain=d, context=r, default='Contributed by:')
-        dv_translated_label_close_fullscreen = translate('js_label_close_fullscreen', domain=d, context=r, default='Close Fullscreen')
 
-
-        # escape_for_js
-        dv_translated_label_zoom = dv_translated_label_zoom.replace("'", "\\'")
-        dv_translated_label_page = dv_translated_label_page.replace("'", "\\'")
-        dv_translated_label_of = dv_translated_label_of.replace("'", "\\'")
-        dv_translated_label_document = dv_translated_label_document.replace("'", "\\'")
-        dv_translated_label_pages = dv_translated_label_pages.replace("'", "\\'")
-        dv_translated_label_notes = dv_translated_label_notes.replace("'", "\\'")
-        dv_translated_label_loading = dv_translated_label_loading.replace("'", "\\'")
-        dv_translated_label_text = dv_translated_label_text.replace("'", "\\'")
-        dv_translated_label_search = dv_translated_label_search.replace("'", "\\'")
-        dv_translated_label_for = dv_translated_label_for.replace("'", "\\'")
-        dv_translated_label_previous = dv_translated_label_previous.replace("'", "\\'")
-        dv_translated_label_next = dv_translated_label_next.replace("'", "\\'")
-        dv_translated_label_close = dv_translated_label_close.replace("'", "\\'")
-        dv_translated_label_remove = dv_translated_label_remove.replace("'", "\\'")
-        dv_translated_label_link_to_note = dv_translated_label_link_to_note.replace("'", "\\'")
-        dv_translated_label_previous_annotation = dv_translated_label_previous_annotation.replace("'", "\\'")
-        dv_translated_label_next_annotation = dv_translated_label_next_annotation.replace("'", "\\'")
-        dv_translated_label_on_page = dv_translated_label_on_page.replace("'", "\\'")
-        dv_translated_label_for_page = dv_translated_label_for_page.replace("'", "\\'")
-
-        return TEMPLATE % dict(
-            dv_translated_label_zoom=dv_translated_label_zoom,
-            dv_translated_label_page=dv_translated_label_page,
-            dv_translated_label_of=dv_translated_label_of,
-            dv_translated_label_document=dv_translated_label_document,
-            dv_translated_label_pages=dv_translated_label_pages,
-            dv_translated_label_notes=dv_translated_label_notes,
-            dv_translated_label_loading=dv_translated_label_loading,
-            dv_translated_label_text=dv_translated_label_text,
-            dv_translated_label_search=dv_translated_label_search,
-            dv_translated_label_for=dv_translated_label_for,
-            dv_translated_label_previous=dv_translated_label_previous,
-            dv_translated_label_next=dv_translated_label_next,
-            dv_translated_label_close=dv_translated_label_close,
-            dv_translated_label_remove=dv_translated_label_remove,
-            dv_translated_label_link_to_note=dv_translated_label_link_to_note,
-            dv_translated_label_previous_annotation=dv_translated_label_previous_annotation,
-            dv_translated_label_next_annotation=dv_translated_label_next_annotation,
-            dv_translated_label_on_page=dv_translated_label_on_page,
-            dv_translated_label_for_page=dv_translated_label_for_page,
-            dv_translated_label_original_document=dv_translated_label_original_document,
-            dv_translated_label_contributed_by=dv_translated_label_contributed_by,
-            dv_translated_label_close_fullscreen=dv_translated_label_close_fullscreen,
-        )
+        return result
 
 
 try:
@@ -410,9 +341,9 @@ class SettingsForm(form.EditForm):
     fields = field.Fields(IDocumentViewerSettings)
 
     label = _(u'heading_documentviewer_settings_form',
-        default=u"Document Viewer Settings")
+              default=u"Document Viewer Settings")
     description = _(u'description_documentviewer_settings_form',
-        default=u"These settings override the global settings.")
+                    default=u"These settings override the global settings.")
 
     @button.buttonAndHandler(_('Save'), name='apply')
     def handleApply(self, action):
@@ -424,7 +355,7 @@ class SettingsForm(form.EditForm):
         self.applyChanges(data)
 
         url = getMultiAdapter((self.context, self.request),
-            name='absolute_url')() + '/view'
+                              name='absolute_url')() + '/view'
         self.request.response.redirect(url)
 
         self.context.plone_utils.addPortalMessage(PloneMessageFactory('Changes saved.'))
@@ -436,9 +367,9 @@ class GlobalSettingsForm(form.EditForm):
     fields = field.Fields(IGlobalDocumentViewerSettings)
 
     label = _(u'heading_documentviewer_global_settings_form',
-        default=u"Global Document Viewer Settings")
+              default=u"Global Document Viewer Settings")
     description = _(u'description_documentviewer_global_settings_form',
-        default=u"Configure the parameters for this Viewer.")
+                    default=u"Configure the parameters for this Viewer.")
 
     @button.buttonAndHandler(_('Save'), name='apply')
     def handleApply(self, action):
@@ -464,9 +395,9 @@ class Utils(BrowserView):
                 if self.context.getLayout() == 'documentviewer':
                     return True
                 else:
-                    return allowedDocumentType(self.context,
-                        GlobalSettings(
-                            getPortal(self.context)).auto_layout_file_types)
+                    settings = GlobalSettings(getPortal(self.context))
+                    return allowedDocumentType(
+                        self.context, settings.auto_layout_file_types)
             else:
                 return False
         except:
@@ -485,10 +416,10 @@ class Utils(BrowserView):
         for foldername in os.listdir(storage_loc):
             if len(foldername) == 1:
                 # we're in a container, check inside
-                count += self.clean_folder(catalog,
-                    os.path.join(storage_loc, foldername))
+                count += self.clean_folder(
+                    catalog, os.path.join(storage_loc, foldername))
             else:
-                #foldername should be file uid
+                # foldername should be file uid
                 brains = catalog(UID=foldername)
                 folderpath = os.path.join(storage_loc, foldername)
                 if len(brains) == 0:
@@ -600,10 +531,8 @@ class BlobView(BrowserView):
         self.request.response.setHeader('Accept-Ranges', 'bytes')
         self.request.response.setHeader("Content-Length", length)
         self.request.response.setHeader('Content-Type', ct)
-        request_range = handleRequestRange(self.context,
-                                   length,
-                                   self.request,
-                                   self.request.response)
+        request_range = handleRequestRange(
+            self.context, length, self.request, self.request.response)
         return BlobStreamIterator(blob, **request_range)
 
 
@@ -783,7 +712,7 @@ class GroupView(BrowserView):
         return self.getContents(portal_type=types)
 
     def get_files(self, obj, portal_type=('File',)):
-        #Handle brains or objects
+        # Handle brains or objects
         if base_hasattr(obj, 'getPath'):
             path = obj.getPath()
         else:
@@ -805,7 +734,8 @@ class GroupView(BrowserView):
         self.global_settings = GlobalSettings(self.site)
         self.search_enabled = self.global_settings.show_search_on_group_view
 
-        self.portal_url = getMultiAdapter((self.context, self.request),
+        self.portal_url = getMultiAdapter(
+            (self.context, self.request),
             name="plone_portal_state").portal_url()
         self.static_url = '%s/++resource++dv.resources' % (self.portal_url)
         self.resource_url = self.global_settings.override_base_resource_url
