@@ -1,6 +1,12 @@
 Changelog
 =========
 
+4.0.0 (unreleased)
+------------------
+
+- do not support upgrading from wildcard.pdfpal and wc.pageturner anymore. Use 3.x series
+  [vangheem]
+
 3.0.3 (2015-07-29)
 ------------------
 

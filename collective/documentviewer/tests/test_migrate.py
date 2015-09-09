@@ -3,7 +3,6 @@ from collective.documentviewer.settings import Settings
 from collective.documentviewer.settings import STORAGE_VERSION
 from collective.documentviewer import storage
 from tempfile import mkdtemp
-from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from Products.Archetypes.event import ObjectInitializedEvent
 
@@ -16,28 +15,6 @@ from os import listdir
 
 
 class MigrateTest(BaseTest):
-
-    def test_migrate_page_turner_on_convert(self):
-        fi = self.createFile('test.pdf')
-        fi.layout = 'page-turner'
-        annotations = IAnnotations(fi)
-        metadata = {'foo': 'bar'}
-        annotations['wc.pageturner'] = metadata
-        notify(ObjectInitializedEvent(fi))
-        annotations = IAnnotations(fi)
-        self.assertTrue('wc.pageturner' not in annotations)
-        self.assertEquals(fi.layout, 'documentviewer')
-
-    def test_migrate_pdfpal_on_convert(self):
-        fi = self.createFile('test.pdf')
-        fi.layout = 'page-turner'
-        annotations = IAnnotations(fi)
-        metadata = {'foo': 'bar'}
-        annotations['wc.pageturner'] = metadata
-        notify(ObjectInitializedEvent(fi))
-        annotations = IAnnotations(fi)
-        self.assertTrue('wc.pageturner' not in annotations)
-        self.assertEquals(fi.layout, 'documentviewer')
 
     def test_cleanup_file_storage(self):
         gsettings = GlobalSettings(self.portal)

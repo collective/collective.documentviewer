@@ -487,33 +487,10 @@ class Converter(object):
         """
         This will check if the file does not have the
         document viewer display selected.
-
-        In addition, if the currently selected display
-        is for wc.pageturner, we'll clean out the annotations
-        from that product. Additionally, we'll also look
-        for wildcard.pdfpal related values.
         """
         current = self.context.getLayout()
         if current != 'documentviewer':
             self.context.layout = 'documentviewer'
-
-        annotations = IAnnotations(self.context)
-        # remove page turner related
-        data = annotations.get('wc.pageturner', None)
-        if data:
-            del annotations['wc.pageturner']
-
-        # remove pdfpal related
-        try:
-            field = self.context.getField('ocrText')
-            if field:
-                field.set(self.context, '')
-        except AttributeError:  # Dexterity doesn't have getField
-            pass
-
-        data = annotations.get('wildcard.pdfpal', None)
-        if data:
-            del annotations['wildcard.pdfpal']
 
     def anonCanView(self):
         can = False

@@ -27,26 +27,6 @@ def install(context):
             methods.append('dvpdf-group-view')
             _type.view_methods = tuple(set(methods))
 
-    portal = getSite()
-
-    # disable as much of pageturner/pdfpal as possible
-    properties_tool = getToolByName(portal, 'portal_properties')
-    site_props = properties_tool.site_properties
-    if site_props.hasProperty('page_turner_auto_select_layout'):
-        site_props.manage_changeProperties(
-            page_turner_auto_select_layout=False)
-
-    try:
-        from wildcard.pdfpal.settings import PDFPalConfiguration
-        qi = getToolByName(context, 'portal_quickinstaller')
-        if qi.isProductInstalled('wildcard.pdfpal'):
-            config = PDFPalConfiguration(portal)
-            config.ocr_enabled = False
-            config.overwrite_pdf_with_searchable_version = False
-            config.thumbnail_gen_enabled = False
-    except ImportError:
-        pass
-
 
 def uninstall(context, reinstall=False):
     if not reinstall:
@@ -75,8 +55,7 @@ def uninstall(context, reinstall=False):
             if data:
                 del annotations['collective.documentviewer']
             # delete files associated with it...
-            storage_dir = storage.getResourceDirectory(gsettings=settings,
-                obj=obj)
+            storage_dir = storage.getResourceDirectory(gsettings=settings, obj=obj)
             if os.path.exists(storage_dir):
                 shutil.rmtree(storage_dir)
 

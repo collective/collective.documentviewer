@@ -110,14 +110,6 @@
     attribute="getTranslatedJSLabels"
     permission="zope.Public" />
 
-  <monkey:patch
-    zcml:condition="installed wc.pageturner"
-    description="Patch object modify/creation subscribers to not run with dv"
-    module="wc.pageturner.events"
-    original="queue_job"
-    replacement=".patches.pt_queue_job"
-    preserveOriginal="True" />
-
   <adapter factory=".adapters.StandardOCRLanguageAdapter" />
   <adapter factory=".adapters.BaseItem" />
   <adapter factory=".adapters.DexterityItem" />
