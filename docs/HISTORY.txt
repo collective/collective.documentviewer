@@ -1,6 +1,13 @@
 Changelog
 =========
 
+4.0.1 (unreleased)
+------------------
+
+- fix async monitor registration
+  [pilz]
+
+
 4.0.0 (2015-09-09)
 ------------------
 
