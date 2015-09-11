@@ -19,10 +19,23 @@ try:
 except ImportError:
     pass
 
+try:
+    from celery.result import AsyncResult  # noqa
+except ImportError:
+    pass
+
 
 def asyncInstalled():
     try:
-        import plone.app.async
+        import plone.app.async  # noqa
+        return True
+    except:
+        return False
+
+
+def celeryInstalled():
+    try:
+        import collective.celery  # noqa
         return True
     except:
         return False
@@ -35,7 +48,14 @@ def isConversion(job, sitepath):
     return sitepath == job.args[1] and job.args[4] == runConversion
 
 
-class JobRunner(object):
+def getJobRunner(obj):
+    if asyncInstalled():
+        return AsyncJobRunner(obj)
+    elif celeryInstalled():
+        return CeleryJobRunner(obj)
+
+
+class AsyncJobRunner(object):
     """
     helper class to setup the quota and check the
     queue before adding it to the queue
@@ -130,28 +150,109 @@ class JobRunner(object):
         bucket._data = tuple(jobs)
 
 
+try:
+    from collective.celery import task
+
+    @task()
+    def _celeryQueueJob(obj):
+        runConversion(obj)
+        settings = Settings(obj)
+        settings.converting = True
+except ImportError:
+    pass
+
+
+class CeleryJobRunner(object):
+    """
+    helper class to setup the quota and check the
+    queue before adding it to the queue
+    """
+
+    def __init__(self, obj):
+        self.object = obj
+        self.portal = getPortal(obj)
+        self.settings = Settings(obj)
+
+    def is_current_active(self, job):
+        try:
+            return job.state not in ('PENDING', 'FAILURE', 'SUCCESS')
+        except TypeError:
+            return False
+
+    @property
+    def already_in_queue(self):
+        """
+        Check if object in queue
+        """
+        return self.find_job()[0] > -1
+
+    def find_position(self):
+        # active in queue
+        try:
+            return self.find_job()[0]
+        except KeyError:
+            return -1
+
+    def find_job(self):
+        result = AsyncResult(self.settings.celery_task_id)
+        if self.is_current_active(result):
+            return 0, result
+
+        return -1, None
+
+    def queue_it(self):
+        result = _celeryQueueJob.delay(self.object)
+        self.settings.celery_task_id = result.id
+        self.settings.converting = True
+
+    def move_to_front(self):
+        pass
+
+
+class QueueException(Exception):
+    pass
+
+
+def asyncQueueJob(obj):
+    try:
+        runner = AsyncJobRunner(obj)
+        runner.set_quota()
+        if runner.already_in_queue:
+            logger.info('object %s already in queue for conversion' % (
+                repr(obj)))
+        else:
+            runner.queue_it()
+        return
+    except:
+        raise QueueException
+
+
+def celeryQueueJob(obj):
+    try:
+        runner = CeleryJobRunner(obj)
+        if runner.already_in_queue:
+            logger.info('object %s already in queue for conversion' % (
+                repr(obj)))
+        else:
+            runner.queue_it()
+        return
+    except:
+        raise QueueException
+
+
 def queueJob(obj):
-    """
-    queue a job async if available.
-    otherwise, just run normal
-    """
     converter = Converter(obj)
     if not converter.can_convert:
         return
-    if asyncInstalled():
-        try:
-            runner = JobRunner(obj)
-            runner.set_quota()
-            if runner.already_in_queue:
-                logger.info('object %s already in queue for conversion' % (
-                    repr(obj)))
-            else:
-                runner.queue_it()
-            return
-        except:
-            logger.exception("Error using plone.app.async with "
-                "collective.documentviewer. Converting pdf without "
-                "plone.app.async...")
+    try:
+        if asyncInstalled():
+            asyncQueueJob(obj)
+        elif celeryInstalled():
+            celeryQueueJob(obj)
+        else:
             converter()
-    else:
+    except QueueException:
+        logger.exception(
+            "Error using async with "
+            "collective.documentviewer. Converting pdf without async...")
         converter()

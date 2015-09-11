@@ -4,6 +4,9 @@ Changelog
 4.0.1 (unreleased)
 ------------------
 
+- be able to use collective.celery for queuing tasks
+  [vangheem]
+
 - fix async monitor registration
   [pilz]
 

@@ -46,5 +46,8 @@ setup(name='collective.documentviewer',
 
       [z3c.autoinclude.plugin]
       target = plone
+
+      [celery_tasks]
+      documentviewer = collective.documentviewer.async
       """
       )

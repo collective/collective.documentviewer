@@ -11,8 +11,9 @@ from Products.CMFPlone.utils import base_hasattr
 from Products.Five.browser import BrowserView
 from collective.documentviewer import mf as _
 from collective.documentviewer import storage
-from collective.documentviewer.async import JobRunner
+from collective.documentviewer.async import getJobRunner
 from collective.documentviewer.async import asyncInstalled
+from collective.documentviewer.async import celeryInstalled
 from collective.documentviewer.async import queueJob
 from collective.documentviewer.convert import DUMP_FILENAME
 from collective.documentviewer.convert import TEXT_REL_PATHNAME
@@ -328,7 +329,7 @@ class Utils(BrowserView):
         return self.context.getLayout() == 'documentviewer'
 
     def async_enabled(self):
-        return asyncInstalled()
+        return asyncInstalled() or celeryInstalled()
 
     def clean_folder(self, catalog, storage_loc):
         if not os.path.isdir(storage_loc):
@@ -395,7 +396,7 @@ class Convert(Utils):
         mtool = getToolByName(self.context, 'portal_membership')
         self.manager = mtool.checkPermission('cmf.ManagePortal',
                                              self.context)
-        self.async_installed = asyncInstalled()
+        self.async_installed = asyncInstalled() or celeryInstalled()
         self.converting = False
         if self.enabled():
             req = self.request
@@ -411,15 +412,11 @@ class Convert(Utils):
                 settings.filehash = '--foobar--'
                 queueJob(self.context)
                 self.converting = True
-                if self.async_installed:
-                    self.position = JobRunner(self.context).find_position()
-                    queueJob(self.context)
-                else:
-                    return self.request.response.redirect(
-                        self.context.absolute_url() + '/view')
+                return self.request.response.redirect(
+                    self.context.absolute_url() + '/view')
             else:
                 if self.async_installed:
-                    self.position = JobRunner(self.context).find_position()
+                    self.position = getJobRunner(self.context).find_position()
                     if self.position > -1:
                         self.converting = True
 
@@ -523,7 +520,7 @@ class MoveJob(BrowserView):
             if not authenticator.verify():
                 raise Unauthorized
 
-            JobRunner(self.context).move_to_front()
+            getJobRunner(self.context).move_to_front()
 
         return self.request.response.redirect(
             self.context.absolute_url() + '/@@convert-to-documentviewer')
