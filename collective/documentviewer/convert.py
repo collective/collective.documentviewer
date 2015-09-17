@@ -25,6 +25,14 @@ from collective.documentviewer.utils import mkdir_p
 from collective.documentviewer.events import ConversionFinishedEvent
 from collective.documentviewer.interfaces import IFileWrapper, IOCRLanguage
 import random
+from plone.namedfile.file import NamedBlobImage
+
+try:
+    from plone.app.contenttypes.behaviors.leadimage import ILeadImage
+except ImportError:
+    from zope.interface import Interface
+    class ILeadImage(Interface):
+        pass
 
 word_re = re.compile('\W+')
 logger = getLogger('collective.documentviewer')
@@ -103,7 +111,8 @@ class BaseSubProcess(object):
             cmd = cmd.split()
         cmdformatted = ' '.join(cmd)
         logger.info("Running command %s" % cmdformatted)
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+        process = subprocess.Popen(
+            cmd, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE, close_fds=self.close_fds)
         output, error = process.communicate()
         process.stdout.close()
@@ -217,7 +226,8 @@ class DocSplitSubProcess(BaseSubProcess):
     def dump_images(self, filepath, output_dir, sizes, format, lang='eng'):
         # docsplit images pdf.pdf --size 700x,300x,50x
         # --format gif --output
-        cmd = [self.binary, "images", filepath,
+        cmd = [
+            self.binary, "images", filepath,
             '--language', lang,
             '--size', ','.join([str(s[1]) + 'x' for s in sizes]),
             '--format', format,
@@ -243,7 +253,8 @@ class DocSplitSubProcess(BaseSubProcess):
         # docsplit text pdf.pdf --[no-]ocr --pages all
         output_dir = os.path.join(output_dir, TEXT_REL_PATHNAME)
         ocr = not ocr and 'no-' or ''
-        cmd = [self.binary, "text", filepath,
+        cmd = [
+            self.binary, "text", filepath,
             '--language', lang,
             '--%socr' % ocr,
             '--pages', 'all',
@@ -266,7 +277,8 @@ class DocSplitSubProcess(BaseSubProcess):
         inputfilepath = os.path.join(output_dir, 'dump.%s' % ext)
         shutil.move(filepath, inputfilepath)
         orig_files = set(os.listdir(output_dir))
-        cmd = [self.binary, 'pdf', inputfilepath,
+        cmd = [
+            self.binary, 'pdf', inputfilepath,
             '--output', output_dir]
         self._run_command(cmd)
 
@@ -430,6 +442,20 @@ class Converter(object):
         storage_dir = self.storage_dir
         settings = self.settings
         context = self.context
+
+        # save lead image if available
+        if ILeadImage.providedBy(self.context):
+            path = os.path.join(storage_dir, 'large')
+            filename = None
+            for dump_filename in os.listdir(path):
+                if dump_filename.startswith('dump_1.'):
+                    filename = dump_filename
+                    break
+            filepath = os.path.join(path, filename)
+            fi = open(filepath)
+            self.context.image = NamedBlobImage(fi, filename=filename.decode('utf8'))
+            fi.close()
+
         if self.gsettings.storage_type == 'Blob':
             logger.info('setting blob data for %s' % repr(context))
             # go through temp folder and move items into blob storage
@@ -451,7 +477,7 @@ class Converter(object):
             settings.blob_files = files
             shutil.rmtree(storage_dir)
 
-            #check for old storage to remove... Just in case.
+            # check for old storage to remove... Just in case.
             old_storage_dir = os.path.join(gsettings.storage_location,
                                            context.UID())
             if os.path.exists(old_storage_dir):

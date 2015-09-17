@@ -4,6 +4,9 @@ Changelog
 4.0.1 (unreleased)
 ------------------
 
+- add lead image support
+  [vangheem]
+
 - be able to use collective.celery for queuing tasks
   [vangheem]
 
