@@ -157,19 +157,6 @@
       <script type="text/javascript" tal:content="structure view/javascript"></script>
     </tal:show>
 
-    <tal:block repeat="widget view/widgets/values">
-        <tal:block tal:condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description',)">
-            <tal:widget tal:replace="structure widget/@@ploneform-render-widget"/>
-        </tal:block>
-    </tal:block>
-
-    <fieldset tal:repeat="group view/groups"
-              tal:attributes="id python:''.join((group.prefix, 'groups.', group.__name__)).replace('.', '-')">
-        <legend tal:content="group/label" />
-        <tal:block tal:repeat="widget group/widgets/values">
-            <tal:widget tal:replace="structure widget/@@ploneform-render-widget"/>
-        </tal:block>
-    </fieldset>                                                               
   </tal:main-macro>
 </div>
 

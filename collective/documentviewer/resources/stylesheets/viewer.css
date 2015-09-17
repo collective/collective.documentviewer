@@ -20,3 +20,7 @@
 #DV-container {
     z-index: 0;
 }
+
+.leadImage{
+  display:none;
+}
