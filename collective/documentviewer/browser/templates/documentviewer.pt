@@ -21,10 +21,10 @@
       tal:attributes="src string:${portal_url}/dv_javascript_variables.js"></script>
   <link href="/viewer/printviewer.css" media="print" rel="stylesheet" type="text/css"
       tal:attributes="href string:${view/dvstatic}/assets/printviewer.css" />
-  <script src="/viewer/templates.js"
-      tal:attributes="src string:${view/dvstatic}/assets/templates.js"></script>
   <script src="/viewer/viewer.js"
       tal:attributes="src string:${view/dvstatic}/assets/viewer.js"></script>
+  <script src="/viewer/templates.js"
+      tal:attributes="src string:${view/dvstatic}/assets/templates.js"></script>
   <script src="/viewer/viewer.js"
       tal:attributes="src string:${view/dvstatic}/javascripts/viewer.js"></script>
 
