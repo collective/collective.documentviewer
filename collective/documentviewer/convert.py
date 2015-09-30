@@ -25,10 +25,10 @@ from collective.documentviewer.utils import mkdir_p
 from collective.documentviewer.events import ConversionFinishedEvent
 from collective.documentviewer.interfaces import IFileWrapper, IOCRLanguage
 import random
-from plone.namedfile.file import NamedBlobImage
 
 try:
     from plone.app.contenttypes.behaviors.leadimage import ILeadImage
+    from plone.namedfile.file import NamedBlobImage
 except ImportError:
     from zope.interface import Interface
     class ILeadImage(Interface):
