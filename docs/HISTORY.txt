@@ -1,6 +1,12 @@
 Changelog
 =========
 
+4.0.3 (2015-09-30)
+------------------
+
+- fix import of namedfile, restores older plone compatibility
+  [vangheem]
+
 4.0.2 (2015-09-30)
 ------------------
 
