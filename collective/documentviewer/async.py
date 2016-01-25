@@ -1,10 +1,13 @@
 from logging import getLogger
-from zope.component import getUtility
-from collective.documentviewer.utils import getPortal
-from collective.documentviewer.settings import Settings
+
+from ZODB.POSException import ConflictError
+from collective.documentviewer.convert import Converter
 from collective.documentviewer.convert import runConversion
 from collective.documentviewer.settings import GlobalSettings
-from collective.documentviewer.convert import Converter
+from collective.documentviewer.settings import Settings
+from collective.documentviewer.utils import getPortal
+from zope.component import getUtility
+
 try:
     from zc.async.interfaces import COMPLETED
 except:
@@ -155,9 +158,15 @@ try:
 
     @task()
     def _celeryQueueJob(obj):
-        runConversion(obj)
-        settings = Settings(obj)
-        settings.converting = True
+        retries = 0
+        while True:
+            try:
+                runConversion(obj)
+                return
+            except ConflictError:
+                retries += 1
+                if retries > 4:
+                    break
 except ImportError:
     pass
 
@@ -175,7 +184,7 @@ class CeleryJobRunner(object):
 
     def is_current_active(self, job):
         try:
-            return job.state not in ('PENDING', 'FAILURE', 'SUCCESS')
+            return job.state not in ('PENDING', 'FAILURE', 'SUCCESS', 'RETRY')
         except TypeError:
             return False
 
