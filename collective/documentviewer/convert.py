@@ -605,8 +605,8 @@ class Converter(object):
                 self.index_pdf(pages, catalog)
 
             settings.catalog = catalog
-            self.context.reindexObject(idxs=['SearchableText'])
             self.handle_storage()
+            self.context.reindexObject()
             self.handle_layout()
             settings.num_pages = pages
             settings.successfully_converted = True

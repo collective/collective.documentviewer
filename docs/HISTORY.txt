@@ -1,6 +1,13 @@
 Changelog
 =========
 
+4.0.5 (2016-01-25)
+------------------
+
+- reindex object after lead image is set so icon can be retrieved
+  [vangheem]
+
+
 4.0.4 (2016-01-25)
 ------------------
 
