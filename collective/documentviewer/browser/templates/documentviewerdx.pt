@@ -157,6 +157,15 @@
       <script type="text/javascript" tal:content="structure view/javascript"></script>
     </tal:show>
 
+    <p>
+      <a tal:attributes="href context/absolute_url">
+        Download <tal:name tal:content="context/file/filename" >Filename</tal:name>
+      </a>
+      <span class="discreet"
+          tal:define="size context/file/getSize;
+                      kb python:size/1024">
+        &mdash; <span tal:replace="kb" /> KB</span>
+    </p>
   </tal:main-macro>
 </div>
 

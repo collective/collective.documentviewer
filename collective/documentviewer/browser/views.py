@@ -199,7 +199,10 @@ class DocumentViewerView(BrowserView):
         width = either(self.settings.width,
                        self.global_settings.width)
         if width is None:
-            width = "jQuery('#DV-container').width()"
+            if self.can_modify:
+                width = "jQuery('#DV-container').width()"
+            else:
+                width = '"100%"'
         else:
             width = str(width)
 
@@ -211,17 +214,22 @@ class DocumentViewerView(BrowserView):
 window.documentData = %(data)s;
 var hash = window.location.hash;
 window.initializeDV = function(){
+var sidebar = %(search)s;
+if(jQuery(window).width() < 800){
+    sidebar = false;
+}
+
 /* We do this so we can reload it later when managing annotations */
     window.currentDocument = DV.load(window.documentData, { %(height)s
-        sidebar: %(sidebar)s,
+        sidebar: sidebar,
         width: %(width)s,
-        search: %(search)s,
+        search: sidebar,
         container: '#DV-container' });
 }
 if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
         hash != '#bypass-fullscreen')){
     window.currentDocument = DV.load(window.documentData, {
-        sidebar: true,
+        sidebar: sidebar,
         search: %(search)s,
         container: document.body });
     jQuery('body').addClass('fullscreen');
