@@ -20,7 +20,10 @@ def getisocodes_dict(data_path):
     for line in fp:
         fields = line.split('|')
         if len(fields[2]) > 0:
-            map[fields[2]] = fields[0]
+            if len(fields[1]) > 0:
+                map[fields[2]] = fields[1]    
+            else:
+                map[fields[2]] = fields[0]
     fp.close()
     return map
 
