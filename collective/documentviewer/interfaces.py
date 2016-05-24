@@ -111,6 +111,9 @@ class IGlobalDocumentViewerSettings(Interface):
         description=_("Automatically convert files on creation "
                       "and modification."),
         default=True)
+    show_contributor = schema.Bool(
+        title=_("Show contributor"),
+        default=True)
     override_contributor = schema.TextLine(
         title=_("Override Contributor"),
         description=_("What to override the contributor field on viewer with."

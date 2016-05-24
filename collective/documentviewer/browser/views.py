@@ -137,21 +137,25 @@ class DocumentViewerView(BrowserView):
 
     def dv_data(self):
         dump_path = DUMP_FILENAME.rsplit('.', 1)[0]
-        if self.global_settings.override_contributor:
-            contributor = self.global_settings.override_contributor
-        else:
-            contributor = self.context.Creator()
 
-        mtool = getToolByName(self.context, 'portal_membership')
-        contributor_user = mtool.getMemberById(contributor)
-        if contributor_user is not None:
-            contributor = contributor_user.getProperty('fullname', None) \
-                or contributor
+        if self.global_settings.show_contributor:
+            if self.global_settings.override_contributor:
+                contributor = self.global_settings.override_contributor
+            else:
+                contributor = self.context.Creator()
 
-        if self.global_settings.override_organization:
-            organization = self.global_settings.override_organization
+                mtool = getToolByName(self.context, 'portal_membership')
+                contributor_user = mtool.getMemberById(contributor)
+                if contributor_user is not None:
+                    contributor = contributor_user.getProperty('fullname', None) \
+                        or contributor
+
+            if self.global_settings.override_organization:
+                organization = self.global_settings.override_organization
+            else:
+                organization = self.site.title
         else:
-            organization = self.site.title
+            contributor = organization = ''
 
         image_format = self.settings.pdf_image_format
         if not image_format:
