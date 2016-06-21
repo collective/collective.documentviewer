@@ -4,6 +4,9 @@ Changelog
 4.0.7 (unreleased)
 ------------------
 
+- do not convert Image types
+  [vangheem]
+
 - be able to completely hide contributor
   [vangheem]
 

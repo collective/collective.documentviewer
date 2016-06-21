@@ -14,6 +14,8 @@ logger = getLogger('collective.documentviewer')
 
 
 def handle_file_creation(obj, event):
+    if obj.portal_type == 'Image':
+        return
     qi = getToolByName(obj, 'portal_quickinstaller', None)
     if not qi:
         return
@@ -37,6 +39,8 @@ def handle_file_creation(obj, event):
 
 
 def handle_workflow_change(obj, event):
+    if obj.portal_type == 'Image':
+        return
     settings = Settings(obj)
     site = getPortal(obj)
     gsettings = GlobalSettings(site)
