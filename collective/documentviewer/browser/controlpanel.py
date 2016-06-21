@@ -1,3 +1,4 @@
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from logging import getLogger
 
 from AccessControl import Unauthorized
@@ -130,6 +131,7 @@ class AsyncMonitor(BrowserView):
 
 class GlobalSettingsForm(form.EditForm):
     fields = field.Fields(IGlobalDocumentViewerSettings)
+    fields['auto_layout_file_types'].widgetFactory = CheckBoxFieldWidget
 
     label = _(u'heading_documentviewer_global_settings_form',
               default=u"Global Document Viewer Settings")
