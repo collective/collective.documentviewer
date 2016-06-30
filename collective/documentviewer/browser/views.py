@@ -203,10 +203,7 @@ class DocumentViewerView(BrowserView):
         width = either(self.settings.width,
                        self.global_settings.width)
         if width is None:
-            if self.can_modify:
-                width = "jQuery('#DV-container').width()"
-            else:
-                width = '"100%"'
+            width = '"100%"'
         else:
             width = str(width)
 
@@ -218,7 +215,7 @@ class DocumentViewerView(BrowserView):
 window.documentData = %(data)s;
 var hash = window.location.hash;
 window.initializeDV = function(){
-var sidebar = %(search)s;
+var sidebar = %(sidebar)s;
 if(jQuery(window).width() < 800){
     sidebar = false;
 }
@@ -227,7 +224,7 @@ if(jQuery(window).width() < 800){
     window.currentDocument = DV.load(window.documentData, { %(height)s
         sidebar: sidebar,
         width: %(width)s,
-        search: sidebar,
+        search: %(search)s,
         container: '#DV-container' });
 }
 if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&

@@ -61,7 +61,7 @@
       </dl>
     </tal:notshow>
     <tal:show tal:condition="view/enabled">
-      <tal:annotate tal:condition="view/can_modify">
+      <div tal:condition="view/can_modify" id="dv-manage-features">
         <a href="#" id="manage-annotations" i18n:translate="">Manage Annotations</a> |
         <a href="#" id="manage-sections" i18n:translate="">Manage Sections</a>
         <div id="annotation-management">
@@ -145,7 +145,7 @@
             <ul></ul>
           </div>
         </div>
-      </tal:annotate>
+      </div>
       <div id="DV-container">
 
       <div class="DV-loadingDocument"><span i18n:translate="">Loading</span></div>
