@@ -83,8 +83,8 @@ def handle_file_delete(obj, event):
         return
 
     # need to remove files if stored in file system
-    converter = Converter(obj)
-    if converter.settings.storage_type == 'File':
+    settings = Settings(obj)
+    if settings.storage_type == 'File':
         storage_directory = getResourceDirectory(obj=obj)
         if os.path.exists(storage_directory):
             shutil.rmtree(storage_directory)
