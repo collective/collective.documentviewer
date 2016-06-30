@@ -1,14 +1,17 @@
-from logging import getLogger
-import os
-import shutil
-from Products.CMFCore.utils import getToolByName
+from collective.documentviewer import storage
+from collective.documentviewer.async import queueJob
+from collective.documentviewer.convert import Converter
 from collective.documentviewer.settings import GlobalSettings
 from collective.documentviewer.settings import Settings
+from collective.documentviewer.storage import getResourceDirectory
 from collective.documentviewer.utils import allowedDocumentType
 from collective.documentviewer.utils import getPortal
-from collective.documentviewer.async import queueJob
-from collective.documentviewer import storage
-from collective.documentviewer.convert import Converter
+from logging import getLogger
+from Products.CMFCore.utils import getToolByName
+
+import os
+import shutil
+
 
 logger = getLogger('collective.documentviewer')
 
@@ -73,3 +76,15 @@ def handle_workflow_change(obj, event):
     # and re-move it
     converter = Converter(object)
     converter.handleFileObfuscation()
+
+
+def handle_file_delete(obj, event):
+    if obj.portal_type == 'Image':
+        return
+
+    # need to remove files if stored in file system
+    converter = Converter(obj)
+    if converter.settings.storage_type == 'File':
+        storage_directory = getResourceDirectory(obj=obj)
+        if os.path.exists(storage_directory):
+            shutil.rmtree(storage_directory)

@@ -81,6 +81,11 @@
          Products.CMFCore.interfaces.IActionSucceededEvent"
     handler=".subscribers.handle_workflow_change" />
 
+  <subscriber
+    for="Products.ATContentTypes.interface.IFileContent
+         zope.lifecycleevent.interfaces.IObjectRemovedEvent"
+    handler=".subscribers.handle_file_delete" />
+
   <adapter name="SearchableText" factory=".catalog.SearchableTextArchetypes" />
 
 </configure>
