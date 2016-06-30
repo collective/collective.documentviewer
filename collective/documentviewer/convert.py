@@ -541,7 +541,7 @@ class Converter(object):
         """
         settings = self.settings
         if not settings.obfuscate_secret:
-                settings.obfuscate_secret = str(random.randint(1, 9999999999))
+            settings.obfuscate_secret = str(random.randint(1, 9999999999))
 
         storage_dir = self.storage_dir
         secret_dir = os.path.join(storage_dir,

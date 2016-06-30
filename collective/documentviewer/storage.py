@@ -1,7 +1,7 @@
-from os.path import join
 from collective.documentviewer.settings import GlobalSettings
 from collective.documentviewer.settings import Settings
 from collective.documentviewer.utils import getPortal
+from os.path import join
 
 
 def getResourceDirectory(gsettings=None, settings=None, obj=None):
