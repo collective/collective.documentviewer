@@ -5,6 +5,10 @@ Changelog
 ------------------
 
 - Handle file deleted to clean up files
+  [vangheem]
+
+- fix not being able to hide sidebar
+  [vangheem]
 
 
 4.0.8 (2016-06-21)

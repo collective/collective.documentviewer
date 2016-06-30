@@ -203,10 +203,7 @@ class DocumentViewerView(BrowserView):
         width = either(self.settings.width,
                        self.global_settings.width)
         if width is None:
-            if self.can_modify:
-                width = "jQuery('#DV-container').width()"
-            else:
-                width = '"100%"'
+            width = '"100%"'
         else:
             width = str(width)
 
