@@ -499,7 +499,7 @@ class Converter(object):
             opened = openBlob(self.blob)
             self.blob_filepath = opened.name
             opened.close()
-        except IOError:
+        except (IOError, AttributeError):
             self.blob_filepath = None
 
     def savepoint(self):

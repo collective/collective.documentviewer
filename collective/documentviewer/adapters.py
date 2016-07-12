@@ -122,7 +122,8 @@ class DexterityItem(BaseItem):
 
     @property
     def file_length(self):
-        return self.file.getSize()
+        if self.file:
+            return self.file.getSize()
 
     @property
     def file_type(self):
@@ -131,8 +132,10 @@ class DexterityItem(BaseItem):
 
     @property
     def blob(self):
-        return self.file._blob
+        if self.file:
+            return self.file._blob
 
     @property
     def filename(self):
-        return self.file.filename
+        if self.file:
+            return self.file.filename
