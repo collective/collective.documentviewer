@@ -1,36 +1,38 @@
-import json
-from logging import getLogger
-import os
-import random
-import shutil
-
 from AccessControl import Unauthorized
-from DateTime import DateTime
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import base_hasattr
-from Products.Five.browser import BrowserView
 from collective.documentviewer import mf as _
 from collective.documentviewer import storage
-from collective.documentviewer.async import getJobRunner
 from collective.documentviewer.async import asyncInstalled
 from collective.documentviewer.async import celeryInstalled
+from collective.documentviewer.async import getJobRunner
 from collective.documentviewer.async import queueJob
+from collective.documentviewer.convert import docsplit
 from collective.documentviewer.convert import DUMP_FILENAME
 from collective.documentviewer.convert import TEXT_REL_PATHNAME
-from collective.documentviewer.convert import docsplit
 from collective.documentviewer.interfaces import IFileWrapper
 from collective.documentviewer.interfaces import IUtils
 from collective.documentviewer.settings import GlobalSettings
 from collective.documentviewer.settings import Settings
 from collective.documentviewer.utils import allowedDocumentType
 from collective.documentviewer.utils import getPortal
+from DateTime import DateTime
+from logging import getLogger
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import base_hasattr
+from Products.Five.browser import BrowserView
 from repoze.catalog.query import Contains
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
 from zope.i18n import translate
+from zope.index.text.parsetree import ParseError
 from zope.interface import implements
+
+import json
+import os
+import random
+import shutil
+
 
 logger = getLogger('collective.documentviewer')
 
@@ -306,8 +308,13 @@ class DocumentViewerSearchView(BrowserView):
         settings = Settings(self.context)
         catalog = settings.catalog
         query = self.request.form.get('q')
-        if catalog:
-            results = catalog.query(Contains('text', query))
+        results = None
+        if query:
+            try:
+                results = catalog.query(Contains('text', query))
+            except (TypeError, ParseError):
+                pass
+        if catalog and results:
             return json.dumps({
                 "results": list(results[1]),
                 "query": query
