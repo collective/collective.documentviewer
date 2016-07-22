@@ -1,6 +1,13 @@
 Changelog
 =========
 
+4.0.13 (2016-07-22)
+-------------------
+
+- hide doc viewer from screen readers since they won't be able to make
+  sense of <img> tags for pdf pages.
+  [vangheem]
+
 4.0.12 (2016-07-22)
 -------------------
 

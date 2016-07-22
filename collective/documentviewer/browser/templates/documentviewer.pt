@@ -146,9 +146,8 @@
           </div>
         </div>
       </div>
-      <div id="DV-container">
-
-      <div class="DV-loadingDocument"><span i18n:translate="">Loading</span></div>
+      <div id="DV-container" aria-hidden="true">
+        <div class="DV-loadingDocument"><span i18n:translate="">Loading</span></div>
         <noscript>
           <div id="DV-noJS" style="height:500px" i18n:translate="">The Document Viewer requires that you enable Javascript.</div>
         </noscript>
