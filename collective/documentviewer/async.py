@@ -259,7 +259,7 @@ def queueJob(obj):
         elif celeryInstalled():
             celeryQueueJob(obj)
         else:
-            converter()
+            converter(async=False)
     except QueueException:
         logger.exception(
             "Error using async with "

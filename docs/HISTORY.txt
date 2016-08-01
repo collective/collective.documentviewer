@@ -1,6 +1,12 @@
 Changelog
 =========
 
+4.0.14 (2016-08-01)
+-------------------
+
+- handle conflict errors in async processes better
+  [vangheem]
+
 4.0.13 (2016-07-22)
 -------------------
 

@@ -39,9 +39,6 @@ logger = getLogger('collective.documentviewer')
 
 DUMP_FILENAME = 'dump.pdf'
 TEXT_REL_PATHNAME = 'text'
-# so we know to resync and do savepoints
-# this isn't working???
-LARGE_PDF_SIZE = 10000
 
 
 class Page(object):
@@ -585,17 +582,15 @@ class Converter(object):
         else:
             return self.gsettings.enable_indexation
 
-    def __call__(self):
+    def __call__(self, async=True):
         settings = self.settings
 
-        savepoint = None
         try:
             pages = self.run_conversion()
-            if pages > LARGE_PDF_SIZE:
-                # conversion can take a long time.
-                # let's sync before we save the changes
+            # conversion can take a long time.
+            # let's sync before we save the changes
+            if async:
                 self.sync_db()
-                savepoint = self.savepoint()
 
             catalog = None
             # regarding enable_indexation, either take the value on the context
@@ -618,9 +613,6 @@ class Converter(object):
             self.handleFileObfuscation()
             result = 'success'
         except Exception, ex:
-            if savepoint is not None:
-                savepoint.rollback()
-
             logger.exception('Error converting PDF:\n%s\n%s' % (
                 getattr(ex, 'message', ''),
                 traceback.format_exc()))
