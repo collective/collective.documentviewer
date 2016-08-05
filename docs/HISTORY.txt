@@ -1,11 +1,8 @@
 Changelog
 =========
 
-4.1.1 (unreleased)
+5.0.2 (unreleased)
 ------------------
-
-- Fix issue breaking zoom on the 1st page of PDFs
-  [obct537]
 
 - Add function and browser view (``convert_all_unconverted``) to convert all files, which haven't been converted yet.
   [thet]
@@ -26,12 +23,30 @@ Changelog
   for its conversion directories
   [pysailor]
 
+
+5.0.1 (2017-07-16)
+------------------
+
+- Fix issue breaking zoom on the 1st page of PDFs
+  [obct537]
+
+5.0.0 (2016-09-02)
+------------------
+
+- log exception when pulling OCR text instead of completely erroring
+  [vangheem]
+
+5.0.0a1 (2016-08-05)
+--------------------
+
+- plone 5/dexterity only now
+  [vangheem]
+
 4.1.0 (2017-05-15)
 ------------------
 
 - Persist converted pdf and publish it as pdf/dump.pdf and @@pdf.
   [jaroel]
-
 
 4.0.14 (2016-08-01)
 -------------------

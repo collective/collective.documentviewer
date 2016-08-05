@@ -1,23 +1,31 @@
-(function($){
-$(document).ready(function(){
 
-$('.close-fullscreen').on('click', function(){
-  if(window.opener){
-    window.close();
-    window.opener.location = jQuery('base').attr('href') + '/view#bypass-fullscreen';
-    window.opener.location.reload();
-  }else{
-    window.location = jQuery('base').attr('href') + '/view#bypass-fullscreen';
-    window.location.reload();
-  }
-  return false;
+require([
+  'jquery',
+  'mockup-patterns-base',
+  'mockup-utils'
+], function($, Base, utils) {
+  "use strict";
+
+  var DocumentViewer = Base.extend({
+    name: 'documentviewer',
+    trigger: '.pat-documentviewer',
+    parser: 'mockup',
+    defaults: {
+    },
+    init: function() {
+      var that = this;
+
+      var options = $.extend({}, true, that.options, {
+        container: that.$el[0]
+      });
+      delete options.data;
+
+      if($(window).width() < 800){
+        options.sidebar = false;
+      }
+      DV.load(that.options.data, options);
+    }
+  });
+
+  return DocumentViewer;
 });
-
-
-$('#errorMsg a').click(function(){
-  $('#errorMsg dd').slideDown();
-  return false;
-})
-
-});
-})(jQuery);

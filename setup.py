@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '4.1.1.dev0'
+version = '5.0.1.dev0'
 
 setup(name='collective.documentviewer',
       version=version,
@@ -36,7 +36,8 @@ setup(name='collective.documentviewer',
           'zope.browserresource',
           'repoze.catalog',
           'plone.app.z3cform',
-          'collective.monkeypatcher'
+          'collective.monkeypatcher',
+          'plone.app.contenttypes'
       ],
       extras_require={
           'test': ['plone.app.testing'],

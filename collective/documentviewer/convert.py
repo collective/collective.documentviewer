@@ -334,7 +334,10 @@ class DocSplitSubProcess(BaseSubProcess):
                 ocr = False
 
         if enable_indexation:
-            self.dump_text(path, output_dir, ocr, language)
+            try:
+                self.dump_text(path, output_dir, ocr, language)
+            except:
+                logger.info('Error extracting text from PDF', exc_info=True)
 
         num_pages = self.get_num_pages(path)
 
