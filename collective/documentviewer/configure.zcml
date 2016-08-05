@@ -36,8 +36,32 @@
   <adapter factory=".adapters.StandardOCRLanguageAdapter" />
   <adapter factory=".adapters.BaseItem" />
   <adapter factory=".adapters.DexterityItem" />
-  <include file="archetypes.zcml" />
-  <include file="dexterity.zcml" />
+
+  <adapter
+    for="plone.app.contenttypes.interfaces.IFile"
+    provides=".interfaces.IDocumentViewerSettings"
+    factory=".settings.Settings" />
+
+  <subscriber
+    for="plone.app.contenttypes.interfaces.IFile
+         zope.lifecycleevent.interfaces.IObjectAddedEvent"
+    handler=".subscribers.handle_file_creation" />
+
+  <subscriber
+    for="plone.app.contenttypes.interfaces.IFile
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    handler=".subscribers.handle_file_creation" />
+
+  <subscriber
+    for="plone.app.contenttypes.interfaces.IFile
+         Products.CMFCore.interfaces.IActionSucceededEvent"
+    handler=".subscribers.handle_workflow_change" />
+  <subscriber
+    for="plone.app.contenttypes.interfaces.IFile
+         zope.lifecycleevent.interfaces.IObjectRemovedEvent"
+    handler=".subscribers.handle_file_delete" />
+
+  <adapter name="SearchableText" factory=".catalog.SearchableTextDexterity" />
 
   <include package=".browser" />
 </configure>

@@ -24,24 +24,6 @@
     description="To show thumbnails from pdf and make it searchable." />
 
   <browser:page
-    zcml:condition="installed plone.app.async"
-    name="dvasync-monitor"
-    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-    class=".controlpanel.AsyncMonitor"
-    template="templates/async-monitor.pt"
-    permission="cmf.ManagePortal"
-    layer="..interfaces.ILayer" />
-
-  <browser:page
-    zcml:condition="installed plone.app.async"
-    name="dv-remove-from-queue"
-    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-    class=".controlpanel.AsyncMonitor"
-    attribute="remove"
-    permission="cmf.ManagePortal"
-    layer="..interfaces.ILayer" />
-
-  <browser:page
     name="global-documentviewer-settings"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     class=".controlpanel.GlobalSettingsFormView"
@@ -80,10 +62,40 @@
     layer="..interfaces.ILayer" />
 
   <browser:page
-    for="*"
-    name="dv_javascript_variables.js"
+    name="documentviewer"
+    for="plone.app.contenttypes.interfaces.IFile"
     class=".views.DocumentViewerView"
-    attribute="getTranslatedJSLabels"
-    permission="zope.Public" />
+    template="templates/documentviewer.pt"
+    permission="zope2.View"
+    layer="..interfaces.ILayer" />
+
+  <browser:menuItem
+    for="plone.app.contenttypes.interfaces.IFile"
+    menu="plone_displayviews"
+    title="Document Viewer"
+    action="documentviewer"
+    description="Displays a PDF embedded in the web page via document cloud viewer." />
+
+  <browser:page
+    name="dv-search.json"
+    for="plone.app.contenttypes.interfaces.IFile"
+    class=".views.DocumentViewerSearchView"
+    permission="zope2.View"
+    layer="..interfaces.ILayer" />
+
+  <browser:page
+    name="documentviewer-settings"
+    for="plone.app.contenttypes.interfaces.IFile"
+    class=".settings.SettingsFormView"
+    layer="..interfaces.ILayer"
+    permission="cmf.ModifyPortalContent" />
+
+  <browser:page
+    name="convert-to-documentviewer"
+    for="plone.app.contenttypes.interfaces.IFile"
+    permission="cmf.ModifyPortalContent"
+    class=".views.Convert"
+    template="templates/converting.pt"
+    layer="..interfaces.ILayer" />
 
 </configure>
