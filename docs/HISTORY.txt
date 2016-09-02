@@ -1,10 +1,16 @@
 Changelog
 =========
 
+5.0.0 (2016-09-02)
+------------------
+
+- log exception when pulling OCR text instead of completely erroring
+  [vangheem]
+
 5.0.0a1 (2016-08-05)
 --------------------
 
-- plone 5 + archetypes only now
+- plone 5/dexterity only now
   [vangheem]
 
 
