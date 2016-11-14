@@ -10,7 +10,7 @@ Introduction
 This package integrates documentcloud's viewer and pdf processing
 into plone.
 
-Example viewer: https://www.documentcloud.org/documents/19864-goldman-sachs-internal-emails
+Example viewer: https://www.documentcloud.org/documents/3219331-FOIA-Request-17-OIG-015.html
 
 Features
 --------
