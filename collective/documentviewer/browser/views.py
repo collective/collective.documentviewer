@@ -213,30 +213,33 @@ class DocumentViewerView(BrowserView):
                          self.global_settings.show_sidebar)
         search = either(self.settings.show_search,
                         self.global_settings.show_search)
-        return """
-window.documentData = %(data)s;
+        return """window.documentData = %(data)s;
 var hash = window.location.hash;
-window.initializeDV = function(){
 var sidebar = %(sidebar)s;
-if(jQuery(window).width() < 800){
-    sidebar = false;
-}
+
+window.initializeDV = function() {
+    if(jQuery(window).width() < 800) {
+        sidebar = false;
+    }
 
 /* We do this so we can reload it later when managing annotations */
     window.currentDocument = DV.load(window.documentData, { %(height)s
         sidebar: sidebar,
         width: %(width)s,
         search: %(search)s,
-        container: '#DV-container' });
+        container: '#DV-container'
+    });
+
 }
-if(hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
-        hash != '#bypass-fullscreen')){
+
+if (hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
+        hash != '#bypass-fullscreen')) {
     window.currentDocument = DV.load(window.documentData, {
         sidebar: sidebar,
         search: %(search)s,
         container: document.body });
     jQuery('body').addClass('fullscreen');
-}else{
+} else {
     window.initializeDV();
     jQuery('body').addClass('not-fullscreen');
 }
