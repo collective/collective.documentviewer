@@ -4,6 +4,9 @@ Changelog
 4.0.14 (2016-08-01)
 -------------------
 
+- Added italian translation
+  [keul]
+
 - Fixed JavaScript issue on Chrome: expected global variable ``sidebar`` was not global
   [keul]
 
