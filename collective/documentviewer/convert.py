@@ -334,7 +334,8 @@ class DocSplitSubProcess(BaseSubProcess):
 
         num_pages = self.get_num_pages(path)
 
-        os.remove(path)
+        # We don't need to cleanup the PDF right
+        # The PDF will be removed by handle_storage, which delete the tempdir.
         return num_pages
 
 try:
@@ -470,6 +471,11 @@ class Converter(object):
                     filepath = os.path.join(textfilespath, filename)
                     filename = '%s/%s' % (TEXT_REL_PATHNAME, filename)
                     files[filename] = saveFileToBlob(filepath)
+
+            # Store converted PDF
+            dump_pdf_path = os.path.join(storage_dir, DUMP_FILENAME)
+            filename = 'pdf/%s' % DUMP_FILENAME
+            files[filename] = saveFileToBlob(dump_pdf_path)
 
             settings.blob_files = files
             shutil.rmtree(storage_dir)

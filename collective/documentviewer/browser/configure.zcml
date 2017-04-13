@@ -86,4 +86,11 @@
     attribute="getTranslatedJSLabels"
     permission="zope.Public" />
 
+  <browser:page
+    for="*"
+    name="dv_pdf_url"
+    class=".views.DVPdfUrl"
+    permission="zope2.View"
+  />
+
 </configure>

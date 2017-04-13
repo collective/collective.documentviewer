@@ -293,6 +293,33 @@ if (hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
         return result
 
 
+class DVPdfUrl(BrowserView):
+    def __call__(self):
+        """ Redirects to the url for the rendered PDF.
+
+            We need to redirect, because the PDF can be stored on FS, instead
+            of ZODB.
+        """
+        site = getPortal(self.context)
+        settings = Settings(self.context)
+        global_settings = GlobalSettings(site)
+
+        portal_url = getMultiAdapter(
+            (self.context, self.request),
+            name="plone_portal_state").portal_url()
+
+        resource_url = global_settings.override_base_resource_url
+        rel_url = storage.getResourceRelURL(gsettings=global_settings,
+                                            settings=settings)
+        if resource_url:
+            dvpdffiles = '%s/%s' % (resource_url.rstrip('/'), rel_url)
+        else:
+            dvpdffiles = '%s/%s' % (portal_url, rel_url)
+
+        url = '%s/pdf/dump.pdf' % dvpdffiles
+        self.request.response.redirect(url)
+
+
 try:
     from plone.dexterity.browser.view import DefaultView
 
