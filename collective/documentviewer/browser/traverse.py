@@ -80,7 +80,7 @@ class PDFTraverseBlobFile(SimpleItem):
         self.previous = previous
 
     def publishTraverse(self, request, name):
-        if name not in ('large', 'normal', 'small', 'text'):
+        if name not in ('large', 'normal', 'small', 'text', 'pdf'):
             filepath = '%s/%s' % (self.previous, name)
             if filepath in self.settings.blob_files:
                 return BlobFileWrapper(self.context,
