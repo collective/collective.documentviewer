@@ -88,7 +88,7 @@
 
   <browser:page
     for="*"
-    name="dv_pdf_url"
+    name="pdf"
     class=".views.DVPdfUrl"
     permission="zope2.View"
   />
