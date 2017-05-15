@@ -1,8 +1,8 @@
 Changelog
 =========
 
-4.0.15 (unreleased)
--------------------
+4.1.0 (2017-05-15)
+------------------
 
 - Persist converted pdf and publish it as pdf/dump.pdf and @@pdf.
   [jaroel]
