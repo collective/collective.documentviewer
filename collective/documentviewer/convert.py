@@ -285,8 +285,12 @@ class DocSplitSubProcess(BaseSubProcess):
         # while using libreoffice, docsplit leaves a 'libreoffice'
         # folder next to the generated PDF, removes it!
         libreOfficePath = os.path.join(output_dir, 'libreoffice')
+        # In Nixos, the folder is called 'libreofficedev'
+        libreOfficePathNixos = os.path.join(output_dir, 'libreofficedev')
         if os.path.exists(libreOfficePath):
             shutil.rmtree(libreOfficePath)
+        elif os.path.exists(libreOfficePathNixos):
+            shutil.rmtree(libreOfficePathNixos)
 
         # move the file to the right location now
         files = set(os.listdir(output_dir))
