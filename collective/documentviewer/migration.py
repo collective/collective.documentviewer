@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from copy import deepcopy
 from plone.app.contenttypes.migration.migration import ICustomMigrator
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapter
@@ -32,7 +31,7 @@ class PACDocumentViewerMigator(object):
                     new.absolute_url()
                 )
                 return
-            target_annotations[ANNOTATION_KEY] = deepcopy(settings)
+            target_annotations[ANNOTATION_KEY] = settings
             logger.info('DocumentViewer settings migrated for %s' % 
                 new.absolute_url()
             )
