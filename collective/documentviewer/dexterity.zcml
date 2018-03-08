@@ -87,4 +87,15 @@
 
   <adapter name="SearchableText" factory=".catalog.SearchableTextDexterity" />
 
+  <configure zcml:condition="installed plone.app.contenttypes">
+    <adapter
+        name="pac_documentviewer_migration"
+        factory=".migration.PACDocumentViewerMigator"
+        />
+    <class class="plone.app.contenttypes.content.File">
+      <implements interface=".interfaces.IPACPossibleDocumentViewerMarker" />
+    </class>
+    <adapter name="SearchableText" factory=".catalog.SearchableTextPAC" />
+  </configure>
+
 </configure>

@@ -19,6 +19,7 @@ def SearchableTextIndexer(obj):
     else:
         return text
 
+
 try:
     from Products.ATContentTypes.interface import IFileContent
 
@@ -28,11 +29,22 @@ try:
 except ImportError:
     pass
 
+
 try:
     from plone.dexterity.interfaces import IDexterityContent
 
     @indexer(IDexterityContent)
     def SearchableTextDexterity(obj):
+        return SearchableTextIndexer(obj)
+except ImportError:
+    pass
+
+
+try:
+    from collective.documentviewer.interfaces import IPACPossibleDocumentViewerMarker  # noqa
+
+    @indexer(IPACPossibleDocumentViewerMarker)
+    def SearchableTextPAC(obj):
         return SearchableTextIndexer(obj)
 except ImportError:
     pass

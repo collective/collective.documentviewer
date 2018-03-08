@@ -17,6 +17,15 @@ except TypeError:
     SUPPORT_DEFAULT_FACTORY = False
 
 
+try:
+    from plone.app.contenttypes.interfaces import IFile
+
+    class IPACPossibleDocumentViewerMarker(IFile):
+        pass
+except ImportError:
+    pass
+
+
 class ILayer(Interface):
     """
     layer class
