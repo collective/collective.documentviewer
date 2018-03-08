@@ -38,7 +38,7 @@ def convert_all(only_unconverted=True):
         obj = item.getObject()
 
         settings = Settings(obj)
-        if not only_unconverted and settings.successfully_converted:
+        if only_unconverted and settings.successfully_converted:
             return
 
         gsettings = GlobalSettings(site)
