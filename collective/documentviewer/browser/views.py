@@ -5,6 +5,7 @@ from collective.documentviewer.async import asyncInstalled
 from collective.documentviewer.async import celeryInstalled
 from collective.documentviewer.async import getJobRunner
 from collective.documentviewer.async import queueJob
+from collective.documentviewer.convert_all import convert_all
 from collective.documentviewer.convert import docsplit
 from collective.documentviewer.convert import DUMP_FILENAME
 from collective.documentviewer.convert import TEXT_REL_PATHNAME
@@ -629,3 +630,11 @@ class Annotate(BrowserView):
             }
             if data in sections:
                 sections.remove(data)
+
+
+class ConvertAllUnconvertedView(BrowserView):
+    def __call__(self):
+        """Convert all unconverted files.
+        """
+        convert_all(only_unconverted=True)
+        return "Finished"

@@ -4,6 +4,9 @@ Changelog
 4.1.1 (unreleased)
 ------------------
 
+- Add function and browser view (``convert_all_unconverted``) to convert all files, which hasn't been converted yet.
+  [thet]
+
 - Handle plone.app.contenttypes file indexing.
   [thet]
 
