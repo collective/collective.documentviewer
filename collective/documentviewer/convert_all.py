@@ -46,12 +46,12 @@ def convert_all(only_unconverted=True):
 
         settings = Settings(obj)
         if only_unconverted and settings.successfully_converted:
-            return
+            continue
 
         gsettings = GlobalSettings(site)
 
         if not allowedDocumentType(obj, gsettings.auto_layout_file_types):
-            return
+            continue
 
         auto_layout = gsettings.auto_select_layout
         if auto_layout and obj.getLayout() != 'documentviewer':
