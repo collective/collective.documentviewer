@@ -39,11 +39,5 @@
   <include file="dexterity.zcml" />
 
   <include package=".browser" />
-  
-  <adapter
-      zcml:condition="installed plone.app.contenttypes"
-      name="pac_documentviewer_migration"
-      factory=".migration.PACDocumentViewerMigator"
-      />
 
 </configure>

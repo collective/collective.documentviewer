@@ -4,6 +4,9 @@ Changelog
 4.1.1 (unreleased)
 ------------------
 
+- Handle plone.app.contenttypes file indexing.
+  [thet]
+
 - Add a custom migrator for plone.app.contenttypes and avoid converting while migrating to plone.app.contettypes.
   [thet]
 
