@@ -1,3 +1,5 @@
+from collective.documentviewer.async import asyncInstalled
+from collective.documentviewer.async import celeryInstalled
 from collective.documentviewer.async import queueJob
 from collective.documentviewer.settings import GlobalSettings
 from collective.documentviewer.settings import Settings
@@ -7,6 +9,9 @@ from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
+
+import transaction
+
 
 logger = getLogger('collective.documentviewer')
 
@@ -31,6 +36,8 @@ def convert_all(only_unconverted=True):
     res = cat(portal_type='File')
     length = len(res)
 
+    async_enabled = asyncInstalled() or celeryInstalled()
+
     for cnt, item in enumerate(res, 1):
 
         logger.info('processing %s/%s', cnt, length)
@@ -52,3 +59,6 @@ def convert_all(only_unconverted=True):
 
         if obj.getLayout() == 'documentviewer' and gsettings.auto_convert:
             queueJob(obj)
+            if not async_enabled:
+                # conversion lasts an eternity. commit the results immediately.
+                transaction.commit()
