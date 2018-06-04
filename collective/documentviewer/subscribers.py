@@ -1,3 +1,4 @@
+# coding=utf-8
 from collective.documentviewer import storage
 from collective.documentviewer.async import queueJob
 from collective.documentviewer.convert import Converter
@@ -10,7 +11,6 @@ from logging import getLogger
 from Products.CMFCore.utils import getToolByName
 from zope.globalrequest import getRequest
 
-
 import os
 import shutil
 
@@ -22,8 +22,6 @@ def handle_file_creation(obj, event):
     if obj.portal_type == 'Image':
         return
     qi = getToolByName(obj, 'portal_quickinstaller', None)
-    if not qi:
-        return
     if not qi:
         return
     if not qi.isProductInstalled('collective.documentviewer'):
