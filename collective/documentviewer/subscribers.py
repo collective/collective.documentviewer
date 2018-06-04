@@ -18,17 +18,28 @@ import shutil
 logger = getLogger('collective.documentviewer')
 
 
-def handle_file_creation(obj, event):
+def _should_skip_handler(obj):
+    ''' Check if we should skip running the handlers. We will not run them if:
+
+    - obj is an Image
+    - if we are running the p.a.contenttypes migration
+    '''
     if obj.portal_type == 'Image':
+        return True
+    request = getRequest() or {}
+    if request.get(
+        'plone.app.contenttypes_migration_running', False
+    ):
+        return True
+
+
+def handle_file_creation(obj, event):
+    if _should_skip_handler(obj):
         return
     qi = getToolByName(obj, 'portal_quickinstaller', None)
     if not qi:
         return
     if not qi.isProductInstalled('collective.documentviewer'):
-        return
-    if getRequest().get('plone.app.contenttypes_migration_running', False):
-        """Don't migrate while running a plone.app.contenttypes migration.
-        """
         return
 
     site = getPortal(obj)
@@ -46,11 +57,7 @@ def handle_file_creation(obj, event):
 
 
 def handle_workflow_change(obj, event):
-    if obj.portal_type == 'Image':
-        return
-    if getRequest().get('plone.app.contenttypes_migration_running', False):
-        """Don't migrate while running a plone.app.contenttypes migration.
-        """
+    if _should_skip_handler(obj):
         return
     settings = Settings(obj)
     site = getPortal(obj)
@@ -87,11 +94,7 @@ def handle_workflow_change(obj, event):
 
 
 def handle_file_delete(obj, event):
-    if obj.portal_type == 'Image':
-        return
-    if getRequest().get('plone.app.contenttypes_migration_running', False):
-        """Don't migrate while running a plone.app.contenttypes migration.
-        """
+    if _should_skip_handler(obj):
         return
 
     # need to remove files if stored in file system
