@@ -4,6 +4,8 @@ Changelog
 4.1.1 (unreleased)
 ------------------
 
+- Add function and browser view (``convert_all_unconverted``) to convert all files, which haven't been converted yet.
+  [thet]
 - Do not break if no global request is set. Fixes #71
   [ale-rt]
 

@@ -93,4 +93,11 @@
     permission="zope2.View"
   />
 
+  <browser:page
+    name="convert_all_unconverted"
+    for="*"
+    permission="cmf.ManagePortal"
+    class=".views.ConvertAllUnconvertedView"
+    layer="..interfaces.ILayer" />
+
 </configure>
