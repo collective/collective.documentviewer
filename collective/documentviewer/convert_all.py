@@ -18,7 +18,7 @@ logger = getLogger('collective.documentviewer')
 
 def convert_all(only_unconverted=True):
     """Convert all files.
-    Defaults to convert only files, which hasn't been converted yet.
+    Defaults to convert only files, which haven't been converted yet.
     """
     site = getSite()
 
