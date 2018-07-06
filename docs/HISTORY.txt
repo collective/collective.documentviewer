@@ -4,6 +4,9 @@ Changelog
 4.1.1 (unreleased)
 ------------------
 
+- Do not break if no global request is set. Fixes #71
+  [ale-rt]
+
 - Fix redundant condition
   [ale-rt]
 
