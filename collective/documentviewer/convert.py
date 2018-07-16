@@ -454,9 +454,15 @@ class Converter(object):
                     filename = dump_filename
                     break
             filepath = os.path.join(path, filename)
-            fi = open(filepath)
+            tmppath = '%s.tmp' % (filepath)
+
+            # NamedBlobImage eventually calls blob.consume,
+            # destroying the image, so we need to make a temporary copy.
+            shutil.copyfile(filepath, tmppath)
+            fi = open(tmppath)
             self.context.image = NamedBlobImage(fi, filename=filename.decode('utf8'))
             fi.close()
+
 
         if self.gsettings.storage_type == 'Blob':
             logger.info('setting blob data for %s' % repr(context))
