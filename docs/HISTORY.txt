@@ -2,7 +2,7 @@ Changelog
 =========
 
 4.1.1 (unreleased)
-=======
+------------------
 
 - Fix issue breaking zoom on the 1st page of PDFs
   [obct537]
