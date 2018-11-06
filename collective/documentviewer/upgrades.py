@@ -5,7 +5,7 @@ from os.path import exists
 
 import transaction
 from collective.documentviewer import storage
-from collective.documentviewer.async import queueJob
+from collective.documentviewer.async_utils import queueJob
 from collective.documentviewer.config import GROUP_VIEW_DISPLAY_TYPES
 from collective.documentviewer.settings import (STORAGE_VERSION,
                                                 GlobalSettings, Settings)
@@ -14,6 +14,7 @@ from DateTime import DateTime
 from plone.app.contenttypes.interfaces import IFile
 from Products.CMFCore.utils import getToolByName
 from zope.component.hooks import getSite
+
 
 OBJECT_PROVIDES = (IFile.__identifier__,)
 

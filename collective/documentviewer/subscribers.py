@@ -4,7 +4,7 @@ import shutil
 from logging import getLogger
 
 from collective.documentviewer import storage
-from collective.documentviewer.async import queueJob
+from collective.documentviewer.async_utils import queueJob
 from collective.documentviewer.convert import Converter
 from collective.documentviewer.settings import GlobalSettings, Settings
 from collective.documentviewer.storage import getResourceDirectory

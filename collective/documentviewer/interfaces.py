@@ -1,11 +1,15 @@
-from collective.documentviewer import mf as _
 from collective.documentviewer.config import CONVERTABLE_TYPES
 from OFS.interfaces import IItem
 from zope import schema
 from zope.component.interfaces import IObjectEvent
+from zope.i18nmessageid import MessageFactory
 from zope.interface import Attribute, Interface
 from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 from zope.site.hooks import getSite
+
+
+_ = mf = MessageFactory('collective.documentviewer')
+
 
 try:
     # older versions of zope.schema do not support defaultFactory

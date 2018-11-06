@@ -1,6 +1,6 @@
 from persistent.dict import PersistentDict
 from DateTime import DateTime
-from zope.interface import implements
+from zope.interface import implementer
 from zope.annotation.interfaces import IAnnotations
 from collective.documentviewer.interfaces import IDocumentViewerSettings
 from collective.documentviewer.interfaces import IGlobalDocumentViewerSettings
@@ -43,11 +43,11 @@ class Base(object):
         return self._metadata.get(name, default)
 
 
+@implementer(IDocumentViewerSettings)
 class Settings(Base):
-    implements(IDocumentViewerSettings)
     use_interface = IDocumentViewerSettings
 
 
+@implementer(IGlobalDocumentViewerSettings)
 class GlobalSettings(Base):
     use_interface = IGlobalDocumentViewerSettings
-    implements(IGlobalDocumentViewerSettings)

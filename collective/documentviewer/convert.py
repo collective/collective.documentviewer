@@ -17,7 +17,6 @@ from collective.documentviewer.settings import GlobalSettings, Settings
 from collective.documentviewer.utils import getDocumentType, mkdir_p
 from DateTime import DateTime
 from plone import api
-from plone.app.blob.utils import openBlob
 from plone.app.contenttypes.behaviors.leadimage import ILeadImage
 from plone.namedfile.file import NamedBlobImage
 from repoze.catalog.catalog import Catalog
@@ -45,7 +44,7 @@ class Page(object):
             fi = open(self.filepath)
             text = fi.read()
             fi.close()
-            text = unicode(text, errors='ignore').encode('utf-8')
+            text = str(text, errors='ignore').encode('utf-8')
             # let's strip out the ugly...
             text = word_re.sub(' ', text).strip()
             return ' '.join([word for word in text.split() if len(word) > 3])
@@ -97,7 +96,7 @@ class BaseSubProcess(object):
         return None
 
     def _run_command(self, cmd):
-        if isinstance(cmd, basestring):
+        if isinstance(cmd, str):
             cmd = cmd.split()
         cmdformatted = ' '.join(cmd)
         logger.info("Running command %s" % cmdformatted)
@@ -183,7 +182,7 @@ class TextCheckerSubProcess(BaseSubProcess):
     def has(self, filepath):
         cmd = [self.binary, filepath]
         output = self._run_command(cmd)
-        if not isinstance(output, basestring):
+        if not isinstance(output, str):
             return False
         lines = output.splitlines()
         if len(lines) < 3:
@@ -508,7 +507,7 @@ class Converter(object):
 
     def initialize_blob_filepath(self):
         try:
-            opened = openBlob(self.blob)
+            opened = self.blob.open('r')
             self.blob_filepath = opened.name
             opened.close()
         except (IOError, AttributeError):
@@ -597,14 +596,14 @@ class Converter(object):
         else:
             return self.gsettings.enable_indexation
 
-    def __call__(self, async=True):
+    def __call__(self, asynchronous=True):
         settings = self.settings
 
         try:
             pages = self.run_conversion()
             # conversion can take a long time.
             # let's sync before we save the changes
-            if async:
+            if asynchronous:
                 self.sync_db()
 
             catalog = None

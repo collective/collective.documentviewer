@@ -9,17 +9,16 @@ from plone.namedfile.interfaces import INamedField
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFCore.utils import getToolByName
 from zope.cachedescriptors.property import Lazy as lazy_property
-from zope.component import adapts
-from zope.interface import implements
+from zope.component import adapter
+from zope.interface import implementer
 
 
+@adapter(IItem)
+@zope.interface.implementer(IOCRLanguage)
 class StandardOCRLanguageAdapter(object):
     """ Return the document language through a configurable
         adapter.
     """
-
-    adapts(IItem)
-    zope.interface.implements(IOCRLanguage)
 
     def __init__(self, context):
         self.context = context
@@ -38,9 +37,9 @@ class StandardOCRLanguageAdapter(object):
         return ISO_UTF_MAP.get(lang, 'eng')
 
 
-class DexterityItem(object):
-    implements(IFileWrapper)
-    adapts(IDexterityContent)
+@implementer(IFileWrapper)
+@adapter(IDexterityContent)
+class DexterityItem:
 
     def __init__(self, context):
         self.context = context

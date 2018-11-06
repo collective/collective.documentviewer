@@ -33,4 +33,6 @@ class BaseTest(unittest.TestCase):
             container=self.portal,
             type='File', id=id,
             file=NamedBlobFile(data=pdf_data, filename=safe_unicode(name)))
-        return fi
+
+    def tearDown(self):
+        pass

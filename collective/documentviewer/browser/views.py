@@ -4,14 +4,14 @@ import shutil
 from logging import getLogger
 
 from AccessControl import Unauthorized
-from collective.documentviewer import mf as _
 from collective.documentviewer import storage
-from collective.documentviewer.async import (celeryInstalled, getJobRunner,
-                                             queueJob)
+from collective.documentviewer.async_utils import (celeryInstalled,
+                                                   getJobRunner, queueJob)
 from collective.documentviewer.convert import (DUMP_FILENAME,
                                                TEXT_REL_PATHNAME, docsplit)
 from collective.documentviewer.convert_all import convert_all
 from collective.documentviewer.interfaces import IFileWrapper, IUtils
+from collective.documentviewer.interfaces import mf as _
 from collective.documentviewer.settings import GlobalSettings, Settings
 from collective.documentviewer.utils import allowedDocumentType
 from DateTime import DateTime
@@ -27,7 +27,7 @@ from zExceptions import NotFound
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
 from zope.index.text.parsetree import ParseError
-from zope.interface import implements
+from zope.interface import implementer
 
 logger = getLogger('collective.documentviewer')
 
@@ -246,8 +246,8 @@ class DocumentViewerSearchView(BrowserView):
         return json.dumps({"results": [], "query": query})
 
 
+@implementer(IUtils)
 class Utils(BrowserView):
-    implements(IUtils)
 
     def enabled(self):
         try:

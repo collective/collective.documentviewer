@@ -1,15 +1,12 @@
-from collective.documentviewer.async import celeryInstalled
-from collective.documentviewer.async import queueJob
-from collective.documentviewer.settings import GlobalSettings
-from collective.documentviewer.settings import Settings
-from collective.documentviewer.utils import allowedDocumentType
 from logging import getLogger
+
+import transaction
+from collective.documentviewer.async_utils import celeryInstalled, queueJob
+from collective.documentviewer.settings import GlobalSettings, Settings
+from collective.documentviewer.utils import allowedDocumentType
 from Products.CMFCore.utils import getToolByName
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
-
-import transaction
-
 
 logger = getLogger('collective.documentviewer')
 
