@@ -498,11 +498,12 @@ class Converter(object):
                 del settings._metadata['blob_files']
 
     def sync_db(self):
-        try:
-            self.context._p_jar.sync()
-        except AttributeError:
-            # ignore, probably in a unit test
-            pass
+        # circular
+        from collective.documentviewer.async import celeryInstalled
+        if celeryInstalled():
+            from collective.celery.utils import getCelery
+            if not getCelery().conf.task_always_eager:
+                self.context._p_jar.sync()
 
     def initialize_blob_filepath(self):
         try:
