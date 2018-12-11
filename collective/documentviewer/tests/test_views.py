@@ -1,15 +1,13 @@
-from zExceptions import NotFound
-from collective.documentviewer.settings import GlobalSettings
-from zope.event import notify
-from Products.Archetypes.event import ObjectInitializedEvent
+import unittest
+from os.path import join
 from tempfile import mkdtemp
 
-import unittest2 as unittest
-
-from collective.documentviewer.settings import Settings
+from collective.documentviewer.browser.traverse import BlobFileWrapper
+from collective.documentviewer.settings import GlobalSettings, Settings
 from collective.documentviewer.tests import BaseTest
-from collective.documentviewer.views import BlobFileWrapper
-from os.path import join
+from Products.Archetypes.event import ObjectInitializedEvent
+from zExceptions import NotFound
+from zope.event import notify
 
 
 class PDFResourceTraverseTest(BaseTest):

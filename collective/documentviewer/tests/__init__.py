@@ -1,12 +1,13 @@
+import unittest
+from os.path import dirname, join
+
+from collective.documentviewer.interfaces import ILayer
 from collective.documentviewer.testing import \
     DocumentViewer_INTEGRATION_TESTING
-from plone.app.testing import setRoles
-import unittest
-from plone.app.testing import TEST_USER_ID
-from collective.documentviewer.testing import createObject
-from os.path import join
-from os.path import dirname
-from collective.documentviewer.interfaces import ILayer
+from plone import api
+from plone.app.testing import TEST_USER_ID, TEST_USER_NAME, login, setRoles
+from plone.namedfile.file import NamedBlobFile
+from Products.CMFPlone.utils import safe_unicode
 from zope.interface import alsoProvides
 
 _files = join(dirname(__file__), 'test_files')
@@ -21,15 +22,13 @@ class BaseTest(unittest.TestCase):
         self.request = self.layer['request']
         alsoProvides(self.request, ILayer)
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        from collective.documentviewer import async
-        self.origFunc = async.asyncInstalled
-        async.asyncInstalled = lambda: False
+        login(self.portal, TEST_USER_NAME)
 
-    def tearDown(self):
-        from collective.documentviewer import async
-        async.asyncInstalled = self.origFunc
-
-    def createFile(self, name="test.pdf", id='test1'):
-        fi = createObject(self.portal, 'File', id,
-            file=open(join(_files, name)))
+    def createFile(self, name=u"test.pdf", id='test1'):
+        with open(join(_files, name)) as fi:
+            pdf_data = fi.read()
+        fi = api.content.create(
+            container=self.portal,
+            type='File', id=id,
+            file=NamedBlobFile(data=pdf_data, filename=safe_unicode(name)))
         return fi

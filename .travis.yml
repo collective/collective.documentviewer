@@ -1,5 +1,10 @@
 language: python
 python: 2.7
+sudo: true
+before_install:
+  - apt-get install -y graphicsmagick poppler-utils poppler-data ghostscript pdftk
+  - apt-get install -y libreoffice
+  - gem install docsplit
 install:
   - mkdir -p {eggs,downloads}
   - wget https://launchpad.net/plone/5.0/5.0.8/+download/Plone-5.0.8-UnifiedInstaller.tgz

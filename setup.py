@@ -40,7 +40,10 @@ setup(name='collective.documentviewer',
           'plone.app.contenttypes'
       ],
       extras_require={
-          'test': ['plone.app.testing'],
+        'test': [
+          'plone.api',
+          'plone.app.testing'
+        ],
       },
       entry_points="""
       # -*- Entry points: -*-

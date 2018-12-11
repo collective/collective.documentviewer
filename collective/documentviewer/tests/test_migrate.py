@@ -6,7 +6,7 @@ from tempfile import mkdtemp
 from zope.event import notify
 from Products.Archetypes.event import ObjectInitializedEvent
 
-import unittest2 as unittest
+import unittest
 
 from collective.documentviewer.tests import BaseTest
 from os.path import exists
