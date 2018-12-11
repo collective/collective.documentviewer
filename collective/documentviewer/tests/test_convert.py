@@ -20,72 +20,68 @@ class ConvertTest(BaseTest):
     def test_converts(self):
         fi = self.createFile('test.pdf')
         settings = Settings(fi)
-        self.assertEqual(settings.successfully_converted, None)
-        notify(ObjectInitializedEvent(fi))
         self.assertEqual(settings.successfully_converted, True)
         self.assertEqual(settings.num_pages, 1)
 
     def test_auto_assigns_view(self):
-        fi = self.createFile('test.pdf')
         gsettings = GlobalSettings(self.portal)
         gsettings.auto_select_layout = True
-        notify(ObjectInitializedEvent(fi))
+        fi = self.createFile('test.pdf')
         self.assertEqual(fi.getLayout(), 'documentviewer')
 
     def test_not_auto_assigns_view(self):
-        fi = self.createFile('test.pdf')
         gsettings = GlobalSettings(self.portal)
         gsettings.auto_select_layout = False
-        notify(ObjectInitializedEvent(fi))
+        fi = self.createFile('test.pdf')
         self.assertTrue(fi.getLayout() != 'documentviewer')
 
     def test_auto_convert_word(self):
-        fi = self.createFile('test.doc')
         gsettings = GlobalSettings(self.portal)
         gsettings.auto_select_layout = True
         gsettings.auto_layout_file_types = ['word']
-        notify(ObjectInitializedEvent(fi))
+
+        fi = self.createFile('test.doc')
         settings = Settings(fi)
         self.assertEqual(settings.successfully_converted, True)
         self.assertEqual(settings.num_pages, 2)
 
     def test_auto_convert_powerpoint(self):
-        fi = self.createFile('test.odp')
         gsettings = GlobalSettings(self.portal)
         gsettings.auto_select_layout = True
         gsettings.auto_layout_file_types = ['ppt']
-        notify(ObjectInitializedEvent(fi))
+
+        fi = self.createFile('test.odp')
         settings = Settings(fi)
         self.assertEqual(settings.successfully_converted, True)
         self.assertEqual(settings.num_pages, 1)
 
     def test_sets_filehash(self):
-        fi = self.createFile('test.odp')
         gsettings = GlobalSettings(self.portal)
         gsettings.auto_select_layout = True
         gsettings.auto_layout_file_types = ['ppt']
-        notify(ObjectInitializedEvent(fi))
+
+        fi = self.createFile('test.odp')
         settings = Settings(fi)
         self.assertTrue(settings.filehash is not None)
 
     def test_sets_can_not_convert_after_conversion(self):
-        fi = self.createFile('test.odp')
         gsettings = GlobalSettings(self.portal)
         gsettings.auto_select_layout = True
         gsettings.auto_layout_file_types = ['ppt']
-        notify(ObjectInitializedEvent(fi))
+
+        fi = self.createFile('test.odp')
         converter = Converter(fi)
         self.assertTrue(not converter.can_convert)
 
     def test_saves_with_file_storage(self):
-        fi = self.createFile('test.odp')
         gsettings = GlobalSettings(self.portal)
         gsettings.auto_select_layout = True
         gsettings.auto_layout_file_types = ['ppt']
         gsettings.storage_type = 'File'
         _dir = mkdtemp()
         gsettings.storage_location = _dir
-        notify(ObjectInitializedEvent(fi))
+
+        fi = self.createFile('test.odp')
 
         fi_dir = storage.getResourceDirectory(obj=fi)
         self.assertEqual(len(listdir(fi_dir)), 4)
@@ -96,11 +92,11 @@ class ConvertTest(BaseTest):
         shutil.rmtree(fi_dir)
 
     def test_indexation_enabled(self):
-        fi = self.createFile('test.pdf')
         gsettings = GlobalSettings(self.portal)
         # indexation is enabled by default
         self.assertEquals(gsettings.enable_indexation, True)
-        notify(ObjectInitializedEvent(fi))
+
+        fi = self.createFile('test.pdf')
         # make sure conversion was successfull
         self.failUnless(self._isSuccessfullyConverted(fi))
         annotations = IAnnotations(fi)['collective.documentviewer']
@@ -109,11 +105,11 @@ class ConvertTest(BaseTest):
         self.failUnless('software' in annotations['catalog']['text'].lexicon.words())
 
     def test_indexation_disabled(self):
-        fi = self.createFile('test.pdf')
         gsettings = GlobalSettings(self.portal)
         # indexation is enabled by default, so disable it
         gsettings.enable_indexation = False
-        notify(ObjectInitializedEvent(fi))
+
+        fi = self.createFile('test.pdf')
         # make sure conversion was successfull
         self.failUnless(self._isSuccessfullyConverted(fi))
         annotations = IAnnotations(fi)['collective.documentviewer']
@@ -126,7 +122,6 @@ class ConvertTest(BaseTest):
         '''
         fi = self.createFile('test.pdf')
         # indexation is enabled by default
-        notify(ObjectInitializedEvent(fi))
         # make sure conversion was successfull
         self.failUnless(self._isSuccessfullyConverted(fi))
         annotations = IAnnotations(fi)['collective.documentviewer']
@@ -153,7 +148,6 @@ class ConvertTest(BaseTest):
         fi = self.createFile('test.pdf')
         # indexation is enabled by default in the global settings
         # and nothing is defined in the local settings
-        notify(ObjectInitializedEvent(fi))
         # make sure conversion was successfull
         self.failUnless(self._isSuccessfullyConverted(fi))
         annotations = IAnnotations(fi)['collective.documentviewer']

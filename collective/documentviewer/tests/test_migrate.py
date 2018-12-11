@@ -23,7 +23,6 @@ class MigrateTest(BaseTest):
         gsettings.storage_type = 'File'
         fi = self.createFile('test.pdf')
         uid = fi.UID()
-        notify(ObjectInitializedEvent(fi))
         self.portal.manage_delObjects([fi.getId()])
         self.assertTrue(exists(join(_dir, uid[0], uid[1], uid)))
         self.portal.unrestrictedTraverse('@@dvcleanup-filestorage')()
