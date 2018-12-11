@@ -18,7 +18,7 @@ def celeryInstalled():
     try:
         import collective.celery  # noqa
         return True
-    except:
+    except Exception:
         return False
 
 
@@ -84,6 +84,8 @@ class CeleryJobRunner(object):
             return -1
 
     def find_job(self):
+        if self.settings.celery_task_id is None:
+            return -1, None
         result = AsyncResult(self.settings.celery_task_id)
         if self.is_current_active(result):
             return 0, result
@@ -109,7 +111,9 @@ def celeryQueueJob(obj):
         else:
             runner.queue_it()
         return
-    except:
+    except Exception:
+        logger.error(
+            "Could not queue job", exc_info=True)
         raise QueueException
 
 
