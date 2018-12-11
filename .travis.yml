@@ -12,5 +12,6 @@ install:
   - buildout -Nc buildout.cfg
 
 script:
-  - flake8 collective/documentviewer;
+# activate later...
+#  - flake8 collective/documentviewer;
   - bin/test -s collective.documentviewer;
