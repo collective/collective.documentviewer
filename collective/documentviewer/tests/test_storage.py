@@ -86,10 +86,12 @@ class StorageTest(BaseTest):
         fi.reindexObject()
         notify(ObjectInitializedEvent(fi))
         settings = Settings(fi)
-        self.assertTrue(exists(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)))
-        self.assertTrue(listdir(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)) > 3)
+        self.assertTrue(
+            exists(join(_dir, uid[0], uid[1], uid,
+                        settings.obfuscate_secret)))
+        self.assertTrue(
+            listdir(join(_dir, uid[0], uid[1], uid,
+                         settings.obfuscate_secret)) > 3)
 
     def test_storage_removes_obfuscation(self):
         gsettings = GlobalSettings(self.portal)
@@ -102,15 +104,18 @@ class StorageTest(BaseTest):
         fi.reindexObject()
         notify(ObjectInitializedEvent(fi))
         settings = Settings(fi)
-        self.assertTrue(exists(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)))
-        self.assertTrue(listdir(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)) > 3)
+        self.assertTrue(
+            exists(join(_dir, uid[0], uid[1], uid,
+                        settings.obfuscate_secret)))
+        self.assertTrue(
+            listdir(join(_dir, uid[0], uid[1], uid,
+                         settings.obfuscate_secret)) > 3)
         # publish now
         workflowTool = getToolByName(fi, 'portal_workflow')
         workflowTool.doActionFor(fi, 'publish')
-        self.assertTrue(not exists(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)))
+        self.assertTrue(
+            not exists(join(_dir, uid[0], uid[1], uid,
+                            settings.obfuscate_secret)))
 
     def test_publish_unpublish_again_works_with_obfuscation(self):
         gsettings = GlobalSettings(self.portal)
@@ -120,23 +125,26 @@ class StorageTest(BaseTest):
         gsettings.storage_obfuscate = True
         fi = self.createFile('test.pdf')
         uid = fi.UID()
-        fi.reindexObject()
-        notify(ObjectInitializedEvent(fi))
         settings = Settings(fi)
-        self.assertTrue(exists(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)))
-        self.assertTrue(listdir(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)) > 3)
+        self.assertTrue(
+            exists(join(_dir, uid[0], uid[1], uid,
+                        settings.obfuscate_secret)))
+        self.assertTrue(
+            listdir(join(_dir, uid[0], uid[1], uid,
+                         settings.obfuscate_secret)) > 3)
         # publish now
         workflowTool = getToolByName(fi, 'portal_workflow')
         workflowTool.doActionFor(fi, 'publish')
-        self.assertTrue(not exists(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)))
+        self.assertTrue(
+            not exists(join(_dir, uid[0], uid[1], uid,
+                            settings.obfuscate_secret)))
         workflowTool.doActionFor(fi, 'retract')
-        self.assertTrue(exists(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)))
-        self.assertTrue(listdir(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)) > 3)
+        self.assertTrue(
+            exists(join(_dir, uid[0], uid[1], uid,
+                        settings.obfuscate_secret)))
+        self.assertTrue(
+            listdir(join(_dir, uid[0], uid[1], uid,
+                         settings.obfuscate_secret)) > 3)
 
 
 def test_suite():

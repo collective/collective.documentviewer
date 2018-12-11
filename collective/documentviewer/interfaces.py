@@ -1,13 +1,11 @@
-from zope.schema.vocabulary import SimpleTerm
-from zope.schema.vocabulary import SimpleVocabulary
-from zope.interface import Interface
-from zope.interface import Attribute
+from collective.documentviewer import mf as _
+from collective.documentviewer.config import CONVERTABLE_TYPES
+from OFS.interfaces import IItem
 from zope import schema
 from zope.component.interfaces import IObjectEvent
+from zope.interface import Attribute, Interface
+from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 from zope.site.hooks import getSite
-from collective.documentviewer.config import CONVERTABLE_TYPES
-from collective.documentviewer import mf as _
-from OFS.interfaces import IItem
 
 try:
     # older versions of zope.schema do not support defaultFactory
@@ -17,19 +15,11 @@ except TypeError:
     SUPPORT_DEFAULT_FACTORY = False
 
 
-try:
-    from plone.app.contenttypes.interfaces import IFile
-
-    class IPACPossibleDocumentViewerMarker(IFile):
-        pass
-except ImportError:
-    pass
-
-
 class ILayer(Interface):
     """
     layer class
     """
+
 
 FILE_TYPES_VOCAB = []
 

@@ -33,7 +33,6 @@
     directory="resources" />
 
   <adapter factory=".adapters.StandardOCRLanguageAdapter" />
-  <adapter factory=".adapters.BaseItem" />
   <adapter factory=".adapters.DexterityItem" />
 
   <adapter

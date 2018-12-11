@@ -23,9 +23,8 @@ class MigrateTest(BaseTest):
         gsettings.storage_type = 'File'
         fi = self.createFile('test.pdf')
         uid = fi.UID()
-        self.portal.manage_delObjects([fi.getId()])
         self.assertTrue(exists(join(_dir, uid[0], uid[1], uid)))
-        self.portal.unrestrictedTraverse('@@dvcleanup-filestorage')()
+        self.portal.manage_delObjects([fi.getId()])
         self.assertTrue(not exists(join(_dir, uid[0], uid[1], uid)))
 
     def test_cleanup_file_storage_does_not_delete_good_files(self):
@@ -60,7 +59,7 @@ class MigrateTest(BaseTest):
         self.assertEquals(settings.storage_version, STORAGE_VERSION)
         new_path = storage.getResourceDirectory(obj=fi)
         self.assertTrue(exists(new_path))
-        self.assertEquals(len(listdir(new_path)), 4)
+        self.assertEquals(len(listdir(new_path)), 6)
 
 
 def test_suite():

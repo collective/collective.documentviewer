@@ -84,7 +84,7 @@ class ConvertTest(BaseTest):
         fi = self.createFile('test.odp')
 
         fi_dir = storage.getResourceDirectory(obj=fi)
-        self.assertEqual(len(listdir(fi_dir)), 4)
+        self.assertEqual(len(listdir(fi_dir)), 5)
         self.assertEqual(len(listdir(join(fi_dir, 'normal'))), 1)
         self.assertEqual(len(listdir(join(fi_dir, 'small'))), 1)
         self.assertEqual(len(listdir(join(fi_dir, 'large'))), 1)

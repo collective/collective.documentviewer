@@ -1,36 +1,21 @@
 import os
+import shutil
 from logging import getLogger
 from os.path import exists
-import shutil
+
 import transaction
-from DateTime import DateTime
-try:
-    from zope.app.component.hooks import getSite
-except ImportError:
-    from zope.component.hooks import getSite
-from Products.CMFCore.utils import getToolByName
-from collective.documentviewer.config import GROUP_VIEW_DISPLAY_TYPES
-from collective.documentviewer.settings import GlobalSettings
-from collective.documentviewer.settings import Settings
-from collective.documentviewer.settings import STORAGE_VERSION
-from collective.documentviewer.utils import allowedDocumentType
-from collective.documentviewer.async import queueJob
 from collective.documentviewer import storage
-from collective.documentviewer.utils import mkdir_p
+from collective.documentviewer.async import queueJob
+from collective.documentviewer.config import GROUP_VIEW_DISPLAY_TYPES
+from collective.documentviewer.settings import (STORAGE_VERSION,
+                                                GlobalSettings, Settings)
+from collective.documentviewer.utils import allowedDocumentType, mkdir_p
+from DateTime import DateTime
+from plone.app.contenttypes.interfaces import IFile
+from Products.CMFCore.utils import getToolByName
+from zope.component.hooks import getSite
 
-OBJECT_PROVIDES = []
-try:
-    from plone.app.contenttypes.interfaces import IFile
-    OBJECT_PROVIDES.append(IFile.__identifier__)
-except ImportError:
-    pass
-try:
-    from Products.ATContentTypes.interface.file import IFileContent
-    OBJECT_PROVIDES.append(IFileContent.__identifier__)
-except ImportError:
-    pass
-
-OBJECT_PROVIDES = tuple(OBJECT_PROVIDES)
+OBJECT_PROVIDES = (IFile.__identifier__,)
 
 default_profile = 'profile-collective.documentviewer:default'
 logger = getLogger('collective.documentviewer')
@@ -43,8 +28,8 @@ def convert_all(context):
     for brain in catalog(object_provides=OBJECT_PROVIDES):
         file_item = brain.getObject()
 
-        if not allowedDocumentType(file_item,
-                gsettings.auto_layout_file_types):
+        if not allowedDocumentType(
+                file_item, gsettings.auto_layout_file_types):
             continue
 
         # let's not switch to the document viewer view
@@ -57,7 +42,7 @@ def convert_all(context):
         else:
             settings = Settings(file_item)
             # also convert if there was an error.
-            if settings.successfully_converted == False:
+            if settings.successfully_converted is False:
                 settings.last_updated = DateTime('1999/01/01').ISO8601()
                 settings.filehash = ''
                 queueJob(file_item)
@@ -67,9 +52,9 @@ def migrate_old_storage(context):
     catalog = getToolByName(context, 'portal_catalog')
     portal = getSite()
     gsettings = GlobalSettings(portal)
-    for brain in catalog(object_provides=IFileContent.__identifier__):
+    for brain in catalog(object_provides=IFile.__identifier__):
         file_item = brain.getObject()
-        if file.getLayout() == 'documentviewer':
+        if file_item.getLayout() == 'documentviewer':
             settings = Settings(file_item)
             if settings.storage_version == 1:
                 if settings.storage_type == 'File':

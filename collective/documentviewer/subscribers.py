@@ -1,19 +1,16 @@
 # coding=utf-8
+import os
+import shutil
+from logging import getLogger
+
 from collective.documentviewer import storage
 from collective.documentviewer.async import queueJob
 from collective.documentviewer.convert import Converter
-from collective.documentviewer.settings import GlobalSettings
-from collective.documentviewer.settings import Settings
+from collective.documentviewer.settings import GlobalSettings, Settings
 from collective.documentviewer.storage import getResourceDirectory
-from collective.documentviewer.utils import allowedDocumentType
-from collective.documentviewer.utils import getPortal
-from logging import getLogger
+from collective.documentviewer.utils import allowedDocumentType, getPortal
 from Products.CMFCore.utils import getToolByName
 from zope.globalrequest import getRequest
-
-import os
-import shutil
-
 
 logger = getLogger('collective.documentviewer')
 
@@ -89,7 +86,7 @@ def handle_workflow_change(obj, event):
     # if we made it here, the item might have been switched back
     # to being unpublished. Let's just get the converter object
     # and re-move it
-    converter = Converter(object)
+    converter = Converter(obj)
     converter.handleFileObfuscation()
 
 
