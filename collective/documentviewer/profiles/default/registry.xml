@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<registry xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+          i18n:domain="plone">
+
+  <records prefix="plone.resources/documentviewer"
+            interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+      <value key="js">++resource++dv.resources/javascripts/build.min.js</value>
+      <value key="css">
+        <element>++resource++dv.resources/stylesheets/viewer.css</element>
+      </value>
+  </records>
+
+</registry>

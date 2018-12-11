@@ -1,10 +1,21 @@
 language: python
-python: "2.7"
+python: 2.7
+sudo: true
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq rubygems graphicsmagick poppler-utils openoffice.org openoffice.org-java-common
-  - sudo gem install docsplit -q
+  - sudo apt-get install -y graphicsmagick poppler-utils poppler-data ghostscript pdftk
+  - sudo apt-get install -y libreoffice
+  - sudo gem install docsplit
 install:
-  - python bootstrap.py -c travis.cfg
-  - bin/buildout -c travis.cfg -t 3
-script: bin/test
+  - mkdir -p {eggs,downloads}
+  - wget https://launchpad.net/plone/5.0/5.0.8/+download/Plone-5.0.8-UnifiedInstaller.tgz
+  - tar -zxvf Plone-*.tgz > /dev/null
+  - tar -xvjf Plone-*/packages/buildout-cache.tar.bz2 > /dev/null
+  - cp -rf buildout-cache/eggs/* eggs/
+  - cp -rf buildout-cache/downloads/* downloads/
+  - pip install -r requirements.txt
+  - pip install pyflakes==1.6.0 pycodestyle==2.3.1 flake8==3.5.0;
+  - buildout -Nc buildout.cfg
+
+script:
+  - flake8 collective/documentviewer;
+  - bin/test -s collective.documentviewer;

@@ -28,10 +28,8 @@ class PACDocumentViewerMigator(object):
             target_annotations = IAnnotations(new)
             if target_annotations.get(ANNOTATION_KEY, None) is not None:
                 logger.error('DocumentViewer settings exist on %s' %
-                    new.absolute_url()
-                )
+                             new.absolute_url())
                 return
             target_annotations[ANNOTATION_KEY] = settings
-            logger.info('DocumentViewer settings migrated for %s' % 
-                new.absolute_url()
-            )
+            logger.info('DocumentViewer settings migrated for %s' %
+                        new.absolute_url())

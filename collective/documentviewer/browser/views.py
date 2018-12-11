@@ -1,7 +1,6 @@
 from AccessControl import Unauthorized
 from collective.documentviewer import mf as _
 from collective.documentviewer import storage
-from collective.documentviewer.async import asyncInstalled
 from collective.documentviewer.async import celeryInstalled
 from collective.documentviewer.async import getJobRunner
 from collective.documentviewer.async import queueJob
@@ -17,21 +16,19 @@ from collective.documentviewer.utils import allowedDocumentType
 from collective.documentviewer.utils import getPortal
 from DateTime import DateTime
 from logging import getLogger
-from persistent.dict import PersistentDict
-from persistent.list import PersistentList
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.resources import add_resource_on_request
 from Products.CMFPlone.utils import base_hasattr
 from Products.Five.browser import BrowserView
 from repoze.catalog.query import Contains
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
-from zope.i18n import translate
 from zope.index.text.parsetree import ParseError
 from zope.interface import implements
+from plone.dexterity.browser.view import DefaultView
 
 import json
 import os
-import random
 import shutil
 
 
@@ -44,12 +41,16 @@ def either(one, two):
     return one
 
 
-class DocumentViewerView(BrowserView):
+class DocumentViewerView(DefaultView):
 
     installed = docsplit is not None
     enabled = True
 
     def __call__(self):
+        self._update()
+
+        add_resource_on_request(self.request, 'documentviewer')
+
         self.site = getPortal(self.context)
         self.settings = Settings(self.context)
         self.global_settings = GlobalSettings(self.site)
@@ -114,30 +115,6 @@ class DocumentViewerView(BrowserView):
 
         return self.index()
 
-    def annotations(self):
-        data = []
-        annotations = self.settings.annotations
-        if annotations is None:
-            return data
-
-        for page, anns in annotations.items():
-            for ann in anns:
-                data.append({
-                    "location": {"image": ann['coord']},
-                    "title": ann['title'],
-                    "id": ann['id'],
-                    "page": page,
-                    "access": "public",
-                    "content": ann['content']})
-
-        return data
-
-    def sections(self):
-        sections = self.settings.sections
-        if sections is None:
-            return []
-        return sections
-
     def dv_data(self):
         dump_path = DUMP_FILENAME.rsplit('.', 1)[0]
 
@@ -168,9 +145,9 @@ class DocumentViewerView(BrowserView):
             image_format = self.global_settings.pdf_image_format
 
         return {
+            'annotations': [],
+            'sections': [],
             'access': 'public',
-            'annotations': self.annotations(),
-            'sections': list(self.sections()),
             'canonical_url': self.context.absolute_url() + '/view',
             'created_at': DateTime(self.context.CreationDate()).aCommonZ(),
             'data': {},
@@ -199,14 +176,12 @@ class DocumentViewerView(BrowserView):
             }
         }
 
-    def javascript(self):
-        fullscreen = self.settings.fullscreen
-        height = 'height: %i,' % either(self.settings.height,
-                                        self.global_settings.height)
-        width = either(self.settings.width,
-                       self.global_settings.width)
+    def pattern_options(self):
+        height = either(self.settings.height, self.global_settings.height)
+        width = either(self.settings.width, self.global_settings.width)
+
         if width is None:
-            width = '"100%"'
+            width = '100%'
         else:
             width = str(width)
 
@@ -214,84 +189,13 @@ class DocumentViewerView(BrowserView):
                          self.global_settings.show_sidebar)
         search = either(self.settings.show_search,
                         self.global_settings.show_search)
-        return """window.documentData = %(data)s;
-var hash = window.location.hash;
-var sidebar = %(sidebar)s;
-
-window.initializeDV = function() {
-    if(jQuery(window).width() < 800) {
-        sidebar = false;
-    }
-
-/* We do this so we can reload it later when managing annotations */
-    window.currentDocument = DV.load(window.documentData, { %(height)s
-        sidebar: sidebar,
-        width: %(width)s,
-        search: %(search)s,
-        container: '#DV-container'
-    });
-
-}
-
-if (hash.search("\#(document|pages|text)\/") != -1 || (%(fullscreen)s &&
-        hash != '#bypass-fullscreen')) {
-    window.currentDocument = DV.load(window.documentData, {
-        sidebar: sidebar,
-        search: %(search)s,
-        container: document.body });
-    jQuery('body').addClass('fullscreen');
-} else {
-    window.initializeDV();
-    jQuery('body').addClass('not-fullscreen');
-}
-""" % {
-            'portal_url': self.portal_url,
+        return json.dumps({
             'height': height,
-            'fullscreen': str(fullscreen).lower(),
-            'sidebar': str(sidebar).lower(),
-            'search': str(search).lower(),
+            'sidebar': sidebar,
+            'search': search,
             'width': width,
-            'data': json.dumps(self.dv_data())
-        }
-
-    def getTranslatedJSLabels(self):
-        """
-        """
-        labels = [
-            ('zoom', 'Zoom'),
-            ('page', 'Page'),
-            ('of', 'of'),
-            ('document', 'Document'),
-            ('pages', 'Pages'),
-            ('notes', 'Notes'),
-            ('loading', 'Loading'),
-            ('text', 'Text'),
-            ('search', 'Search'),
-            ('for', 'for'),
-            ('previous', 'Previous'),
-            ('next', 'Next'),
-            ('close', 'Close'),
-            ('remove', 'Remove'),
-            ('link_to_note', 'Link to this note'),
-            ('previous_annotation', 'Previous annotation'),
-            ('next_annotation', 'Next annotation'),
-            ('on_page', 'on page'),
-            ('for_page', 'for page'),
-            ('original_document', 'Original Document'),
-            ('contributed_by', 'Contributed by:'),
-            ('close_fullscreen', 'Close Fullscreen')
-        ]
-        result = ''
-        for lid, default in labels:
-            translated = translate(
-                'js_label_%s' % lid, domain='collective.documentviewer',
-                context=self.request, default=default)
-            result += "var dv_translated_label_%s = '%s';\n" % (
-                lid, translated.replace("'", "\\'")
-            )
-        self.request.response.setHeader("Content-type", "application/javascript")
-
-        return result
+            'data': self.dv_data()
+        })
 
 
 class DVPdfUrl(BrowserView):
@@ -319,18 +223,6 @@ class DVPdfUrl(BrowserView):
 
         url = '%s/pdf/dump.pdf' % dvpdffiles
         self.request.response.redirect(url)
-
-
-try:
-    from plone.dexterity.browser.view import DefaultView
-
-    class DXDocumentViewerView(DocumentViewerView, DefaultView):
-        def __call__(self):
-            self._update()
-            self.update()
-            return super(DXDocumentViewerView, self).__call__()
-except ImportError:
-    pass
 
 
 class DocumentViewerSearchView(BrowserView):
@@ -369,14 +261,14 @@ class Utils(BrowserView):
                         self.context, settings.auto_layout_file_types)
             else:
                 return False
-        except:
+        except Exception:
             return False
 
     def settings_enabled(self):
         return self.context.getLayout() == 'documentviewer'
 
     def async_enabled(self):
-        return asyncInstalled() or celeryInstalled()
+        return celeryInstalled()
 
     def clean_folder(self, catalog, storage_loc):
         if not os.path.isdir(storage_loc):
@@ -443,12 +335,12 @@ class Convert(Utils):
         mtool = getToolByName(self.context, 'portal_membership')
         self.manager = mtool.checkPermission('cmf.ManagePortal',
                                              self.context)
-        self.async_installed = asyncInstalled() or celeryInstalled()
+        self.async_installed = celeryInstalled()
         self.converting = False
         if self.enabled():
             req = self.request
-            if req.get('REQUEST_METHOD', 'POST') and \
-               'form.action.queue' in req.form.keys():
+            if (req.get('REQUEST_METHOD', 'POST') and
+                    'form.action.queue' in req.form.keys()):
                 authenticator = getMultiAdapter((self.context, self.request),
                                                 name=u"authenticator")
                 if not authenticator.verify():
@@ -555,81 +447,6 @@ class GroupView(BrowserView):
         elif obj.portal_type == 'Image':
             url = obj.absolute_url()
             return '%s/image_thumb' % url
-
-
-class MoveJob(BrowserView):
-
-    def __call__(self):
-        if self.request.get('REQUEST_METHOD', 'POST') and \
-                self.request.form.get('form.action.move', False):
-            authenticator = getMultiAdapter((self.context, self.request),
-                                            name=u"authenticator")
-            if not authenticator.verify():
-                raise Unauthorized
-
-            getJobRunner(self.context).move_to_front()
-
-        return self.request.response.redirect(
-            self.context.absolute_url() + '/@@convert-to-documentviewer')
-
-
-class Annotate(BrowserView):
-
-    def __call__(self):
-        req = self.request
-        settings = Settings(self.context)
-        annotations = settings.annotations
-        if annotations is None:
-            annotations = PersistentDict()
-            settings.annotations = annotations
-
-        sections = settings.sections
-        if sections is None:
-            sections = PersistentList()
-            settings.sections = sections
-
-        action = req.form['action']
-        if action == 'addannotation':
-            page = int(req.form['page'])
-            if page not in annotations:
-                annotations[page] = PersistentList()
-
-            pageann = annotations[page]
-            data = {
-                "id": random.randint(1, 9999999),
-                "coord": req.form['coord'],
-                "title": req.form.get('title', ''),
-                "content": req.form.get('content', '')}
-            pageann.append(data)
-            return json.dumps(data)
-        elif action == 'removeannotation':
-            page = int(req.form['page'])
-            if page in annotations:
-                ann_id = int(req.form['id'])
-                found = False
-                annotations = annotations[page]
-                for ann in annotations:
-                    if ann['id'] == ann_id:
-                        found = ann
-                        break
-
-                if found:
-                    annotations.remove(found)
-
-        elif action == 'addsection':
-            data = {
-                'page': req.form['page'],
-                'title': req.form['title']
-            }
-            sections.append(data)
-            return json.dumps(data)
-        elif action == 'removesection':
-            data = {
-                'page': req.form['page'],
-                'title': req.form['title']
-            }
-            if data in sections:
-                sections.remove(data)
 
 
 class ConvertAllUnconvertedView(BrowserView):

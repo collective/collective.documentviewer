@@ -19,7 +19,7 @@ Features
 - OCR
 - Searchable on OCR text
 - works with many different document types
-- plone.app.async integration with task monitor
+- collective.celery integration
 - lots of configuration options
 - PDF Album view for display groups of PDFs
 
@@ -52,7 +52,7 @@ Install requirements
 Async Integration
 -----------------
 
-It it highly recommended to install and configure plone.app.async
+It it highly recommended to install and configure collective.celery
 in combination with this package. Doing so will manage all pdf
 conversions processes asynchronously so the user isn't delayed
 so much when saving files.
@@ -151,9 +151,18 @@ folder accesses, and removal of temp files.   Just run the following command::
 And retry the conversion of your document
 
 
-TODO
-----
 
-- check why there are some error during async operations:
-    - ConflictError: database conflict error (oid 0x4d10, class BTrees.IOBTree.IOBucket, serial this txn started with 0x0395f478bc2cb377 2012-04-21 03:36:44.103425, serial currently committed 0x0395f479b09de4cc 2012-04-21 03:37:41.394556)
-    - ERROR ZODB.Connection Shouldn't load state for 0x319d when the connection is closed
+Development
+-----------
+
+Normal flow:
+
+    git clone git@github.com:collective/collective.documentviewer.git
+
+    cd collective.documentviewer
+
+    virtualenv .
+
+    bin/pip install -r requirements.txt
+
+    bin/buildout

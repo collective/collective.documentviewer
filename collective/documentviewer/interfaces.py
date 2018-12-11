@@ -1,13 +1,11 @@
-from zope.schema.vocabulary import SimpleTerm
-from zope.schema.vocabulary import SimpleVocabulary
-from zope.interface import Interface
-from zope.interface import Attribute
+from collective.documentviewer import mf as _
+from collective.documentviewer.config import CONVERTABLE_TYPES
+from OFS.interfaces import IItem
 from zope import schema
 from zope.component.interfaces import IObjectEvent
+from zope.interface import Attribute, Interface
+from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 from zope.site.hooks import getSite
-from collective.documentviewer.config import CONVERTABLE_TYPES
-from collective.documentviewer import mf as _
-from OFS.interfaces import IItem
 
 try:
     # older versions of zope.schema do not support defaultFactory
@@ -17,19 +15,11 @@ except TypeError:
     SUPPORT_DEFAULT_FACTORY = False
 
 
-try:
-    from plone.app.contenttypes.interfaces import IFile
-
-    class IPACPossibleDocumentViewerMarker(IFile):
-        pass
-except ImportError:
-    pass
-
-
 class ILayer(Interface):
     """
     layer class
     """
+
 
 FILE_TYPES_VOCAB = []
 
@@ -122,7 +112,7 @@ class IGlobalDocumentViewerSettings(Interface):
         default=True)
     show_contributor = schema.Bool(
         title=_("Show contributor"),
-        default=True)
+        default=False)
     override_contributor = schema.TextLine(
         title=_("Override Contributor"),
         description=_("What to override the contributor field on viewer with."
@@ -142,37 +132,37 @@ class IGlobalDocumentViewerSettings(Interface):
                       "specify the base url path."),
         default=None,
         required=False)
+
     width = schema.Int(
         title=_("Viewer Width"),
         description=_("Leave blank to take full width."),
         default=None,
         required=False)
+
     height = schema.Int(
         title=_("Viewer Height"),
-        description=_("Default height to use for viewer (only for "
-                      "non-fullscreen mode)."),
+        description=_("Default height to use for viewer"),
         default=700)
+
     show_sidebar = schema.Bool(
         title=_("Show sidebar"),
         description=_("Default to show sidebar on Document Viewer."),
-        default=True)
+        default=False)
+
     show_search = schema.Bool(
         title=_("Show search box"),
         description=_("On Document Viewer."),
         default=True)
+
     show_search_on_group_view = schema.Bool(
         title=_("Show search on group view"),
         description=_("Enable search on group view."),
         default=True)
+
     group_view_batch_size = schema.Int(
         title=_("Group View Batch Size"),
         description=_("For folders. Does not apply to topics."),
         default=20)
-    async_quota_size = schema.Int(
-        title=_("Async Quota Size"),
-        description=_("Number of conversions to run at a time. "
-                      "The quota name assigned is `dv`."),
-        default=3)
 
 
 def default_width():
@@ -223,17 +213,17 @@ class IDocumentViewerSettings(Interface):
         title=_("Viewer Width"),
         description=_("Leave blank to take full width."),
         required=False,
-        **_default(default_width,
+        **_default(
+            default_width,
             IGlobalDocumentViewerSettings['width'].default))
+
     height = schema.Int(
         title=_("Viewer Height"),
         required=False,
-        **_default(default_height,
+        **_default(
+            default_height,
             IGlobalDocumentViewerSettings['height'].default))
-    fullscreen = schema.Bool(
-        title=_("Fullscreen Viewer"),
-        description=_("Default to fullscreen viewer."),
-        default=False)
+
     enable_indexation = schema.Bool(
         title=_("Make searchable"),
         description=_("If this is enabled, the text will be extracted from "
@@ -241,18 +231,23 @@ class IDocumentViewerSettings(Interface):
                       "with the Plone search.  You will need to run conversion again "
                       "for this parameter to be taken into account."
                       ),
-        **_default(default_enable_indexation,
-            IGlobalDocumentViewerSettings['width'].default))
+        **_default(
+            default_enable_indexation,
+            IGlobalDocumentViewerSettings['enable_indexation'].default))
+
     show_sidebar = schema.Bool(
         title=_("Show sidebar"),
         description=_("Default to show sidebar."),
         required=False,
-        **_default(default_show_sidebar,
-            IGlobalDocumentViewerSettings['width'].default))
+        **_default(
+            default_show_sidebar,
+            IGlobalDocumentViewerSettings['show_sidebar'].default))
+
     show_search = schema.Bool(
         title=_("Show search box"),
-        **_default(default_show_search,
-            IGlobalDocumentViewerSettings['width'].default))
+        **_default(
+            default_show_search,
+            IGlobalDocumentViewerSettings['show_search'].default))
 
 
 class IUtils(Interface):
@@ -271,6 +266,7 @@ class IUtils(Interface):
         """
         force conversion
         """
+
     def async_enabled():
         """
         whether async is installed

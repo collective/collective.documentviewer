@@ -1,5 +1,7 @@
 from plone.indexer import indexer
 from collective.documentviewer.settings import Settings
+from plone.dexterity.interfaces import IDexterityContent
+from plone.app.contenttypes.interfaces import IFile
 
 
 def SearchableTextIndexer(obj):
@@ -20,31 +22,11 @@ def SearchableTextIndexer(obj):
         return text
 
 
-try:
-    from Products.ATContentTypes.interface import IFileContent
-
-    @indexer(IFileContent)
-    def SearchableTextArchetypes(obj):
-        return SearchableTextIndexer(obj)
-except ImportError:
-    pass
+@indexer(IDexterityContent)
+def SearchableTextDexterity(obj):
+    return SearchableTextIndexer(obj)
 
 
-try:
-    from plone.dexterity.interfaces import IDexterityContent
-
-    @indexer(IDexterityContent)
-    def SearchableTextDexterity(obj):
-        return SearchableTextIndexer(obj)
-except ImportError:
-    pass
-
-
-try:
-    from collective.documentviewer.interfaces import IPACPossibleDocumentViewerMarker  # noqa
-
-    @indexer(IPACPossibleDocumentViewerMarker)
-    def SearchableTextPAC(obj):
-        return SearchableTextIndexer(obj)
-except ImportError:
-    pass
+@indexer(IFile)
+def SearchableTextPAC(obj):
+    return SearchableTextIndexer(obj)

@@ -1,18 +1,15 @@
-from Products.CMFCore.utils import getToolByName
-from collective.documentviewer.settings import GlobalSettings
-from zope.event import notify
-from Products.Archetypes.event import ObjectInitializedEvent
+import unittest
+from os import listdir
+from os.path import exists, join
 from tempfile import mkdtemp
 
-import unittest2 as unittest
-
-from collective.documentviewer.settings import Settings
 from collective.documentviewer import storage
+from collective.documentviewer.settings import (STORAGE_VERSION,
+                                                GlobalSettings, Settings)
 from collective.documentviewer.tests import BaseTest
-from collective.documentviewer.settings import STORAGE_VERSION
-from os.path import join
-from os.path import exists
-from os import listdir
+from Products.Archetypes.event import ObjectInitializedEvent
+from Products.CMFCore.utils import getToolByName
+from zope.event import notify
 
 
 class StorageTest(BaseTest):
@@ -89,10 +86,12 @@ class StorageTest(BaseTest):
         fi.reindexObject()
         notify(ObjectInitializedEvent(fi))
         settings = Settings(fi)
-        self.assertTrue(exists(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)))
-        self.assertTrue(listdir(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)) > 3)
+        self.assertTrue(
+            exists(join(_dir, uid[0], uid[1], uid,
+                        settings.obfuscate_secret)))
+        self.assertTrue(
+            listdir(join(_dir, uid[0], uid[1], uid,
+                         settings.obfuscate_secret)) > 3)
 
     def test_storage_removes_obfuscation(self):
         gsettings = GlobalSettings(self.portal)
@@ -105,15 +104,18 @@ class StorageTest(BaseTest):
         fi.reindexObject()
         notify(ObjectInitializedEvent(fi))
         settings = Settings(fi)
-        self.assertTrue(exists(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)))
-        self.assertTrue(listdir(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)) > 3)
+        self.assertTrue(
+            exists(join(_dir, uid[0], uid[1], uid,
+                        settings.obfuscate_secret)))
+        self.assertTrue(
+            listdir(join(_dir, uid[0], uid[1], uid,
+                         settings.obfuscate_secret)) > 3)
         # publish now
         workflowTool = getToolByName(fi, 'portal_workflow')
         workflowTool.doActionFor(fi, 'publish')
-        self.assertTrue(not exists(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)))
+        self.assertTrue(
+            not exists(join(_dir, uid[0], uid[1], uid,
+                            settings.obfuscate_secret)))
 
     def test_publish_unpublish_again_works_with_obfuscation(self):
         gsettings = GlobalSettings(self.portal)
@@ -123,23 +125,26 @@ class StorageTest(BaseTest):
         gsettings.storage_obfuscate = True
         fi = self.createFile('test.pdf')
         uid = fi.UID()
-        fi.reindexObject()
-        notify(ObjectInitializedEvent(fi))
         settings = Settings(fi)
-        self.assertTrue(exists(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)))
-        self.assertTrue(listdir(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)) > 3)
+        self.assertTrue(
+            exists(join(_dir, uid[0], uid[1], uid,
+                        settings.obfuscate_secret)))
+        self.assertTrue(
+            listdir(join(_dir, uid[0], uid[1], uid,
+                         settings.obfuscate_secret)) > 3)
         # publish now
         workflowTool = getToolByName(fi, 'portal_workflow')
         workflowTool.doActionFor(fi, 'publish')
-        self.assertTrue(not exists(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)))
+        self.assertTrue(
+            not exists(join(_dir, uid[0], uid[1], uid,
+                            settings.obfuscate_secret)))
         workflowTool.doActionFor(fi, 'retract')
-        self.assertTrue(exists(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)))
-        self.assertTrue(listdir(join(_dir, uid[0], uid[1], uid,
-            settings.obfuscate_secret)) > 3)
+        self.assertTrue(
+            exists(join(_dir, uid[0], uid[1], uid,
+                        settings.obfuscate_secret)))
+        self.assertTrue(
+            listdir(join(_dir, uid[0], uid[1], uid,
+                         settings.obfuscate_secret)) > 3)
 
 
 def test_suite():
