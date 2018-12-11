@@ -24,22 +24,26 @@ class PDFResourceTraverseTest(BaseTest):
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/%s/%s/%s/small/dump_1.gif' % (
                 uid[0], uid[1], uid))
-        self.assertEquals(fiobj.context.path,
+        self.assertEquals(
+            fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'small', 'dump_1.gif'))
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/%s/%s/%s/normal/dump_1.gif' % (
                 uid[0], uid[1], uid))
-        self.assertEquals(fiobj.context.path,
+        self.assertEquals(
+            fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'normal', 'dump_1.gif'))
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/%s/%s/%s/large/dump_1.gif' % (
                 uid[0], uid[1], uid))
-        self.assertEquals(fiobj.context.path,
+        self.assertEquals(
+            fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'large', 'dump_1.gif'))
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/%s/%s/%s/text/dump_1.txt' % (
                 uid[0], uid[1], uid))
-        self.assertEquals(fiobj.context.path,
+        self.assertEquals(
+            fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'text', 'dump_1.txt'))
 
     def test_filesystem_old_storage_works(self):
@@ -48,15 +52,13 @@ class PDFResourceTraverseTest(BaseTest):
         gsettings.storage_location = _dir
         gsettings.storage_type = 'File'
         fi = self.createFile('test.pdf')
-        settings = Settings(fi)
-        del settings._metadata['storage_version']
-        notify(ObjectInitializedEvent(fi))
         uid = fi.UID()
-        fi.reindexObject()  # for pc
         fiobj = self.portal.unrestrictedTraverse(
-            '@@dvpdffiles/%s/small/dump_1.gif' % uid)
-        self.assertEquals(fiobj.context.path,
-            join(_dir, uid, 'small', 'dump_1.gif'))
+            '@@dvpdffiles/{}/{}/{}/small/dump_1.gif'.format(
+                uid[0], uid[1], uid))
+        self.assertEquals(
+            fiobj.context.path,
+            join(_dir, uid[0], uid[1], uid, 'small', 'dump_1.gif'))
 
     def test_filesystem_missing_gives_404(self):
         gsettings = GlobalSettings(self.portal)
@@ -66,10 +68,11 @@ class PDFResourceTraverseTest(BaseTest):
         fi = self.createFile('test.pdf')
         notify(ObjectInitializedEvent(fi))
         uid = fi.UID()
-        self.assertRaises(KeyError,
+        self.assertRaises(
+            KeyError,
             self.portal.unrestrictedTraverse,
-                '@@dvpdffiles/%s/%s/%s/small/foobar.gif' % (
-                    uid[0], uid[1], uid))
+            '@@dvpdffiles/%s/%s/%s/small/foobar.gif' % (
+                uid[0], uid[1], uid))
 
     def test_blob_old_storage_works(self):
         gsettings = GlobalSettings(self.portal)

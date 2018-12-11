@@ -1,10 +1,11 @@
 
 """
 See http://stackoverflow.com/questions/2879856/get-system-language-in-iso-639-3-letter-codes-in-python
-"""
+"""  # noqa
 
 import os
 import codecs
+
 
 def getisocodes_dict(data_path):
     # Provide a map from ISO code (both bibliographic and terminologic)
@@ -12,20 +13,21 @@ def getisocodes_dict(data_path):
     # English and french names
     #
     # "bibliographic" iso codes are derived from English word for the language
-    # "terminologic" iso codes are derived from the pronunciation in the target 
+    # "terminologic" iso codes are derived from the pronunciation in the target
     # language (if different to the bibliographic code)
 
     map = {}
-    fp = codecs.open(os.path.join(os.path.dirname(__file__), data_path), 'rb', 'utf-8')
+    fp = codecs.open(
+        os.path.join(os.path.dirname(__file__), data_path), 'rb', 'utf-8')
     for line in fp:
         fields = line.split('|')
         if len(fields[2]) > 0:
             if len(fields[1]) > 0:
-                map[fields[2]] = fields[1]    
+                map[fields[2]] = fields[1]
             else:
                 map[fields[2]] = fields[0]
     fp.close()
     return map
 
-ISO_UTF_MAP =  getisocodes_dict('ISO-639-2_utf-8.txt')
 
+ISO_UTF_MAP = getisocodes_dict('ISO-639-2_utf-8.txt')

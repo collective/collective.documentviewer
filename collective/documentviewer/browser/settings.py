@@ -37,4 +37,5 @@ class SettingsForm(form.EditForm):
 
         self.context.plone_utils.addPortalMessage(PloneMessageFactory('Changes saved.'))
 
+
 SettingsFormView = wrap_form(SettingsForm)

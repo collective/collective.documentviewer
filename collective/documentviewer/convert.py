@@ -1,40 +1,32 @@
-import subprocess
 import os
-from logging import getLogger
-import shutil
-import tempfile
+import random
 import re
-import transaction
+import shutil
+import subprocess
+import tempfile
 import traceback
-from ZODB.blob import Blob
-from BTrees.OOBTree import OOBTree
+from logging import getLogger
+
+import transaction
 from Acquisition import aq_inner
-from DateTime import DateTime
-from zope.event import notify
-from zope.annotation.interfaces import IAnnotations
-from collective.documentviewer.utils import getPortal
-from plone.app.blob.utils import openBlob
-from repoze.catalog.catalog import Catalog
-from repoze.catalog.indexes.text import CatalogTextIndex
-from repoze.catalog.indexes.field import CatalogFieldIndex
-from collective.documentviewer.settings import Settings
-from collective.documentviewer.settings import GlobalSettings
-from collective.documentviewer.utils import getDocumentType
+from BTrees.OOBTree import OOBTree
 from collective.documentviewer import storage
-from collective.documentviewer.utils import mkdir_p
 from collective.documentviewer.events import ConversionFinishedEvent
 from collective.documentviewer.interfaces import IFileWrapper, IOCRLanguage
-import random
+from collective.documentviewer.settings import GlobalSettings, Settings
+from collective.documentviewer.utils import getDocumentType, getPortal, mkdir_p
+from DateTime import DateTime
+from plone.app.blob.utils import openBlob
+from plone.app.contenttypes.behaviors.leadimage import ILeadImage
+from plone.namedfile.file import NamedBlobImage
+from repoze.catalog.catalog import Catalog
+from repoze.catalog.indexes.field import CatalogFieldIndex
+from repoze.catalog.indexes.text import CatalogTextIndex
+from ZODB.blob import Blob
+from zope.annotation.interfaces import IAnnotations
+from zope.event import notify
 
-try:
-    from plone.app.contenttypes.behaviors.leadimage import ILeadImage
-    from plone.namedfile.file import NamedBlobImage
-except ImportError:
-    from zope.interface import Interface
-    class ILeadImage(Interface):
-        pass
-
-word_re = re.compile('\W+')
+word_re = re.compile(r'\W+')
 logger = getLogger('collective.documentviewer')
 
 DUMP_FILENAME = 'dump.pdf'
@@ -144,6 +136,7 @@ class MD5SubProcess(BaseSubProcess):
         hashval = self._run_command(cmd)
         return hashval.split('=')[1].strip()
 
+
 try:
     md5 = MD5SubProcess()
 except IOError:
@@ -165,6 +158,7 @@ class MD5SumSubProcess(BaseSubProcess):
         cmd = [self.binary, filepath]
         hashval = self._run_command(cmd)
         return hashval.split('  ')[0].strip()
+
 
 try:
     if md5 is None:
@@ -195,7 +189,7 @@ class TextCheckerSubProcess(BaseSubProcess):
             return False
         try:
             index = lines.index(self.font_line_marker)
-        except:
+        except Exception:
             return False
         return len(lines[index + 1:]) > 0
 
@@ -336,7 +330,7 @@ class DocSplitSubProcess(BaseSubProcess):
         if enable_indexation:
             try:
                 self.dump_text(path, output_dir, ocr, language)
-            except:
+            except Exception:
                 logger.info('Error extracting text from PDF', exc_info=True)
 
         num_pages = self.get_num_pages(path)
@@ -344,6 +338,7 @@ class DocSplitSubProcess(BaseSubProcess):
         # We don't need to cleanup the PDF right
         # The PDF will be removed by handle_storage, which delete the tempdir.
         return num_pages
+
 
 try:
     docsplit = DocSplitSubProcess()
@@ -465,7 +460,6 @@ class Converter(object):
             fi = open(tmppath)
             self.context.image = NamedBlobImage(fi, filename=filename.decode('utf8'))
             fi.close()
-
 
         if self.gsettings.storage_type == 'Blob':
             logger.info('setting blob data for %s' % repr(context))
@@ -631,7 +625,7 @@ class Converter(object):
             settings.filehash = self.filehash
             self.handleFileObfuscation()
             result = 'success'
-        except Exception, ex:
+        except Exception as ex:
             logger.exception('Error converting PDF:\n%s\n%s' % (
                 getattr(ex, 'message', ''),
                 traceback.format_exc()))

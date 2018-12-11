@@ -27,6 +27,8 @@ class BaseTest(unittest.TestCase):
     def createFile(self, name=u"test.pdf", id='test1'):
         with open(join(_files, name)) as fi:
             pdf_data = fi.read()
+        if id in self.portal.objectIds():
+            api.content.delete(self.portal[id])
         fi = api.content.create(
             container=self.portal,
             type='File', id=id,

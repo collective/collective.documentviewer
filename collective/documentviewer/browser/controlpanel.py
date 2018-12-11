@@ -32,4 +32,5 @@ class GlobalSettingsForm(form.EditForm):
 
         self.status = PloneMessageFactory('Changes saved.')
 
+
 GlobalSettingsFormView = wrap_form(GlobalSettingsForm)
