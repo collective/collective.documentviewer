@@ -1,7 +1,6 @@
 from os.path import join
 
 from collective.documentviewer.settings import GlobalSettings, Settings
-from collective.documentviewer.utils import getPortal
 from plone import api
 
 

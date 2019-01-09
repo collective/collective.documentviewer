@@ -1,4 +1,5 @@
 import json
+from zExceptions import NotFound
 import os
 import shutil
 from logging import getLogger
@@ -16,6 +17,7 @@ from collective.documentviewer.settings import GlobalSettings, Settings
 from collective.documentviewer.utils import allowedDocumentType
 from DateTime import DateTime
 from plone import api
+from plone.api import exc
 from plone.dexterity.browser.view import DefaultView
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.resources import add_resource_on_request
@@ -200,7 +202,10 @@ class DVPdfUrl(BrowserView):
             We need to redirect, because the PDF can be stored on FS, instead
             of ZODB.
         """
-        site = api.portal.get()
+        try:
+            site = api.portal.get()
+        except exc.CannotGetPortalError:
+            raise NotFound
         settings = Settings(self.context)
         global_settings = GlobalSettings(site)
 
