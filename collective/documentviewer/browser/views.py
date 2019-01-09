@@ -1,5 +1,4 @@
 import json
-from zExceptions import NotFound
 import os
 import shutil
 from logging import getLogger
@@ -24,6 +23,7 @@ from Products.CMFPlone.resources import add_resource_on_request
 from Products.CMFPlone.utils import base_hasattr
 from Products.Five.browser import BrowserView
 from repoze.catalog.query import Contains
+from zExceptions import NotFound
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
 from zope.index.text.parsetree import ParseError
