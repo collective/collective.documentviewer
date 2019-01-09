@@ -14,8 +14,9 @@ from collective.documentviewer import storage
 from collective.documentviewer.events import ConversionFinishedEvent
 from collective.documentviewer.interfaces import IFileWrapper, IOCRLanguage
 from collective.documentviewer.settings import GlobalSettings, Settings
-from collective.documentviewer.utils import getDocumentType, getPortal, mkdir_p
+from collective.documentviewer.utils import getDocumentType, mkdir_p
 from DateTime import DateTime
+from plone import api
 from plone.app.blob.utils import openBlob
 from plone.app.contenttypes.behaviors.leadimage import ILeadImage
 from plone.namedfile.file import NamedBlobImage
@@ -367,7 +368,7 @@ class Converter(object):
         self.blob = fw.blob
         self.initialize_blob_filepath()
         self.filehash = None
-        self.gsettings = GlobalSettings(getPortal(context))
+        self.gsettings = GlobalSettings(api.portal.get())
         self.storage_dir = self.get_storage_dir()
         self.doc_type = getDocumentType(self.context,
                                         self.gsettings.auto_layout_file_types)

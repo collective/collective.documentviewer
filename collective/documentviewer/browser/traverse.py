@@ -1,21 +1,18 @@
-from logging import getLogger
 import os
+from logging import getLogger
 
-from AccessControl import Unauthorized
-from AccessControl import getSecurityManager
-from OFS.SimpleItem import SimpleItem
-from Products.CMFCore import permissions
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser import BrowserView
-from Products.Five.browser.resource import Directory
-from Products.Five.browser.resource import DirectoryResource
+from AccessControl import Unauthorized, getSecurityManager
 from collective.documentviewer.interfaces import IBlobFileWrapper
-from collective.documentviewer.settings import GlobalSettings
-from collective.documentviewer.settings import Settings
-from collective.documentviewer.utils import getPortal
+from collective.documentviewer.settings import GlobalSettings, Settings
+from OFS.SimpleItem import SimpleItem
+from plone import api
 from plone.app.blob.download import handleRequestRange
 from plone.app.blob.iterators import BlobStreamIterator
 from plone.app.blob.utils import openBlob
+from Products.CMFCore import permissions
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
+from Products.Five.browser.resource import Directory, DirectoryResource
 from webdav.common import rfc1123_date
 from zExceptions import NotFound
 from zope.annotation.interfaces import IAnnotations
@@ -130,11 +127,6 @@ class RequestMemo(object):
         return memogetter
 
 
-@RequestMemo()
-def _getPortal(request, context):
-    return getPortal(context)
-
-
 class PDFFiles(SimpleItem, DirectoryResource):
     implements(IBrowserPublisher)
 
@@ -143,7 +135,7 @@ class PDFFiles(SimpleItem, DirectoryResource):
         self.previous = previous
 
         self.__name__ = 'dvpdffiles'
-        self.site = _getPortal(request, context)
+        self.site = api.portal.get()
         self.global_settings = GlobalSettings(self.site)
         self.storage_type = self.global_settings.storage_type
         self.__dir = Directory(

@@ -1,21 +1,22 @@
+import json
+import os
+import shutil
+from logging import getLogger
+
 from AccessControl import Unauthorized
 from collective.documentviewer import mf as _
 from collective.documentviewer import storage
-from collective.documentviewer.async import celeryInstalled
-from collective.documentviewer.async import getJobRunner
-from collective.documentviewer.async import queueJob
+from collective.documentviewer.async import (celeryInstalled, getJobRunner,
+                                             queueJob)
+from collective.documentviewer.convert import (DUMP_FILENAME,
+                                               TEXT_REL_PATHNAME, docsplit)
 from collective.documentviewer.convert_all import convert_all
-from collective.documentviewer.convert import docsplit
-from collective.documentviewer.convert import DUMP_FILENAME
-from collective.documentviewer.convert import TEXT_REL_PATHNAME
-from collective.documentviewer.interfaces import IFileWrapper
-from collective.documentviewer.interfaces import IUtils
-from collective.documentviewer.settings import GlobalSettings
-from collective.documentviewer.settings import Settings
+from collective.documentviewer.interfaces import IFileWrapper, IUtils
+from collective.documentviewer.settings import GlobalSettings, Settings
 from collective.documentviewer.utils import allowedDocumentType
-from collective.documentviewer.utils import getPortal
 from DateTime import DateTime
-from logging import getLogger
+from plone import api
+from plone.dexterity.browser.view import DefaultView
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.resources import add_resource_on_request
 from Products.CMFPlone.utils import base_hasattr
@@ -25,12 +26,6 @@ from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
 from zope.index.text.parsetree import ParseError
 from zope.interface import implements
-from plone.dexterity.browser.view import DefaultView
-
-import json
-import os
-import shutil
-
 
 logger = getLogger('collective.documentviewer')
 
@@ -51,7 +46,7 @@ class DocumentViewerView(DefaultView):
 
         add_resource_on_request(self.request, 'documentviewer')
 
-        self.site = getPortal(self.context)
+        self.site = api.portal.get()
         self.settings = Settings(self.context)
         self.global_settings = GlobalSettings(self.site)
 
@@ -205,7 +200,7 @@ class DVPdfUrl(BrowserView):
             We need to redirect, because the PDF can be stored on FS, instead
             of ZODB.
         """
-        site = getPortal(self.context)
+        site = api.portal.get()
         settings = Settings(self.context)
         global_settings = GlobalSettings(site)
 
@@ -256,7 +251,7 @@ class Utils(BrowserView):
                 if self.context.getLayout() == 'documentviewer':
                     return True
                 else:
-                    settings = GlobalSettings(getPortal(self.context))
+                    settings = GlobalSettings(api.portal.get())
                     return allowedDocumentType(
                         self.context, settings.auto_layout_file_types)
             else:
@@ -410,7 +405,7 @@ class GroupView(BrowserView):
         return self.global_settings.group_view_batch_size
 
     def __call__(self):
-        self.site = getPortal(self.context)
+        self.site = api.portal.get()
         self.global_settings = GlobalSettings(self.site)
         self.search_enabled = self.global_settings.show_search_on_group_view
 

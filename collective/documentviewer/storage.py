@@ -1,7 +1,8 @@
-from collective.documentviewer.settings import GlobalSettings
-from collective.documentviewer.settings import Settings
-from collective.documentviewer.utils import getPortal
 from os.path import join
+
+from collective.documentviewer.settings import GlobalSettings, Settings
+from collective.documentviewer.utils import getPortal
+from plone import api
 
 
 def getResourceDirectory(gsettings=None, settings=None, obj=None):
@@ -11,7 +12,7 @@ def getResourceDirectory(gsettings=None, settings=None, obj=None):
         obj = settings.context
 
     if gsettings is None:
-        gsettings = GlobalSettings(getPortal(obj))
+        gsettings = GlobalSettings(api.portal.get())
 
     uid = settings.context.UID()
     if settings.storage_version >= 2:
@@ -27,7 +28,7 @@ def getResourceRelURL(gsettings=None, settings=None, obj=None):
         obj = settings.context
 
     if gsettings is None:
-        gsettings = GlobalSettings(getPortal(obj))
+        gsettings = GlobalSettings(api.portal.get())
 
     base = '@@dvpdffiles/'
     if gsettings.override_base_resource_url:
