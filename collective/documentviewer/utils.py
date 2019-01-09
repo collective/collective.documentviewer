@@ -34,7 +34,3 @@ def mkdir_p(path):
             pass
         else:
             raise
-
-
-def getPortal(obj):
-    return getToolByName(obj, 'portal_url').getPortalObject()

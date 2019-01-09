@@ -8,7 +8,8 @@ from collective.documentviewer.async import queueJob
 from collective.documentviewer.convert import Converter
 from collective.documentviewer.settings import GlobalSettings, Settings
 from collective.documentviewer.storage import getResourceDirectory
-from collective.documentviewer.utils import allowedDocumentType, getPortal
+from collective.documentviewer.utils import allowedDocumentType
+from plone import api
 from Products.CMFCore.utils import getToolByName
 from zope.globalrequest import getRequest
 
@@ -39,8 +40,7 @@ def handle_file_creation(obj, event):
     if not qi.isProductInstalled('collective.documentviewer'):
         return
 
-    site = getPortal(obj)
-    gsettings = GlobalSettings(site)
+    gsettings = GlobalSettings(api.portal.get())
 
     if not allowedDocumentType(obj, gsettings.auto_layout_file_types):
         return
@@ -57,8 +57,7 @@ def handle_workflow_change(obj, event):
     if _should_skip_handler(obj):
         return
     settings = Settings(obj)
-    site = getPortal(obj)
-    gsettings = GlobalSettings(site)
+    gsettings = GlobalSettings(api.portal.get())
     if not gsettings.storage_obfuscate or \
             settings.storage_type != 'File':
         return
