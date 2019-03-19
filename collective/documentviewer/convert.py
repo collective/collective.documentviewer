@@ -499,7 +499,7 @@ class Converter(object):
 
     def sync_db(self):
         # circular
-        from collective.documentviewer.async import celeryInstalled
+        from collective.documentviewer.async_utils import celeryInstalled
         if celeryInstalled():
             from collective.celery.utils import getCelery
             if not getCelery().conf.task_always_eager:
