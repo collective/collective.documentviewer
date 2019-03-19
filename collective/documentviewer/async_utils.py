@@ -1,11 +1,9 @@
 from logging import getLogger
 
-from ZODB.POSException import ConflictError
-from collective.documentviewer.convert import Converter
-from collective.documentviewer.convert import runConversion
+from collective.documentviewer.convert import Converter, runConversion
 from collective.documentviewer.settings import Settings
-from collective.documentviewer.utils import getPortal
-
+from ZODB.POSException import ConflictError
+from zope.component.hooks import getSite
 
 logger = getLogger('collective.documentviewer')
 
@@ -62,7 +60,7 @@ class CeleryJobRunner(object):
 
     def __init__(self, obj):
         self.object = obj
-        self.portal = getPortal(obj)
+        self.portal = getSite()
         self.settings = Settings(obj)
 
     def is_current_active(self, job):
