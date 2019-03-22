@@ -6,11 +6,11 @@ from logging import getLogger
 from collective.documentviewer import storage
 from collective.documentviewer.async_utils import queueJob
 from collective.documentviewer.convert import Converter
+from collective.documentviewer.interfaces import ILayer
 from collective.documentviewer.settings import GlobalSettings, Settings
 from collective.documentviewer.storage import getResourceDirectory
 from collective.documentviewer.utils import allowedDocumentType
 from plone import api
-from Products.CMFCore.utils import getToolByName
 from zope.globalrequest import getRequest
 
 logger = getLogger('collective.documentviewer')
@@ -34,10 +34,9 @@ def _should_skip_handler(obj):
 def handle_file_creation(obj, event):
     if _should_skip_handler(obj):
         return
-    qi = getToolByName(obj, 'portal_quickinstaller', None)
-    if not qi:
-        return
-    if not qi.isProductInstalled('collective.documentviewer'):
+
+    req = getRequest()
+    if req is not None and not ILayer.providedBy(req):
         return
 
     gsettings = GlobalSettings(api.portal.get())

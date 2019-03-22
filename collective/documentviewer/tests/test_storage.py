@@ -7,9 +7,9 @@ from collective.documentviewer import storage
 from collective.documentviewer.settings import (STORAGE_VERSION,
                                                 GlobalSettings, Settings)
 from collective.documentviewer.tests import BaseTest
-from Products.Archetypes.event import ObjectInitializedEvent
 from Products.CMFCore.utils import getToolByName
 from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class StorageTest(BaseTest):
@@ -38,7 +38,7 @@ class StorageTest(BaseTest):
         _dir = mkdtemp()
         gsettings.storage_location = _dir
         fi = self.createFile('test.pdf')
-        notify(ObjectInitializedEvent(fi))
+        notify(ObjectModifiedEvent(fi))
         uid = fi.UID()
         self.assertEquals(storage.getResourceDirectory(obj=fi),
                           join(_dir, uid[0], uid[1], uid))
@@ -84,7 +84,7 @@ class StorageTest(BaseTest):
         fi = self.createFile('test.pdf')
         uid = fi.UID()
         fi.reindexObject()
-        notify(ObjectInitializedEvent(fi))
+        notify(ObjectModifiedEvent(fi))
         settings = Settings(fi)
         self.assertTrue(
             exists(join(_dir, uid[0], uid[1], uid,
@@ -102,7 +102,7 @@ class StorageTest(BaseTest):
         fi = self.createFile('test.pdf')
         uid = fi.UID()
         fi.reindexObject()
-        notify(ObjectInitializedEvent(fi))
+        notify(ObjectModifiedEvent(fi))
         settings = Settings(fi)
         self.assertTrue(
             exists(join(_dir, uid[0], uid[1], uid,

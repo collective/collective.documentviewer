@@ -35,7 +35,7 @@ setup(name='collective.documentviewer',
           'plone.api',
           'Products.CMFPlone',
           'zope.browserresource',
-          'repoze.catalog',
+          'repoze.catalog>=0.9.0',
           'plone.app.z3cform',
           'collective.monkeypatcher',
           'plone.app.contenttypes'

@@ -1,18 +1,17 @@
+import shutil
+import unittest
+from os import listdir
+from os.path import join
 from tempfile import mkdtemp
+
+from collective.documentviewer import storage
+from collective.documentviewer.convert import Converter
+from collective.documentviewer.settings import GlobalSettings, Settings
+from collective.documentviewer.tests import BaseTest
 from DateTime import DateTime
-from collective.documentviewer.settings import GlobalSettings
 from zope.annotation import IAnnotations
 from zope.event import notify
-from Products.Archetypes.event import ObjectInitializedEvent
-
-import unittest
-from collective.documentviewer.convert import Converter
-from collective.documentviewer.settings import Settings
-from collective.documentviewer.tests import BaseTest
-from collective.documentviewer import storage
-from os import listdir
-import shutil
-from os.path import join
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class ConvertTest(BaseTest):
@@ -133,7 +132,7 @@ class ConvertTest(BaseTest):
         # make it convertable again by adapting last_updated and filehash
         annotations['last_updated'] = DateTime('1901/01/01').ISO8601()
         annotations['filehash'] = 'dummymd5'
-        notify(ObjectInitializedEvent(fi))
+        notify(ObjectModifiedEvent(fi))
         # make sure conversion was successfull
         self.failUnless(self._isSuccessfullyConverted(fi))
         # nothing indexed anymore
@@ -160,11 +159,11 @@ class ConvertTest(BaseTest):
         # make it convertable again by adapting last_updated and filehash
         annotations['last_updated'] = DateTime('1901/01/01').ISO8601()
         annotations['filehash'] = 'dummymd5'
-        notify(ObjectInitializedEvent(fi))
+        notify(ObjectModifiedEvent(fi))
         # make sure conversion was successfull
         self.failUnless(self._isSuccessfullyConverted(fi))
         # as indexation is disabled in local settings, the text
-        # of the PDF is no more indexed...
+        # of the PDF is no longer indexed...
         self.failIf(annotations['catalog'] is not None)
 
     def _isSuccessfullyConverted(self, fi):

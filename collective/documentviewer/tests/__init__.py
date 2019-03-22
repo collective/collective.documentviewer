@@ -25,11 +25,11 @@ class BaseTest(unittest.TestCase):
         login(self.portal, TEST_USER_NAME)
 
     def createFile(self, name=u"test.pdf", id='test1'):
-        with open(join(_files, name)) as fi:
+        with open(join(_files, name), 'rb') as fi:
             pdf_data = fi.read()
         if id in self.portal.objectIds():
             api.content.delete(self.portal[id])
-        fi = api.content.create(
+        return api.content.create(
             container=self.portal,
             type='File', id=id,
             file=NamedBlobFile(data=pdf_data, filename=safe_unicode(name)))

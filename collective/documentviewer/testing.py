@@ -7,7 +7,6 @@ from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from zope.configuration import xmlconfig
-from plone.testing import z2
 
 
 class DocumentViewer(PloneSandboxLayer):
@@ -21,7 +20,6 @@ class DocumentViewer(PloneSandboxLayer):
         xmlconfig.file(
             'configure.zcml', collective.documentviewer,
             context=configurationContext)
-        z2.installProduct(app, 'collective.documentviewer')
 
     def setUpPloneSite(self, portal):
         # install into the Plone site
