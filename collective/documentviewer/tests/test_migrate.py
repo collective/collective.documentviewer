@@ -47,16 +47,16 @@ class MigrateTest(BaseTest):
         del settings._metadata['storage_version']
         fi.reindexObject()
         notify(ObjectModifiedEvent(fi))
-        self.assertEquals(settings.storage_version, 1)
+        self.assertEqual(settings.storage_version, 1)
         old_path = storage.getResourceDirectory(obj=fi)
         self.assertTrue(exists(old_path))
         from collective.documentviewer.upgrades import migrate_old_storage
         migrate_old_storage(self.portal)
         self.assertTrue(not exists(old_path))
-        self.assertEquals(settings.storage_version, STORAGE_VERSION)
+        self.assertEqual(settings.storage_version, STORAGE_VERSION)
         new_path = storage.getResourceDirectory(obj=fi)
         self.assertTrue(exists(new_path))
-        self.assertEquals(len(listdir(new_path)), 6)
+        self.assertEqual(len(listdir(new_path)), 6)
 
 
 def test_suite():

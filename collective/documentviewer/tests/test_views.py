@@ -24,25 +24,25 @@ class PDFResourceTraverseTest(BaseTest):
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/%s/%s/%s/small/dump_1.gif' % (
                 uid[0], uid[1], uid))
-        self.assertEquals(
+        self.assertEqual(
             fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'small', 'dump_1.gif'))
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/%s/%s/%s/normal/dump_1.gif' % (
                 uid[0], uid[1], uid))
-        self.assertEquals(
+        self.assertEqual(
             fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'normal', 'dump_1.gif'))
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/%s/%s/%s/large/dump_1.gif' % (
                 uid[0], uid[1], uid))
-        self.assertEquals(
+        self.assertEqual(
             fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'large', 'dump_1.gif'))
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/%s/%s/%s/text/dump_1.txt' % (
                 uid[0], uid[1], uid))
-        self.assertEquals(
+        self.assertEqual(
             fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'text', 'dump_1.txt'))
 
@@ -56,7 +56,7 @@ class PDFResourceTraverseTest(BaseTest):
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/{}/{}/{}/small/dump_1.gif'.format(
                 uid[0], uid[1], uid))
-        self.assertEquals(
+        self.assertEqual(
             fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'small', 'dump_1.gif'))
 
