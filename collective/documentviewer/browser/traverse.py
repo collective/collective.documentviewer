@@ -131,7 +131,8 @@ class RequestMemo(object):
 class PDFFiles(SimpleItem, DirectoryResource):
 
     def __init__(self, context, request, previous=[]):
-        SimpleItem.__init__(self, context, request)
+        DirectoryResource.__init__(self, context, request)
+        SimpleItem.__init__(self)
         self.previous = previous
 
         self.__name__ = 'dvpdffiles'
