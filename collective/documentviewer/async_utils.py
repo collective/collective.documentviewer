@@ -84,6 +84,9 @@ class CeleryJobRunner(object):
             return -1
 
     def find_job(self):
+        if not self.settings.celery_task_id:
+            return -1, None
+
         result = AsyncResult(self.settings.celery_task_id)
         if self.is_current_active(result):
             return 0, result

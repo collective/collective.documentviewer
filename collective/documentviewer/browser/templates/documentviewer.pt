@@ -10,8 +10,7 @@
 
 <div metal:fill-slot="content-core">
 <tal:main-macro metal:define-macro="content-core"
-         tal:define="size python:here.getObjSize(here);
-                     content_type here/get_content_type|here/Format;"
+         tal:define="content_type here/get_content_type|here/Format;"
          i18n:domain="collective.documentviewer">
   <tal:notshow tal:condition="not: view/enabled">
     <dl id="errorMsg" tal:condition="python: view.can_modify and view.settings.successfully_converted is False">

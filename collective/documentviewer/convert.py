@@ -41,10 +41,8 @@ class Page(object):
     @property
     def contents(self):
         if os.path.exists(self.filepath):
-            fi = open(self.filepath)
-            text = fi.read()
-            fi.close()
-            text = str(text, errors='ignore').encode('utf-8')
+            with open(self.filepath, 'r') as fi:
+                text = fi.read()
             # let's strip out the ugly...
             text = word_re.sub(' ', text).strip()
             return ' '.join([word for word in text.split() if len(word) > 3])
@@ -104,6 +102,8 @@ class BaseSubProcess(object):
             cmd, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE, close_fds=self.close_fds)
         output, error = process.communicate()
+        output = output.decode('utf-8')
+        error = error.decode('utf-8')
         process.stdout.close()
         process.stderr.close()
         if process.returncode != 0:
@@ -350,11 +350,10 @@ except IOError:
 
 def saveFileToBlob(filepath):
     blob = Blob()
-    fi = open(filepath)
     bfile = blob.open('w')
-    bfile.write(fi.read())
+    with open(filepath, 'rb') as fi:
+        bfile.write(fi.read())
     bfile.close()
-    fi.close()
     return blob
 
 
@@ -457,9 +456,8 @@ class Converter(object):
             # NamedBlobImage eventually calls blob.consume,
             # destroying the image, so we need to make a temporary copy.
             shutil.copyfile(filepath, tmppath)
-            fi = open(tmppath)
-            self.context.image = NamedBlobImage(fi, filename=filename.decode('utf8'))
-            fi.close()
+            with open(tmppath, 'rb') as fi:
+                self.context.image = NamedBlobImage(fi, filename=filename)
 
         if self.gsettings.storage_type == 'Blob':
             logger.info('setting blob data for %s' % repr(context))

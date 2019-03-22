@@ -10,8 +10,7 @@
 
 <div metal:fill-slot="content-core">
   <tal:main-macro metal:define-macro="content-core"
-         tal:define="size python:here.getObjSize(here);
-                     content_type here/get_content_type|here/Format;"
+         tal:define="content_type here/get_content_type|here/Format;"
          i18n:domain="collective.documentviewer">
   <tal:notconverting tal:condition="not: view/converting">
     <h3 i18n:translate="">Convert this to document viewer</h3>
