@@ -35,7 +35,7 @@
     </tal:show>
 
     <p>
-      <a tal:attributes="href context/absolute_url">
+      <a tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename}">
         Download <tal:name tal:content="context/file/filename">Filename</tal:name>
       </a>
       <span class="discreet"
