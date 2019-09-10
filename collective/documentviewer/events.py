@@ -1,10 +1,10 @@
-from zope.interface import implements
+from zope.interface import implementer
 from zope.component.interfaces import ObjectEvent
 from collective.documentviewer.interfaces import IConversionFinishedEvent
 
 
+@implementer(IConversionFinishedEvent)
 class ConversionFinishedEvent(ObjectEvent):
-    implements(IConversionFinishedEvent)
 
     def __init__(self, obj, status):
         self.object = obj

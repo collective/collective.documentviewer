@@ -17,7 +17,6 @@ from collective.documentviewer.settings import GlobalSettings, Settings
 from collective.documentviewer.utils import getDocumentType, mkdir_p
 from DateTime import DateTime
 from plone import api
-from plone.app.blob.utils import openBlob
 from plone.app.contenttypes.behaviors.leadimage import ILeadImage
 from plone.namedfile.file import NamedBlobImage
 from repoze.catalog.catalog import Catalog
@@ -42,10 +41,8 @@ class Page(object):
     @property
     def contents(self):
         if os.path.exists(self.filepath):
-            fi = open(self.filepath)
-            text = fi.read()
-            fi.close()
-            text = unicode(text, errors='ignore').encode('utf-8')
+            with open(self.filepath, 'r') as fi:
+                text = fi.read()
             # let's strip out the ugly...
             text = word_re.sub(' ', text).strip()
             return ' '.join([word for word in text.split() if len(word) > 3])
@@ -97,7 +94,7 @@ class BaseSubProcess(object):
         return None
 
     def _run_command(self, cmd):
-        if isinstance(cmd, basestring):
+        if isinstance(cmd, str):
             cmd = cmd.split()
         cmdformatted = ' '.join(cmd)
         logger.info("Running command %s" % cmdformatted)
@@ -105,6 +102,8 @@ class BaseSubProcess(object):
             cmd, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE, close_fds=self.close_fds)
         output, error = process.communicate()
+        output = output.decode('utf-8')
+        error = error.decode('utf-8')
         process.stdout.close()
         process.stderr.close()
         if process.returncode != 0:
@@ -183,7 +182,7 @@ class TextCheckerSubProcess(BaseSubProcess):
     def has(self, filepath):
         cmd = [self.binary, filepath]
         output = self._run_command(cmd)
-        if not isinstance(output, basestring):
+        if not isinstance(output, str):
             return False
         lines = output.splitlines()
         if len(lines) < 3:
@@ -351,11 +350,10 @@ except IOError:
 
 def saveFileToBlob(filepath):
     blob = Blob()
-    fi = open(filepath)
     bfile = blob.open('w')
-    bfile.write(fi.read())
+    with open(filepath, 'rb') as fi:
+        bfile.write(fi.read())
     bfile.close()
-    fi.close()
     return blob
 
 
@@ -458,9 +456,8 @@ class Converter(object):
             # NamedBlobImage eventually calls blob.consume,
             # destroying the image, so we need to make a temporary copy.
             shutil.copyfile(filepath, tmppath)
-            fi = open(tmppath)
-            self.context.image = NamedBlobImage(fi, filename=filename.decode('utf8'))
-            fi.close()
+            with open(tmppath, 'rb') as fi:
+                self.context.image = NamedBlobImage(fi, filename=filename)
 
         if self.gsettings.storage_type == 'Blob':
             logger.info('setting blob data for %s' % repr(context))
@@ -500,7 +497,7 @@ class Converter(object):
 
     def sync_db(self):
         # circular
-        from collective.documentviewer.async import celeryInstalled
+        from collective.documentviewer.async_utils import celeryInstalled
         if celeryInstalled():
             from collective.celery.utils import getCelery
             if not getCelery().conf.task_always_eager:
@@ -508,7 +505,7 @@ class Converter(object):
 
     def initialize_blob_filepath(self):
         try:
-            opened = openBlob(self.blob)
+            opened = self.blob.open('r')
             self.blob_filepath = opened.name
             opened.close()
         except (IOError, AttributeError):
@@ -597,14 +594,14 @@ class Converter(object):
         else:
             return self.gsettings.enable_indexation
 
-    def __call__(self, async=True):
+    def __call__(self, asynchronous=True):
         settings = self.settings
 
         try:
             pages = self.run_conversion()
             # conversion can take a long time.
             # let's sync before we save the changes
-            if async:
+            if asynchronous:
                 self.sync_db()
 
             catalog = None

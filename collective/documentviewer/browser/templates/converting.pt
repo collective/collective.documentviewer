@@ -10,8 +10,7 @@
 
 <div metal:fill-slot="content-core">
   <tal:main-macro metal:define-macro="content-core"
-         tal:define="size python:here.getObjSize(here);
-                     content_type here/get_content_type|here/Format;"
+         tal:define="content_type here/get_content_type|here/Format;"
          i18n:domain="collective.documentviewer">
   <tal:notconverting tal:condition="not: view/converting">
     <h3 i18n:translate="">Convert this to document viewer</h3>
@@ -43,21 +42,6 @@
         <tal:pos tal:condition="python: view.position == 0" i18n:translate="">
           The file is active in the Queue.
         </tal:pos>
-        <tal:move tal:condition="python: view.position > 1 and view.manager">
-          <form method="post" tal:attributes="action string:${context/absolute_url}/@@dvmove-to-front">
-            <span tal:replace="structure context/@@authenticator/authenticator"/>
-            <input type="submit" name="form.action.move" value="Move to front of Queue" />
-          </form>
-        </tal:move>
-        <br /><br />
-        <span i18n:translate="" tal:omit-tag="">
-        You might also want to
-        <a tal:attributes="href string:${context/portal_url}/@@dvasync-monitor"
-          i18n:name="url"
-          i18n:translate=""
-          >check
-          it in the process queue</a>.
-        </span>
       </tal:queue>
     </p>
   </tal:converting>

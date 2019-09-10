@@ -1,13 +1,11 @@
-from collective.documentviewer import mf as _
-from collective.documentviewer.interfaces import IGlobalDocumentViewerSettings
 from logging import getLogger
+
+from collective.documentviewer.interfaces import IGlobalDocumentViewerSettings
+from collective.documentviewer.interfaces import mf as _
 from plone.app.z3cform.layout import wrap_form
 from Products.CMFPlone import PloneMessageFactory
-from z3c.form import button
-from z3c.form import field
-from z3c.form import form
+from z3c.form import button, field, form
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
-
 
 logger = getLogger('collective.documentviewer')
 

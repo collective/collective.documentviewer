@@ -5,9 +5,9 @@ from tempfile import mkdtemp
 from collective.documentviewer.browser.traverse import BlobFileWrapper
 from collective.documentviewer.settings import GlobalSettings, Settings
 from collective.documentviewer.tests import BaseTest
-from Products.Archetypes.event import ObjectInitializedEvent
 from zExceptions import NotFound
 from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class PDFResourceTraverseTest(BaseTest):
@@ -18,31 +18,31 @@ class PDFResourceTraverseTest(BaseTest):
         gsettings.storage_location = _dir
         gsettings.storage_type = 'File'
         fi = self.createFile('test.pdf')
-        notify(ObjectInitializedEvent(fi))
+        notify(ObjectModifiedEvent(fi))
         uid = fi.UID()
         fi.reindexObject()  # for pc
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/%s/%s/%s/small/dump_1.gif' % (
                 uid[0], uid[1], uid))
-        self.assertEquals(
+        self.assertEqual(
             fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'small', 'dump_1.gif'))
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/%s/%s/%s/normal/dump_1.gif' % (
                 uid[0], uid[1], uid))
-        self.assertEquals(
+        self.assertEqual(
             fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'normal', 'dump_1.gif'))
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/%s/%s/%s/large/dump_1.gif' % (
                 uid[0], uid[1], uid))
-        self.assertEquals(
+        self.assertEqual(
             fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'large', 'dump_1.gif'))
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/%s/%s/%s/text/dump_1.txt' % (
                 uid[0], uid[1], uid))
-        self.assertEquals(
+        self.assertEqual(
             fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'text', 'dump_1.txt'))
 
@@ -56,7 +56,7 @@ class PDFResourceTraverseTest(BaseTest):
         fiobj = self.portal.unrestrictedTraverse(
             '@@dvpdffiles/{}/{}/{}/small/dump_1.gif'.format(
                 uid[0], uid[1], uid))
-        self.assertEquals(
+        self.assertEqual(
             fiobj.context.path,
             join(_dir, uid[0], uid[1], uid, 'small', 'dump_1.gif'))
 
@@ -66,7 +66,7 @@ class PDFResourceTraverseTest(BaseTest):
         gsettings.storage_location = _dir
         gsettings.storage_type = 'File'
         fi = self.createFile('test.pdf')
-        notify(ObjectInitializedEvent(fi))
+        notify(ObjectModifiedEvent(fi))
         uid = fi.UID()
         self.assertRaises(
             KeyError,
@@ -80,7 +80,7 @@ class PDFResourceTraverseTest(BaseTest):
         fi = self.createFile('test.pdf')
         settings = Settings(fi)
         del settings._metadata['storage_version']
-        notify(ObjectInitializedEvent(fi))
+        notify(ObjectModifiedEvent(fi))
         uid = fi.UID()
         fi.reindexObject()  # for pc
         req = self.request
@@ -94,7 +94,7 @@ class PDFResourceTraverseTest(BaseTest):
         gsettings = GlobalSettings(self.portal)
         gsettings.storage_type = 'Blob'
         fi = self.createFile('test.pdf')
-        notify(ObjectInitializedEvent(fi))
+        notify(ObjectModifiedEvent(fi))
         uid = fi.UID()
         fi.reindexObject()  # for pc
         req = self.request

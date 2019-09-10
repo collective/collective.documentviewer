@@ -6,18 +6,21 @@ from collective.documentviewer.interfaces import IBlobFileWrapper
 from collective.documentviewer.settings import GlobalSettings, Settings
 from OFS.SimpleItem import SimpleItem
 from plone import api
-from plone.app.blob.download import handleRequestRange
-from plone.app.blob.iterators import BlobStreamIterator
-from plone.app.blob.utils import openBlob
 from Products.CMFCore import permissions
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.Five.browser.resource import Directory, DirectoryResource
-from webdav.common import rfc1123_date
 from zExceptions import NotFound
 from zope.annotation.interfaces import IAnnotations
-from zope.interface import implements
+from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserPublisher
+from ZPublisher.Iterators import filestream_iterator
+
+try:
+    from webdav.common import rfc1123_date
+except ImportError:
+    from App.Common import rfc1123_date
+
 
 logger = getLogger('collective.documentviewer')
 
@@ -32,9 +35,9 @@ class BlobView(BrowserView):
         settings = self.context.settings
         filepath = self.context.filepath
         blob = settings.blob_files[filepath]
-        blobfi = openBlob(blob)
-        length = os.fstat(blobfi.fileno()).st_size
-        blobfi.close()
+        filename = blob._p_blob_uncommitted or blob.committed()
+
+        length = os.path.getsize(filename)
         ext = os.path.splitext(os.path.normcase(filepath))[1][1:]
         if ext == 'txt':
             ct = 'text/plain'
@@ -43,16 +46,13 @@ class BlobView(BrowserView):
 
         self.request.response.setHeader('Last-Modified',
                                         rfc1123_date(self.context._p_mtime))
-        self.request.response.setHeader('Accept-Ranges', 'bytes')
         self.request.response.setHeader("Content-Length", length)
         self.request.response.setHeader('Content-Type', ct)
-        request_range = handleRequestRange(
-            self.context, length, self.request, self.request.response)
-        return BlobStreamIterator(blob, **request_range)
+        return filestream_iterator(filename, 'rb')
 
 
+@implementer(IBlobFileWrapper, IBrowserPublisher)
 class BlobFileWrapper(SimpleItem):
-    implements(IBlobFileWrapper, IBrowserPublisher)
 
     def __init__(self, fileobj, settings, filepath, request):
         self.context = fileobj
@@ -64,11 +64,11 @@ class BlobFileWrapper(SimpleItem):
         return self, ('@@view',)
 
 
+@implementer(IBrowserPublisher)
 class PDFTraverseBlobFile(SimpleItem):
     """
     For traversing blob data store
     """
-    implements(IBrowserPublisher)
 
     def __init__(self, fileobj, settings, request, previous=None):
         self.context = fileobj
@@ -127,11 +127,12 @@ class RequestMemo(object):
         return memogetter
 
 
+@implementer(IBrowserPublisher)
 class PDFFiles(SimpleItem, DirectoryResource):
-    implements(IBrowserPublisher)
 
     def __init__(self, context, request, previous=[]):
-        SimpleItem.__init__(self, context, request)
+        DirectoryResource.__init__(self, context, request)
+        SimpleItem.__init__(self)
         self.previous = previous
 
         self.__name__ = 'dvpdffiles'

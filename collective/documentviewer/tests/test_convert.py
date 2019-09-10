@@ -1,18 +1,17 @@
+import shutil
+import unittest
+from os import listdir
+from os.path import join
 from tempfile import mkdtemp
+
+from collective.documentviewer import storage
+from collective.documentviewer.convert import Converter
+from collective.documentviewer.settings import GlobalSettings, Settings
+from collective.documentviewer.tests import BaseTest
 from DateTime import DateTime
-from collective.documentviewer.settings import GlobalSettings
 from zope.annotation import IAnnotations
 from zope.event import notify
-from Products.Archetypes.event import ObjectInitializedEvent
-
-import unittest
-from collective.documentviewer.convert import Converter
-from collective.documentviewer.settings import Settings
-from collective.documentviewer.tests import BaseTest
-from collective.documentviewer import storage
-from os import listdir
-import shutil
-from os.path import join
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class ConvertTest(BaseTest):
@@ -98,11 +97,11 @@ class ConvertTest(BaseTest):
 
         fi = self.createFile('test.pdf')
         # make sure conversion was successfull
-        self.failUnless(self._isSuccessfullyConverted(fi))
+        self.assertTrue(self._isSuccessfullyConverted(fi))
         annotations = IAnnotations(fi)['collective.documentviewer']
-        self.failUnless(annotations['catalog'] is not None)
+        self.assertIsNotNone(annotations['catalog'])
         # we have relevant informations in the catalog
-        self.failUnless('software' in annotations['catalog']['text'].lexicon.words())
+        self.assertTrue('software' in annotations['catalog']['text'].lexicon.words())
 
     def test_indexation_disabled(self):
         gsettings = GlobalSettings(self.portal)
@@ -111,9 +110,9 @@ class ConvertTest(BaseTest):
 
         fi = self.createFile('test.pdf')
         # make sure conversion was successfull
-        self.failUnless(self._isSuccessfullyConverted(fi))
+        self.assertTrue(self._isSuccessfullyConverted(fi))
         annotations = IAnnotations(fi)['collective.documentviewer']
-        self.failUnless(annotations['catalog'] is None)
+        self.assertTrue(annotations['catalog'] is None)
 
     def test_indexation_switch_mode(self):
         '''
@@ -123,21 +122,21 @@ class ConvertTest(BaseTest):
         fi = self.createFile('test.pdf')
         # indexation is enabled by default
         # make sure conversion was successfull
-        self.failUnless(self._isSuccessfullyConverted(fi))
+        self.assertTrue(self._isSuccessfullyConverted(fi))
         annotations = IAnnotations(fi)['collective.documentviewer']
         # something is catalogued
-        self.failUnless(annotations['catalog'] is not None)
+        self.assertTrue(annotations['catalog'] is not None)
         # now disable indexation and convert again
         gsettings = GlobalSettings(self.portal)
         gsettings.enable_indexation = False
         # make it convertable again by adapting last_updated and filehash
         annotations['last_updated'] = DateTime('1901/01/01').ISO8601()
         annotations['filehash'] = 'dummymd5'
-        notify(ObjectInitializedEvent(fi))
+        notify(ObjectModifiedEvent(fi))
         # make sure conversion was successfull
-        self.failUnless(self._isSuccessfullyConverted(fi))
+        self.assertTrue(self._isSuccessfullyConverted(fi))
         # nothing indexed anymore
-        self.failIf(annotations['catalog'] is not None)
+        self.assertTrue(annotations['catalog'] is None)
 
     def test_indexation_settings(self):
         '''
@@ -149,23 +148,23 @@ class ConvertTest(BaseTest):
         # indexation is enabled by default in the global settings
         # and nothing is defined in the local settings
         # make sure conversion was successfull
-        self.failUnless(self._isSuccessfullyConverted(fi))
+        self.assertTrue(self._isSuccessfullyConverted(fi))
         annotations = IAnnotations(fi)['collective.documentviewer']
-        self.failUnless(annotations['catalog'] is not None)
+        self.assertTrue(annotations['catalog'] is not None)
         # nothing defined on the 'fi'
-        self.failIf('enable_indexation' in annotations)
+        self.assertTrue('enable_indexation' not in annotations)
         # if we disable indexation in the local settings, this will be
         # taken into account as it overrides global settings
         annotations['enable_indexation'] = False
         # make it convertable again by adapting last_updated and filehash
         annotations['last_updated'] = DateTime('1901/01/01').ISO8601()
         annotations['filehash'] = 'dummymd5'
-        notify(ObjectInitializedEvent(fi))
+        notify(ObjectModifiedEvent(fi))
         # make sure conversion was successfull
-        self.failUnless(self._isSuccessfullyConverted(fi))
+        self.assertTrue(self._isSuccessfullyConverted(fi))
         # as indexation is disabled in local settings, the text
-        # of the PDF is no more indexed...
-        self.failIf(annotations['catalog'] is not None)
+        # of the PDF is no longer indexed...
+        self.assertTrue(annotations['catalog'] is None)
 
     def _isSuccessfullyConverted(self, fi):
         '''

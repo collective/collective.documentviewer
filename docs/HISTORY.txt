@@ -1,6 +1,13 @@
 Changelog
 =========
 
+5.0.5 (unreleased)
+------------------
+
+- Python 3, Plone 5.2 compatible
+  [vangheem]
+
+
 5.0.4 (2019-01-09)
 ------------------
 
@@ -19,6 +26,9 @@ Changelog
 
 - Fix to work with latest collective.celery
   [vangheem]
+
+- Fix issue breaking zoom on the 1st page of PDFs
+  [obct537]
 
 - Add function and browser view (``convert_all_unconverted``) to convert all files, which haven't been converted yet.
   [thet]

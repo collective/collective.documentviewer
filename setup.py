@@ -35,16 +35,19 @@ setup(name='collective.documentviewer',
           'plone.api',
           'Products.CMFPlone',
           'zope.browserresource',
-          'repoze.catalog',
+          'repoze.catalog>=0.9.0',
           'plone.app.z3cform',
           'collective.monkeypatcher',
           'plone.app.contenttypes'
       ],
       extras_require={
-        'test': [
-          'plone.api',
-          'plone.app.testing'
-        ],
+          'test': [
+              'plone.api',
+              'plone.app.testing',
+              'plone.testing',
+              'plone.app.contenttypes',
+              'collective.celery[test]'
+          ]
       },
       entry_points="""
       # -*- Entry points: -*-
@@ -53,6 +56,6 @@ setup(name='collective.documentviewer',
       target = plone
 
       [celery_tasks]
-      documentviewer = collective.documentviewer.async
+      documentviewer = collective.documentviewer.async_utils
       """
       )

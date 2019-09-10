@@ -2,10 +2,11 @@ from logging import getLogger
 
 from collective.documentviewer.convert import Converter, runConversion
 from collective.documentviewer.settings import Settings
-from plone import api
 from ZODB.POSException import ConflictError
+from zope.component.hooks import getSite
 
 logger = getLogger('collective.documentviewer')
+
 
 try:
     from celery.result import AsyncResult  # noqa
@@ -59,7 +60,7 @@ class CeleryJobRunner(object):
 
     def __init__(self, obj):
         self.object = obj
-        self.portal = api.portal.get()
+        self.portal = getSite()
         self.settings = Settings(obj)
 
     def is_current_active(self, job):
@@ -83,8 +84,9 @@ class CeleryJobRunner(object):
             return -1
 
     def find_job(self):
-        if self.settings.celery_task_id is None:
+        if not self.settings.celery_task_id:
             return -1, None
+
         result = AsyncResult(self.settings.celery_task_id)
         if self.is_current_active(result):
             return 0, result
@@ -95,6 +97,9 @@ class CeleryJobRunner(object):
         result = _celeryQueueJob.delay(self.object)
         self.settings.celery_task_id = result.id
         self.settings.converting = True
+
+    def move_to_front(self):
+        pass
 
 
 class QueueException(Exception):
@@ -111,8 +116,6 @@ def celeryQueueJob(obj):
             runner.queue_it()
         return
     except Exception:
-        logger.error(
-            "Could not queue job", exc_info=True)
         raise QueueException
 
 
@@ -124,7 +127,7 @@ def queueJob(obj):
         if celeryInstalled():
             celeryQueueJob(obj)
         else:
-            converter(async=False)
+            converter(False)
     except QueueException:
         logger.exception(
             "Error using async with "

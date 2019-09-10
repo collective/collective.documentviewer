@@ -21,7 +21,18 @@
     title="Document Viewer"
     directory="profiles/default"
     description="Installs the collective.documentviewer package"
-    provides="Products.GenericSetup.interfaces.EXTENSION" />
+    provides="Products.GenericSetup.interfaces.EXTENSION"
+    post_handler=".setuphandlers.install"
+  />
+
+  <genericsetup:registerProfile
+    name="uninstall"
+    title="Document Viewer (uninstall)"
+    directory="profiles/uninstall"
+    description="Uninstalls the Document Viewer add-on."
+    provides="Products.GenericSetup.interfaces.EXTENSION"
+    post_handler=".setuphandlers.uninstall"
+    />
 
   <adapter
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"

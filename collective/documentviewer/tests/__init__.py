@@ -2,8 +2,7 @@ import unittest
 from os.path import dirname, join
 
 from collective.documentviewer.interfaces import ILayer
-from collective.documentviewer.testing import \
-    DocumentViewer_INTEGRATION_TESTING
+from collective.documentviewer.testing import DocumentViewer_FUNCTIONAL_TESTING
 from plone import api
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME, login, setRoles
 from plone.namedfile.file import NamedBlobFile
@@ -15,7 +14,7 @@ _files = join(dirname(__file__), 'test_files')
 
 class BaseTest(unittest.TestCase):
 
-    layer = DocumentViewer_INTEGRATION_TESTING
+    layer = DocumentViewer_FUNCTIONAL_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']
@@ -25,12 +24,14 @@ class BaseTest(unittest.TestCase):
         login(self.portal, TEST_USER_NAME)
 
     def createFile(self, name=u"test.pdf", id='test1'):
-        with open(join(_files, name)) as fi:
+        with open(join(_files, name), 'rb') as fi:
             pdf_data = fi.read()
         if id in self.portal.objectIds():
             api.content.delete(self.portal[id])
-        fi = api.content.create(
+        return api.content.create(
             container=self.portal,
             type='File', id=id,
             file=NamedBlobFile(data=pdf_data, filename=safe_unicode(name)))
-        return fi
+
+    def tearDown(self):
+        pass
