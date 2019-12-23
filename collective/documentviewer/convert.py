@@ -202,7 +202,136 @@ except IOError:
                      "contains text")
     textChecker = None
 
+class QpdfProcess(BaseSubProcess):
+    """
+    This is used to both strip metadata in pdf files.
+    And to strip a page for the screenshot process.
+    """
+    if os.name == 'nt':
+        bin_name = 'qpdf.exe'
+    else:
+        bin_name = 'qpdf'
 
+    def __call__(self, filepath):
+        outfile = '{}-processed.pdf'.format(filepath[:-4])
+        cmd = [self.binary, '--linearize', filepath, outfile]
+        self._run_command(cmd)
+        shutil.copy(outfile, filepath)
+
+    def strip_page(self, filepath, pagenumber):
+        tmpdir = tempfile.mkdtemp()
+        tmpfilepath = os.path.join(tmpdir, 'temp.pdf')
+        pagenumber = str(pagenumber)
+        
+        cmd = [self.bin_name,
+               '--empty', '--pages',
+               filepath, pagenumber, '--', tmpfilepath]
+
+        self._run_command(cmd)
+        return tmpfilepath
+
+try:
+    qpdf = QpdfProcess()
+except IOError:
+    qpdf = None
+    logger.warn("qpdf not installed.  Some metadata might remain in PDF files."
+                "You will also not able to make screenshots")
+
+   
+class GraphicsMagickSubProcess(BaseSubProcess):
+    """
+    Allows us to create small images using graphicsmagick
+    """
+    if os.name == 'nt':
+        bin_name = 'gm.exe'
+    else:
+        bin_name = 'gm'    
+
+
+    def __call__(self, filepath, output_dir, sizes, format, lang='eng'):
+        try:
+            qpdf = QpdfProcess()
+            tmpfilepath = qpdf.strip_page(filepath, 1)
+        except e:
+            raise e
+
+        result = []
+        
+        for size in sizes:
+            output_file = os.path.join(output_dir, '%ix' % size[1])
+            cmd = [
+                self.binary, "convert", tmpfilepath,
+                '-resize', str(size[1]),
+                '-format', format,
+                output_file]
+
+            result.append(self._run_command(cmd))
+
+        os.remove(tmpfilepath)
+        
+        # now, move images to correctly named folders
+        for name, size in sizes:
+            dest = os.path.join(output_dir, name)
+            if os.path.exists(dest):
+                shutil.rmtree(dest)
+
+            source = os.path.join(output_dir, '%ix' % size)
+            shutil.move(source, dest)
+
+try:
+    gm = GraphicsMagickSubProcess()
+except IOError:
+    logger.exception("Graphics Magick is not installed, castle.cms"
+                     "Will not be able to make screenshots")
+    gm = None
+
+    
+class LibreOfficeSubProcess(BaseSubProcess):
+    """
+    Converts files of other formats into pdf files using libreoffice.
+    """
+    if os.name == 'nt':
+        bin_name = 'soffice.exe'
+    else:
+        bin_name = 'soffice'
+    
+    def __call__(self, filepath, filename, output_dir):
+        ext = os.path.splitext(os.path.normcase(filename))[1][1:]
+        inputfilepath = os.path.join(output_dir, 'dump.%s' % ext)
+        shutil.move(filepath, inputfilepath)
+        orig_files = set(os.listdir(output_dir))
+        cmd = [
+            self.binary, '--headless', '--convert-to', 'pdf', inputfilepath,
+            '--outdir', output_dir]
+        self._run_command(cmd)
+
+        # remove original
+        os.remove(inputfilepath)
+
+        # move the file to the right location now
+        files = set(os.listdir(output_dir))
+
+        if len(files) != len(orig_files):
+            # we should have the same number of files as when we first began
+            # since we removed libreoffice.
+            # We do this in order to keep track of the files being created
+            # and used...
+            raise Exception("Error converting to pdf")
+
+        converted_path = os.path.join(output_dir,
+                                      [f for f in files - orig_files][0])
+        shutil.move(converted_path, os.path.join(output_dir, DUMP_FILENAME))
+
+try:
+    loffice = LibreOfficeSubProcess()
+except IOError:
+    logger.exception("Libreoffice not installed. castle.cms"
+                 "will not be able to convert text files to pdf.")
+    loffice = None
+    
+
+
+    
 class DocSplitSubProcess(BaseSubProcess):
     """
     idea of how to handle this shamelessly
@@ -215,31 +344,11 @@ class DocSplitSubProcess(BaseSubProcess):
         bin_name = 'docsplit'
 
     def dump_images(self, filepath, output_dir, sizes, format, lang='eng'):
-        # docsplit images pdf.pdf --size 700x,300x,50x
-        # --format gif --output
-        cmd = [
-            self.binary, "images", filepath,
-            '--language', lang,
-            '--size', ','.join([str(s[1]) + 'x' for s in sizes]),
-            '--format', format,
-            '--rolling',
-            '--output', output_dir]
-        if lang != 'eng':
-            # cf https://github.com/documentcloud/docsplit/issues/72
-            # the cleaning functions are only suited for english
-            cmd.append('--no-clean')
+        # now exists as a compatibility layer.
+        gm = GraphicsMagickSubProcess()
+        gm(filepath, output_dir, sizes, format, lang)
 
-        self._run_command(cmd)
-
-        # now, move images to correctly named folders
-        for name, size in sizes:
-            dest = os.path.join(output_dir, name)
-            if os.path.exists(dest):
-                shutil.rmtree(dest)
-
-            source = os.path.join(output_dir, '%ix' % size)
-            shutil.move(source, dest)
-
+    
     def dump_text(self, filepath, output_dir, ocr, lang='eng'):
         # docsplit text pdf.pdf --[no-]ocr --pages all
         output_dir = os.path.join(output_dir, TEXT_REL_PATHNAME)
