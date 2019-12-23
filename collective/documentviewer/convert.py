@@ -255,8 +255,6 @@ class GraphicsMagickSubProcess(BaseSubProcess):
         except e:
             raise e
 
-        result = []
-        
         for size in sizes:
             output_file = os.path.join(output_dir, '%ix' % size[1])
             cmd = [
@@ -265,7 +263,7 @@ class GraphicsMagickSubProcess(BaseSubProcess):
                 '-format', format,
                 output_file]
 
-            result.append(self._run_command(cmd))
+            self._run_command(cmd)
 
         os.remove(tmpfilepath)
         
@@ -279,6 +277,7 @@ class GraphicsMagickSubProcess(BaseSubProcess):
             shutil.move(source, dest)
 
 try:
+    import pdb; pdb.set_trace()
     gm = GraphicsMagickSubProcess()
 except IOError:
     logger.exception("Graphics Magick is not installed, castle.cms"
@@ -551,23 +550,23 @@ class Converter(object):
         settings = self.settings
         context = self.context
 
+        import pdb; pdb.set_trace()
         # save lead image if available
         if ILeadImage.providedBy(self.context):
             path = os.path.join(storage_dir, 'large')
-            filename = None
-            for dump_filename in os.listdir(path):
-                if dump_filename.startswith('dump_1.'):
-                    filename = dump_filename
-                    break
-            filepath = os.path.join(path, filename)
+            filename = os.path.basename(path)
+            filepath = os.path.join(storage_dir, path)
             tmppath = '%s.tmp' % (filepath)
 
             # NamedBlobImage eventually calls blob.consume,
             # destroying the image, so we need to make a temporary copy.
             shutil.copyfile(filepath, tmppath)
             with open(tmppath, 'rb') as fi:
-                self.context.image = NamedBlobImage(fi, filename=filename)
-
+                try:
+                    self.context.image = NamedBlobImage(fi, filename=filename)
+                except WrongType:
+                    self.context.image = NambeBlobImage(fi, filename = filename.decode("utf8"))
+                    
         if self.gsettings.storage_type == 'Blob':
             logger.info('setting blob data for %s' % repr(context))
             # go through temp folder and move items into blob storage
@@ -705,8 +704,8 @@ class Converter(object):
 
     def __call__(self, asynchronous=True):
         settings = self.settings
-
         try:
+            import pdb; pdb.set_trace()
             pages = self.run_conversion()
             # conversion can take a long time.
             # let's sync before we save the changes
@@ -721,7 +720,8 @@ class Converter(object):
                 self.index_pdf(pages, catalog)
 
             settings.catalog = catalog
-            self.handle_storage()
+            import pdb; pdb.set_trace()
+            self.handle_storage() 
             self.context.reindexObject()
             self.handle_layout()
             settings.num_pages = pages
