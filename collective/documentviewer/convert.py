@@ -307,9 +307,15 @@ class LibreOfficeSubProcess(BaseSubProcess):
         inputfilepath = os.path.join(output_dir, 'dump.%s' % ext)
         shutil.move(filepath, inputfilepath)
         orig_files = set(os.listdir(output_dir))
-        cmd = [
-            self.binary, '--headless', '--convert-to', 'pdf', inputfilepath,
-            '--outdir', output_dir]
+        #HTML takes unnecesarily too long using standard settings.
+        if ext == 'html':
+            cmd = [
+                self.binary, '--headless', '--convert-to', 'pdf:writer_pdf_Export',
+                inputfilepath, '--outdir', output_dir]
+        else:
+            cmd = [
+                self.binary, '--headless', '--convert-to', 'pdf', inputfilepath,
+                '--outdir', output_dir]
         self._run_command(cmd)
 
         # remove original
