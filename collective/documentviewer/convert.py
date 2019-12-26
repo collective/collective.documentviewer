@@ -202,6 +202,7 @@ except IOError:
                      "contains text")
     textChecker = None
 
+
 class QpdfProcess(BaseSubProcess):
     """
     This is used to both strip metadata in pdf files.
@@ -222,13 +223,14 @@ class QpdfProcess(BaseSubProcess):
         tmpdir = tempfile.mkdtemp()
         tmpfilepath = os.path.join(tmpdir, 'temp.pdf')
         pagenumber = str(pagenumber)
-        
+
         cmd = [self.bin_name,
                '--empty', '--pages',
                filepath, pagenumber, '--', tmpfilepath]
 
         self._run_command(cmd)
         return tmpfilepath
+
 
 try:
     qpdf = QpdfProcess()
@@ -237,7 +239,7 @@ except IOError:
     logger.warn("qpdf not installed.  Some metadata might remain in PDF files."
                 "You will also not able to make screenshots")
 
-   
+
 class GraphicsMagickSubProcess(BaseSubProcess):
     """
     Allows us to create small images using graphicsmagick
@@ -245,15 +247,14 @@ class GraphicsMagickSubProcess(BaseSubProcess):
     if os.name == 'nt':
         bin_name = 'gm.exe'
     else:
-        bin_name = 'gm'    
-
+        bin_name = 'gm'
 
     def __call__(self, filepath, output_dir, sizes, format, lang='eng'):
         try:
             qpdf = QpdfProcess()
             tmpfilepath = qpdf.strip_page(filepath, 1)
-        except e:
-            raise e
+        except Exception:
+            raise Exception
 
         for size in sizes:
             output_file = os.path.join(output_dir, '%ix' % size[1])
@@ -266,7 +267,7 @@ class GraphicsMagickSubProcess(BaseSubProcess):
             self._run_command(cmd)
 
         os.remove(tmpfilepath)
-        
+
         # now, move images to correctly named folders
         for name, size in sizes:
             dest = os.path.join(output_dir, name)
@@ -276,15 +277,15 @@ class GraphicsMagickSubProcess(BaseSubProcess):
             source = os.path.join(output_dir, '%ix' % size)
             shutil.move(source, dest)
 
+
 try:
-    import pdb; pdb.set_trace()
     gm = GraphicsMagickSubProcess()
 except IOError:
-    logger.exception("Graphics Magick is not installed, castle.cms"
+    logger.exception("Graphics Magick is not installed, castle.cms "
                      "Will not be able to make screenshots")
     gm = None
 
-    
+
 class LibreOfficeSubProcess(BaseSubProcess):
     """
     Converts files of other formats into pdf files using libreoffice.
@@ -293,8 +294,11 @@ class LibreOfficeSubProcess(BaseSubProcess):
         bin_name = 'soffice.exe'
     else:
         bin_name = 'soffice'
-    
-    def __call__(self, filepath, filename, output_dir):
+
+    def dump_text(self, filepath, output_dir, ocr, lang='eng'):
+        pass
+
+    def convert_to_pdf(self, filepath, filename, output_dir):
         ext = os.path.splitext(os.path.normcase(filename))[1][1:]
         inputfilepath = os.path.join(output_dir, 'dump.%s' % ext)
         shutil.move(filepath, inputfilepath)
@@ -321,16 +325,15 @@ class LibreOfficeSubProcess(BaseSubProcess):
                                       [f for f in files - orig_files][0])
         shutil.move(converted_path, os.path.join(output_dir, DUMP_FILENAME))
 
+
 try:
     loffice = LibreOfficeSubProcess()
 except IOError:
-    logger.exception("Libreoffice not installed. castle.cms"
-                 "will not be able to convert text files to pdf.")
+    logger.exception("Libreoffice not installed. castle.cms "
+                     "will not be able to convert text files to pdf.")
     loffice = None
-    
 
 
-    
 class DocSplitSubProcess(BaseSubProcess):
     """
     idea of how to handle this shamelessly
@@ -347,7 +350,6 @@ class DocSplitSubProcess(BaseSubProcess):
         gm = GraphicsMagickSubProcess()
         gm(filepath, output_dir, sizes, format, lang)
 
-    
     def dump_text(self, filepath, output_dir, ocr, lang='eng'):
         # docsplit text pdf.pdf --[no-]ocr --pages all
         output_dir = os.path.join(output_dir, TEXT_REL_PATHNAME)
@@ -371,6 +373,7 @@ class DocSplitSubProcess(BaseSubProcess):
         return int(self._run_command(cmd).strip())
 
     def convert_to_pdf(self, filepath, filename, output_dir):
+        import pdb; pdb.set_trace()
         # get ext from filename
         ext = os.path.splitext(os.path.normcase(filename))[1][1:]
         inputfilepath = os.path.join(output_dir, 'dump.%s' % ext)
@@ -561,22 +564,26 @@ class Converter(object):
             # NamedBlobImage eventually calls blob.consume,
             # destroying the image, so we need to make a temporary copy.
             shutil.copyfile(filepath, tmppath)
+            NamedBlobImagefailed = False
             with open(tmppath, 'rb') as fi:
                 try:
                     self.context.image = NamedBlobImage(fi, filename=filename)
-                except WrongType:
-                    self.context.image = NambeBlobImage(fi, filename = filename.decode("utf8"))
-                    
+                except Exception:
+                    NamedBlobImagefailed = True
+            # If we are using python2 we need to recreate the file and try again
+            if NamedBlobImagefailed:
+                shutil.copyfile(filepath, tmppath)
+                with open(tmppath, 'rb') as fi:
+                    self.context.image = NamedBlobImage(fi, filename=filename.decode("utf8"))
+
         if self.gsettings.storage_type == 'Blob':
             logger.info('setting blob data for %s' % repr(context))
             # go through temp folder and move items into blob storage
             files = OOBTree()
             for size in ('large', 'normal', 'small'):
                 path = os.path.join(storage_dir, size)
-                for filename in os.listdir(path):
-                    filepath = os.path.join(path, filename)
-                    filename = '%s/%s' % (size, filename)
-                    files[filename] = saveFileToBlob(filepath)
+                filename = '%s/%s' % (size, storage_dir)
+                files[filename] = saveFileToBlob(path)
 
             if self.settings.enable_indexation:
                 textfilespath = os.path.join(storage_dir, TEXT_REL_PATHNAME)
@@ -705,7 +712,6 @@ class Converter(object):
     def __call__(self, asynchronous=True):
         settings = self.settings
         try:
-            import pdb; pdb.set_trace()
             pages = self.run_conversion()
             # conversion can take a long time.
             # let's sync before we save the changes
@@ -721,7 +727,7 @@ class Converter(object):
 
             settings.catalog = catalog
             import pdb; pdb.set_trace()
-            self.handle_storage() 
+            self.handle_storage()
             self.context.reindexObject()
             self.handle_layout()
             settings.num_pages = pages

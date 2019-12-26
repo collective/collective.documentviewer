@@ -44,6 +44,7 @@ class DocumentViewerView(DefaultView):
     enabled = True
 
     def __call__(self):
+        import pdb; pdb.set_trace()
         self._update()
 
         add_resource_on_request(self.request, 'documentviewer')
