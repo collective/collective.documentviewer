@@ -255,8 +255,7 @@ class GraphicsMagickSubProcess(BaseSubProcess):
             tmpfilepath = qpdf.strip_page(filepath, 1)
         except Exception:
             raise Exception
-        
-        import pdb; pdb.set_trace()
+
         for size in sizes:
             output_file = os.path.join(output_dir, '%ix.%s' % (size[1], format))
             cmd = [
@@ -374,47 +373,15 @@ class DocSplitSubProcess(BaseSubProcess):
         return int(self._run_command(cmd).strip())
 
     def convert_to_pdf(self, filepath, filename, output_dir):
-        import pdb; pdb.set_trace()
         # get ext from filename
-        ext = os.path.splitext(os.path.normcase(filename))[1][1:]
-        inputfilepath = os.path.join(output_dir, 'dump.%s' % ext)
-        shutil.move(filepath, inputfilepath)
-        orig_files = set(os.listdir(output_dir))
-        cmd = [
-            self.binary, 'pdf', inputfilepath,
-            '--output', output_dir]
-        self._run_command(cmd)
-
-        # remove original
-        os.remove(inputfilepath)
-
-        # while using libreoffice, docsplit leaves a 'libreoffice'
-        # folder next to the generated PDF, removes it!
-        libreOfficePath = os.path.join(output_dir, 'libreoffice')
-        # In Nixos, the folder is called 'libreofficedev'
-        libreOfficePathNixos = os.path.join(output_dir, 'libreofficedev')
-        if os.path.exists(libreOfficePath):
-            shutil.rmtree(libreOfficePath)
-        elif os.path.exists(libreOfficePathNixos):
-            shutil.rmtree(libreOfficePathNixos)
-
-        # move the file to the right location now
-        files = set(os.listdir(output_dir))
-
-        if len(files) != len(orig_files):
-            # we should have the same number of files as when we first began
-            # since we removed libreoffice.
-            # We do this in order to keep track of the files being created
-            # and used...
-            raise Exception("Error converting to pdf")
-
-        converted_path = os.path.join(output_dir,
-                                      [f for f in files - orig_files][0])
-        shutil.move(converted_path, os.path.join(output_dir, DUMP_FILENAME))
+        import pdb; pdb.set_trace()
+        loffice = LibreOfficeSubProcess()
+        loffice.convert_to_pdf(filepath, filename, output_dir)
 
     def convert(self, output_dir, inputfilepath=None, filedata=None,
                 converttopdf=False, sizes=(('large', 1000),), enable_indexation=True,
                 ocr=True, detect_text=True, format='gif', filename=None, language='eng'):
+        import pdb; pdb.set_trace()
         if inputfilepath is None and filedata is None:
             raise Exception("Must provide either filepath or filedata params")
 
