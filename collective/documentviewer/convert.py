@@ -255,9 +255,10 @@ class GraphicsMagickSubProcess(BaseSubProcess):
             tmpfilepath = qpdf.strip_page(filepath, 1)
         except Exception:
             raise Exception
-
+        
+        import pdb; pdb.set_trace()
         for size in sizes:
-            output_file = os.path.join(output_dir, '%ix' % size[1])
+            output_file = os.path.join(output_dir, '%ix.%s' % (size[1], format))
             cmd = [
                 self.binary, "convert", tmpfilepath,
                 '-resize', str(size[1]),
@@ -274,7 +275,7 @@ class GraphicsMagickSubProcess(BaseSubProcess):
             if os.path.exists(dest):
                 shutil.rmtree(dest)
 
-            source = os.path.join(output_dir, '%ix' % size)
+            source = os.path.join(output_dir, '%ix.%s' % (size, format))
             shutil.move(source, dest)
 
 
