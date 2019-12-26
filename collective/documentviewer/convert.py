@@ -231,6 +231,10 @@ class QpdfProcess(BaseSubProcess):
         self._run_command(cmd)
         return tmpfilepath
 
+    def get_num_pages(self, filepath):
+        cmd = [self.binary, "--show-npages", filepath]
+        return int(self._run_command(cmd).strip())
+
 
 try:
     qpdf = QpdfProcess()
@@ -369,8 +373,8 @@ class DocSplitSubProcess(BaseSubProcess):
         self._run_command(cmd)
 
     def get_num_pages(self, filepath):
-        cmd = [self.binary, "length", filepath]
-        return int(self._run_command(cmd).strip())
+        qpdf = QpdfProcess()
+        return qpdf.get_num_pages(filepath)
 
     def convert_to_pdf(self, filepath, filename, output_dir):
         # get ext from filename
@@ -406,13 +410,14 @@ class DocSplitSubProcess(BaseSubProcess):
                 logger.info('Text already found in pdf. Skipping OCR.')
                 ocr = False
 
+        num_pages = self.get_num_pages(path)
+
         if enable_indexation:
             try:
                 self.dump_text(path, output_dir, ocr, language)
             except Exception:
                 logger.info('Error extracting text from PDF', exc_info=True)
 
-        num_pages = self.get_num_pages(path)
 
         # We don't need to cleanup the PDF right
         # The PDF will be removed by handle_storage, which delete the tempdir.
