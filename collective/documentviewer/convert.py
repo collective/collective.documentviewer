@@ -1,4 +1,5 @@
 import os
+import glob
 import random
 import re
 import shutil
@@ -172,7 +173,7 @@ except IOError:
 
 class TextCheckerSubProcess(BaseSubProcess):
     if os.name == 'nt':
-        bin_name = 'pdffonts.ext'
+        bin_name = 'pdffonts.exe'
     else:
         bin_name = 'pdffonts'
 
@@ -203,7 +204,7 @@ except IOError:
     textChecker = None
 
 
-class QpdfProcess(BaseSubProcess):
+class QpdfSubProcess(BaseSubProcess):
     """
     This is used to both strip metadata in pdf files.
     And to strip a page for the screenshot process.
@@ -235,9 +236,17 @@ class QpdfProcess(BaseSubProcess):
         cmd = [self.binary, "--show-npages", filepath]
         return int(self._run_command(cmd).strip())
 
+    def split_pages(self, filepath, output_dir):
+        output_dir = os.path.join(output_dir, TEXT_REL_PATHNAME)
+        os.mkdir(output_dir)
+        output_file = os.path.join(output_dir, 'dump_%d.pdf')
+        cmd = [self.bin_name, '--split-pages', filepath,
+               '--', output_file]
+        self._run_command(cmd)
+        return output_dir
 
 try:
-    qpdf = QpdfProcess()
+    qpdf = QpdfSubProcess()
 except IOError:
     qpdf = None
     logger.warn("qpdf not installed.  Some metadata might remain in PDF files."
@@ -255,7 +264,7 @@ class GraphicsMagickSubProcess(BaseSubProcess):
 
     def __call__(self, filepath, output_dir, sizes, format, lang='eng'):
         try:
-            qpdf = QpdfProcess()
+            qpdf = QpdfSubProcess()
             tmpfilepath = qpdf.strip_page(filepath, 1)
         except Exception:
             raise Exception
@@ -280,8 +289,14 @@ class GraphicsMagickSubProcess(BaseSubProcess):
 
             source = os.path.join(output_dir, '%ix.%s' % (size, format))
             shutil.move(source, dest)
-
-
+    
+    def convert_multiple_pdfs(self, file_list, filepath, format):
+        cmd = []
+        for single_file in file_list:
+            output_file = single_file[:-3] + format
+            cmd = [self.bin_name, "convert", "-quality 100", single_file, output_file]
+            self._run_command(cmd)
+        
 try:
     gm = GraphicsMagickSubProcess()
 except IOError:
@@ -289,6 +304,61 @@ except IOError:
                      "Will not be able to make screenshots")
     gm = None
 
+class TesseractSubProcess(BaseSubProcess):
+    """
+    Uses the tesseract Optical Character Recognition to read and output
+    text from images.
+    """
+    if os.name == 'nt':
+        bin_name = 'tesseract.exe'
+    else:
+        bin_name = 'tesseract'
+
+    def dump_text(self, file_list, output_dir, lang='eng'):
+        gm = GraphicsMagickSubProcess()
+        gm.convert_multiple_pdfs(file_list, output_dir, 'jpeg')
+        cmd = []
+        file_list = glob.glob(os.path.join(output_dir, "*.jpeg"))
+
+        for single_file in file_list:
+            output_file = single_file[:-5]
+            cmd = [self.bin_name, single_file, output_file, '-l', lang]
+            self._run_command(cmd)
+        
+        
+
+class PdfToTextSubProcess(BaseSubProcess):
+    """
+    Uses the pdftotext utility from poppler-utils.
+    """
+    if os.name == 'nt':
+        bin_name = 'pdftotext.exe'
+    else:
+        bin_name = 'pdftotext'
+
+    def dump_text(self, filepath, output_dir, ocr, lang='eng'):
+        qpdf = QpdfSubProcess()
+        output_dir = qpdf.split_pages(filepath, output_dir)
+        find_file = os.path.join(output_dir, "*.pdf")
+        file_list = glob.glob(find_file)
+        cmd = []
+        if ocr:
+            import pdb; pdb.set_trace()
+            tesseract = TesseractSubProcess()
+            tesseract.dump_text(file_list, output_dir, lang)
+        else:
+            for single_file in file_list:
+                cmd = [self.bin_name, single_file]
+                self._run_command(cmd)
+
+        #Remove the pdf and jpeg files just in case they weren't removed during the conversion process
+        file_list = glob.glob(find_file)
+        find_file = os.path.join(output_dir, "*.jpeg")
+        file_list += glob.glob(find_file)
+        if file_list > 0:
+            map(lambda single_file: os.remove(single_file), file_list) 
+
+        
 
 class LibreOfficeSubProcess(BaseSubProcess):
     """
@@ -299,8 +369,6 @@ class LibreOfficeSubProcess(BaseSubProcess):
     else:
         bin_name = 'soffice'
 
-    def dump_text(self, filepath, output_dir, ocr, lang='eng'):
-        pass
 
     def convert_to_pdf(self, filepath, filename, output_dir):
         ext = os.path.splitext(os.path.normcase(filename))[1][1:]
@@ -361,30 +429,16 @@ class DocSplitSubProcess(BaseSubProcess):
         gm(filepath, output_dir, sizes, format, lang)
 
     def dump_text(self, filepath, output_dir, ocr, lang='eng'):
-        # docsplit text pdf.pdf --[no-]ocr --pages all
-        output_dir = os.path.join(output_dir, TEXT_REL_PATHNAME)
-        ocr = not ocr and 'no-' or ''
-        cmd = [
-            self.binary, "text", filepath,
-            '--language', lang,
-            '--%socr' % ocr,
-            '--pages', 'all',
-            '--output', output_dir
-        ]
-        if lang != 'eng':
-            # cf https://github.com/documentcloud/docsplit/issues/72
-            # the cleaning functions are only suited for english
-            cmd.append('--no-clean')
-
-        self._run_command(cmd)
+        # Compatibility layer for pdftotext
+        pdftotext = PdfToTextSubProcess()
+        pdftotext.dump_text(filepath, output_dir, ocr, lang)
 
     def get_num_pages(self, filepath):
-        qpdf = QpdfProcess()
+        qpdf = QpdfSubProcess()
         return qpdf.get_num_pages(filepath)
 
     def convert_to_pdf(self, filepath, filename, output_dir):
         # get ext from filename
-        import pdb; pdb.set_trace()
         loffice = LibreOfficeSubProcess()
         loffice.convert_to_pdf(filepath, filename, output_dir)
 
