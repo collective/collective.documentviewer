@@ -411,16 +411,11 @@ except IOError:
     loffice = None
 
 
-class DocSplitSubProcess(BaseSubProcess):
+class DocSplitSubProcess(object):
     """
-    idea of how to handle this shamelessly
-    stolen from ploneformgen's gpg calls
+    Currently exists as a compatibility layer for older code now that
+    Docsplit has been replaced.
     """
-
-    if os.name == 'nt':
-        bin_name = 'docsplit.exe'
-    else:
-        bin_name = 'docsplit'
 
     def dump_images(self, filepath, output_dir, sizes, format, lang='eng'):
         # now exists as a compatibility layer.
@@ -440,6 +435,19 @@ class DocSplitSubProcess(BaseSubProcess):
         # get ext from filename
         loffice = LibreOfficeSubProcess()
         loffice.convert_to_pdf(filepath, filename, output_dir)
+
+    def convert(self, output_dir, inputfilepath=None, filedata=None,
+                converttopdf=False, sizes=(('large', 1000),), enable_indexation=True,
+                ocr=True, detect_text=True, format='gif', filename=None, language='eng'):
+        sc = Safe_Convert()
+        return sc.convert(output_dir, inputfilepath, fileday, converttopdf, sizes, enable_indexation,
+                          ocr, detect_text, format, filename, language)
+
+
+class Safe_Convert(object):
+    """
+    Acts as a way to safely convert the pdf.
+    """
 
     def convert(self, output_dir, inputfilepath=None, filedata=None,
                 converttopdf=False, sizes=(('large', 1000),), enable_indexation=True,
@@ -482,14 +490,7 @@ class DocSplitSubProcess(BaseSubProcess):
         return num_pages
 
 
-try:
-    docsplit = DocSplitSubProcess()
-except IOError:
-    logger.exception("No docsplit installed. collective.documentviewer "
-                     "will not work.")
-    docsplit = None
-
-
+        
 def saveFileToBlob(filepath):
     blob = Blob()
     bfile = blob.open('w')
