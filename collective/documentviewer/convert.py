@@ -263,7 +263,7 @@ class GraphicsMagickSubProcess(BaseSubProcess):
     else:
         bin_name = 'gm'
 
-    def convert(self, filepath, output_dir, sizes, format, lang='eng'):
+    def dump_images(self, filepath, output_dir, sizes, format, lang='eng'):
         try:
             qpdf = QpdfSubProcess()
             tmpfilepath = qpdf.strip_page(filepath, 1)
@@ -379,7 +379,7 @@ except IOError:
 
 class LibreOfficeSubProcess(BaseSubProcess):
     """
-    Converts files of other formats into pdf files using libreoffice.
+    Converts files of other formats into other file types using libreoffice.
     """
     if os.name == 'nt':
         bin_name = 'soffice.exe'
@@ -436,7 +436,7 @@ class DocSplitSubProcess(object):
 
     def dump_images(self, filepath, output_dir, sizes, format, lang='eng'):
         # now exists as a compatibility layer.
-        gm.convert(filepath, output_dir, sizes, format, lang)
+        gm.dump_images(filepath, output_dir, sizes, format, lang)
 
     def dump_text(self, filepath, output_dir, ocr, lang='eng'):
         # Compatibility layer for pdftotext
@@ -485,19 +485,19 @@ class Safe_Convert(object):
             fi.close()
 
         if converttopdf:
-            self.convert_to_pdf(path, filename, output_dir)
+            loffice.convert_to_pdf(path, filename, output_dir)
 
-        self.dump_images(path, output_dir, sizes, format, language)
+        gm.dump_images(path, output_dir, sizes, format, language)
         if enable_indexation and ocr and detect_text and textChecker is not None:
             if textChecker.has(path):
                 logger.info('Text already found in pdf. Skipping OCR.')
                 ocr = False
 
-        num_pages = self.get_num_pages(path)
+        num_pages = qpdf.get_num_pages(path)
 
         if enable_indexation:
             try:
-                self.dump_text(path, output_dir, ocr, language)
+                pdftotext.dump_text(path, output_dir, ocr, language)
             except Exception:
                 logger.info('Error extracting text from PDF', exc_info=True)
 

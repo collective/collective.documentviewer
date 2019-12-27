@@ -133,7 +133,7 @@ should be an `upgrade-all` step to run.
 Installation on Cent OS/Red hat
 -------------------------------
 
-Special instructions for centos have been contributed by Eric Tyrer.
+Special instructions for centos have been contributed by Eric Tyrer. 
 You can access them via `the git hub repo file location <https://github.com/collective/collective.documentviewer/blob/master/CENTOS-INSTALL.rst>`_.
 
 Installation

@@ -14,7 +14,7 @@ from zope.interface import implementer
 
 
 @adapter(IItem)
-@zope.interface.implementer(IOCRLanguage)
+@implementer(IOCRLanguage)
 class StandardOCRLanguageAdapter(object):
     """ Return the document language through a configurable
         adapter.

@@ -15,6 +15,7 @@ except ImportError:
 
 
 def celeryInstalled():
+    return False
     try:
         import collective.celery  # noqa
         return True
