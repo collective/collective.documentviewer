@@ -263,7 +263,7 @@ class GraphicsMagickSubProcess(BaseSubProcess):
     else:
         bin_name = 'gm'
 
-    def __call__(self, filepath, output_dir, sizes, format, lang='eng'):
+    def convert(self, filepath, output_dir, sizes, format, lang='eng'):
         try:
             qpdf = QpdfSubProcess()
             tmpfilepath = qpdf.strip_page(filepath, 1)
@@ -318,7 +318,6 @@ class TesseractSubProcess(BaseSubProcess):
         bin_name = 'tesseract'
 
     def dump_text(self, file_list, output_dir, lang='eng'):
-        gm = GraphicsMagickSubProcess()
         gm.convert_multiple_pdfs(file_list, output_dir, 'jpeg')
         cmd = []
         file_list = glob.glob(os.path.join(output_dir, "*.jpeg"))
@@ -327,6 +326,15 @@ class TesseractSubProcess(BaseSubProcess):
             output_file = single_file[:-5]
             cmd = [self.bin_name, single_file, output_file, '-l', lang]
             self._run_command(cmd)
+
+
+try:
+    tesseract = TesseractSubProcess()
+except IOError:
+    logger.exception("Tesseract is not installed, castle.cms "
+                     "Will not be able to convert pdfs or images to text "
+                     "Using Optical Character Recognition")
+    tesseract = None
 
 
 class PdfToTextSubProcess(BaseSubProcess):
@@ -358,6 +366,15 @@ class PdfToTextSubProcess(BaseSubProcess):
         file_list += glob.glob(find_file)
         if file_list > 0:
             map(lambda single_file: os.remove(single_file), file_list)
+
+
+try:
+    pdftotext = PdfToTextSubProcess()
+except IOError:
+    logger.exception("poppler_utils are not installed. "
+                     "You wil not be able to index text or "
+                     "see the text dump in Document Viewer")
+    pdftotext = None
 
 
 class LibreOfficeSubProcess(BaseSubProcess):
@@ -419,21 +436,17 @@ class DocSplitSubProcess(object):
 
     def dump_images(self, filepath, output_dir, sizes, format, lang='eng'):
         # now exists as a compatibility layer.
-        gm = GraphicsMagickSubProcess()
-        gm(filepath, output_dir, sizes, format, lang)
+        gm.convert(filepath, output_dir, sizes, format, lang)
 
     def dump_text(self, filepath, output_dir, ocr, lang='eng'):
         # Compatibility layer for pdftotext
-        pdftotext = PdfToTextSubProcess()
         pdftotext.dump_text(filepath, output_dir, ocr, lang)
 
     def get_num_pages(self, filepath):
-        qpdf = QpdfSubProcess()
         return qpdf.get_num_pages(filepath)
 
     def convert_to_pdf(self, filepath, filename, output_dir):
         # get ext from filename
-        loffice = LibreOfficeSubProcess()
         loffice.convert_to_pdf(filepath, filename, output_dir)
 
     def convert(self, output_dir, inputfilepath=None, filedata=None,
@@ -443,6 +456,9 @@ class DocSplitSubProcess(object):
         return sc.convert(output_dir, inputfilepath, filedata, converttopdf,
                           sizes, enable_indexation,
                           ocr, detect_text, format, filename, language)
+
+
+docsplit = DocSplitSubProcess()
 
 
 class Safe_Convert(object):
