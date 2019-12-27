@@ -343,7 +343,6 @@ class PdfToTextSubProcess(BaseSubProcess):
         file_list = glob.glob(find_file)
         cmd = []
         if ocr:
-            import pdb; pdb.set_trace()
             tesseract = TesseractSubProcess()
             tesseract.dump_text(file_list, output_dir, lang)
         else:
@@ -445,7 +444,6 @@ class DocSplitSubProcess(BaseSubProcess):
     def convert(self, output_dir, inputfilepath=None, filedata=None,
                 converttopdf=False, sizes=(('large', 1000),), enable_indexation=True,
                 ocr=True, detect_text=True, format='gif', filename=None, language='eng'):
-        import pdb; pdb.set_trace()
         if inputfilepath is None and filedata is None:
             raise Exception("Must provide either filepath or filedata params")
 
@@ -586,7 +584,6 @@ class Converter(object):
         settings = self.settings
         context = self.context
 
-        import pdb; pdb.set_trace()
         # save lead image if available
         if ILeadImage.providedBy(self.context):
             path = os.path.join(storage_dir, 'large')
@@ -759,7 +756,6 @@ class Converter(object):
                 self.index_pdf(pages, catalog)
 
             settings.catalog = catalog
-            import pdb; pdb.set_trace()
             self.handle_storage()
             self.context.reindexObject()
             self.handle_layout()

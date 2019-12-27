@@ -44,7 +44,6 @@ class DocumentViewerView(DefaultView):
     enabled = True
 
     def __call__(self):
-        import pdb; pdb.set_trace()
         self._update()
 
         add_resource_on_request(self.request, 'documentviewer')
@@ -356,7 +355,6 @@ class Convert(Utils):
                     self.context.absolute_url() + '/view')
             else:
                 if self.async_installed:
-                    import pdb; pdb.set_trace()
                     self.position = getJobRunner(self.context).find_position()
                     if self.position > -1:
                         self.converting = True
