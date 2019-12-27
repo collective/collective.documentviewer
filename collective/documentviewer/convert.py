@@ -245,6 +245,7 @@ class QpdfSubProcess(BaseSubProcess):
         self._run_command(cmd)
         return output_dir
 
+
 try:
     qpdf = QpdfSubProcess()
 except IOError:
@@ -289,20 +290,22 @@ class GraphicsMagickSubProcess(BaseSubProcess):
 
             source = os.path.join(output_dir, '%ix.%s' % (size, format))
             shutil.move(source, dest)
-    
+
     def convert_multiple_pdfs(self, file_list, filepath, format):
         cmd = []
         for single_file in file_list:
             output_file = single_file[:-3] + format
             cmd = [self.bin_name, "convert", "-quality 100", single_file, output_file]
             self._run_command(cmd)
-        
+
+
 try:
     gm = GraphicsMagickSubProcess()
 except IOError:
     logger.exception("Graphics Magick is not installed, castle.cms "
                      "Will not be able to make screenshots")
     gm = None
+
 
 class TesseractSubProcess(BaseSubProcess):
     """
@@ -324,8 +327,7 @@ class TesseractSubProcess(BaseSubProcess):
             output_file = single_file[:-5]
             cmd = [self.bin_name, single_file, output_file, '-l', lang]
             self._run_command(cmd)
-        
-        
+
 
 class PdfToTextSubProcess(BaseSubProcess):
     """
@@ -350,14 +352,13 @@ class PdfToTextSubProcess(BaseSubProcess):
                 cmd = [self.bin_name, single_file]
                 self._run_command(cmd)
 
-        #Remove the pdf and jpeg files just in case they weren't removed during the conversion process
+        # Remove the pdf and jpeg files just in case they weren't removed during the conversion process
         file_list = glob.glob(find_file)
         find_file = os.path.join(output_dir, "*.jpeg")
         file_list += glob.glob(find_file)
         if file_list > 0:
-            map(lambda single_file: os.remove(single_file), file_list) 
+            map(lambda single_file: os.remove(single_file), file_list)
 
-        
 
 class LibreOfficeSubProcess(BaseSubProcess):
     """
@@ -368,13 +369,12 @@ class LibreOfficeSubProcess(BaseSubProcess):
     else:
         bin_name = 'soffice'
 
-
     def convert_to_pdf(self, filepath, filename, output_dir):
         ext = os.path.splitext(os.path.normcase(filename))[1][1:]
         inputfilepath = os.path.join(output_dir, 'dump.%s' % ext)
         shutil.move(filepath, inputfilepath)
         orig_files = set(os.listdir(output_dir))
-        #HTML takes unnecesarily too long using standard settings.
+        # HTML takes unnecesarily too long using standard settings.
         if ext == 'html':
             cmd = [
                 self.binary, '--headless', '--convert-to', 'pdf:writer_pdf_Export',
@@ -440,7 +440,8 @@ class DocSplitSubProcess(object):
                 converttopdf=False, sizes=(('large', 1000),), enable_indexation=True,
                 ocr=True, detect_text=True, format='gif', filename=None, language='eng'):
         sc = Safe_Convert()
-        return sc.convert(output_dir, inputfilepath, fileday, converttopdf, sizes, enable_indexation,
+        return sc.convert(output_dir, inputfilepath, filedata, converttopdf,
+                          sizes, enable_indexation,
                           ocr, detect_text, format, filename, language)
 
 
@@ -484,13 +485,11 @@ class Safe_Convert(object):
             except Exception:
                 logger.info('Error extracting text from PDF', exc_info=True)
 
-
         # We don't need to cleanup the PDF right
         # The PDF will be removed by handle_storage, which delete the tempdir.
         return num_pages
 
 
-        
 def saveFileToBlob(filepath):
     blob = Blob()
     bfile = blob.open('w')
