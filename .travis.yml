@@ -33,6 +33,7 @@ script:
   - flake8 collective/documentviewer;
   - bin/test;
 before_install:
-  - sudo apt-get install -y graphicsmagick poppler-utils poppler-data ghostscript qpdf tesseract
+  - sudo apt-get install -y graphicsmagick poppler-utils poppler-data ghostscript qpdf tesseract-ocr
   - sudo apt-get install -y libreoffice
+  - sudo apt-get install -y pdftk
   - sudo gem install docsplit
