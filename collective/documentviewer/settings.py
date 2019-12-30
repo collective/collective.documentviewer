@@ -17,7 +17,7 @@ class Base(object):
     use_interface = None
 
     def __init__(self, context):
-        #import pdb; pdb.set_trace()
+        import pdb; pdb.set_trace()
         self.context = context
         annotations = IAnnotations(self.context)
 

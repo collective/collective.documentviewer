@@ -48,7 +48,7 @@ class ConvertTest(BaseTest):
         gsettings = GlobalSettings(self.portal)
         gsettings.auto_select_layout = True
         gsettings.auto_layout_file_types = ['ppt']
-
+        import pdb; pdb.set_trace()
         fi = self.createFile('test.odp')
         settings = Settings(fi)
         self.assertEqual(settings.successfully_converted, True)

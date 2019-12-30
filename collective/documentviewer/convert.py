@@ -265,7 +265,6 @@ class GraphicsMagickSubProcess(BaseSubProcess):
 
     def dump_images(self, filepath, output_dir, sizes, format, lang='eng'):
         try:
-            qpdf = QpdfSubProcess()
             tmpfilepath = qpdf.strip_page(filepath, 1)
         except Exception:
             raise Exception
