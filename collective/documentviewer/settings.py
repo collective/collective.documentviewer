@@ -4,6 +4,7 @@ from zope.interface import implementer
 from zope.annotation.interfaces import IAnnotations
 from collective.documentviewer.interfaces import IDocumentViewerSettings
 from collective.documentviewer.interfaces import IGlobalDocumentViewerSettings
+from celery.result import AsyncResult
 
 
 STORAGE_VERSION = 2
@@ -17,17 +18,22 @@ class Base(object):
     use_interface = None
 
     def __init__(self, context):
-        import pdb; pdb.set_trace()
         self.context = context
         annotations = IAnnotations(self.context)
-
+        
         self._metadata = annotations.get('collective.documentviewer', None)
         if self._metadata is None:
             self._metadata = PersistentDict()
             self._metadata['last_updated'] = DateTime('1901/01/01').ISO8601()
             self.storage_version = STORAGE_VERSION
             annotations['collective.documentviewer'] = self._metadata
-
+        '''if self._metadata.get('converting') == True:
+            result = AsyncResult(self._metadata.get('celery_task_id'))
+            if result:
+                self._metadata['successfully_converted'] = True
+                self._metadata['converting'] = False
+                annotations['collective.documentviewer'] = self._metadata
+           ''' 
     def __setattr__(self, name, value):
         if name[0] == '_' or name in ['context', 'use_interface']:
             self.__dict__[name] = value
@@ -42,7 +48,6 @@ class Base(object):
             default = _defaults.get(name, None)
 
         return self._metadata.get(name, default)
-
 
 @implementer(IDocumentViewerSettings)
 class Settings(Base):

@@ -15,6 +15,7 @@ except ImportError:
 
 
 def celeryInstalled():
+    False
     try:
         import collective.celery  # noqa
         return True
@@ -30,7 +31,7 @@ def isConversion(job, sitepath):
 
 
 def getJobRunner(obj):
-    if celeryInstalled():
+    if Installed():
         return CeleryJobRunner(obj)
 
 
@@ -42,8 +43,7 @@ try:
         retries = 0
         while True:
             try:
-                runConversion(obj)
-                return
+                return runConversion(obj)
             except ConflictError:
                 retries += 1
                 if retries > 4:
@@ -94,6 +94,7 @@ class CeleryJobRunner(object):
         return -1, None
 
     def queue_it(self):
+        import pdb; pdb.set_trace()
         result = _celeryQueueJob.delay(self.object)
         self.settings.celery_task_id = result.id
         self.settings.converting = True
