@@ -175,5 +175,16 @@ class ConvertTest(BaseTest):
         settings = Settings(fi)
         return settings.successfully_converted
 
+    def _wait_for_async(self,fi):
+        '''
+        Allows the test to wait for async to be completed.
+        '''
+        settings = Settings(fi)
+        asyn = ApplyAsync(settings.get('celery_task_id'))
+        result = asyn.get()
+        fi = result
+        settings = Settings(fi)
+        
+    
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

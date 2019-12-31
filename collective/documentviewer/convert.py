@@ -280,15 +280,17 @@ class GraphicsMagickSubProcess(BaseSubProcess):
             self._run_command(cmd)
 
         os.remove(tmpfilepath)
-
         # now, move images to correctly named folders
         for name, size in sizes:
             dest = os.path.join(output_dir, name)
+            
             if os.path.exists(dest):
                 shutil.rmtree(dest)
 
+            os.makedirs(dest)
             source = os.path.join(output_dir, '%ix.%s' % (size, format))
-            shutil.move(source, dest)
+            dest_file = os.path.join(dest, 'dump_1.gif')
+            shutil.move(source, dest_file)
 
     def convert_multiple_pdfs(self, file_list, filepath, format):
         cmd = []
@@ -627,7 +629,11 @@ class Converter(object):
             files = OOBTree()
             for size in ('large', 'normal', 'small'):
                 path = os.path.join(storage_dir, size)
-                filename = '%s/%s' % (size, storage_dir)
+                for file in os.listdir(path):
+                    filename = file
+                filename2 = filename
+                filename ='%s/%s' % (filename, path)
+                path = os.path.join(path, filename2)
                 files[filename] = saveFileToBlob(path)
 
             if self.settings.enable_indexation:
