@@ -94,7 +94,6 @@ class CeleryJobRunner(object):
         return -1, None
 
     def queue_it(self):
-        import pdb; pdb.set_trace()
         result = _celeryQueueJob.delay(self.object)
         self.settings.celery_task_id = result.id
         self.settings.converting = True
