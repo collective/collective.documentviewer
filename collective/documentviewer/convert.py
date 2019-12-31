@@ -632,7 +632,7 @@ class Converter(object):
                 for file in os.listdir(path):
                     filename = file
                 filename2 = filename
-                filename ='%s/%s' % (filename, path)
+                filename ='%s/%s' % (size, filename)
                 path = os.path.join(path, filename2)
                 files[filename] = saveFileToBlob(path)
 
