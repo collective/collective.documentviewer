@@ -296,7 +296,7 @@ class GraphicsMagickSubProcess(BaseSubProcess):
         cmd = []
         for single_file in file_list:
             output_file = single_file[:-3] + format
-            cmd = [self.bin_name, "convert", "-quality 100", single_file, output_file]
+            cmd = [self.bin_name, "convert", single_file, output_file]
             self._run_command(cmd)
 
 
@@ -600,13 +600,15 @@ class Converter(object):
         storage_dir = self.storage_dir
         settings = self.settings
         context = self.context
-
+        import pdb; pdb.set_trace()
         # save lead image if available
         if ILeadImage.providedBy(self.context):
             path = os.path.join(storage_dir, 'large')
-            filename = os.path.basename(path)
-            filepath = os.path.join(storage_dir, path)
+            for file in os.listdir(path):
+                filename = file
+            filepath = os.path.join(path, filename)
             tmppath = '%s.tmp' % (filepath)
+            
 
             # NamedBlobImage eventually calls blob.consume,
             # destroying the image, so we need to make a temporary copy.
@@ -761,6 +763,7 @@ class Converter(object):
             return self.gsettings.enable_indexation
 
     def __call__(self, asynchronous=True):
+        import pdb; pdb.set_trace()
         settings = self.settings
         try:
             pages = self.run_conversion()
