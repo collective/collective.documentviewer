@@ -34,4 +34,5 @@ script:
   - bin/test;
 before_install:
   - sudo apt-get install -y graphicsmagick poppler-utils poppler-data ghostscript qpdf tesseract-ocr
+  - sudo apt-get install -y tesseract-ocr-all
   - sudo apt-get install -y libreoffice
