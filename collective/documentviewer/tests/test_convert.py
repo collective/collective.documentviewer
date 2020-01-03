@@ -93,14 +93,14 @@ class ConvertTest(BaseTest):
     def test_indexation_enabled(self):
         gsettings = GlobalSettings(self.portal)
         # indexation is enabled by default
-        self.assertEquals(gsettings.enable_indexation, True)
+        self.assertEqual(gsettings.enable_indexation, True)
         fi = self.createFile('test.pdf')
         # make sure conversion was successfull
         self.assertTrue(self._isSuccessfullyConverted(fi))
         annotations = IAnnotations(fi)['collective.documentviewer']
         self.assertIsNotNone(annotations['catalog'])
         # we have relevant informations in the catalog
-        self.assertTrue('software' in annotations['catalog']['text'].lexicon.words())
+        self.assertTrue('software' in annotations['catalog']['text'].lexicon.words(), msg=annotations['catalog']['text'])
 
     def test_indexation_disabled(self):
         gsettings = GlobalSettings(self.portal)
