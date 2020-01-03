@@ -19,7 +19,7 @@ before_script:
 
 before_install:
   - sudo apt-get update
-  - sudo apt-get install -y graphicsmagick libpoppler poppler-utils poppler-data
+  - sudo apt-get install -y graphicsmagick poppler-utils poppler-data
   - sudo apt-get install -y ghostscript qpdf tesseract-ocr tesseract-ocr-eng
   - sudo apt-get install -y libreoffice
 
