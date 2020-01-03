@@ -3,7 +3,6 @@ import unittest
 from os import listdir
 from os.path import join
 from tempfile import mkdtemp
-from celery.result import AsyncResult
 
 from collective.documentviewer import storage
 from collective.documentviewer.convert import Converter
@@ -74,6 +73,7 @@ class ConvertTest(BaseTest):
         self.assertTrue(not converter.can_convert)
 
     def test_saves_with_file_storage(self):
+        import pdb; pdb.set_trace()
         gsettings = GlobalSettings(self.portal)
         gsettings.auto_select_layout = True
         gsettings.auto_layout_file_types = ['ppt']
@@ -95,7 +95,7 @@ class ConvertTest(BaseTest):
         gsettings = GlobalSettings(self.portal)
         # indexation is enabled by default
         self.assertEquals(gsettings.enable_indexation, True)
-
+        import pdb; pdb.set_trace()
         fi = self.createFile('test.pdf')
         # make sure conversion was successfull
         self.assertTrue(self._isSuccessfullyConverted(fi))
@@ -175,16 +175,5 @@ class ConvertTest(BaseTest):
         settings = Settings(fi)
         return settings.successfully_converted
 
-    def _wait_for_async(self,fi):
-        '''
-        Allows the test to wait for async to be completed.
-        '''
-        settings = Settings(fi)
-        asyn = ApplyAsync(settings.get('celery_task_id'))
-        result = asyn.get()
-        fi = result
-        settings = Settings(fi)
-        
-    
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

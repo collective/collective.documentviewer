@@ -18,6 +18,7 @@ before_script:
   - sleep 10
 
 before_install:
+  - sudo apt-get -y upgrade
   - sudo apt-get install -y graphicsmagick poppler-utils poppler-data ghostscript qpdf tesseract-ocr
   - sudo apt-get install -y tesseract-ocr-eng
   - sudo apt-get install -y libreoffice

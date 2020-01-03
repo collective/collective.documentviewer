@@ -32,6 +32,7 @@ def _should_skip_handler(obj):
 
 
 def handle_file_creation(obj, event):
+    import pdb; pdb.set_trace()
     if _should_skip_handler(obj):
         return
 
