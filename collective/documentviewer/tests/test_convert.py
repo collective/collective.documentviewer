@@ -100,7 +100,7 @@ class ConvertTest(BaseTest):
         annotations = IAnnotations(fi)['collective.documentviewer']
         self.assertIsNotNone(annotations['catalog'])
         # we have relevant informations in the catalog
-        self.assertTrue('software' in annotations['catalog']['text'].lexicon.words(), msg=annotations['catalog']['text'])
+        self.assertTrue('software' in annotations['catalog']['text'].lexicon.words())
 
     def test_indexation_disabled(self):
         gsettings = GlobalSettings(self.portal)
