@@ -13,7 +13,6 @@ from zope.lifecycleevent import ObjectModifiedEvent
 class PDFResourceTraverseTest(BaseTest):
 
     def test_filesystem_storage_works(self):
-        import pdb; pdb.set_trace()
         gsettings = GlobalSettings(self.portal)
         _dir = mkdtemp()
         gsettings.storage_location = _dir

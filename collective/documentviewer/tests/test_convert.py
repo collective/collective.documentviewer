@@ -73,7 +73,6 @@ class ConvertTest(BaseTest):
         self.assertTrue(not converter.can_convert)
 
     def test_saves_with_file_storage(self):
-        import pdb; pdb.set_trace()
         gsettings = GlobalSettings(self.portal)
         gsettings.auto_select_layout = True
         gsettings.auto_layout_file_types = ['ppt']
@@ -95,7 +94,6 @@ class ConvertTest(BaseTest):
         gsettings = GlobalSettings(self.portal)
         # indexation is enabled by default
         self.assertEquals(gsettings.enable_indexation, True)
-        import pdb; pdb.set_trace()
         fi = self.createFile('test.pdf')
         # make sure conversion was successfull
         self.assertTrue(self._isSuccessfullyConverted(fi))
