@@ -39,11 +39,11 @@ def either(one, two):
 
 
 class DocumentViewerView(DefaultView):
-
     installed = docsplit is not None
     enabled = True
 
     def __call__(self):
+        
         self._update()
 
         add_resource_on_request(self.request, 'documentviewer')
@@ -112,7 +112,7 @@ class DocumentViewerView(DefaultView):
 
         return self.index()
 
-    def dv_data(self):
+    def dv_data(self):        
         dump_path = DUMP_FILENAME.rsplit('.', 1)[0]
 
         if self.global_settings.show_contributor:
@@ -173,7 +173,7 @@ class DocumentViewerView(DefaultView):
             }
         }
 
-    def pattern_options(self):
+    def pattern_options(self):        
         height = either(self.settings.height, self.global_settings.height)
         width = either(self.settings.width, self.global_settings.width)
 
@@ -202,6 +202,7 @@ class DVPdfUrl(BrowserView):
             We need to redirect, because the PDF can be stored on FS, instead
             of ZODB.
         """
+        
         try:
             site = api.portal.get()
         except exc.CannotGetPortalError:
@@ -228,6 +229,7 @@ class DVPdfUrl(BrowserView):
 class DocumentViewerSearchView(BrowserView):
 
     def __call__(self):
+        
         settings = Settings(self.context)
         catalog = settings.catalog
         query = self.request.form.get('q')
@@ -324,7 +326,6 @@ class Utils(BrowserView):
 
 
 class Convert(Utils):
-
     def __call__(self):
         """
         - handle queuing
@@ -332,6 +333,7 @@ class Convert(Utils):
         - async
             - queue position
         """
+        
         mtool = getToolByName(self.context, 'portal_membership')
         self.manager = mtool.checkPermission('cmf.ManagePortal',
                                              self.context)
@@ -365,7 +367,6 @@ class Convert(Utils):
 
 
 class GroupView(BrowserView):
-
     def getContents(self, object=None, portal_type=('File',),
                     full_objects=False, path=None):
         if not object:

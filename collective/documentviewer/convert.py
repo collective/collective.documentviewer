@@ -587,11 +587,13 @@ class Converter(object):
         storage_dir = self.storage_dir
         settings = self.settings
         context = self.context
+        import pdb; pdb.set_trace()
         # save lead image if available
         if ILeadImage.providedBy(self.context):
             path = os.path.join(storage_dir, 'large')
-            filename = glob.glob(os.path.join(path, "*_[0]*1.*"))
-            
+            filename = glob.glob(os.path.join(path, "*_*?1.*"))
+            filename.sort()
+            filename = filename[0]
             filepath = os.path.join(path, filename)
             tmppath = '%s.tmp' % (filepath)
             
