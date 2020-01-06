@@ -43,7 +43,7 @@ class DocumentViewerView(DefaultView):
     enabled = True
 
     def __call__(self):
-        
+        import pdb; pdb.set_trace()
         self._update()
 
         add_resource_on_request(self.request, 'documentviewer')
@@ -112,7 +112,8 @@ class DocumentViewerView(DefaultView):
 
         return self.index()
 
-    def dv_data(self):        
+    def dv_data(self):
+        import pdb; pdb.set_trace()
         dump_path = DUMP_FILENAME.rsplit('.', 1)[0]
 
         if self.global_settings.show_contributor:

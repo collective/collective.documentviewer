@@ -590,7 +590,7 @@ class Converter(object):
         # save lead image if available
         if ILeadImage.providedBy(self.context):
             path = os.path.join(storage_dir, 'large')
-            filename = glob.glob(os.path.join(path, "*_*?1.*"))
+            filename = os.listdir(path)
             filename.sort()
             filename = filename[0]
             filepath = os.path.join(path, filename)
@@ -762,7 +762,6 @@ class Converter(object):
             if self.isIndexationEnabled():
                 catalog = CatalogFactory()
                 self.index_pdf(pages, catalog)
-
             settings.catalog = catalog
             self.handle_storage()
             self.context.reindexObject()
