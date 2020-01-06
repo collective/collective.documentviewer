@@ -587,7 +587,6 @@ class Converter(object):
         storage_dir = self.storage_dir
         settings = self.settings
         context = self.context
-        import pdb; pdb.set_trace()
         # save lead image if available
         if ILeadImage.providedBy(self.context):
             path = os.path.join(storage_dir, 'large')
