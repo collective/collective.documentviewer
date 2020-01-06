@@ -220,17 +220,12 @@ class QpdfSubProcess(BaseSubProcess):
         self._run_command(cmd)
         shutil.copy(outfile, filepath)
 
-    def strip_page(self, filepath, pagenumber):
-        tmpdir = tempfile.mkdtemp()
-        tmpfilepath = os.path.join(tmpdir, 'temp.pdf')
-        pagenumber = str(pagenumber)
-
-        cmd = [self.bin_name,
-               '--empty', '--pages',
-               filepath, pagenumber, '--', tmpfilepath]
+    def strip_page(self, filepath, output_dir):
+        output_file = os.path.join(output_dir, 'dump_%d.pdf')
+        cmd = [self.bin_name, '--split-pages', filepath,
+               '--', output_file]
 
         self._run_command(cmd)
-        return tmpfilepath
 
     def get_num_pages(self, filepath):
         cmd = [self.binary, "--show-npages", filepath]
@@ -264,33 +259,25 @@ class GraphicsMagickSubProcess(BaseSubProcess):
         bin_name = 'gm'
 
     def dump_images(self, filepath, output_dir, sizes, format, lang='eng'):
-        try:
-            tmpfilepath = qpdf.strip_page(filepath, 1)
-        except Exception:
-            raise Exception
-
         for size in sizes:
-            output_file = os.path.join(output_dir, '%ix.%s' % (size[1], format))
-            cmd = [
-                self.binary, "convert", tmpfilepath,
-                '-resize', str(size[1]),
-                '-format', format,
-                output_file]
+            output_folder = os.path.join(output_dir, size[0])
+            os.makedirs(output_folder)
+            try:
+                qpdf.strip_page(filepath, output_folder)
+            except:
+                raise Exception
+            for file in os.listdir(output_folder):
+                file = os.path.join(output_folder, file)
+                output_file = file[:-3] + format
+                cmd = [
+                    self.binary, "convert", file,
+                    '-resize', str(size[1]),
+                    '-format', format,
+                    output_file]
 
-            self._run_command(cmd)
-
-        os.remove(tmpfilepath)
-        # now, move images to correctly named folders
-        for name, size in sizes:
-            dest = os.path.join(output_dir, name)
-            
-            if os.path.exists(dest):
-                shutil.rmtree(dest)
-
-            os.makedirs(dest)
-            source = os.path.join(output_dir, '%ix.%s' % (size, format))
-            dest_file = os.path.join(dest, 'dump_1.gif')
-            shutil.move(source, dest_file)
+                self._run_command(cmd)
+                cmd = ['rm', file]
+                self._run_command(cmd)
 
     def convert_multiple_pdfs(self, file_list, filepath, format):
         cmd = []
@@ -631,11 +618,9 @@ class Converter(object):
             for size in ('large', 'normal', 'small'):
                 path = os.path.join(storage_dir, size)
                 for file in os.listdir(path):
-                    filename = file
-                filename2 = filename
-                filename ='%s/%s' % (size, filename)
-                path = os.path.join(path, filename2)
-                files[filename] = saveFileToBlob(path)
+                    filename ='%s/%s' % (size, file)
+                    filepath = os.path.join(path, file)
+                    files[filename] = saveFileToBlob(filepath)
 
             if self.settings.enable_indexation:
                 textfilespath = os.path.join(storage_dir, TEXT_REL_PATHNAME)
