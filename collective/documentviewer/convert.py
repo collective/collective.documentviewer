@@ -590,10 +590,8 @@ class Converter(object):
         # save lead image if available
         if ILeadImage.providedBy(self.context):
             path = os.path.join(storage_dir, 'large')
-            for file in os.listdir(path):
-                if file == "dump_1.gif":
-                    filename = file
-                    break
+            filename = glob.glob(os.path.join(path, "*_[0]*1.*"))
+            
             filepath = os.path.join(path, filename)
             tmppath = '%s.tmp' % (filepath)
             
