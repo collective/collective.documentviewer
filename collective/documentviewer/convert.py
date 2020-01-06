@@ -266,18 +266,17 @@ class GraphicsMagickSubProcess(BaseSubProcess):
                 qpdf.strip_page(filepath, output_folder)
             except:
                 raise Exception
-            for file in os.listdir(output_folder):
-                file = os.path.join(output_folder, file)
-                output_file = file[:-3] + format
+            for filename in os.listdir(output_folder):
+                filename = os.path.join(output_folder, filename)
+                output_file = filename[:-3] + format
                 cmd = [
-                    self.binary, "convert", file,
+                    self.binary, "convert", filename,
                     '-resize', str(size[1]),
                     '-format', format,
                     output_file]
 
                 self._run_command(cmd)
-                cmd = ['rm', file]
-                self._run_command(cmd)
+                os.remove(filename)
 
     def convert_multiple_pdfs(self, file_list, filepath, format):
         cmd = []
@@ -493,6 +492,7 @@ class Safe_Convert(object):
         # The PDF will be removed by handle_storage, which delete the tempdir.
         return num_pages
 
+sc = Safe_Convert()
 
 def saveFileToBlob(filepath):
     blob = Blob()
@@ -570,7 +570,7 @@ class Converter(object):
         else:
             args['inputfilepath'] = self.blob_filepath
 
-        return docsplit.convert(self.storage_dir, **args)
+        return sc.convert(self.storage_dir, **args)
 
     def index_pdf(self, pages, catalog):
         logger.info('indexing pdf %s' % repr(self.context))
@@ -591,7 +591,9 @@ class Converter(object):
         if ILeadImage.providedBy(self.context):
             path = os.path.join(storage_dir, 'large')
             for file in os.listdir(path):
-                filename = file
+                if file == "dump_1.gif":
+                    filename = file
+                    break
             filepath = os.path.join(path, filename)
             tmppath = '%s.tmp' % (filepath)
             
