@@ -223,7 +223,7 @@ class QpdfSubProcess(BaseSubProcess):
     def strip_page(self, filepath, output_dir):
         output_file = os.path.join(output_dir, 'dump_%d.pdf')
         cmd = [self.bin_name, '--split-pages', filepath,
-               '--', output_file]
+               output_file]
 
         self._run_command(cmd)
 
@@ -236,7 +236,7 @@ class QpdfSubProcess(BaseSubProcess):
         os.mkdir(output_dir)
         output_file = os.path.join(output_dir, 'dump_%d.pdf')
         cmd = [self.bin_name, '--split-pages', filepath,
-               '--', output_file]
+               output_file]
         self._run_command(cmd)
         return output_dir
 
@@ -555,9 +555,9 @@ class Converter(object):
         fw = IFileWrapper(context)
         filename = fw.filename
         language = IOCRLanguage(context).getLanguage()
-        args = dict(sizes=(('large', gsettings.large_size),
-                           ('normal', gsettings.normal_size),
-                           ('small', gsettings.thumb_size)),
+        args = dict(sizes=((u'large', gsettings.large_size),
+                           (u'normal', gsettings.normal_size),
+                           (u'small', gsettings.thumb_size)),
                     enable_indexation=self.isIndexationEnabled(),
                     ocr=gsettings.ocr,
                     detect_text=gsettings.detect_text,
@@ -589,7 +589,7 @@ class Converter(object):
         context = self.context
         # save lead image if available
         if ILeadImage.providedBy(self.context):
-            path = os.path.join(storage_dir, 'large')
+            path = os.path.join(storage_dir, u'large')
             filename = os.listdir(path)
             filename.sort()
             filename = filename[0]
@@ -616,7 +616,7 @@ class Converter(object):
             logger.info('setting blob data for %s' % repr(context))
             # go through temp folder and move items into blob storage
             files = OOBTree()
-            for size in ('large', 'normal', 'small'):
+            for size in (u'large', u'normal', u'small'):
                 path = os.path.join(storage_dir, size)
                 for file in os.listdir(path):
                     filename ='%s/%s' % (size, file)
