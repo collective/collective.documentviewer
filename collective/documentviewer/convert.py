@@ -292,6 +292,7 @@ class GraphicsMagickSubProcess(BaseSubProcess):
             output_file = single_file[:-3] + format
             cmd = [self.bin_name, "convert", single_file, output_file]
             self._run_command(cmd)
+            os.remove(single_file)
 
 
 try:
@@ -321,6 +322,7 @@ class TesseractSubProcess(BaseSubProcess):
             output_file = single_file[:-5]
             cmd = [self.bin_name, single_file, output_file, '-l', lang]
             self._run_command(cmd)
+            os.remove(single_file)
 
 
 try:
@@ -355,13 +357,6 @@ class PdfToTextSubProcess(BaseSubProcess):
                 cmd = [self.bin_name, single_file]
                 self._run_command(cmd)
                 os.remove(single_file)
-
-        # Remove the pdf and jpeg files just in case they weren't removed during the conversion process
-        file_list = glob.glob(find_file)
-        find_file = os.path.join(output_dir, "*.jpeg")
-        file_list += glob.glob(find_file)
-        if file_list > 0:
-            map(lambda single_file: os.remove(single_file), file_list)
 
         # Reorder the end numbers of the files so that document viewer can pick it up.
 

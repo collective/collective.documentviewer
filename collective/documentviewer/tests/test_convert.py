@@ -90,6 +90,25 @@ class ConvertTest(BaseTest):
         self.assertEqual(len(listdir(join(fi_dir, 'text'))), 1)
         shutil.rmtree(fi_dir)
 
+    def test_tesseract_saves_with_file_storage(self):
+        gsettings = GlobalSettings(self.portal)
+        gsettings.auto_select_layout = True
+        gsettings.auto_layout_file_types = ['ppt']
+        gsettings.storage_type = 'File'
+        gsettings.ocr = True
+        _dir = mkdtemp()
+        gsettings.storage_location = _dir
+
+        fi = self.createFile('test.odp')
+
+        fi_dir = storage.getResourceDirectory(obj=fi)
+        self.assertEqual(len(listdir(fi_dir)), 5)
+        self.assertEqual(len(listdir(join(fi_dir, 'normal'))), 1)
+        self.assertEqual(len(listdir(join(fi_dir, 'small'))), 1)
+        self.assertEqual(len(listdir(join(fi_dir, 'large'))), 1)
+        self.assertEqual(len(listdir(join(fi_dir, 'text'))), 1)
+        shutil.rmtree(fi_dir)
+
     def test_indexation_enabled(self):
         gsettings = GlobalSettings(self.portal)
         # indexation is enabled by default
