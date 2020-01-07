@@ -267,6 +267,8 @@ class GraphicsMagickSubProcess(BaseSubProcess):
             except:
                 raise Exception
             for filename in os.listdir(output_folder):
+                # For documents whose number of pages is 2 or higher digits we need to cut out the zeros
+                # at the beginning of dump the page number or the browser viewer won't work.
                 output_file = filename.split('_')
                 output_file[1] = output_file[1][:-4]
                 output_file[1] = int(output_file[1])
@@ -275,10 +277,11 @@ class GraphicsMagickSubProcess(BaseSubProcess):
                 filename = os.path.join(output_folder, filename)
                 
                 cmd = [
-                    self.binary, "convert", filename,
-                    '-size', str(size[1]) + 'x',
+                    self.binary, "convert",
+                    '-resize', str(size[1]) + 'x',
+                    '-density', '150',
                     '-format', format,
-                    output_file]
+                    filename , output_file]
 
                 self._run_command(cmd)
                 os.remove(filename)
