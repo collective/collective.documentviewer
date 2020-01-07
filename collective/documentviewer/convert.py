@@ -354,6 +354,7 @@ class PdfToTextSubProcess(BaseSubProcess):
             for single_file in file_list:
                 cmd = [self.bin_name, single_file]
                 self._run_command(cmd)
+                os.remove(single_file)
 
         # Remove the pdf and jpeg files just in case they weren't removed during the conversion process
         file_list = glob.glob(find_file)
