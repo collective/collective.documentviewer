@@ -267,11 +267,16 @@ class GraphicsMagickSubProcess(BaseSubProcess):
             except:
                 raise Exception
             for filename in os.listdir(output_folder):
+                output_file = filename.split('_')
+                output_file[1] = output_file[1][:-4]
+                output_file[1] = int(output_file[1])
+                output_file = "%s_%i.%s" % (output_file[0], output_file[1], format)
+                output_file = os.path.join(output_folder, output_file)
                 filename = os.path.join(output_folder, filename)
-                output_file = filename[:-3] + format
+                
                 cmd = [
                     self.binary, "convert", filename,
-                    '-resize', str(size[1]),
+                    '-size', str(size[1]) + 'x',
                     '-format', format,
                     output_file]
 
@@ -353,6 +358,18 @@ class PdfToTextSubProcess(BaseSubProcess):
         file_list += glob.glob(find_file)
         if file_list > 0:
             map(lambda single_file: os.remove(single_file), file_list)
+
+        # Reorder the end numbers of the files so that document viewer can pick it up.
+
+        for single_file in os.listdir(output_dir):
+            new_file = single_file
+            new_file = new_file.split('_')
+            new_file[1], format = new_file[1].split('.')
+            new_file[1] = int(new_file[1])
+            new_file = "%s_%i.%s" % (new_file[0], new_file[1], format)
+            new_file = os.path.join(output_dir, new_file)
+            single_file = os.path.join(output_dir, single_file)
+            shutil.move(single_file, new_file)
 
 
 try:
