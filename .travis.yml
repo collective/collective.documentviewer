@@ -10,15 +10,14 @@ matrix:
     - name: Plone 5.2/2.7
       python: 2.7.17
       env: PLONE_VERSION=52
-    - name: Plone 5.2/3.7
-      python: 3.7.6
+    - name: Plone 5.2/3.6
+      python: 3.6
       env: PLONE_VERSION=52
 
 before_script:
   - sleep 10
 
 before_install:
-  - sudo apt-get update
   - sudo apt-get install -y graphicsmagick poppler-utils poppler-data
   - sudo apt-get install -y ghostscript qpdf tesseract-ocr tesseract-ocr-eng
   - sudo apt-get install -y libreoffice
