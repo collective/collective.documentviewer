@@ -8,7 +8,6 @@ from plone.app.testing import TEST_USER_ID, TEST_USER_NAME, login, setRoles
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFPlone.utils import safe_unicode
 from zope.interface import alsoProvides
-import celery
 _files = join(dirname(__file__), 'test_files')
 
 

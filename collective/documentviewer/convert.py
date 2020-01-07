@@ -264,7 +264,7 @@ class GraphicsMagickSubProcess(BaseSubProcess):
             os.makedirs(output_folder)
             try:
                 qpdf.strip_page(filepath, output_folder)
-            except:
+            except Exception:
                 raise Exception
             for filename in os.listdir(output_folder):
                 # For documents whose number of pages is 2 or higher digits we need to cut out the zeros
@@ -275,13 +275,13 @@ class GraphicsMagickSubProcess(BaseSubProcess):
                 output_file = "%s_%i.%s" % (output_file[0], output_file[1], format)
                 output_file = os.path.join(output_folder, output_file)
                 filename = os.path.join(output_folder, filename)
-                
+
                 cmd = [
                     self.binary, "convert",
                     '-resize', str(size[1]) + 'x',
                     '-density', '150',
                     '-format', format,
-                    filename , output_file]
+                    filename, output_file]
 
                 self._run_command(cmd)
                 os.remove(filename)
@@ -512,7 +512,9 @@ class Safe_Convert(object):
         # The PDF will be removed by handle_storage, which delete the tempdir.
         return num_pages
 
+
 sc = Safe_Convert()
+
 
 def saveFileToBlob(filepath):
     blob = Blob()
@@ -615,7 +617,6 @@ class Converter(object):
             filename = filename[0]
             filepath = os.path.join(path, filename)
             tmppath = '%s.tmp' % (filepath)
-            
 
             # NamedBlobImage eventually calls blob.consume,
             # destroying the image, so we need to make a temporary copy.
@@ -639,7 +640,7 @@ class Converter(object):
             for size in (u'large', u'normal', u'small'):
                 path = os.path.join(storage_dir, size)
                 for file in os.listdir(path):
-                    filename ='%s/%s' % (size, file)
+                    filename = '%s/%s' % (size, file)
                     filepath = os.path.join(path, file)
                     files[filename] = saveFileToBlob(filepath)
 

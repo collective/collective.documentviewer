@@ -172,7 +172,7 @@ class DocumentViewerView(DefaultView):
             }
         }
 
-    def pattern_options(self):        
+    def pattern_options(self):
         height = either(self.settings.height, self.global_settings.height)
         width = either(self.settings.width, self.global_settings.width)
 
@@ -201,7 +201,6 @@ class DVPdfUrl(BrowserView):
             We need to redirect, because the PDF can be stored on FS, instead
             of ZODB.
         """
-        
         try:
             site = api.portal.get()
         except exc.CannotGetPortalError:
@@ -228,7 +227,6 @@ class DVPdfUrl(BrowserView):
 class DocumentViewerSearchView(BrowserView):
 
     def __call__(self):
-        
         settings = Settings(self.context)
         catalog = settings.catalog
         query = self.request.form.get('q')
@@ -332,7 +330,6 @@ class Convert(Utils):
         - async
             - queue position
         """
-        
         mtool = getToolByName(self.context, 'portal_membership')
         self.manager = mtool.checkPermission('cmf.ManagePortal',
                                              self.context)

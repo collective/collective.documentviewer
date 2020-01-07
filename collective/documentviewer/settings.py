@@ -19,7 +19,7 @@ class Base(object):
     def __init__(self, context):
         self.context = context
         annotations = IAnnotations(self.context)
-        
+
         self._metadata = annotations.get('collective.documentviewer', None)
         if self._metadata is None:
             self._metadata = PersistentDict()
@@ -41,6 +41,7 @@ class Base(object):
             default = _defaults.get(name, None)
 
         return self._metadata.get(name, default)
+
 
 @implementer(IDocumentViewerSettings)
 class Settings(Base):

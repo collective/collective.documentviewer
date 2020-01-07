@@ -30,7 +30,7 @@ def isConversion(job, sitepath):
 
 
 def getJobRunner(obj):
-    if Installed():
+    if celeryInstalled():
         return CeleryJobRunner(obj)
 
 
