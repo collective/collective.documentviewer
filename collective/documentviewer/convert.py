@@ -328,7 +328,7 @@ class TesseractSubProcess(BaseSubProcess):
 try:
     tesseract = TesseractSubProcess()
 except IOError:
-    logger.exception("Tesseract is not installed, castle.cms "
+    logger.exception("Tesseract is not installed, DocumentViewer "
                      "Will not be able to convert pdfs or images to text "
                      "Using Optical Character Recognition")
     tesseract = None
@@ -426,7 +426,7 @@ class LibreOfficeSubProcess(BaseSubProcess):
 try:
     loffice = LibreOfficeSubProcess()
 except IOError:
-    logger.exception("Libreoffice not installed. castle.cms "
+    logger.exception("Libreoffice not installed. DocumentViewer "
                      "will not be able to convert text files to pdf.")
     loffice = None
 
