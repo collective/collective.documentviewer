@@ -13,6 +13,9 @@ matrix:
     - name: Plone 5.2/3.6
       python: 3.6
       env: PLONE_VERSION=52
+    - name: Plone 5.2/3.7
+      python: 3.7
+      env: PLONE_VERSION=52
 
 before_script:
   - sleep 10
@@ -35,6 +38,7 @@ install:
   - if [ "$PLONE_VERSION" == "52" ]; then
     buildout -Nc travis.cfg;
     fi
+
 script:
   - flake8 collective/documentviewer;
   - bin/test;

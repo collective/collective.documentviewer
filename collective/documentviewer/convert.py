@@ -298,7 +298,7 @@ class GraphicsMagickSubProcess(BaseSubProcess):
 try:
     gm = GraphicsMagickSubProcess()
 except IOError:
-    logger.exception("Graphics Magick is not installed, castle.cms "
+    logger.exception("Graphics Magick is not installed, DocumentViewer "
                      "Will not be able to make screenshots")
     gm = None
 
