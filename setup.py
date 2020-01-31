@@ -10,16 +10,20 @@ setup(name='collective.documentviewer',
           open("README.rst").read(),
           open(os.path.join("docs", "HISTORY.txt")).read()
       ),
-      # Get more strings from
-      # http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      # Get more from https://pypi.org/classifiers/
       classifiers=[
-          "Framework :: Plone :: 4.0",
-          "Framework :: Plone :: 4.1",
-          "Framework :: Plone :: 4.2",
-          "Framework :: Plone :: 4.3",
+          "Environment :: Web Environment",
+          "Framework :: Plone",
+          "Framework :: Plone :: Addon",
           "Framework :: Plone :: 5.0",
+          "Framework :: Plone :: 5.1",
+          "Framework :: Plone :: 5.2",
           "Framework :: Plone",
           "Programming Language :: Python",
+          "Programming Language :: Python :: 2.7",
+          "Programming Language :: Python :: 3.6",
+          "Programming Language :: Python :: 3.7",
+          "Operating System :: OS Independent",
           ],
       keywords='plone documentviewer pdf ocr doc viewer',
       author='Nathan Van Gheem',

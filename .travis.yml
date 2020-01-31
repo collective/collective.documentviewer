@@ -3,19 +3,19 @@ matrix:
   include:
     - name: Plone 5.0
       python: 2.7.17
-      env: PLONE_VERSION=50
+      env: PLONE_VERSION=5.0
     - name: Plone 5.1
       python: 2.7.17
-      env: PLONE_VERSION=51
+      env: PLONE_VERSION=5.1
     - name: Plone 5.2/2.7
       python: 2.7.17
-      env: PLONE_VERSION=52
+      env: PLONE_VERSION=5.2
     - name: Plone 5.2/3.6
       python: 3.6
-      env: PLONE_VERSION=52
+      env: PLONE_VERSION=5.2
     - name: Plone 5.2/3.7
       python: 3.7
-      env: PLONE_VERSION=52
+      env: PLONE_VERSION=5.2
 
 before_script:
   - sleep 10
@@ -24,20 +24,14 @@ before_install:
   - sudo apt-get install -y graphicsmagick poppler-utils poppler-data
   - sudo apt-get install -y ghostscript qpdf tesseract-ocr tesseract-ocr-eng
   - sudo apt-get install -y libreoffice
+  - sed -i "s/test-5.2.x/test-$PLONE_VERSION.x/g" buildout.cfg
+  - sed -i "s/5.2-latest/$PLONE_VERSION-latest/g" requirements.txt
 
 install:
   - mkdir -p buildout-cache/{eggs,downloads}
-  - pip install -r requirements.txt
+  - pip install -IUr requirements.txt
   - pip install pyflakes==1.6.0 pycodestyle==2.3.1 flake8==3.5.0;
-  - if [ "$PLONE_VERSION" == "50" ]; then
-    buildout -Nc travis-5.0.cfg;
-    fi
-  - if [ "$PLONE_VERSION" == "51" ]; then
-    buildout -Nc travis-5.1.cfg;
-    fi
-  - if [ "$PLONE_VERSION" == "52" ]; then
-    buildout -Nc travis.cfg;
-    fi
+  - buildout -Nc travis.cfg
 
 script:
   - flake8 collective/documentviewer;

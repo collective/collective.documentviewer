@@ -1,3 +1,1 @@
-setuptools==39.1.0
-zc.buildout==2.13.2
-zc.recipe.egg>=2.0.6
+-r https://dist.plone.org/release/5.2-latest/requirements.txt
