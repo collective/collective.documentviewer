@@ -42,8 +42,7 @@ try:
         retries = 0
         while True:
             try:
-                runConversion(obj)
-                return
+                return runConversion(obj)
             except ConflictError:
                 retries += 1
                 if retries > 4:

@@ -39,12 +39,11 @@ Besides displaying PDFs, it will also display:
 Install requirements
 --------------------
 
-- Docsplit: http://documentcloud.github.com/docsplit/
 - GraphicsMagick
 - ghostscript (version 9.0 preferred)
 - Poppler
 - tesseract (optional)
-- pdftk (optional)
+- qpdf
 - OpenOffice or LibreOffice (optional, for doc, excel, ppt, etc. types)
 - md5 or md5sum command line tool
 
@@ -133,7 +132,7 @@ should be an `upgrade-all` step to run.
 Installation on Cent OS/Red hat
 -------------------------------
 
-Special instructions for centos have been contributed by Eric Tyrer.
+Special instructions for centos have been contributed by Eric Tyrer. 
 You can access them via `the git hub repo file location <https://github.com/collective/collective.documentviewer/blob/master/CENTOS-INSTALL.rst>`_.
 
 Installation

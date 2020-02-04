@@ -39,7 +39,6 @@ def either(one, two):
 
 
 class DocumentViewerView(DefaultView):
-
     installed = docsplit is not None
     enabled = True
 
@@ -324,7 +323,6 @@ class Utils(BrowserView):
 
 
 class Convert(Utils):
-
     def __call__(self):
         """
         - handle queuing
@@ -365,7 +363,6 @@ class Convert(Utils):
 
 
 class GroupView(BrowserView):
-
     def getContents(self, object=None, portal_type=('File',),
                     full_objects=False, path=None):
         if not object:

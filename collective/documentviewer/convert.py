@@ -1,4 +1,5 @@
 import os
+import glob
 import random
 import re
 import shutil
@@ -172,7 +173,7 @@ except IOError:
 
 class TextCheckerSubProcess(BaseSubProcess):
     if os.name == 'nt':
-        bin_name = 'pdffonts.ext'
+        bin_name = 'pdffonts.exe'
     else:
         bin_name = 'pdffonts'
 
@@ -203,88 +204,209 @@ except IOError:
     textChecker = None
 
 
-class DocSplitSubProcess(BaseSubProcess):
+class QpdfSubProcess(BaseSubProcess):
     """
-    idea of how to handle this shamelessly
-    stolen from ploneformgen's gpg calls
+    This is used to both strip metadata in pdf files.
+    And to strip a page for the screenshot process.
     """
-
     if os.name == 'nt':
-        bin_name = 'docsplit.exe'
+        bin_name = 'qpdf.exe'
     else:
-        bin_name = 'docsplit'
+        bin_name = 'qpdf'
 
-    def dump_images(self, filepath, output_dir, sizes, format, lang='eng'):
-        # docsplit images pdf.pdf --size 700x,300x,50x
-        # --format gif --output
-        cmd = [
-            self.binary, "images", filepath,
-            '--language', lang,
-            '--size', ','.join([str(s[1]) + 'x' for s in sizes]),
-            '--format', format,
-            '--rolling',
-            '--output', output_dir]
-        if lang != 'eng':
-            # cf https://github.com/documentcloud/docsplit/issues/72
-            # the cleaning functions are only suited for english
-            cmd.append('--no-clean')
-
+    def __call__(self, filepath):
+        outfile = '{}-processed.pdf'.format(filepath[:-4])
+        cmd = [self.binary, '--linearize', filepath, outfile]
         self._run_command(cmd)
+        shutil.copy(outfile, filepath)
 
-        # now, move images to correctly named folders
-        for name, size in sizes:
-            dest = os.path.join(output_dir, name)
-            if os.path.exists(dest):
-                shutil.rmtree(dest)
-
-            source = os.path.join(output_dir, '%ix' % size)
-            shutil.move(source, dest)
-
-    def dump_text(self, filepath, output_dir, ocr, lang='eng'):
-        # docsplit text pdf.pdf --[no-]ocr --pages all
-        output_dir = os.path.join(output_dir, TEXT_REL_PATHNAME)
-        ocr = not ocr and 'no-' or ''
-        cmd = [
-            self.binary, "text", filepath,
-            '--language', lang,
-            '--%socr' % ocr,
-            '--pages', 'all',
-            '--output', output_dir
-        ]
-        if lang != 'eng':
-            # cf https://github.com/documentcloud/docsplit/issues/72
-            # the cleaning functions are only suited for english
-            cmd.append('--no-clean')
+    def strip_page(self, filepath, output_dir):
+        output_file = os.path.join(output_dir, 'dump_%d.pdf')
+        cmd = [self.bin_name, '--split-pages', filepath,
+               output_file]
 
         self._run_command(cmd)
 
     def get_num_pages(self, filepath):
-        cmd = [self.binary, "length", filepath]
+        cmd = [self.binary, "--show-npages", filepath]
         return int(self._run_command(cmd).strip())
 
+    def split_pages(self, filepath, output_dir):
+        output_dir = os.path.join(output_dir, TEXT_REL_PATHNAME)
+        os.mkdir(output_dir)
+        output_file = os.path.join(output_dir, 'dump_%d.pdf')
+        cmd = [self.bin_name, '--split-pages', filepath,
+               output_file]
+        self._run_command(cmd)
+        return output_dir
+
+
+try:
+    qpdf = QpdfSubProcess()
+except IOError:
+    qpdf = None
+    logger.warn("qpdf not installed.  Some metadata might remain in PDF files."
+                "You will also not able to make screenshots")
+
+
+class GraphicsMagickSubProcess(BaseSubProcess):
+    """
+    Allows us to create small images using graphicsmagick
+    """
+    if os.name == 'nt':
+        bin_name = 'gm.exe'
+    else:
+        bin_name = 'gm'
+
+    def dump_images(self, filepath, output_dir, sizes, format, lang='eng'):
+        for size in sizes:
+            output_folder = os.path.join(output_dir, size[0])
+            os.makedirs(output_folder)
+            try:
+                qpdf.strip_page(filepath, output_folder)
+            except Exception:
+                raise Exception
+            for filename in os.listdir(output_folder):
+                # For documents whose number of pages is 2 or higher digits we need to cut out the zeros
+                # at the beginning of dump the page number or the browser viewer won't work.
+                output_file = filename.split('_')
+                output_file[1] = output_file[1][:-4]
+                output_file[1] = int(output_file[1])
+                output_file = "%s_%i.%s" % (output_file[0], output_file[1], format)
+                output_file = os.path.join(output_folder, output_file)
+                filename = os.path.join(output_folder, filename)
+
+                cmd = [
+                    self.binary, "convert",
+                    '-resize', str(size[1]) + 'x',
+                    '-density', '150',
+                    '-format', format,
+                    filename, output_file]
+
+                self._run_command(cmd)
+                os.remove(filename)
+
+    def convert_multiple_pdfs(self, file_list, filepath, format):
+        cmd = []
+        for single_file in file_list:
+            output_file = single_file[:-3] + format
+            cmd = [self.bin_name, "convert", single_file, output_file]
+            self._run_command(cmd)
+            os.remove(single_file)
+
+
+try:
+    gm = GraphicsMagickSubProcess()
+except IOError:
+    logger.exception("Graphics Magick is not installed, DocumentViewer "
+                     "Will not be able to make screenshots")
+    gm = None
+
+
+class TesseractSubProcess(BaseSubProcess):
+    """
+    Uses the tesseract Optical Character Recognition to read and output
+    text from images.
+    """
+    if os.name == 'nt':
+        bin_name = 'tesseract.exe'
+    else:
+        bin_name = 'tesseract'
+
+    def dump_text(self, file_list, output_dir, lang='eng'):
+        gm.convert_multiple_pdfs(file_list, output_dir, 'jpeg')
+        cmd = []
+        file_list = glob.glob(os.path.join(output_dir, "*.jpeg"))
+
+        for single_file in file_list:
+            output_file = single_file[:-5]
+            cmd = [self.bin_name, single_file, output_file, '-l', lang]
+            self._run_command(cmd)
+            os.remove(single_file)
+
+
+try:
+    tesseract = TesseractSubProcess()
+except IOError:
+    logger.exception("Tesseract is not installed, Documentviewer "
+                     "Will not be able to convert pdfs or images to text "
+                     "Using Optical Character Recognition")
+    tesseract = None
+
+
+class PdfToTextSubProcess(BaseSubProcess):
+    """
+    Uses the pdftotext utility from poppler-utils.
+    """
+    if os.name == 'nt':
+        bin_name = 'pdftotext.exe'
+    else:
+        bin_name = 'pdftotext'
+
+    def dump_text(self, filepath, output_dir, ocr, lang='eng'):
+        qpdf = QpdfSubProcess()
+        output_dir = qpdf.split_pages(filepath, output_dir)
+        find_file = os.path.join(output_dir, "*.pdf")
+        file_list = glob.glob(find_file)
+        cmd = []
+        if ocr:
+            tesseract = TesseractSubProcess()
+            tesseract.dump_text(file_list, output_dir, lang)
+        else:
+            for single_file in file_list:
+                cmd = [self.bin_name, single_file]
+                self._run_command(cmd)
+                os.remove(single_file)
+
+        # Reorder the end numbers of the files so that document viewer can pick it up.
+
+        for single_file in os.listdir(output_dir):
+            new_file = single_file
+            new_file = new_file.split('_')
+            new_file[1], format = new_file[1].split('.')
+            new_file[1] = int(new_file[1])
+            new_file = "%s_%i.%s" % (new_file[0], new_file[1], format)
+            new_file = os.path.join(output_dir, new_file)
+            single_file = os.path.join(output_dir, single_file)
+            shutil.move(single_file, new_file)
+
+
+try:
+    pdftotext = PdfToTextSubProcess()
+except IOError:
+    logger.exception("poppler_utils are not installed. "
+                     "You wil not be able to index text or "
+                     "see the text dump in Document Viewer")
+    pdftotext = None
+
+
+class LibreOfficeSubProcess(BaseSubProcess):
+    """
+    Converts files of other formats into other file types using libreoffice.
+    """
+    if os.name == 'nt':
+        bin_name = 'soffice.exe'
+    else:
+        bin_name = 'soffice'
+
     def convert_to_pdf(self, filepath, filename, output_dir):
-        # get ext from filename
         ext = os.path.splitext(os.path.normcase(filename))[1][1:]
         inputfilepath = os.path.join(output_dir, 'dump.%s' % ext)
         shutil.move(filepath, inputfilepath)
         orig_files = set(os.listdir(output_dir))
-        cmd = [
-            self.binary, 'pdf', inputfilepath,
-            '--output', output_dir]
+        # HTML takes unnecesarily too long using standard settings.
+        if ext == 'html':
+            cmd = [
+                self.binary, '--headless', '--convert-to', 'pdf:writer_pdf_Export',
+                inputfilepath, '--outdir', output_dir]
+        else:
+            cmd = [
+                self.binary, '--headless', '--convert-to', 'pdf', inputfilepath,
+                '--outdir', output_dir]
         self._run_command(cmd)
 
         # remove original
         os.remove(inputfilepath)
-
-        # while using libreoffice, docsplit leaves a 'libreoffice'
-        # folder next to the generated PDF, removes it!
-        libreOfficePath = os.path.join(output_dir, 'libreoffice')
-        # In Nixos, the folder is called 'libreofficedev'
-        libreOfficePathNixos = os.path.join(output_dir, 'libreofficedev')
-        if os.path.exists(libreOfficePath):
-            shutil.rmtree(libreOfficePath)
-        elif os.path.exists(libreOfficePathNixos):
-            shutil.rmtree(libreOfficePathNixos)
 
         # move the file to the right location now
         files = set(os.listdir(output_dir))
@@ -299,6 +421,53 @@ class DocSplitSubProcess(BaseSubProcess):
         converted_path = os.path.join(output_dir,
                                       [f for f in files - orig_files][0])
         shutil.move(converted_path, os.path.join(output_dir, DUMP_FILENAME))
+
+
+try:
+    loffice = LibreOfficeSubProcess()
+except IOError:
+    logger.exception("Libreoffice not installed, Documentviewer "
+                     "will not be able to convert text files to pdf.")
+    loffice = None
+
+
+class DocSplitSubProcess(object):
+    """
+    Currently exists as a compatibility layer for older code now that
+    Docsplit has been replaced.
+    """
+
+    def dump_images(self, filepath, output_dir, sizes, format, lang='eng'):
+        # now exists as a compatibility layer.
+        gm.dump_images(filepath, output_dir, sizes, format, lang)
+
+    def dump_text(self, filepath, output_dir, ocr, lang='eng'):
+        # Compatibility layer for pdftotext
+        pdftotext.dump_text(filepath, output_dir, ocr, lang)
+
+    def get_num_pages(self, filepath):
+        return qpdf.get_num_pages(filepath)
+
+    def convert_to_pdf(self, filepath, filename, output_dir):
+        # get ext from filename
+        loffice.convert_to_pdf(filepath, filename, output_dir)
+
+    def convert(self, output_dir, inputfilepath=None, filedata=None,
+                converttopdf=False, sizes=(('large', 1000),), enable_indexation=True,
+                ocr=True, detect_text=True, format='gif', filename=None, language='eng'):
+        sc = Safe_Convert()
+        return sc.convert(output_dir, inputfilepath, filedata, converttopdf,
+                          sizes, enable_indexation,
+                          ocr, detect_text, format, filename, language)
+
+
+docsplit = DocSplitSubProcess()
+
+
+class Safe_Convert(object):
+    """
+    Acts as a way to safely convert the pdf.
+    """
 
     def convert(self, output_dir, inputfilepath=None, filedata=None,
                 converttopdf=False, sizes=(('large', 1000),), enable_indexation=True,
@@ -319,33 +488,28 @@ class DocSplitSubProcess(BaseSubProcess):
             fi.close()
 
         if converttopdf:
-            self.convert_to_pdf(path, filename, output_dir)
+            loffice.convert_to_pdf(path, filename, output_dir)
 
-        self.dump_images(path, output_dir, sizes, format, language)
+        gm.dump_images(path, output_dir, sizes, format, language)
         if enable_indexation and ocr and detect_text and textChecker is not None:
             if textChecker.has(path):
                 logger.info('Text already found in pdf. Skipping OCR.')
                 ocr = False
 
+        num_pages = qpdf.get_num_pages(path)
+
         if enable_indexation:
             try:
-                self.dump_text(path, output_dir, ocr, language)
+                pdftotext.dump_text(path, output_dir, ocr, language)
             except Exception:
                 logger.info('Error extracting text from PDF', exc_info=True)
-
-        num_pages = self.get_num_pages(path)
 
         # We don't need to cleanup the PDF right
         # The PDF will be removed by handle_storage, which delete the tempdir.
         return num_pages
 
 
-try:
-    docsplit = DocSplitSubProcess()
-except IOError:
-    logger.exception("No docsplit installed. collective.documentviewer "
-                     "will not work.")
-    docsplit = None
+sc = Safe_Convert()
 
 
 def saveFileToBlob(filepath):
@@ -409,9 +573,9 @@ class Converter(object):
         fw = IFileWrapper(context)
         filename = fw.filename
         language = IOCRLanguage(context).getLanguage()
-        args = dict(sizes=(('large', gsettings.large_size),
-                           ('normal', gsettings.normal_size),
-                           ('small', gsettings.thumb_size)),
+        args = dict(sizes=((u'large', gsettings.large_size),
+                           (u'normal', gsettings.normal_size),
+                           (u'small', gsettings.thumb_size)),
                     enable_indexation=self.isIndexationEnabled(),
                     ocr=gsettings.ocr,
                     detect_text=gsettings.detect_text,
@@ -424,7 +588,7 @@ class Converter(object):
         else:
             args['inputfilepath'] = self.blob_filepath
 
-        return docsplit.convert(self.storage_dir, **args)
+        return sc.convert(self.storage_dir, **args)
 
     def index_pdf(self, pages, catalog):
         logger.info('indexing pdf %s' % repr(self.context))
@@ -441,33 +605,39 @@ class Converter(object):
         storage_dir = self.storage_dir
         settings = self.settings
         context = self.context
-
         # save lead image if available
         if ILeadImage.providedBy(self.context):
-            path = os.path.join(storage_dir, 'large')
-            filename = None
-            for dump_filename in os.listdir(path):
-                if dump_filename.startswith('dump_1.'):
-                    filename = dump_filename
-                    break
+            path = os.path.join(storage_dir, u'large')
+            filename = os.listdir(path)
+            filename.sort()
+            filename = filename[0]
             filepath = os.path.join(path, filename)
             tmppath = '%s.tmp' % (filepath)
 
             # NamedBlobImage eventually calls blob.consume,
             # destroying the image, so we need to make a temporary copy.
             shutil.copyfile(filepath, tmppath)
+            NamedBlobImagefailed = False
             with open(tmppath, 'rb') as fi:
-                self.context.image = NamedBlobImage(fi, filename=filename)
+                try:
+                    self.context.image = NamedBlobImage(fi, filename=filename)
+                except Exception:
+                    NamedBlobImagefailed = True
+            # If we are using python2 we need to recreate the file and try again
+            if NamedBlobImagefailed:
+                shutil.copyfile(filepath, tmppath)
+                with open(tmppath, 'rb') as fi:
+                    self.context.image = NamedBlobImage(fi, filename=filename.decode("utf8"))
 
         if self.gsettings.storage_type == 'Blob':
             logger.info('setting blob data for %s' % repr(context))
             # go through temp folder and move items into blob storage
             files = OOBTree()
-            for size in ('large', 'normal', 'small'):
+            for size in (u'large', u'normal', u'small'):
                 path = os.path.join(storage_dir, size)
-                for filename in os.listdir(path):
-                    filepath = os.path.join(path, filename)
-                    filename = '%s/%s' % (size, filename)
+                for file in os.listdir(path):
+                    filename = '%s/%s' % (size, file)
+                    filepath = os.path.join(path, file)
                     files[filename] = saveFileToBlob(filepath)
 
             if self.settings.enable_indexation:
@@ -596,7 +766,6 @@ class Converter(object):
 
     def __call__(self, asynchronous=True):
         settings = self.settings
-
         try:
             pages = self.run_conversion()
             # conversion can take a long time.
@@ -610,7 +779,6 @@ class Converter(object):
             if self.isIndexationEnabled():
                 catalog = CatalogFactory()
                 self.index_pdf(pages, catalog)
-
             settings.catalog = catalog
             self.handle_storage()
             self.context.reindexObject()
