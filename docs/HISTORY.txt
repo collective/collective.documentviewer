@@ -1,7 +1,7 @@
 Changelog
 =========
 
-5.0.5 (unreleased)
+6.0.0 (unreleased)
 ------------------
 
 - Replaced ``docsplit``.  Instead call the various packages directly.
