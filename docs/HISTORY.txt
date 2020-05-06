@@ -4,6 +4,9 @@ Changelog
 6.0.0 (unreleased)
 ------------------
 
+- Fix the download link for the document. #78
+  [b4oshany]
+
 - Replaced ``docsplit``.  Instead call the various packages directly.
   See `pull request #79 <https://github.com/collective/collective.documentviewer/pull/79>`_.
   [alphaomega325]
