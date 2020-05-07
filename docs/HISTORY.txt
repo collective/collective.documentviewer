@@ -4,6 +4,9 @@ Changelog
 6.0.0 (unreleased)
 ------------------
 
+- Updated Spanish translation.
+  [macagua]
+
 - Updated the i18n support.
   [macagua]
 
