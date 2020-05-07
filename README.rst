@@ -256,9 +256,9 @@ Authors
 
 This product was developed by Wildcard Corp. team.
 
-.. image:: https://wildcardcorp.com/front-page/++theme++wildcard-corp/img/wildcard-logo-horz-tagline-reverse-cr.png
-   :height: 50
-   :width: 382
+.. image:: docs/_static/wildcardcorp_logo.png
+   :height: 111px
+   :width: 330px
    :alt: Produced by wildcardcorp.com
    :align: right
 
