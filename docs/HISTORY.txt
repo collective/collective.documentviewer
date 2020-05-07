@@ -4,6 +4,9 @@ Changelog
 6.0.0 (unreleased)
 ------------------
 
+- Added Transifex.net service integration to manage the translation process.
+  [macagua]
+
 - Updated Spanish translation.
   [macagua]
 
