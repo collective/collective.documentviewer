@@ -15,7 +15,7 @@
   <tal:notshow tal:condition="not: view/enabled">
     <dl id="errorMsg" tal:condition="python: view.can_modify and view.settings.successfully_converted is False">
       <dt>
-        <a href="#">Show Document Viewer Conversion Error</a>
+        <a href="#" i18n:translate="">Show Document Viewer Conversion Error</a>
       </dt>
       <dd>
         <pre tal:content="python: view.settings.exception_msg" />
@@ -34,13 +34,13 @@
     </tal:show>
 
     <p>
-      <a tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename}">
-        Download <tal:name tal:content="context/file/filename">Filename</tal:name>
+      <a tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename}" i18n:translate="">
+        Download <tal:name tal:content="context/file/filename" i18n:name="filename">Filename</tal:name>
       </a>
       <span class="discreet"
           tal:define="size context/file/getSize;
-                      kb python:size/1024">
-        &mdash; <span tal:replace="kb" /> KB</span>
+                      kb python:size/1024" i18n:translate="">
+        &mdash; <span tal:replace="kb" i18n:name="get_size" /> KB</span>
     </p>
   </tal:main-macro>
 </div>

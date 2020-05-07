@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-05-08 15:00-100\n"
+"POT-Creation-Date: 2020-05-07 19:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,3 +22,46 @@ msgstr ""
 msgid "Document Viewer Settings"
 msgstr ""
 
+#: ../browser/templates/async-monitor.pt:29
+msgid "Monitor Document Viewer Async Jobs"
+msgstr ""
+
+#: ../browser/templates/async-monitor.pt:60
+msgid "Remove"
+msgstr ""
+
+#: ../browser/templates/group-view.pt:43
+msgid "Search..."
+msgstr ""
+
+#: ../browser/templates/group-view.pt:67
+msgid "View"
+msgstr ""
+
+#: ../browser/templates/async-monitor.pt:33
+msgid "You have ${jobs} jobs yet to finish."
+msgstr ""
+
+#: ../browser/templates/group-view.pt:46
+msgid "clear search"
+msgstr ""
+
+#: ../browser/templates/async-monitor.pt:42
+msgid "last access"
+msgstr ""
+
+#: ../browser/templates/async-monitor.pt:41
+msgid "object"
+msgstr ""
+
+#: ../browser/templates/async-monitor.pt:43
+msgid "running time"
+msgstr ""
+
+#: ../browser/templates/async-monitor.pt:40
+msgid "status"
+msgstr ""
+
+#: ../browser/templates/async-monitor.pt:39
+msgid "user"
+msgstr ""

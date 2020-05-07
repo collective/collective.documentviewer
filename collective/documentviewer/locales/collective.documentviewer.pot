@@ -1,10 +1,7 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-# SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-11-22 11:49+0000\n"
+"Project-Id-Version: collective.documentviewer 1.0\n"
+"POT-Creation-Date: 2020-05-07 19:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,35 +14,24 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: collective.documentviewer\n"
 
+#: ../browser/templates/documentviewer.pt:43
+msgid "&mdash; ${get_size} KB"
+msgstr ""
+
 #: ../interfaces.py:59
 msgid "*experimental* If you're serving files straight from a web server, there is no way to do permission checks on them. This provides a bit more security as the path to the resources will be more difficult to guess and never publisized. Of course, do not have your web server list directory contents. *If you don't know what this does, you probably do NOT want to enable it*"
 msgstr ""
 
-#: ../browser/views.py:84
+#: ../browser/views.py:82
 msgid "A new conversion to the Document Viewer is currently being generated for this document."
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:102
-#: ../browser/templates/documentviewerdx.pt:102
-msgid "Add"
+#: ../config.py:24
+msgid "Aportis Doc Palm"
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:79
-#: ../browser/templates/documentviewerdx.pt:79
-msgid "Add Annotation"
-msgstr ""
-
-#: ../browser/templates/documentviewer.pt:117
-#: ../browser/templates/documentviewerdx.pt:117
-msgid "Add Section"
-msgstr ""
-
-#: ../browser/templates/converting.pt:18
+#: ../browser/templates/converting.pt:17
 msgid "Are you sure you want to convert this to document viewer?"
-msgstr ""
-
-#: ../interfaces.py:163
-msgid "Async Quota Size"
 msgstr ""
 
 #: ../interfaces.py:110
@@ -68,51 +54,27 @@ msgstr ""
 msgid "Blob storage using the normal ZODB blob mechanism. File storage is for just storage the files on the file system with no hard reference on write to the ZODB. This allows you to easily push the files to be served off-site."
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:80
-#: ../browser/templates/documentviewerdx.pt:80
-msgid "Click and drag an area of the image to select where the annotation should be."
-msgstr ""
-
-#: ../browser/templates/documentviewer.pt:68
-#: ../browser/templates/documentviewerdx.pt:68
-msgid "Close"
-msgstr ""
-
-#: ../browser/templates/converting.pt:23
+#: ../browser/templates/converting.pt:22
 msgid "Convert"
 msgstr ""
 
-#: ../browser/templates/converting.pt:17
+#: ../browser/templates/converting.pt:16
 msgid "Convert this to document viewer"
 msgstr ""
 
-#: ../browser/templates/converting.pt:27
+#: ../browser/templates/converting.pt:26
 msgid "Converting"
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:108
-#: ../browser/templates/documentviewerdx.pt:108
-msgid "Current Annotations"
+#: ../interfaces.py:145
+msgid "Default height to use for viewer"
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:144
-#: ../browser/templates/documentviewerdx.pt:144
-msgid "Current Sections"
-msgstr ""
-
-#: ../interfaces.py:143
-msgid "Default height to use for viewer (only for non-fullscreen mode)."
-msgstr ""
-
-#: ../interfaces.py:226
-msgid "Default to fullscreen viewer."
-msgstr ""
-
-#: ../interfaces.py:148
+#: ../interfaces.py:150
 msgid "Default to show sidebar on Document Viewer."
 msgstr ""
 
-#: ../interfaces.py:239
+#: ../interfaces.py:241
 msgid "Default to show sidebar."
 msgstr ""
 
@@ -124,16 +86,42 @@ msgstr ""
 msgid "Detect text"
 msgstr ""
 
+#: ../browser/configure.zcml:77
+msgid "Displays a PDF embedded in the web page via document cloud viewer."
+msgstr ""
+
+#: ../browser/configure.zcml:77
+#: ../configure.zcml:26
+msgid "Document Viewer"
+msgstr ""
+
+#: ../configure.zcml:35
+msgid "Document Viewer (uninstall)"
+msgstr ""
+
 #: ../profiles/default/controlpanel.xml
 msgid "Document Viewer Async Tasks"
 msgstr ""
 
+#: ../profiles/default/actions.xml
+msgid "Document Viewer Convert"
+msgstr ""
+
+#: ../profiles/default/actions.xml
 #: ../profiles/default/controlpanel.xml
 msgid "Document Viewer Settings"
 msgstr ""
 
-#: ../interfaces.py:156
+#: ../browser/templates/documentviewer.pt:38
+msgid "Download ${filename}"
+msgstr ""
+
+#: ../interfaces.py:160
 msgid "Enable search on group view."
+msgstr ""
+
+#: ../config.py:16
+msgid "Excel File"
 msgstr ""
 
 #: ../interfaces.py:103
@@ -144,7 +132,7 @@ msgstr ""
 msgid "Extract the text from the PDF using OCR technology."
 msgstr ""
 
-#: ../interfaces.py:160
+#: ../interfaces.py:165
 msgid "For folders. Does not apply to topics."
 msgstr ""
 
@@ -152,12 +140,12 @@ msgstr ""
 msgid "For pdf files."
 msgstr ""
 
-#: ../interfaces.py:225
-msgid "Fullscreen Viewer"
+#: ../interfaces.py:164
+msgid "Group View Batch Size"
 msgstr ""
 
-#: ../interfaces.py:159
-msgid "Group View Batch Size"
+#: ../config.py:19
+msgid "HTML File"
 msgstr ""
 
 #: ../interfaces.py:230
@@ -176,16 +164,23 @@ msgstr ""
 msgid "Image Format"
 msgstr ""
 
+#: ../config.py:26
+msgid "Images"
+msgstr ""
+
+#: ../configure.zcml:26
+msgid "Installs the collective.documentviewer package"
+msgstr ""
+
 #: ../interfaces.py:33
 msgid "Large Image Size"
 msgstr ""
 
-#: ../interfaces.py:138
+#: ../interfaces.py:139
 msgid "Leave blank to take full width."
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:150
-#: ../browser/templates/documentviewerdx.pt:150
+#: ../browser/templates/documentviewer.pt:29
 msgid "Loading"
 msgstr ""
 
@@ -193,22 +188,8 @@ msgstr ""
 msgid "Make searchable"
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:65
-#: ../browser/templates/documentviewerdx.pt:65
-msgid "Manage Annotations"
-msgstr ""
-
-#: ../browser/templates/documentviewer.pt:66
-#: ../browser/templates/documentviewerdx.pt:66
-msgid "Manage Sections"
-msgstr ""
-
 #: ../interfaces.py:36
 msgid "Normal Image Size"
-msgstr ""
-
-#: ../interfaces.py:164
-msgid "Number of conversions to run at a time. The quota name assigned is `dv`."
 msgstr ""
 
 #: ../interfaces.py:87
@@ -219,7 +200,7 @@ msgstr ""
 msgid "Obfuscate private file paths"
 msgstr ""
 
-#: ../interfaces.py:152
+#: ../interfaces.py:155
 msgid "On Document Viewer."
 msgstr ""
 
@@ -239,31 +220,44 @@ msgstr ""
 msgid "Override Contributor Organization"
 msgstr ""
 
-#: ../browser/templates/converting.pt:31
+#: ../config.py:12
+msgid "PDF"
+msgstr ""
+
+#: ../browser/configure.zcml:24
+msgid "PDF Group View"
+msgstr ""
+
+#: ../browser/templates/converting.pt:30
 msgid "PDF is now being converted to Document Viewer. The current view will remain until the conversion process is complete."
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:130
-#: ../browser/templates/documentviewerdx.pt:130
-msgid "Page"
+#: ../config.py:21
+msgid "PS Document"
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:72
-#: ../browser/templates/documentviewerdx.pt:72
-msgid "Page:"
+#: ../config.py:22
+msgid "Photoshop"
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:86
-#: ../browser/templates/documentviewerdx.pt:86
-msgid "Required"
+#: ../config.py:25
+msgid "Plain Text File"
 msgstr ""
 
-#: ../browser/controlpanel.py:141
-#: ../browser/settings.py:25
+#: ../config.py:17
+msgid "Powerpoint"
+msgstr ""
+
+#: ../config.py:20
+msgid "RTF"
+msgstr ""
+
+#: ../browser/controlpanel.py:22
+#: ../browser/settings.py:24
 msgid "Save"
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:55
+#: ../browser/templates/documentviewer.pt:18
 msgid "Show Document Viewer Conversion Error"
 msgstr ""
 
@@ -271,19 +265,19 @@ msgstr ""
 msgid "Show contributor"
 msgstr ""
 
-#: ../interfaces.py:151
+#: ../interfaces.py:154
 msgid "Show search box"
 msgstr ""
 
-#: ../interfaces.py:155
+#: ../interfaces.py:159
 msgid "Show search on group view"
 msgstr ""
 
-#: ../interfaces.py:147
+#: ../interfaces.py:149
 msgid "Show sidebar"
 msgstr ""
 
-#: ../browser/views.py:76
+#: ../browser/views.py:74
 msgid "Since you do not have docsplit installed on this system, we can not render the pages of this document."
 msgstr ""
 
@@ -295,61 +289,35 @@ msgstr ""
 msgid "Storage location"
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:94
-#: ../browser/templates/documentviewerdx.pt:94
-msgid "Text"
-msgstr ""
-
-#: ../browser/templates/documentviewer.pt:152
-#: ../browser/templates/documentviewerdx.pt:152
+#: ../browser/templates/documentviewer.pt:31
 msgid "The Document Viewer requires that you enable Javascript."
 msgstr ""
 
-#: ../browser/views.py:88
+#: ../browser/views.py:86
 msgid "The document is currently being converted to the Document Viewer view."
 msgstr ""
 
-#: ../browser/templates/converting.pt:43
+#: ../browser/templates/converting.pt:42
 msgid "The file is active in the Queue."
 msgstr ""
 
-#: ../browser/views.py:105
+#: ../browser/views.py:103
 msgid "The file is not a supported document type. Your type may be supported. Check out the document viewer configuration settings."
 msgstr ""
 
-#: ../browser/templates/converting.pt:41
+#: ../browser/templates/converting.pt:40
 msgid "The file is number ${position} in the Queue."
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:133
-#: ../browser/templates/documentviewerdx.pt:133
-msgid "The page the section is for."
-msgstr ""
-
-#: ../browser/templates/documentviewer.pt:97
-#: ../browser/templates/documentviewerdx.pt:97
-msgid "The text for the annotation. Can include html."
-msgstr ""
-
-#: ../browser/templates/documentviewer.pt:88
-#: ../browser/templates/documentviewerdx.pt:88
-msgid "The title of the annotation"
-msgstr ""
-
-#: ../browser/templates/documentviewer.pt:124
-#: ../browser/templates/documentviewerdx.pt:124
-msgid "The title of the section"
-msgstr ""
-
-#: ../browser/views.py:93
+#: ../browser/views.py:91
 msgid "There was an error trying to convert the document. Maybe the document is encrypted, corrupt or malformed? Check log for details."
 msgstr ""
 
-#: ../browser/views.py:99
+#: ../browser/views.py:97
 msgid "This document is not yet converted to document viewer. Please click the `Document Viewer Convert` button in the actions menu to convert."
 msgstr ""
 
-#: ../browser/templates/converting.pt:28
+#: ../browser/templates/converting.pt:27
 msgid "This file is currently being converted to document viewer."
 msgstr ""
 
@@ -357,17 +325,24 @@ msgstr ""
 msgid "Thumb Image Size"
 msgstr ""
 
-#: ../browser/templates/documentviewer.pt:85
-#: ../browser/templates/documentviewerdx.pt:85
-msgid "Title"
+#: ../browser/configure.zcml:24
+msgid "To show thumbnails from pdf and make it searchable."
 msgstr ""
 
-#: ../interfaces.py:142
+#: ../configure.zcml:35
+msgid "Uninstalls the Document Viewer add-on."
+msgstr ""
+
+#: ../interfaces.py:144
 msgid "Viewer Height"
 msgstr ""
 
-#: ../interfaces.py:137
+#: ../interfaces.py:138
 msgid "Viewer Width"
+msgstr ""
+
+#: ../config.py:23
+msgid "Visio"
 msgstr ""
 
 #: ../interfaces.py:119
@@ -378,35 +353,31 @@ msgstr ""
 msgid "What to override the organization field on viewer with.Leave blank to use site title."
 msgstr ""
 
-#: ../browser/templates/converting.pt:35
+#: ../config.py:13
+msgid "Word Document"
+msgstr ""
+
+#: ../browser/templates/converting.pt:34
 msgid "You may visit ${tag} until the conversion is complete."
 msgstr ""
 
-#: ../browser/templates/converting.pt:55
-msgid "You might also want to ${url}."
-msgstr ""
-
-#: ../browser/templates/converting.pt:55
-msgid "check it in the process queue"
-msgstr ""
-
 #. Default: "Configure the parameters for this Viewer."
-#: ../browser/controlpanel.py:138
+#: ../browser/controlpanel.py:19
 msgid "description_documentviewer_global_settings_form"
 msgstr ""
 
 #. Default: "These settings override the global settings."
-#: ../browser/settings.py:22
+#: ../browser/settings.py:21
 msgid "description_documentviewer_settings_form"
 msgstr ""
 
 #. Default: "Global Document Viewer Settings"
-#: ../browser/controlpanel.py:136
+#: ../browser/controlpanel.py:17
 msgid "heading_documentviewer_global_settings_form"
 msgstr ""
 
 #. Default: "Document Viewer Settings"
-#: ../browser/settings.py:20
+#: ../browser/settings.py:19
 msgid "heading_documentviewer_settings_form"
 msgstr ""
 
@@ -498,7 +469,6 @@ msgstr ""
 msgid "js_label_zoom"
 msgstr ""
 
-#: ../browser/templates/converting.pt:35
+#: ../browser/templates/converting.pt:34
 msgid "the current file"
 msgstr ""
-

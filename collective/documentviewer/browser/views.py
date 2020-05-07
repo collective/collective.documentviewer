@@ -11,7 +11,7 @@ from collective.documentviewer.convert import (DUMP_FILENAME,
                                                TEXT_REL_PATHNAME, docsplit)
 from collective.documentviewer.convert_all import convert_all
 from collective.documentviewer.interfaces import IFileWrapper, IUtils
-from collective.documentviewer.interfaces import mf as _
+from collective.documentviewer import _
 from collective.documentviewer.settings import GlobalSettings, Settings
 from collective.documentviewer.utils import allowedDocumentType
 from DateTime import DateTime
