@@ -256,7 +256,7 @@ Authors
 
 This product was developed by Wildcard Corp. team.
 
-.. image:: docs/_static/wildcardcorp_logo.png
+.. image:: https://raw.githubusercontent.com/collective/collective.documentviewer/i18n_improvements/docs/_static/wildcardcorp_logo.png
    :height: 111px
    :width: 330px
    :alt: Produced by wildcardcorp.com
