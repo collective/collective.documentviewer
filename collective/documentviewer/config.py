@@ -1,5 +1,6 @@
 from collective.documentviewer import _
 
+
 class DocType(object):
 
     def __init__(self, name, extensions, requires_conversion=True):
@@ -11,11 +12,11 @@ class DocType(object):
 CONVERTABLE_TYPES = {
     'pdf': DocType(_(u'PDF'), ('pdf',), False),
     'word': DocType(_(u'Word Document'), ('doc', 'docx', 'dot', 'wiz',
-                                       'odt', 'sxw', 'wks', 'wpd',
-                                       'vor', 'sdw')),
+                                          'odt', 'sxw', 'wks', 'wpd',
+                                          'vor', 'sdw')),
     'excel': DocType(_(u'Excel File'), ('xls', 'xlsx', 'xlt', 'ods', 'csv', )),
     'ppt': DocType(_(u'Powerpoint'), ('ppt', 'pptx', 'pps', 'ppa', 'pwz',
-                                   'odp', 'sxi')),
+                                      'odp', 'sxi')),
     'html': DocType(_(u'HTML File'), ('htm', 'html', 'xhtml')),
     'rft': DocType(_(u'RTF'), ('rtf',)),
     'ps': DocType(_(u'PS Document'), ('ps', 'eps', 'ai')),
@@ -24,8 +25,8 @@ CONVERTABLE_TYPES = {
     'palm': DocType(_(u'Aportis Doc Palm'), ('pdb',)),
     'txt': DocType(_(u'Plain Text File'), ('txt', )),
     'image': DocType(_(u'Images'), ('jpg', 'jpeg', 'png',
-                                 'gif', 'bmp',
-                                 'tif', 'tiff', )),
+                                    'gif', 'bmp',
+                                    'tif', 'tiff', )),
 }
 
 EXTENSION_TO_ID_MAPPING = {}
