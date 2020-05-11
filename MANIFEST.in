@@ -6,21 +6,6 @@ include *.txt
 include Makefile
 include buildout.cfg
 include travis.cfg
-recursive-include collective *.css
-recursive-include collective *.doc
-recursive-include collective *.js
-recursive-include collective *.less
-recursive-include collective *.map
-recursive-include collective *.odp
-recursive-include collective *.pdf
-recursive-include collective *.png
-recursive-include collective *.po
-recursive-include collective *.pot
-recursive-include collective *.pt
-recursive-include collective *.py
-recursive-include collective *.sh
-recursive-include collective *.txt
-recursive-include collective *.xml
-recursive-include collective *.zcml
-recursive-include docs *.GPL
-recursive-include docs *.txt
+include .tx/config
+graft collective
+graft docs
