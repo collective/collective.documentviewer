@@ -40,10 +40,10 @@
     <div id="search-icon"></div>
     <div id="search-input">
       <form method="get">
-        <input placeholder="Search..." name="q" tal:attributes="value request/q|nothing" />
+        <input placeholder="Search..." i18n:attributes="placeholder" name="q" tal:attributes="value request/q|nothing" />
       </form>
     </div>
-    <div id="cancel-search" title="clear search"></div>
+    <div id="cancel-search" title="clear search" i18n:attributes="title"></div>
   </div>
 
   <div id="pdf-files">
@@ -64,7 +64,7 @@
               Title
             </span>
           </a>
-          <a tal:attributes="href string:${file/absolute_url}/view;">View</a>
+          <a tal:attributes="href string:${file/absolute_url}/view;" i18n:translate="">View</a>
         </div>
         <div class="photoAlbumEntry photoAlbumFolder pdfEntry"
               tal:condition="python: file.portal_type not in file_types"

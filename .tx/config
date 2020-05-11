@@ -1,0 +1,16 @@
+[main]
+host = https://www.transifex.com
+
+[plone-collective.collective-documentviewer-pot]
+file_filter = collective/documentviewer/locales/<lang>/LC_MESSAGES/collective.documentviewer.po
+minimum_perc = 0
+source_file = collective/documentviewer/locales/collective.documentviewer.pot
+source_lang = en
+type = PO
+
+[plone-collective.collective-documentviewer-plone-pot]
+file_filter = collective/documentviewer/locales/<lang>/LC_MESSAGES/plone.po
+minimum_perc = 0
+source_file = collective/documentviewer/locales/plone.pot
+source_lang = en
+type = PO

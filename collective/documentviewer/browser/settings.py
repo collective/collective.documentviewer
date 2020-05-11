@@ -1,7 +1,7 @@
 from logging import getLogger
 
 from collective.documentviewer.interfaces import IDocumentViewerSettings
-from collective.documentviewer.interfaces import mf as _
+from collective.documentviewer import _
 from plone.app.z3cform.layout import wrap_form
 from Products.CMFPlone import PloneMessageFactory
 from z3c.form import button, field, form

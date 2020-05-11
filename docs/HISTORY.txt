@@ -4,6 +4,15 @@ Changelog
 6.0.0 (unreleased)
 ------------------
 
+- Added Transifex.net service integration to manage the translation process.
+  [macagua]
+
+- Updated Spanish translation.
+  [macagua]
+
+- Updated the i18n support.
+  [macagua]
+
 - Fix the download link for the document. #78
   [b4oshany]
 
