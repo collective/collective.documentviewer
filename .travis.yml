@@ -36,3 +36,8 @@ install:
 script:
   - flake8 collective/documentviewer;
   - bin/test;
+
+after_success:
+  - bin/coverage run bin/test
+  - pip install coveralls==0.5
+  - coveralls
