@@ -1,0 +1,5 @@
+<layers>
+  <layer name="collective.documentviewer"
+         interface="collective.documentviewer.interfaces.ILayer"
+         remove="true" />
+</layers>
