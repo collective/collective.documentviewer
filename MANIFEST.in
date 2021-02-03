@@ -9,3 +9,4 @@ include travis.cfg
 include .tx/config
 graft collective
 graft docs
+global-exclude *.pyc *.pyo
