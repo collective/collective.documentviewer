@@ -23,16 +23,6 @@ def install(context):
 
 def uninstall(context):
     portal = api.portal.get()
-    portal_actions = getToolByName(portal, 'portal_actions')
-    object_buttons = portal_actions.object
-
-    # remove actions
-    actions_to_remove = ('documentviewer_settings',
-                            'documentviewer_convert')
-    for action in actions_to_remove:
-        if action in object_buttons.objectIds():
-            object_buttons.manage_delObjects([action])
-
     catalog = getToolByName(portal, 'portal_catalog')
     objs = catalog(object_provides=OBJECT_PROVIDES)
     settings = GlobalSettings(portal)
