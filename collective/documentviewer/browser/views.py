@@ -2,6 +2,10 @@ import json
 import os
 import shutil
 from logging import getLogger
+try:
+    from html import escape  # python 3.x
+except ImportError:
+    from cgi import escape  # python 2.x
 
 from AccessControl import Unauthorized
 from collective.documentviewer import storage
@@ -231,7 +235,9 @@ class DocumentViewerSearchView(BrowserView):
         catalog = settings.catalog
         query = self.request.form.get('q')
         results = None
+        resultquery = None
         if query:
+            resultquery = escape(query)
             try:
                 results = catalog.query(Contains('text', query))
             except (TypeError, ParseError):
@@ -239,10 +245,10 @@ class DocumentViewerSearchView(BrowserView):
         if catalog and results:
             return json.dumps({
                 "results": list(results[1]),
-                "query": query
+                "query": resultquery
                 })
 
-        return json.dumps({"results": [], "query": query})
+        return json.dumps({"results": [], "query": resultquery})
 
 
 @implementer(IUtils)
