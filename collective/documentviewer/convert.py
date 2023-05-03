@@ -214,29 +214,40 @@ class QpdfSubProcess(BaseSubProcess):
     else:
         bin_name = 'qpdf'
 
+    @property
+    def extra_parameters(self):
+        """Return extra parameters that can be defined using environment variable
+        `DOCUMENTVIEWER_QPDF_PARAMETERS`"""
+        return os.getenv("DOCUMENTVIEWER_QPDF_PARAMETERS", "").split()
+
     def __call__(self, filepath):
         outfile = '{}-processed.pdf'.format(filepath[:-4])
-        cmd = [self.binary, '--linearize', filepath, outfile]
+        cmd = [self.binary, '--linearize']
+        cmd.extend(self.extra_parameters)
+        cmd.extend([filepath, outfile])
         self._run_command(cmd)
         shutil.copy(outfile, filepath)
 
     def strip_page(self, filepath, output_dir):
         output_file = os.path.join(output_dir, 'dump_%d.pdf')
-        cmd = [self.bin_name, '--split-pages', filepath,
-               output_file]
-
+        cmd = [self.bin_name, '--split-pages']
+        cmd.extend(self.extra_parameters)
+        cmd.extend([filepath, output_file])
         self._run_command(cmd)
 
     def get_num_pages(self, filepath):
-        cmd = [self.binary, "--show-npages", filepath]
+        cmd = [self.binary, "--show-npages"]
+        cmd.extend(self.extra_parameters)
+        cmd.append(filepath)
         return int(self._run_command(cmd).strip())
 
     def split_pages(self, filepath, output_dir):
         output_dir = os.path.join(output_dir, TEXT_REL_PATHNAME)
         os.mkdir(output_dir)
         output_file = os.path.join(output_dir, 'dump_%d.pdf')
-        cmd = [self.bin_name, '--split-pages', filepath,
-               output_file]
+        cmd = [self.bin_name, '--split-pages']
+        cmd.extend(self.extra_parameters)
+        cmd.extend([filepath, output_file])
         self._run_command(cmd)
         return output_dir
 
