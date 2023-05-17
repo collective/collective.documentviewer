@@ -1,7 +1,7 @@
 Changelog
 =========
 
-6.0.3 (unreleased)
+6.0.3 (2023-05-17)
 ------------------
 
 - Allow usage of extra parameters with qpdf using `DOCUMENTVIEWER_QPDF_PARAMETERS` environment variable
