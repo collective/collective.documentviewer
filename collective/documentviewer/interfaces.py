@@ -2,8 +2,8 @@ from collective.documentviewer import _
 from collective.documentviewer.config import CONVERTABLE_TYPES
 from OFS.interfaces import IItem
 from zope import schema
-from zope.component.interfaces import IObjectEvent
 from zope.interface import Attribute, Interface
+from zope.interface.interfaces import IObjectEvent
 from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 from zope.component.hooks import getSite
 
