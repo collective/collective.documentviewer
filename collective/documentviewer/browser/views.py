@@ -23,7 +23,7 @@ from plone import api
 from plone.api import exc
 from plone.dexterity.browser.view import DefaultView
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.resources import add_resource_on_request
+from Products.CMFPlone.resources import add_bundle_on_request
 from Products.CMFPlone.utils import base_hasattr
 from Products.Five.browser import BrowserView
 from repoze.catalog.query import Contains
@@ -49,7 +49,7 @@ class DocumentViewerView(DefaultView):
     def __call__(self):
         self._update()
 
-        add_resource_on_request(self.request, 'documentviewer')
+        add_bundle_on_request(self.request, 'documentviewer')
 
         self.site = api.portal.get()
         self.settings = Settings(self.context)

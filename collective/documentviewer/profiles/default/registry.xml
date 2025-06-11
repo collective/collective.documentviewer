@@ -2,14 +2,31 @@
 <registry xmlns:i18n="http://xml.zope.org/namespaces/i18n"
           i18n:domain="plone">
 
-  <records prefix="plone.resources/documentviewer"
+  <records prefix="plone.bundles/collective.documentviewer.loader"
            interface='Products.CMFPlone.interfaces.IBundleRegistry'>
-    <value key="depends">plone</value>
+    <value key="depends">collective.documentviewer.templates</value>
     <value key="enabled">True</value>
     <value key="csscompilation">++resource++dv.resources/stylesheets/viewer.css</value>
-    <value key="jscompilation">++resource++dv.resources/javascripts/build.min.js</value>
+    <value key="jscompilation">++resource++dv.resources/javascripts/loader.js</value>
     <value key="load_async">False</value>
     <value key="load_defer">False</value>
   </records>
-
+  <records prefix="plone.bundles/collective.documentviewer.viewer"
+           interface='Products.CMFPlone.interfaces.IBundleRegistry'>
+    <value key="depends">plone</value>
+    <value key="enabled">True</value>
+    <value key="csscompilation"></value>
+    <value key="jscompilation">++resource++dv.resources/assets/viewer.js</value>
+    <value key="load_async">False</value>
+    <value key="load_defer">False</value>
+  </records>
+  <records prefix="plone.bundles/collective.documentviewer.templates"
+           interface='Products.CMFPlone.interfaces.IBundleRegistry'>
+    <value key="depends">collective.documentviewer.viewer</value>
+    <value key="enabled">True</value>
+    <value key="csscompilation"></value>
+    <value key="jscompilation">++resource++dv.resources/assets/templates.js</value>
+    <value key="load_async">False</value>
+    <value key="load_defer">False</value>
+  </records>
 </registry>
