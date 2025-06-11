@@ -1,5 +1,7 @@
 `Debian 9.x Plone 5.2.x & Documentviewer Setup, Author/Leonardo J. Caballero G. CTO - Covantec R.L.`
 
+Beware: this document is kept for reference, it is not updated for Plone 6
+
 Debian Software Selection & Setup
 ---------------------------------
 

@@ -1,10 +1,11 @@
 Changelog
 =========
 
-6.0.4 (unreleased)
+7.0.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Plone 6.1 support
+  [boulch, laulaz, gotcha]
 
 
 6.0.3 (2023-05-17)

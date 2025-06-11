@@ -12,3 +12,4 @@ include/
 lib/
 parts/
 var/
+pyvenv.cfg
