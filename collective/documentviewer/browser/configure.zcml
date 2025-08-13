@@ -16,8 +16,24 @@
     permission="zope2.View"
     layer="..interfaces.ILayer" />
 
+  <browser:page
+    name="dvpdf-group-view"
+    for="plone.app.contenttypes.interfaces.ICollection"
+    class=".views.GroupView"
+    template="templates/group-view.pt"
+    permission="zope2.View"
+    layer="..interfaces.ILayer" />
+
+
   <browser:menuItem
     for="Products.CMFCore.interfaces._content.IFolderish"
+    menu="plone_displayviews"
+    title="PDF Group View"
+    action="dvpdf-group-view"
+    description="To show thumbnails from pdf and make it searchable." />
+
+  <browser:menuItem
+    for="plone.app.contenttypes.interfaces.ICollection"
     menu="plone_displayviews"
     title="PDF Group View"
     action="dvpdf-group-view"

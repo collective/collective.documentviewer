@@ -1,7 +1,8 @@
-<?xml version="1.0"?>
-<object name="File"
-   meta_type="Factory-based Type Information with dynamic views"
-   i18n:domain="plone" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+<?xml version="1.0" encoding="utf-8"?>
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        meta_type="Dexterity FTI"
+        name="File"
+        i18n:domain="plone">
   <property name="view_methods" purge="False">
     <element value="documentviewer"/>
   </property>

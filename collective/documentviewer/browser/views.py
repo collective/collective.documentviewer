@@ -8,6 +8,7 @@ except ImportError:
     from cgi import escape  # python 2.x
 
 from AccessControl import Unauthorized
+from Acquisition import aq_inner
 from collective.documentviewer import storage
 from collective.documentviewer.async_utils import (celeryInstalled,
                                                    getJobRunner, queueJob)
@@ -21,8 +22,10 @@ from collective.documentviewer.utils import allowedDocumentType
 from DateTime import DateTime
 from plone import api
 from plone.api import exc
+from plone.app.contenttypes.interfaces import ICollection
 from plone.dexterity.browser.view import DefaultView
 from Products.CMFCore.utils import getToolByName
+from plone.base.batch import Batch
 from Products.CMFPlone.resources import add_bundle_on_request
 from Products.CMFPlone.utils import base_hasattr
 from Products.Five.browser import BrowserView
@@ -369,26 +372,68 @@ class Convert(Utils):
 
 
 class GroupView(BrowserView):
-    def getContents(self, object=None, portal_type=('File',),
-                    full_objects=False, path=None):
+    def getContents(self, object=None, portal_type=('File',), path=None, start=0):
+        """Return batched contents for the given path and portal types, with search support"""
+
+        catalog = api.portal.get_tool(name='portal_catalog')
         if not object:
             object = self.context
+        start = int(self.request.form.get('b_start', start)) if 'b_start' in self.request.form else start
+
+        if ICollection.providedBy(object):
+            # Handle Collection with search
+            query = object.query or []
+            opts = {}
+            for criterion in query:
+                field = criterion['i']
+                value = criterion['v']
+                operator = criterion.get('o', 'plone.app.querystring.operation.string.is')
+                # Handle indexes that don't support 'operator' (e.g., portal_type, review_state)
+                if field in ('portal_type', 'review_state', 'Subject'):
+                    if operator == 'plone.app.querystring.operation.selection.any':
+                        opts[field] = value  # Pass list directly for OR query
+                    else:
+                        opts[field] = value
+                elif operator == 'plone.app.querystring.operation.string.is':
+                    opts[field] = value
+                elif operator == 'plone.app.querystring.operation.selection.any':
+                    opts[field] = {'query': value, 'operator': 'or'}
+                # Add more operator mappings as needed (e.g., date.largerThan)
+            if 'q' in self.request and self.request['q'] and self.search_enabled:
+                opts['SearchableText'] = self.request['q']
+                start = 0  # Reset start for search
+            results = catalog(**opts)
+            return Batch(results, size=self.b_size, start=start, orphan=0)
 
         opts = {'portal_type': portal_type}
+        if 'b_start' in self.request.form and start >= 0:
+            start = int(self.request.form['b_start']) 
+        # Build the catalog query
         if path:
-            opts['path'] = path
-
-        if 'q' in self.request.form and self.search_enabled:
-            opts['SearchableText'] = self.request.form['q']
-
-        if object.portal_type == 'Topic':
-            res = object.queryCatalog(self.request, batch=True, **opts)
+            # Use provided path (dynamic, could be a string or object)
+            if isinstance(path, str):
+                query_path = path
+            else:
+                # Assume path is a content object, get its physical path
+                query_path = '/'.join(aq_inner(object).getPhysicalPath())
         else:
-            opts['sort_on'] = 'getObjPositionInParent'
-            res = object.getFolderContents(contentFilter=opts,
-                                           batch=True, b_size=self.b_size,
-                                           full_objects=full_objects)
-        return res
+            # Default to current context
+            query_path = '/'.join(aq_inner(self.context).getPhysicalPath())
+        opts = {
+                'path': {'query': query_path, 'depth': 1},
+                'sort_on': 'getObjPositionInParent',
+            }
+      
+        # Add search term from request.form['q'] if present
+        if 'q' in self.request and self.request['q'] != '' \
+            and self.search_enabled:
+            opts['SearchableText'] = self.request['q']
+            start = 0  # Reset start if searching
+        results = catalog(opts)
+        # Apply batching if start is not -1
+        if start >= 0:
+            return Batch(results, start=start, size=self.b_size, orphan=0)
+        return results
 
     def results(self, portal_type=('File',)):
         types = ('Folder', 'Large Plone Folder') + portal_type
@@ -400,16 +445,14 @@ class GroupView(BrowserView):
             path = obj.getPath()
         else:
             path = '/'.join(obj.getPhysicalPath())
-
         # Explicitly set path to remove default depth
-        return self.getContents(object=obj, portal_type=portal_type, path=path)
+        return self.getContents(object=obj, portal_type=portal_type, path=path, start=-1)
 
     @property
     def b_size(self):
-        if self.context.portal_type == 'Topic':
-            if self.context.getLimitNumber():
-                return self.context.getItemCount()
-
+        context = aq_inner(self.context)
+        if context.portal_type == 'Collection' and context.item_count:
+                return context.item_count
         return self.global_settings.group_view_batch_size
 
     def __call__(self):

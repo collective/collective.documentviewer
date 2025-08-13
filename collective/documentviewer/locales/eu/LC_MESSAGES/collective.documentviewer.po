@@ -150,9 +150,9 @@ msgstr "Elementu-mota extrak OpenOffice/LibreOffice instalatuta badago bakarrik 
 msgid "Extract the text from the PDF using OCR technology."
 msgstr "Testua PDFtik erauzi OCR teknologia aplikatuz."
 
-#. Default: "For folders. Does not apply to topics."
+#. Default: "For folders. Does not apply to collections."
 #: ../interfaces.py:165
-msgid "For folders. Does not apply to topics."
+msgid "For folders. Does not apply to collections."
 msgstr "Karpetentzat. Ez da bildumentzat."
 
 #. Default: "For pdf files."

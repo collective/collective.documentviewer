@@ -133,7 +133,7 @@ msgid "Extract the text from the PDF using OCR technology."
 msgstr ""
 
 #: ../interfaces.py:165
-msgid "For folders. Does not apply to topics."
+msgid "For folders. Does not apply to collections."
 msgstr ""
 
 #: ../interfaces.py:99

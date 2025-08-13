@@ -162,7 +162,7 @@ class IGlobalDocumentViewerSettings(Interface):
 
     group_view_batch_size = schema.Int(
         title=_("Group View Batch Size"),
-        description=_("For folders. Does not apply to topics."),
+        description=_("For folders. Does not apply to collections."),
         default=20)
 
 

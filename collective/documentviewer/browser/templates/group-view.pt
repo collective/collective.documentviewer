@@ -29,65 +29,81 @@
   <div metal:define-macro="text-field-view" tal:on-error="nothing"
       id="parent-fieldname-text" class="stx"
       tal:define="text here/aq_explicit/getText|nothing;
-                  format here/Format|nothing;"
+                  format here/Format|python:'text/plain';"
       tal:condition="text"
-      tal:attributes="class python:test(format in ('text/structured',
-                                             'text/x-rst', ), 'stx', 'plain')">
+      tal:attributes="class python:'stx' if format in ('text/structured', 'text/x-rst') else 'plain'">
     <div metal:define-slot="inside" tal:replace="structure text">The body</div>
   </div>
 
   <div id="pdf-files-search" tal:condition="view/search_enabled">
     <div id="search-icon"></div>
     <div id="search-input">
-      <form method="get">
-        <input placeholder="Search..." i18n:attributes="placeholder" name="q" tal:attributes="value request/q|nothing" />
+      <form class="d-flex show_images" method="get">
+        <label class="hiddenStructure" for="PDFsearch">Search Site</label>
+        <input id="PDFsearch" class="form-control me-2" placeholder="Search..." i18n:attributes="placeholder" name="q" tal:attributes="value request/form/q|nothing" />
       </form>
     </div>
-    <div id="cancel-search" title="clear search" i18n:attributes="title"></div>
+    <div id="cancel-search" class="d-none" title="clear search" i18n:attributes="title"></div>
   </div>
 
-  <div id="pdf-files">
+  <div id="spinner" class="text-center d-none">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div id="pdf-files" class="row">
     <tal:albumsfiles tal:condition="python:batch">
       <tal:files tal:condition="batch" tal:repeat="file batch">
-        <div class="photoAlbumEntry pdfEntry"
-          tal:condition="python: file.portal_type in file_types"
-            tal:define="type file/portal_type;
-                        file file/getObject|file;
-                        thumb python: view.get_thumb(file);">
-          <a rel="thumbnails"
-             tal:attributes="href string:${file/absolute_url}/view;
-                             title file/Description;">
-            <span class="photoAlbumEntryWrapper">
-              <img src="" alt="" tal:attributes="src thumb" />
-            </span>
-            <span class="photoAlbumEntryTitle" tal:content="file/pretty_title_or_id">
-              Title
-            </span>
-          </a>
-          <a tal:attributes="href string:${file/absolute_url}/view;" i18n:translate="">View</a>
-        </div>
-        <div class="photoAlbumEntry photoAlbumFolder pdfEntry"
-              tal:condition="python: file.portal_type not in file_types"
-              tal:define="file_brains_in_album python:view.get_files(file, portal_type=file_types);
-                          number_of_files python:len(file_brains_in_album);
-                          random python:modules['random'];
-                          random_image python:number_of_files and random.choice(file_brains_in_album).getObject() or None;
-                          type random_image/portal_type|nothing;
-                          thumb python: view.get_thumb(random_image);">
-            <a tal:attributes="href file/getURL;
-                               title file/Description;" 
-                rel="thumbnails">
-              <span class="photoAlbumEntryWrapper">
-                <img src="" alt=""
-                    tal:condition="number_of_files"
-                    tal:attributes="src thumb" />
-              </span>
-              <span class="photoAlbumEntryTitle">
-                <tal:title content="file/pretty_title_or_id">Title</tal:title>
-                (<tal:number content="number_of_files" />)
-              </span>
-            </a>
+        <div class="col-sm-4 mb-5"
+             tal:define="type file/portal_type;
+                         file file/getObject|file;
+                         thumb python: view.get_thumb(file);">
+          <div class="card h-100" 
+             tal:condition="python: type in file_types">
+            <div class="card-image d-flex justify-content-center align-items-center"
+                 style="height: 14rem;">
+              <a class="card-link stretched-link"
+                 tal:attributes="href string:${file/absolute_url}/view;
+                                 title file/Description;">
+                <img src="" alt="" tal:attributes="src thumb" />
+              </a>
+            </div>
+            <div class="card-body">
+              <a class="card-link stretched-link"
+                 tal:attributes="href string:${file/absolute_url}/view;
+                                 title file/Description;">
+                <h5 class="card-title"
+                  tal:content="file/Title"
+                >Image title</h5>
+                  <p class="card-text"
+                    tal:content="file/Description"
+                  >Description</p>
+              </a>
+            </div>
           </div>
+          <div class="card h-100"
+               tal:condition="python: file.portal_type not in file_types">
+          <tal:folder
+               tal:define="file_brains_in_album python:view.get_files(file, portal_type=file_types);
+                           number_of_files python:len(file_brains_in_album);
+                           random python:modules['random'];
+                           random_image python:number_of_files and random.choice(file_brains_in_album).getObject() or None;
+                           type random_image/portal_type|nothing;
+                           thumb python: view.get_thumb(random_image);">
+            <div class="card-image d-flex justify-content-center align-items-center">
+              <a tal:attributes="href file/absolute_url;
+                                 title file/Description;" 
+                 class="card-link stretched-link">
+                <img src="" alt=""
+                     tal:attributes="src thumb" />
+                <h5 class="card-title"><tal:title tal:replace="file/pretty_title_or_id">Title</tal:title>
+                (<tal:number content="number_of_files" />)</h5>
+              </a>
+            </div>
+          </tal:folder>
+          </div>
+        </div>
       </tal:files>
       <div class="visualClear"><!-- --></div>
     </tal:albumsfiles>
