@@ -579,6 +579,10 @@ class Converter(object):
         return storage_dir
 
     def run_conversion(self):
+        # if document type is not set, we cannot convert the file.
+        if self.doc_type is None:
+            logger.info(f"Document type is not set for {self.context.Title()}")
+            return
         context = self.context
         gsettings = self.gsettings
         fw = IFileWrapper(context)
