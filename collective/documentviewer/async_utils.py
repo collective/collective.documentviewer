@@ -13,13 +13,16 @@ try:
 except ImportError:
     pass
 
+try:
+    import collective.celery  # noqa
+
+    CELERY_INSTALLED = True
+except Exception:
+    CELERY_INSTALLED = False
+
 
 def celeryInstalled():
-    try:
-        import collective.celery  # noqa
-        return True
-    except Exception:
-        return False
+    return CELERY_INSTALLED
 
 
 def isConversion(job, sitepath):
@@ -49,6 +52,10 @@ try:
                     break
 except ImportError:
     pass
+except AttributeError:
+    # AttributeError: property 'backend' of 'Celery' object has no deleter
+    logger.exception("collective.celery is available, but registering task failed.")
+    CELERY_INSTALLED = False
 
 
 class CeleryJobRunner(object):
