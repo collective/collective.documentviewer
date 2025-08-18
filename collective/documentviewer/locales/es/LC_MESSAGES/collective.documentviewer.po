@@ -154,9 +154,9 @@ msgstr "Los tipos extra solo funcionarán con openoffice/libreoffice instalado."
 msgid "Extract the text from the PDF using OCR technology."
 msgstr "Extraer el texto del PDF utilizando tecnología OCR."
 
-#. Default: "For folders. Does not apply to topics."
+#. Default: "For folders. Does not apply to collections."
 #: ../interfaces.py:165
-msgid "For folders. Does not apply to topics."
+msgid "For folders. Does not apply to collections."
 msgstr "Para carpetas. No aplicable a colecciones."
 
 #. Default: "For pdf files."

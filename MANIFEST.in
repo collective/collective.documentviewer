@@ -3,9 +3,7 @@ include *.json
 include *.py
 include *.rst
 include *.txt
-include Makefile
 include buildout.cfg
-include travis.cfg
 include .tx/config
 graft collective
 graft docs

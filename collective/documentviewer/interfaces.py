@@ -2,8 +2,8 @@ from collective.documentviewer import _
 from collective.documentviewer.config import CONVERTABLE_TYPES
 from OFS.interfaces import IItem
 from zope import schema
-from zope.component.interfaces import IObjectEvent
 from zope.interface import Attribute, Interface
+from zope.interface.interfaces import IObjectEvent
 from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 from zope.component.hooks import getSite
 
@@ -162,7 +162,7 @@ class IGlobalDocumentViewerSettings(Interface):
 
     group_view_batch_size = schema.Int(
         title=_("Group View Batch Size"),
-        description=_("For folders. Does not apply to topics."),
+        description=_("For folders. Does not apply to collections."),
         default=20)
 
 

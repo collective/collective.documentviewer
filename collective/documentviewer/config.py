@@ -40,5 +40,5 @@ GROUP_VIEW_DISPLAY_TYPES = (
     'Folder',
     'Large Plone Folder',
     'Plone Site',
-    'Topic'
+    'Collection'
 )

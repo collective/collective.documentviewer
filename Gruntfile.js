@@ -1,3 +1,10 @@
+
+// This file is kept for reference.
+//
+// In case you might want to update the CSS files.
+//
+// The JS build is not used anymore.
+
 module.exports = function (grunt) {
     'use strict';
     grunt.initConfig({

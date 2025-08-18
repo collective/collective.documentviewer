@@ -149,9 +149,9 @@ msgstr ""
 msgid "Extract the text from the PDF using OCR technology."
 msgstr ""
 
-#. Default: "For folders. Does not apply to topics."
+#. Default: "For folders. Does not apply to collections."
 #: ../interfaces.py:165
-msgid "For folders. Does not apply to topics."
+msgid "For folders. Does not apply to collections."
 msgstr ""
 
 #. Default: "For pdf files."

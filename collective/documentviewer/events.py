@@ -1,5 +1,5 @@
 from zope.interface import implementer
-from zope.component.interfaces import ObjectEvent
+from zope.interface.interfaces import ObjectEvent
 from collective.documentviewer.interfaces import IConversionFinishedEvent
 
 
